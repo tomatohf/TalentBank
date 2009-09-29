@@ -5,3 +5,9 @@
 #   
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
+
+
+
+# schools
+School.create(:name => "乔布堂学院", :abbreviation => "qiaobutang")
+School.create(:name => "上海对外贸易学院", :abbreviation => "shift")

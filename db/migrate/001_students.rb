@@ -40,8 +40,10 @@ class Students < ActiveRecord::Migration
   end
 
   def self.down
+    
     drop_table :autologins
     drop_table :students
     drop_table :schools
+    
   end
 end
