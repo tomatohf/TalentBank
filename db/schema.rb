@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(:version => 2) do
 
   create_table "autologins", :force => true do |t|
     t.string   "session_id"
@@ -33,5 +33,15 @@ ActiveRecord::Schema.define(:version => 1) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "trash_records", :force => true do |t|
+    t.string   "trashable_type"
+    t.integer  "trashable_id"
+    t.binary   "data",           :limit => 16777215
+    t.datetime "created_at"
+  end
+
+  add_index "trash_records", ["created_at", "trashable_type"], :name => "index_trash_records_on_created_at_and_trashable_type"
+  add_index "trash_records", ["trashable_type", "trashable_id"], :name => "index_trash_records_on_trashable_type_and_trashable_id"
 
 end
