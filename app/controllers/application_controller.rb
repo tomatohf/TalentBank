@@ -10,6 +10,6 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   # enable output GZip compression
-  after_filter OutputCompressionFilter # unless Rails.env.development?
+  after_filter OutputCompressionFilter unless Rails.env.development?
   
 end

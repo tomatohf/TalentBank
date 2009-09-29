@@ -1,8 +1,17 @@
+add 流量统计
+
 protect key data from being destroy
 
 
 
-========== MODULES ==========
+========== Function Modules ==========
+Denpendencies besides CareerCommunity's:
+
+-----
+
+
+
+========== Function Modules ==========
 - 多维人才数据模型模块			 
 	* 协助学生提炼求职核心竞争力
 	* 支持学生根据求职目标添加多份简历
