@@ -1,0 +1,190 @@
+body {
+	font-family: Arial,Helvetica,sans-serif;
+
+	/* font-size: 90%; */
+	font-size: 12px;
+
+	line-height: 150%;
+
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	color: #3B5998;
+}
+
+h2 {
+	font-size: 18px;
+}
+
+img.vertical_middle {
+	margin-bottom: 4px;
+	vertical-align: middle;
+}
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+
+.pagination {
+	text-align: center;
+	padding: .3em;
+}
+.pagination a, .pagination span {
+	padding: .2em .5em; 
+}
+.pagination span.disabled {
+	color: #AAA; 
+}
+.pagination span.current {
+	font-weight: bold;
+	color: #FF0084;
+}
+.pagination a {
+	border: 1px solid #DDDDDD;
+	color: #0063DC;
+	text-decoration: none;
+}
+.pagination a:hover, .pagination a:focus {
+	border-color: #003366;
+	background: #0063DC;
+	color: white;
+}
+.pagination .page_info {
+	color: #aaa;
+	padding-top: .8em;
+}
+.pagination .prev_page, .pagination .next_page {
+	border-width: 2px;
+}
+.pagination .prev_page {
+	margin-right: 1em;
+}
+.pagination .next_page {
+	margin-left: 1em;
+}
+
+
+.page_container {
+	margin: 0px auto;
+	/* max-width: 980px; */
+	width: 950px;
+}
+
+.main_part_w {
+	width: 100%;
+}
+/* ie6 fixed */
+*html .main_part_w {
+	width: 98%;
+}
+
+.float_l {
+	float: left;
+}
+
+.float_r {
+	float: right;
+}
+
+.align_c {
+	text-align: center;
+}
+
+.align_r {
+	text-align: right;
+}
+
+.overflow_hidden {
+	overflow: hidden;
+}
+
+.clear_l {
+	clear: left;
+}
+
+.clear_r {
+	clear: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.text_field {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #A3988C;
+}
+
+textarea.text_field {
+	padding: 3px;
+}
+
+.text_field:hover {
+	border-style: inset;
+}
+
+.text_field:active {
+	border-style: inset;
+}
+
+.text_field:focus {
+	border-style: inset;
+}
+
+.button {
+	padding: 1px 2px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #A3988C;
+	background: #FFF5E8;
+	cursor: pointer;
+}
+
+.button:hover {
+	border-style: outset;
+}
+
+.button:active {
+	border-style: inset;
+}
+
+select.dropdown_list, .dropdown_list select {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #BDC7D8;
+	padding: 1px 2px;
+}
+
+.fieldset {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #CCCCCC;
+}
+
+
+#bottom_line {
+	margin-top: 10px;
+	margin-bottom: 5px;
+	
+	text-align: right;
+	margin-right: 20px;
+	
+	color: #B3ABA2;
+	
+	line-height: 146%;
+}
+
+#bottom_line #beianhao {
+	margin-left: 5px;
+	color: #B3ABA2;
+	text-decoration: none;
+}
+
+#bottom_line #beianhao:hover {
+	text-decoration: underline;
+}

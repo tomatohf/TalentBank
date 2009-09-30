@@ -1,4 +1,6 @@
-add 流量统计
+出错页面
+	- Logo (图片 和 链接)
+	- inactive 和 status, 添加返回正常页面的链接
 
 protect key data from being destroy
 

@@ -24,7 +24,6 @@ require "thinking_sphinx"
 require "RMagick"
 require "pathname"
 require "fileutils"
-require "system_timer"
 require "redcloth"
 
 
@@ -38,6 +37,7 @@ require "redcloth"
 # require "iconv"
 # 
 # require "xmpp4r-simple"
+# require "system_timer"
 
 ##################################################
 ### END
@@ -65,7 +65,8 @@ require "redcloth"
 ### require lib files
 ##################################################
 
-
+require "util"
+require "noisy_image"
 
 ##################################################
 ### END

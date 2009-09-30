@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+        <title>出错啦 - 人才库 - 乔布堂</title>
+		<%= stylesheet_link_tag("site") %>
+    </head>
+    <body>
+	
+		<div style="margin: 150px auto; width: 600px;">
+
+			<div class="align_r" style="margin: 0px 15px 10px 0px;">
+				<a href="/" title="乔布堂">
+					<img src="/images/index/qiaobutang_logo.png" border="0" alt="乔布堂" /></a>
+			</div>
+
+			<div style="background-color: #FCF9E6; border: 1px solid #F0F0E0; padding: 20px 30px;">
+				<img class="float_l" src="/images/errors/info_m.gif" border="0" alt="出错了" title="出错了" />
+				
+				<div style="margin-left: 120px; font-size: 16px;">
+					<%= yield %>
+				</div>
+				
+				<div class="clear_l"></div>
+			</div>
+
+		</div>
+		
+		<%= render :partial => "/common/bottom_line" %>
+
+		
+		
+		<% if Rails.env.production? %>
+			<script type="text/javascript">
+				var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+				document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+			</script>
+			<script type="text/javascript">
+				try {
+					var pageTracker = _gat._getTracker("UA-5887424-3");
+					pageTracker._trackPageview();
+				} catch(err) {}
+			</script>
+
+
+
+			<script type="text/javascript" src="http://js.tongji.linezing.com/418628/tongji.js"></script>
+			<noscript>
+				<a href="http://www.linezing.com">
+					<img src="http://img.tongji.linezing.com/418628/tongji.gif"/></a>
+			</noscript>
+		<% end %>
+    </body>
+</html>
