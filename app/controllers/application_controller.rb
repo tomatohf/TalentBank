@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   after_filter OutputCompressionFilter unless Rails.env.development?
   
   before_filter :prepare_school
-  before_filter :check_login, :except => []
+  # before_filter :check_login, :except => []
   
   
   
