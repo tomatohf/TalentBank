@@ -12,9 +12,21 @@ class ApplicationController < ActionController::Base
   # enable output GZip compression
   after_filter OutputCompressionFilter unless Rails.env.development?
   
+  before_filter :prepare_school
+  before_filter :check_login, :except => []
+  
   
   
   private
+  
+  # ========== filters ==========
+  
+  def prepare_school
+    @school = Schools.get_school(SCHOOL_ABBR)
+  end
+  
+  # ====================
+  
   
   def do_login(account)
     # TODO ...

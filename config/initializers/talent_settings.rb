@@ -1,6 +1,6 @@
 # enable UTF-8 support
 require 'jcode'
-$KCODE = 'u'
+$KCODE9 = 'u'
 
 # require "i18n"
 
@@ -67,6 +67,8 @@ require "redcloth"
 
 require "util"
 require "noisy_image"
+
+require_dependency "schools/base"
 
 ##################################################
 ### END

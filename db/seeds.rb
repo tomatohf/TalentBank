@@ -9,5 +9,5 @@
 
 
 # schools
-School.create(:name => "乔布堂学院", :abbreviation => "qiaobutang")
-School.create(:name => "上海对外贸易学院", :abbreviation => "shift")
+School.create(:name => "乔布堂学院", :abbr => "qiaobutang", :password => "woshiqiaobutang")
+School.create(:name => "上海对外贸易学院", :abbr => "shift", :password => "passshiftword")

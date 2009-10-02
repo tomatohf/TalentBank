@@ -2,8 +2,13 @@ class Students < ActiveRecord::Migration
   def self.up
     
     create_table :schools, :force => true do |t|
-      t.column :abbreviation, :string, :limit => 15
+      t.column :abbr, :string, :limit => 15
+      t.column :password, :string
+      
       t.column :name, :string, :limit => 50
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO schools (id) VALUES (10000)")
