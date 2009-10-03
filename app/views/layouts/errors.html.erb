@@ -2,16 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
     <head>
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-        <title>出错啦 - 人才库 - 乔布堂</title>
+        <title><%= @school.page_title("出错啦") %></title>
 		<%= stylesheet_link_tag("site") %>
     </head>
     <body>
 	
-		<div style="margin: 150px auto; width: 600px;">
+		<div style="margin: 130px auto; width: 600px;">
 
 			<div class="align_r" style="margin: 0px 15px 10px 0px;">
-				<a href="/" title="乔布堂">
-					<img src="/images/index/qiaobutang_logo.png" border="0" alt="乔布堂" /></a>
+				<a href="/" title="<%= @school.logo_title %>">
+					<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
 			</div>
 
 			<div style="background-color: #FCF9E6; border: 1px solid #F0F0E0; padding: 20px 30px;">
@@ -25,11 +25,9 @@
 			</div>
 
 		</div>
-		
-		<%= render :partial => "/common/bottom_line" %>
 
 		
 		
-		<%= render_school_view("/common/page_track", @school.abbr) %>
+		<%= render_school_view("/common/page_track", @school.abbr) if Rails.env.production? %>
     </body>
 </html>

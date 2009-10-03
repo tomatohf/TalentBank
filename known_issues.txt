@@ -1,8 +1,6 @@
 codes in application_controller.rb
 
-出错页面
-	- Logo (图片 和 链接)
-	- inactive 和 status, 添加返回正常页面的链接
+提交疑问建议,错误反馈的功能
 
 set up 备份的脚本
 

@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   # ========== filters ==========
   
   def prepare_school
-    @school = Schools.get_school(SCHOOL_ABBR)
+    @school = Schools.get_school(::SCHOOL_ABBR)
   end
   
   # ====================

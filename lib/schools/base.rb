@@ -14,8 +14,17 @@ module Schools
     end
     
     
+    def page_title(sub_title)
+      "#{sub_title} - 人才库 - 乔布堂"
+    end
+    
+    
     def logo
       # must be implemented in subclass
+    end
+    
+    def logo_title
+      ""
     end
     
     
