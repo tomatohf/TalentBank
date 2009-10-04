@@ -4,6 +4,7 @@ class Teachers < ActiveRecord::Migration
     create_table :teachers, :force => true do |t|
       t.column :uid, :string, :limit => 25
       t.column :password, :string
+      t.column :active, :boolean, :default => true
       
       t.column :name, :string, :limit => 15
       t.column :email, :string

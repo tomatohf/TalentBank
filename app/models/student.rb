@@ -21,4 +21,16 @@ class Student < ActiveRecord::Base
   named_scope :enabled, :conditions => { :enabled => true }
   named_scope :active, :conditions => { :active => true }
   
+  
+  
+  def self.authenticate(abbr, number, pwd)
+    s = self.get_from_number(abbr, number)
+    s = nil if s && s.password != pwd
+    s
+  end
+  
+  def self.get_from_number(abbr, number)
+    self.find(:first, :conditions => ["school_id = ? and number = ?", School.get_school_info(abbr)[0], number])
+  end
+  
 end

@@ -11,6 +11,17 @@ ActionController::Routing::Routes.draw do |map|
   }
   
   
+  map.resources :schools, :collection => {
+  
+    
+    
+  }, :member => {
+  
+    
+  
+  }
+  
+  
   map.resources :teachers, :collection => {
   
     

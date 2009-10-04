@@ -1,8 +1,5 @@
 class ErrorsController < ApplicationController
   
-  skip_before_filter :check_login
-  
-  
   def inactive
     render :layout => true, :status => 403
   end

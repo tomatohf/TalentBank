@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
   after_filter OutputCompressionFilter unless Rails.env.development?
   
   before_filter :prepare_school
-  before_filter :check_login
   
   
   
@@ -25,35 +24,79 @@ class ApplicationController < ActionController::Base
     @school = Schools.get_school(::SCHOOL_ABBR)
   end
   
-  # ====================
   
-  
-  def do_login(account)
-    # TODO ...
-    a = account.kind_of?(Account) ? account : Account.find_enabled(account)
-    
-    return do_logout unless a
+  def check_login
+    if login?
+      @account_active = session[:account_active]
       
-    session[:account_id] = a.id
-    session[:email] = a.email
-    #session[:nick] = CGI.escapeHTML(a.get_nick)
-    session[:nick] = a.get_nick
-    session[:checked] = a.checked
-    session[:limited] = a.limited?
-    
-    set_login_cookies(session[:nick])
+      yield if block_given?
+    else
+      save_original_address
+      jump_to("/")
+    end
   end
   
   
+  def check_active(active = nil)
+    jump_to("/errors/inactive") unless (active || @account_active)
+  end
+  
+  
+  def check_login_for_school
+    check_login { jump_to("/index/school") unless session[:account_type] == :schools }
+  end
+  
+  
+  def check_login_for_teacher
+    check_login { jump_to("/index/school/t") unless session[:account_type] == :teachers }
+  end
+  
+  
+  def check_login_for_student
+    check_login { jump_to("/index/student") unless session[:account_type] == :students }
+  end
+  
+  
+  def check_login_for_corporation
+    check_login { jump_to("/index/corporation") unless session[:account_type] == :corporations }
+  end
+  
+  # ====================
+  
+  
   def login?
-    session[:account_id] && session[:account_id] > 0 && session[:account_type]
+    session[:account_type] && session[:account_id] && session[:account_id] > 0
+  end
+  
+  
+  def do_login(account_id, account_type, account_active)
+    return do_logout unless account_id && account_type
+      
+    session[:account_id] = account_id
+    session[:account_type] = account_type
+    session[:account_active] = account_active
   end
   
   
   def do_logout
-    remove_login_cookies
-    
     reset_session
+  end
+  
+  
+  def set_login_cookie(loginid, logintype, save_loginid = true)
+    cookies[:logintype] = { :value => logintype, :expires => 1.year.from_now }
+    if save_loginid
+      cookies[:loginid] = { :value => loginid, :expires => 30.days.from_now }
+    else
+      cookies.delete(:loginid)
+    end
+  end
+  
+  
+  def save_original_address
+    session[:original_url] = request.request_uri
+    session[:original_method] = request.method
+    session[:original_params] = request.parameters.reject {|key, value| !value.kind_of?(String) }
   end
   
   
@@ -68,15 +111,8 @@ class ApplicationController < ActionController::Base
     if original_method != :get && original_params
       redirect_non_get(original_params)
     else
-      jump_to(original_url || { :controller => "community" })
+      jump_to(original_url || "/")
     end
-  end
-  
-  
-  def save_original_address
-    session[:original_url] = request.request_uri
-    session[:original_method] = request.method
-    session[:original_params] = request.parameters.reject {|key, value| !value.kind_of?(String) }
   end
   
   
@@ -109,23 +145,6 @@ class ApplicationController < ActionController::Base
     else
       redirect_to(url)
     end
-  end
-  
-  
-  def check_login
-    if login?
-      @account_active = session[:active]
-      
-      yield if block_given?
-    else
-      save_original_address
-      jump_to("/")
-    end
-  end
-  
-  
-  def check_active(active = nil)
-    jump_to("/errors/inactive") unless (active || @account_active)
   end
 
 

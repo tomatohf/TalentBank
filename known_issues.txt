@@ -1,6 +1,4 @@
-codes in application_controller.rb
-
-用 cookie 记录 用户类型 和 用户登录帐号
+index/index 检查, 登录的话跳转到相应的管理页面
 
 Database index
 

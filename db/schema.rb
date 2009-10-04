@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(:version => 4) do
   create_table "schools", :force => true do |t|
     t.string   "abbr",       :limit => 15
     t.string   "password"
+    t.boolean  "active",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -23,9 +24,8 @@ ActiveRecord::Schema.define(:version => 4) do
   create_table "students", :force => true do |t|
     t.string   "number",     :limit => 25
     t.string   "password"
-    t.integer  "school_id"
     t.boolean  "active",                   :default => true
-    t.boolean  "enabled",                  :default => true
+    t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 4) do
   create_table "teachers", :force => true do |t|
     t.string   "uid",        :limit => 25
     t.string   "password"
+    t.boolean  "active",                   :default => true
     t.string   "name",       :limit => 15
     t.string   "email"
     t.integer  "school_id"

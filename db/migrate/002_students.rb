@@ -4,6 +4,7 @@ class Students < ActiveRecord::Migration
     create_table :schools, :force => true do |t|
       t.column :abbr, :string, :limit => 15
       t.column :password, :string
+      t.column :active, :boolean, :default => true
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
@@ -17,11 +18,9 @@ class Students < ActiveRecord::Migration
     create_table :students, :force => true do |t|
       t.column :number, :string, :limit => 25
       t.column :password, :string
+      t.column :active, :boolean, :default => true
       
       t.column :school_id, :integer
-      
-      t.column :active, :boolean, :default => true
-      t.column :enabled, :boolean, :default => true
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime

@@ -200,3 +200,26 @@ a.none:hover {
 .bottom_line .beianhao:hover {
 	text-decoration: underline;
 }
+
+
+.error_msg, .info_msg, .warning_msg {
+	background-repeat: no-repeat;
+	background-position: 10px 5px;
+	background-color: #FFFDC0;
+	
+	padding: 5px 10px 5px 35px;
+}
+
+.error_msg {
+	background-image: url(/images/error_icon.gif);
+	
+	border: 1px dashed red;
+	color: red;
+}
+
+.info_msg {
+	background-image: url(/images/info_icon.gif);
+	
+	border: 1px dashed green;
+	color: green;
+}
