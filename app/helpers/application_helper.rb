@@ -6,4 +6,9 @@ module ApplicationHelper
     render(:partial => "#{template}/#{school_abbr}")
   end
   
+  
+  def talent_page_title(page_title)
+    content_for(:page_title) { page_title }
+  end
+  
 end

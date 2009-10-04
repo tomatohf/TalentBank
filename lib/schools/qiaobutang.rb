@@ -2,8 +2,13 @@ module Schools
   
   class Qiaobutang < Base
     
+    def name
+      "乔布堂学院"
+    end
+    
     def page_title(sub_title)
-      "#{sub_title} - 人才库_乔布堂学院"
+      sub_title += " - " if sub_title && sub_title != ""
+      "#{sub_title}人才库_#{self.name}"
     end
     
     
@@ -12,7 +17,7 @@ module Schools
     end
     
     def logo_title
-      "乔布堂学院 人才库"
+      "#{self.name} 人才库"
     end
     
   end

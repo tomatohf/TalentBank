@@ -14,8 +14,13 @@ module Schools
     end
     
     
+    def name
+      # must be implemented in subclass
+    end
+    
     def page_title(sub_title)
-      "#{sub_title} - 人才库 - 乔布堂"
+      sub_title += " - " if sub_title && sub_title != ""
+      "#{sub_title}人才库 - 乔布堂"
     end
     
     

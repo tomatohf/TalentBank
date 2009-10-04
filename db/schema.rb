@@ -9,23 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 3) do
-
-  create_table "autologins", :force => true do |t|
-    t.string   "session_id"
-    t.integer  "student_id"
-    t.datetime "expire_time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 4) do
 
   create_table "schools", :force => true do |t|
     t.string   "abbr",       :limit => 15
     t.string   "password"
-    t.string   "name",       :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "schools", ["abbr"], :name => "index_schools_on_abbr", :unique => true
 
   create_table "students", :force => true do |t|
     t.string   "number",     :limit => 25

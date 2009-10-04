@@ -1,0 +1,59 @@
+<% talent_page_title("学校用户") %>
+
+<div>
+	<h2>学校用户登录</h2>
+	
+	<% if flash[:error_msg] %>
+		<p class="error_msg">
+		    <%= flash[:error_msg] %>
+		</p>
+	<% end %>
+
+	<% form_tag "", :method => "post" do %>
+
+		<div>
+			<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
+
+			<label for="user_type_school">
+				总管理员
+			</label>
+			
+			&nbsp;&nbsp;&nbsp;
+			
+			<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
+
+			<label for="user_type_teacher">
+				学校老师
+			</label>
+		</div>
+		
+		<div>
+			<label for="username">
+				用户名
+			</label>
+		</div>
+		<div>
+			<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
+		</div>
+
+		<div>
+			<label for="password">
+				密码
+			</label>
+		</div>
+		<div>
+			<input type="password" id="password" name="password" class="text_field" size="30" />
+			<a href="#">
+				忘记密码?</a>
+		</div>
+
+		<div>
+			<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+			<label for="save_username">记住用户名</label>
+		</div>
+
+		<div>
+			<%= submit_tag "登录", :class => "button" %>
+		</div>
+	<% end %>
+</div>

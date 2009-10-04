@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
     <head>
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-        <title><%= @school.page_title("出错啦") %></title>
+        
+		<title><%= @school.page_title("出错啦") %></title>
 		<%= stylesheet_link_tag("site") %>
     </head>
     <body>
@@ -25,9 +26,12 @@
 			</div>
 
 		</div>
+		
+		<% school_abbr = @school.abbr %>
+		<%= render_school_view("/common/bottom_line", school_abbr) %>
 
 		
 		
-		<%= render_school_view("/common/page_track", @school.abbr) if Rails.env.production? %>
+		<%= render_school_view("/common/page_track", school_abbr) if Rails.env.production? %>
     </body>
 </html>

@@ -118,9 +118,7 @@ form {
 	border-style: solid;
 	border-width: 1px;
 	border-color: #A3988C;
-}
-
-textarea.text_field {
+	
 	padding: 3px;
 }
 
@@ -130,10 +128,16 @@ textarea.text_field {
 
 .text_field:active {
 	border-style: inset;
+	
+	border-color: #878787;
+	background-color: #FFFFD8;
 }
 
 .text_field:focus {
 	border-style: inset;
+	
+	border-color: #878787;
+	background-color: #FFFFD8;
 }
 
 .button {
@@ -166,8 +170,16 @@ select.dropdown_list, .dropdown_list select {
 	border-color: #CCCCCC;
 }
 
+a.none {
+	text-decoration: none;
+}
 
-#bottom_line {
+a.none:hover {
+	text-decoration: underline;
+}
+
+
+.bottom_line {
 	margin-top: 10px;
 	margin-bottom: 5px;
 	
@@ -179,12 +191,12 @@ select.dropdown_list, .dropdown_list select {
 	line-height: 146%;
 }
 
-#bottom_line #beianhao {
+.bottom_line .beianhao {
 	margin-left: 5px;
 	color: #B3ABA2;
 	text-decoration: none;
 }
 
-#bottom_line #beianhao:hover {
+.bottom_line .beianhao:hover {
 	text-decoration: underline;
 }

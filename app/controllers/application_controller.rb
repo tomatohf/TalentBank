@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   after_filter OutputCompressionFilter unless Rails.env.development?
   
   before_filter :prepare_school
-  # before_filter :check_login, :except => []
+  before_filter :check_login
   
   
   
@@ -51,20 +51,9 @@ class ApplicationController < ActionController::Base
   
   
   def do_logout
-    remove_autologin_cookies
-    Autologin.delete_by_account(session[:account_id])
-    
     remove_login_cookies
     
     reset_session
-  end
-  
-  
-  def remove_autologin_cookies
-    cookies[:s] = nil
-    cookies[:a] = nil
-    cookies.delete(:s)
-    cookies.delete(:a)
   end
   
   
@@ -130,7 +119,7 @@ class ApplicationController < ActionController::Base
       yield if block_given?
     else
       save_original_address
-      jump_to("/index/login")
+      jump_to("/")
     end
   end
   
