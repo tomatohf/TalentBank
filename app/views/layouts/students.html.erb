@@ -10,7 +10,37 @@
     <body>
 	
 		<div class="page_container">
-			<%= yield %>
+			
+			<div class="float_l" style="width: 200px;">
+
+				<div>
+					<a href="/students/<%= @student.id %>">
+						首页</a>
+				</div>
+				
+				<div>
+					<a href="#">
+						管理简历</a>
+				</div>
+				
+				<div>
+					<a href="/students/<%= @student.id %>/edit">
+						修改密码</a>
+				</div>
+				
+				<div>
+					<a href="/index/logout">
+						退出系统</a>
+				</div>
+
+			</div>
+
+			<div style="margin-left: 200px;">
+				<%= yield %>
+			</div>
+
+			<div class="clear_l"></div>
+			
 		</div>
 		
 		<% school_abbr = @school.abbr %>

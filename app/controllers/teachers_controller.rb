@@ -43,7 +43,7 @@ class TeachersController < ApplicationController
     password = params[:password]
     password_confirmation = params[:password_confirmation]
     
-    changed = @teacher.password == current_password
+    changed = (@teacher.password == current_password)
     
     if changed
       @teacher.password = password
