@@ -1,0 +1,46 @@
+<% talent_page_title("添加学生") %>
+
+
+<h2>添加学生</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @student.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@student) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/create_student", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 100px;">
+				<label for="uid">
+					学号
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="uid" name="uid" class="text_field" size="30" value="<%= @student.number %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/teachers/<%= @teacher.id %>/students">
+					返回管理学生</a>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

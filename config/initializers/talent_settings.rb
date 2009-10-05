@@ -65,8 +65,9 @@ require "redcloth"
 ### require lib files
 ##################################################
 
-require "util"
 require "noisy_image"
+
+require_dependency "utils"
 
 require_dependency "schools/base"
 

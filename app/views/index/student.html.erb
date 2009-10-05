@@ -1,43 +1,64 @@
 <% talent_page_title("学生用户") %>
 
-<div>
-	<h2>学生用户登录</h2>
+
+<h2>学生用户登录</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<% form_tag "", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 50px;">
+				<label for="username">
+					学号
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password">
+					密码
+				</label>
+			</td>
+			
+			<td>
+				<input type="password" id="password" name="password" class="text_field" size="30" />
+				&nbsp;&nbsp;&nbsp;
+				<a href="#">
+					忘记密码?</a>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+				<label for="save_username">记住学号</label>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "登录", :class => "button" %>
+			</td>
+		</tr>
+	</table>
 	
-	<% if flash[:error_msg] %>
-		<p class="error_msg">
-		    <%= flash[:error_msg] %>
-		</p>
-	<% end %>
-
-	<% form_tag "", :method => "post" do %>
-
-		<div>
-			<label for="username">
-				学号
-			</label>
-		</div>
-		<div>
-			<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
-		</div>
-
-		<div>
-			<label for="password">
-				密码
-			</label>
-		</div>
-		<div>
-			<input type="password" id="password" name="password" class="text_field" size="30" />
-			<a href="#">
-				忘记密码?</a>
-		</div>
-
-		<div>
-			<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
-			<label for="save_username">记住学号</label>
-		</div>
-
-		<div>
-			<%= submit_tag "登录", :class => "button" %>
-		</div>
-	<% end %>
-</div>
+<% end %>

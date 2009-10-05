@@ -1,0 +1,60 @@
+<% talent_page_title("管理老师") %>
+
+
+<h2>管理老师</h2>
+
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<a href="/schools/<%= @school_id %>/new_teacher">
+		添加新的老师</a>
+</div>
+
+<div>
+	<% form_tag "/schools/#{@school_id}/destroy_teacher", :method => :post, :id => "del_teacher_form" do %>
+		<input type="hidden" id="del_teacher_id" name="teacher_id" />
+	<% end %>
+	<script language="JavaScript">
+		function del_teacher(teacher_id, teacher_uid) {
+			if(confirm("确定要删除老师 " + teacher_uid + " 么 ?")) {
+				document.getElementById("del_teacher_id").value = teacher_id;
+				document.getElementById("del_teacher_form").submit();
+			}
+		}
+	</script>
+	
+	<% form_tag "/schools/#{@school_id}/adjust_teacher_admin", :method => :post, :id => "adjust_admin_form" do %>
+		<input type="hidden" id="adjust_teacher_id" name="teacher_id" />
+		<input type="hidden" id="teacher_admin" name="teacher_admin" />
+	<% end %>
+	<script language="JavaScript">
+		function adjust_admin(teacher_id, teacher_uid, admin) {
+			if(confirm("确定要调整老师 " + teacher_uid + " 的管理权限么 ?")) {
+				document.getElementById("adjust_teacher_id").value = teacher_id;
+				document.getElementById("teacher_admin").value = admin.toString();
+				document.getElementById("adjust_admin_form").submit();
+			}
+		}
+	</script>
+	
+	<table border="0" cellspacing="0" cellpadding="8" class="main_part_w">
+		<thead>
+			<tr>
+				<td>用户名</td>
+				<td>名称</td>
+				<td style="width: 60px;">管理权限</td>
+				<td style="width: 50px;"></td>
+				<td style="width: 100px;"></td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "/schools/teacher", :collection => @teachers %>
+		</tbody>
+	</table>
+</div>

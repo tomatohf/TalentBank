@@ -10,7 +10,44 @@
     <body>
 	
 		<div class="page_container">
-			<%= yield %>
+			
+			<div class="float_l" style="width: 200px;">
+
+				<div>
+					<a href="/teachers/<%= @teacher.id %>">
+						首页</a>
+				</div>
+				
+				<% if @teacher.admin %>
+					<div>
+						<a href="/teachers/<%= @teacher.id %>/students">
+							管理学生</a>
+					</div>
+				<% end %>
+				
+				<div>
+					<a href="/teachers/<%= @teacher.id %>/edit">
+						修改信息</a>
+				</div>
+				
+				<div>
+					<a href="/teachers/<%= @teacher.id %>/edit_password">
+						修改密码</a>
+				</div>
+				
+				<div>
+					<a href="/index/logout">
+						退出系统</a>
+				</div>
+
+			</div>
+
+			<div style="margin-left: 200px;">
+				<%= yield %>
+			</div>
+
+			<div class="clear_l"></div>
+			
 		</div>
 		
 		<% school_abbr = @school.abbr %>

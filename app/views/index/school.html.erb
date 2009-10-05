@@ -1,59 +1,83 @@
 <% talent_page_title("学校用户") %>
 
-<div>
-	<h2>学校用户登录</h2>
-	
-	<% if flash[:error_msg] %>
-		<p class="error_msg">
-		    <%= flash[:error_msg] %>
-		</p>
-	<% end %>
 
-	<% form_tag "", :method => "post" do %>
+<h2>学校用户登录</h2>
 
-		<div>
-			<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
 
-			<label for="user_type_school">
-				总管理员
-			</label>
-			
-			&nbsp;&nbsp;&nbsp;
-			
-			<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
+<% form_tag "", :method => :post do %>
 
-			<label for="user_type_teacher">
-				学校老师
-			</label>
-		</div>
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 60px;">
+
+			</td>
+
+			<td>
+				<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
+				<label for="user_type_school">
+					总管理员
+				</label>
+
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+				<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
+				<label for="user_type_teacher">
+					学校老师
+				</label>
+			</td>
+		</tr>
 		
-		<div>
-			<label for="username">
-				用户名
-			</label>
-		</div>
-		<div>
-			<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
-		</div>
+		<tr>
+			<td>
+				<label for="username">
+					用户名
+				</label>
+			</td>
 
-		<div>
-			<label for="password">
-				密码
-			</label>
-		</div>
-		<div>
-			<input type="password" id="password" name="password" class="text_field" size="30" />
-			<a href="#">
-				忘记密码?</a>
-		</div>
+			<td>
+				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password">
+					密码
+				</label>
+			</td>
 
-		<div>
-			<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
-			<label for="save_username">记住用户名</label>
-		</div>
+			<td>
+				<input type="password" id="password" name="password" class="text_field" size="30" />
+				&nbsp;&nbsp;&nbsp;
+				<a href="#">
+					忘记密码?</a>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
 
-		<div>
-			<%= submit_tag "登录", :class => "button" %>
-		</div>
-	<% end %>
-</div>
+			<td>
+				<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+				<label for="save_username">记住用户名</label>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+
+			<td>
+				<%= submit_tag "登录", :class => "button" %>
+			</td>
+		</tr>
+	</table>
+<% end %>

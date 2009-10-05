@@ -137,6 +137,11 @@ class ApplicationController < ActionController::Base
   end
   
   
+  def performed_render_or_redirect
+    @performed_render || @performed_redirect
+  end
+  
+  
   def jump_to(url)
     if request.xhr?
       render :update do |page|
@@ -152,11 +157,6 @@ class ApplicationController < ActionController::Base
     correct = (session[:img_code] == params[:img_code])
     flash.now[:error_msg] = "请输入正确的验证码" unless correct
     correct
-  end
-  
-  
-  def performed_render_or_redirect
-    @performed_render || @performed_redirect
   end
   
 end

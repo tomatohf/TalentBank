@@ -1,0 +1,17 @@
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<% student_number = h(student.number) %>
+	
+	<td>
+		<%= student_number %>
+	</td>
+	
+	<td>
+		<a href="#" title="删除" class="none" onclick="del_student(<%= student.id %>, '<%= student_number %>'); return false;">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+			删除</a>
+	</td>
+	
+	<td>
+		
+	</td>
+</tr>

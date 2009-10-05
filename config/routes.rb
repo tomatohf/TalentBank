@@ -1,34 +1,33 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :students, :collection => {
-  
-    
-    
-  }, :member => {
-  
-    
-  
-  }
-  
-  
+  map.connect "/schools/:id/teachers/:page", :controller => "schools", :action => "teachers", :id => /\d+/, :page => /\d+/
   map.resources :schools, :collection => {
-  
-    
     
   }, :member => {
-  
-    
-  
+    :teachers => :get,
+    :new_teacher => :get,
+    :create_teacher => :post,
+    :destroy_teacher => :post,
+    :adjust_teacher_admin => :post
   }
   
   
+  map.connect "/teachers/:id/students/:page", :controller => "teachers", :action => "students", :id => /\d+/, :page => /\d+/
   map.resources :teachers, :collection => {
-  
-    
     
   }, :member => {
+    :edit_password => :get,
+    :update_password => :post,
+    :students => :get,
+    :new_student => :get,
+    :create_student => :post,
+    :destroy_student => :post
+  }
   
+  
+  map.resources :students, :collection => {
     
+  }, :member => {
   
   }
   

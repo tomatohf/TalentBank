@@ -1,0 +1,36 @@
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<% teacher_uid = h(teacher.uid) %>
+	
+	<td>
+		<%= teacher_uid %>
+	</td>
+	
+	<td>
+		<%= h(teacher.name) %>
+	</td>
+	
+	<td align="center">
+		<% if teacher.admin %>
+			<img src="/images/teachers/checked_icon.png" border="0" alt="拥有管理权限" title="拥有管理权限" />
+		<% end %>
+	</td>
+	
+	<td align="right">
+		<a href="#" title="删除" class="none" onclick="del_teacher(<%= teacher.id %>, '<%= teacher_uid %>'); return false;">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+			删除</a>
+	</td>
+	
+	<td align="right">
+		<a href="#" class="none" onclick="adjust_admin(<%= teacher.id %>, '<%= teacher_uid %>', <%= !teacher.admin %>); return false;">
+			<% if teacher.admin %>
+				<img src="/images/teachers/admin_remove_icon.gif" border="0" alt="取消管理权限" />
+				取消管理权限
+			<% else %>
+				<img src="/images/teachers/admin_add_icon.gif" border="0" alt="添加管理权限" />
+				添加管理权限
+			<% end %>
+		</a>
+	</td>
+</tr>
+	

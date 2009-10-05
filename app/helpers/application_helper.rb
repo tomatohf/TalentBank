@@ -11,4 +11,13 @@ module ApplicationHelper
     content_for(:page_title) { page_title }
   end
   
+  
+  def list_model_validate_errors(model)
+    errors = ""
+    model.errors.each do |attr, error|
+      errors += "#{error}<br />"
+    end
+    errors
+  end
+  
 end

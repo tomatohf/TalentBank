@@ -1,1 +1,11 @@
-this is teachers ~~~
+<% talent_page_title("老师") %>
+
+
+<h2>老师用户操作首页</h2>
+
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>

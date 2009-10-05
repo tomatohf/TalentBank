@@ -119,6 +119,8 @@ form {
 	border-width: 1px;
 	border-color: #A3988C;
 	
+	background-color: #F8F8F8;
+	
 	padding: 3px;
 }
 
@@ -180,7 +182,7 @@ a.none:hover {
 
 
 .bottom_line {
-	margin-top: 10px;
+	margin-top: 100px;
 	margin-bottom: 5px;
 	
 	text-align: right;
@@ -202,12 +204,12 @@ a.none:hover {
 }
 
 
-.error_msg, .info_msg, .warning_msg {
+.error_msg, .success_msg, .warning_msg {
 	background-repeat: no-repeat;
 	background-position: 10px 5px;
 	background-color: #FFFDC0;
 	
-	padding: 5px 10px 5px 35px;
+	padding: 5px 10px 3px 35px;
 }
 
 .error_msg {
@@ -217,8 +219,8 @@ a.none:hover {
 	color: red;
 }
 
-.info_msg {
-	background-image: url(/images/info_icon.gif);
+.success_msg {
+	background-image: url(/images/success_icon.gif);
 	
 	border: 1px dashed green;
 	color: green;

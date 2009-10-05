@@ -1,4 +1,28 @@
-module CareerCommunity
+module Utils
+  
+  # !!! the method to generate initial password
+  def self.generate_password(uid = "")
+    "#{uid}_password"
+  end
+  
+  def self.expand_cache_key(key)
+    ActiveSupport::Cache.expand_cache_key(key, :views)
+  end
+  
+  def self.deep_copy(object)
+    Marshal::load(Marshal.dump(object))
+  end
+  
+  def self.truncate_text(text, len, append = "...")
+    return "" if text.nil?
+    text.mb_chars.length > len ? text.mb_chars[0...(len - append.mb_chars.length)] + append : text
+  end
+  
+  def self.get_unique_id
+    now = Time.now
+    "#{now.to_i}_#{now.usec}_#{Process.pid}"
+  end
+  
   
   module CountCacheable
     
@@ -45,31 +69,6 @@ module CareerCommunity
         record.class.increase_count_cache(record.send(record.class::Count_Cache_Group_Field))
       }
       
-    end
-    
-  end
-
-
-  module Util
-    
-    def self.included(klass)
-      def klass.expand_cache_key(key)
-        ActiveSupport::Cache.expand_cache_key(key, :views)
-      end
-    end
-    
-    def deep_copy(ar)
-      Marshal::load(Marshal.dump(ar))
-    end
-    
-    def truncate_text(text, len, append = "...")
-      return "" if text.nil?
-      text.mb_chars.length > len ? text.mb_chars[0...(len - append.mb_chars.length)] + append : text
-    end
-    
-    def get_unique_id
-      now = Time.now
-      "#{now.to_i}_#{now.usec}_#{Process.pid}"
     end
     
   end

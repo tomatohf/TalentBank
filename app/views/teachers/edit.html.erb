@@ -1,0 +1,64 @@
+<% talent_page_title("修改老师信息") %>
+
+
+<h2>修改信息</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @teacher.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@teacher) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}", :method => :put do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				用户名
+			</td>
+			
+			<td>
+				<%= @teacher.uid %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="name">
+					名称
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @teacher.name %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="email">
+					email
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @teacher.email %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "修改信息", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+<% end %>

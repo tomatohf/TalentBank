@@ -30,6 +30,9 @@ ActiveRecord::Schema.define(:version => 4) do
     t.datetime "updated_at"
   end
 
+  add_index "students", ["school_id", "created_at"], :name => "index_students_on_school_id_and_created_at"
+  add_index "students", ["school_id", "number"], :name => "index_students_on_school_id_and_number", :unique => true
+
   create_table "teachers", :force => true do |t|
     t.string   "uid",        :limit => 25
     t.string   "password"
@@ -41,6 +44,9 @@ ActiveRecord::Schema.define(:version => 4) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "teachers", ["school_id", "created_at"], :name => "index_teachers_on_school_id_and_created_at"
+  add_index "teachers", ["school_id", "uid"], :name => "index_teachers_on_school_id_and_uid", :unique => true
 
   create_table "trash_records", :force => true do |t|
     t.string   "trashable_type"
