@@ -1,9 +1,10 @@
-Database index
+http://railscasts.com/episodes/182-cropping-images
 
 添加老师 和 添加学生 时, 提示初始密码
 
 提交疑问建议,错误反馈的功能
 
+Database index
 set up 备份的脚本
 
 protect key data from being destroy
