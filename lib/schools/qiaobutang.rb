@@ -20,6 +20,11 @@ module Schools
       "#{self.name} 人才库"
     end
     
+    
+    def edu_levels
+      [100300, 100200, 100400]
+    end
+    
   end
   
 end

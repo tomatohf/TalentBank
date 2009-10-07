@@ -2,7 +2,7 @@ module Utils
   
   # !!! the method to generate initial password
   def self.generate_password(uid = "")
-    "#{uid}_password"
+    "pass#{uid}word"
   end
   
   def self.expand_cache_key(key)

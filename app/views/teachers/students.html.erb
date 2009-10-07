@@ -11,28 +11,10 @@
 <% end %>
 
 <div>
-	<a href="/teachers/<%= @teacher.id %>/new_student">
-		添加新的学生</a>
-</div>
-
-<div>
-	<% form_tag "/teachers/#{@teacher.id}/destroy_student", :method => :post, :id => "del_student_form" do %>
-		<input type="hidden" id="del_student_id" name="student_id" />
-	<% end %>
-	<script language="JavaScript">
-		function del_student(student_id, student_number) {
-			if(confirm("确定要删除学生 " + student_number + " 么 ?")) {
-				document.getElementById("del_student_id").value = student_id;
-				document.getElementById("del_student_form").submit();
-			}
-		}
-	</script>
-	
 	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w">
 		<thead>
 			<tr>
 				<td style="width: 200px;">学号</td>
-				<td style="width: 50px;"></td>
 				<td></td>
 			</tr>
 		</thead>

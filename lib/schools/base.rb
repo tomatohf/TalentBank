@@ -33,6 +33,11 @@ module Schools
     end
     
     
+    def edu_levels
+      []
+    end
+    
+    
   end
   
 

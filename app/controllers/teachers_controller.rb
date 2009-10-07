@@ -5,11 +5,11 @@ class TeachersController < ApplicationController
   
   before_filter :check_login_for_teacher
   
-  before_filter :check_active, :only => [:update, :update_password, :create_student, :destroy_student]
+  before_filter :check_active, :only => [:update, :update_password]
   
   before_filter :check_teacher
   
-  before_filter :check_teacher_admin, :only => [:students, :new_student, :create_student, :destroy_student]
+  before_filter :check_teacher_admin, :only => [:students]
   
   
   def show
@@ -61,46 +61,7 @@ class TeachersController < ApplicationController
   
   
   def students
-    page = params[:page]
-    page = 1 unless page =~ /\d+/
-    @students = Student.paginate(
-      :page => page,
-      :per_page => Student_Page_Size,
-      :conditions => ["school_id = ?", @teacher.school_id],
-      :order => "created_at DESC"
-    )
-  end
-  
-  
-  def new_student
-    @student = Student.new(:school_id => @teacher.school_id)
-  end
-  
-  def create_student
-    @student = Student.new(:school_id => @teacher.school_id)
     
-    @student.number = params[:uid] && params[:uid].strip
-    @student.password = ::Utils.generate_password(@student.number)
-    
-    if @student.save
-      flash[:success_msg] = "操作成功, 已添加学生 #{@student.number}"
-      return jump_to("/teachers/#{@teacher.id}/students")
-    end
-    
-    render :action => "new_student"
-  end
-  
-  
-  def destroy_student
-    student_id = params[:student_id] && params[:student_id].strip
-    
-    student = Student.find(student_id)
-    if student.school_id == @teacher.school_id
-      student.destroy
-      flash[:success_msg] = "操作成功, 已删除学生 #{student.number}"
-    end
-    
-    jump_to("/teachers/#{@teacher.id}/students")
   end
   
   

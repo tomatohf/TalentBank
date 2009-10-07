@@ -12,16 +12,12 @@ ActionController::Routing::Routes.draw do |map|
   }
   
   
-  map.connect "/teachers/:id/students/:page", :controller => "teachers", :action => "students", :id => /\d+/, :page => /\d+/
   map.resources :teachers, :collection => {
     
   }, :member => {
     :edit_password => :get,
     :update_password => :post,
-    :students => :get,
-    :new_student => :get,
-    :create_student => :post,
-    :destroy_student => :post
+    :students => :get
   }
   
   

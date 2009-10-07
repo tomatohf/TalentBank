@@ -3,8 +3,6 @@ class Teacher < ActiveRecord::Base
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   
-  attr_protected :admin
-  
   validates_presence_of :school_id
   
   validates_presence_of :uid, :message => "请输入 用户名"
