@@ -22,7 +22,12 @@ module Schools
     
     
     def edu_levels
-      [100300]
+      [30]
+    end
+    
+    
+    def resume_domains
+      [ResumeDomain.general_version_id, 110, 120]
     end
     
   end

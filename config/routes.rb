@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :students, :collection => {
     
   }, :member => {
-  
+    :resumes => :get
   }
   
   

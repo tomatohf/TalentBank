@@ -21,8 +21,29 @@ Teacher.create(:uid => "wahaha", :password => "tomato", :admin => false, :school
 college_id = College.data["shift"].first[:id]
 Student.create(
   :school_id => school_id,
-  :number => 11111,
-  :password => 11111,
+  :number => "11111",
+  :password => "11111",
+  :name => "小乔",
+  :college_id => college_id,
+  :college_id => Major.data[college_id].first[:id],
+  :edu_level_id => EduLevel.data.first[:id],
+  :enter_year => 2006
+)
+Student.create(
+  :school_id => school_id,
+  :number => "33333",
+  :password => "33333",
+  :name => "小布",
+  :college_id => college_id,
+  :college_id => Major.data[college_id].first[:id],
+  :edu_level_id => EduLevel.data.first[:id],
+  :enter_year => 2006
+)
+Student.create(
+  :school_id => school_id,
+  :number => "55555",
+  :password => "55555",
+  :name => "小堂",
   :college_id => college_id,
   :college_id => Major.data[college_id].first[:id],
   :edu_level_id => EduLevel.data.first[:id],

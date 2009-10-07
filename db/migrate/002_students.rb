@@ -41,10 +41,12 @@ class Students < ActiveRecord::Migration
       
       t.column :school_id, :integer
       
+      t.column :name, :string, :limit => 25
+      
       t.column :college_id, :integer
       t.column :major_id, :integer
       
-      t.column :edu_level_id, :integer
+      t.column :edu_level_id, :integer, :limit => 2
       t.column :enter_year, :integer, :limit => 2
       
       t.column :created_at, :datetime

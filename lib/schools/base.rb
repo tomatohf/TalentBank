@@ -38,6 +38,11 @@ module Schools
     end
     
     
+    def resume_domains
+      []
+    end
+    
+    
   end
   
 

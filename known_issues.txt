@@ -1,4 +1,4 @@
-student_profiles 里面需要的额外信息
+上传求职照
 
 http://railscasts.com/episodes/182-cropping-images
 
