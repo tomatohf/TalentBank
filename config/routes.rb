@@ -28,12 +28,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :students, :collection => {
     
   }, :member => {
-    :resumes => :get,
-    
     :edit_profile => :get,
     :update_profile => :post
   } do |students|
     students.resources :edu_exps
+    
+    students.resources :resumes, :member => {
+      :preview => :get
+    }
   end
   
   

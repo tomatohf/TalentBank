@@ -1,0 +1,56 @@
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<td>
+		<% domain = ResumeDomain.find(resume_domain)[:name] %>
+		<%= domain %>
+	</td>
+	
+	
+	<td>
+		<% resume = resumes[resume_domain] %>
+		<% if resume %>
+			<% if resume.published %>
+				<font color="green">已发布</font>
+			<% else %>
+				<font color="yellow">未发布</font>
+			<% end %>
+		<% else %>
+			<font color="red">未添加</font>
+		<% end %>
+	</td>
+	
+	
+	<td align="right">
+		<% if resume %>
+			<a href="#" title="删除简历" class="none" onclick="del_resume(<%= resume.id %>, '<%= a(domain) %>'); return false;">
+				<img src="/images/teachers/delete_icon.gif" border="0" alt="删除简历" />
+				删除</a>
+		<% end %>
+	</td>
+	
+	
+	<td align="right">
+		<% if resume %>
+			<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>/edit" title="编辑简历" class="none">
+				<img src="/images/students/edit_icon.gif" border="0" alt="编辑简历" />
+				编辑</a>
+		<% else %>
+			<a href="#" title="添加简历" class="none" onclick="create_resume(<%= resume_domain %>); return false;">
+				<img src="/images/students/add_icon.png" border="0" alt="添加简历" />
+				添加</a>
+		<% end %>
+	</td>
+	
+	
+	<td align="right">
+		<% if resume %>
+			<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>/preview" title="预览简历" class="none" target="_blank">
+				<img src="/images/students/preview_resume_icon.gif" border="0" alt="预览简历" />
+				预览</a>
+		<% end %>
+	</td>
+	
+	
+	<td>
+		
+	</td>
+</tr>

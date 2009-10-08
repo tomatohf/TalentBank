@@ -1,0 +1,50 @@
+<% talent_page_title("管理简历") %>
+
+
+<h2>管理简历</h2>
+
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<% form_tag "/students/#{@student.id}/resumes", :method => :post, :id => "create_resume_form" do %>
+		<input type="hidden" id="domain_id" name="domain_id" />
+	<% end %>
+	<% form_tag "", :method => :delete, :id => "del_resume_form" do %>
+	<% end %>
+	<script language="JavaScript">
+		function create_resume(domain_id) {
+			document.getElementById("domain_id").value = domain_id;
+			document.getElementById("create_resume_form").submit();
+		}
+		
+		function del_resume(resume_id, domain) {
+			if(confirm("确定要删除 " + domain + " 的简历么 ? 该简历中所有的数据都将被删除 !")) {
+				del_form = document.getElementById("del_resume_form");
+				del_form.action = "/students/<%= @student.id %>/resumes/" + resume_id;
+				del_form.submit();
+			}
+		}
+	</script>
+	
+	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
+		<thead>
+			<tr>
+				<td style="width: 150px;">求职方向</td>
+				<td style="width: 80px;">状态</td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
+				<td></td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "resume_domain", :collection => @domains, :locals => {:resumes => @resumes} %>
+		</tbody>
+	</table>
+</div>

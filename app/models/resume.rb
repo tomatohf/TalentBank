@@ -1,5 +1,8 @@
 class Resume < ActiveRecord::Base
   
+  acts_as_trashable
+  
+  
   belongs_to :student, :class_name => "Student", :foreign_key => "student_id"
   
   has_many :simple_contents, :class_name => "ResumeSimpleContent", :foreign_key => "resume_id", :dependent => :destroy

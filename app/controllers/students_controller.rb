@@ -38,19 +38,6 @@ class StudentsController < ApplicationController
   end
   
   
-  def resumes
-    @domains = @school.resume_domains
-    
-    @resumes = {}
-    Resume.find(
-      :all,
-      :conditions => ["student_id = ?  and domain_id in (?)", @student.id, @domains]
-    ).each do |resume|
-      @resumes[resume.domain_id] = resume
-    end
-  end
-  
-  
   def edit_profile
     @profile = StudentProfile.get_profile(@student.id)
   end
