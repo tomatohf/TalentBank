@@ -1,0 +1,74 @@
+<table border="0" cellspacing="10" cellpadding="5">
+	<tr>
+		<td style="width: 100px;">
+			<label for="period">
+				时间段<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="period" name="period" class="text_field" size="30" value="<%= @exp.period %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="university">
+				大学
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="university" name="university" class="text_field" size="30" value="<%= @exp.university %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="college">
+				学院
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="college" name="college" class="text_field" size="30" value="<%= @exp.college %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="major">
+				专业
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="major" name="major" class="text_field" size="30" value="<%= @exp.major %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="edu_type">
+				教育类型
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="edu_type" name="edu_type" class="text_field" size="30" value="<%= @exp.edu_type %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			
+		</td>
+		
+		<td>
+			<%= submit_tag submit_label, :class => "button", :disabled => !@account_active %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/students/<%= @student.id %>/edu_exps">
+				返回教育经历列表</a>
+		</td>
+	</tr>
+</table>

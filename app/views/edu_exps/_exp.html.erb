@@ -1,0 +1,41 @@
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<% exp_period = h(exp.period) %>
+	
+	<td>
+		<%= exp_period %>
+	</td>
+	
+	
+	<td>
+		<%= h(exp.university) %>
+	</td>
+	
+	
+	<td>
+		<%= h(exp.college) %>
+	</td>
+	
+	
+	<td>
+		<%= h(exp.major) %>
+	</td>
+	
+	
+	<td>
+		<%= h(exp.edu_type) %>
+	</td>
+	
+	
+	<td>
+		<a href="#" title="删除" class="none" onclick="del_exp(<%= exp.id %>, '<%= a(exp_period) %>'); return false;">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+			删除</a>
+	</td>
+	
+	
+	<td>
+		<a href="/students/<%= @student.id %>/edu_exps/<%= exp.id %>/edit" title="编辑" class="none">
+			<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+			编辑</a>
+	</td>
+</tr>

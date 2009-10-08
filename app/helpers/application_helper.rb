@@ -20,4 +20,17 @@ module ApplicationHelper
     errors
   end
   
+  
+  def required_mark
+    %Q!
+      (<font color="red">*</font>)
+    !
+  end
+  
+  
+  def a(text)
+    # remove single quotes, so that it can be used in html attribute safely
+    text.gsub("'", "")
+  end
+  
 end

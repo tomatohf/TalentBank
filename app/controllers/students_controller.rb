@@ -27,11 +27,11 @@ class StudentsController < ApplicationController
       @student.password = password
       @student.password_confirmation = password_confirmation
       if @student.save
-        flash[:success_msg] = "修改成功, 密码已更新 !"
+        flash[:success_msg] = "修改成功, 密码已更新"
         return jump_to("/students/#{@student.id}")
       end
     else
-      flash.now[:error_msg] = "修改失败, 当前密码 错误 !"
+      flash.now[:error_msg] = "修改失败, 当前密码 错误"
     end
     
     render :action => "edit"
@@ -76,16 +76,11 @@ class StudentsController < ApplicationController
     @profile.political_status_id = params[:political_status]
     
     if @profile.save
-      flash[:success_msg] = "修改成功, 个人信息已更新 !"
+      flash[:success_msg] = "修改成功, 个人信息已更新"
       return jump_to("/students/#{@student.id}")
     end
     
     render :action => "edit_profile"
-  end
-  
-  
-  def edu_exps
-    
   end
   
   

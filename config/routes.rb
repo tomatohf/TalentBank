@@ -31,10 +31,10 @@ ActionController::Routing::Routes.draw do |map|
     :resumes => :get,
     
     :edit_profile => :get,
-    :update_profile => :post,
-    
-    :edu_exps => :get
-  }
+    :update_profile => :post
+  } do |students|
+    students.resources :edu_exps
+  end
   
   
   

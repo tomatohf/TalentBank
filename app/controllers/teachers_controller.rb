@@ -26,7 +26,7 @@ class TeachersController < ApplicationController
     @teacher.email = params[:email] && params[:email].strip
     
     if @teacher.save
-      flash[:success_msg] = "修改成功, 信息已更新 !"
+      flash[:success_msg] = "修改成功, 信息已更新"
       return jump_to("/teachers/#{@teacher.id}")
     end
     
@@ -49,11 +49,11 @@ class TeachersController < ApplicationController
       @teacher.password = password
       @teacher.password_confirmation = password_confirmation
       if @teacher.save
-        flash[:success_msg] = "修改成功, 密码已更新 !"
+        flash[:success_msg] = "修改成功, 密码已更新"
         return jump_to("/teachers/#{@teacher.id}")
       end
     else
-      flash.now[:error_msg] = "修改失败, 当前密码 错误 !"
+      flash.now[:error_msg] = "修改失败, 当前密码 错误"
     end
     
     render :action => "edit_password"
