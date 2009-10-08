@@ -30,14 +30,16 @@ class ResumesController < ApplicationController
     
     resume.domain_id = params[:domain_id] && params[:domain_id].strip
     
-    flash[:success_msg] = "操作成功, 已添加 #{ResumeDomain.find(resume.domain_id)[:name]} 的简历" if resume.save
-    
-    jump_to("/students/#{@student.id}/resumes")
+    if resume.save
+      jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit")
+    else
+      jump_to("/students/#{@student.id}/resumes")
+    end
   end
   
   
   def edit
-    
+    @simple_content = ResumeSimpleContent.get_simple_content(@resume.id)
   end
   
   def update

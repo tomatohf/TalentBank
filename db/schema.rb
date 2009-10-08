@@ -24,15 +24,6 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "edu_exps", ["student_id"], :name => "index_edu_exps_on_student_id"
 
-  create_table "resume_exp_contents", :force => true do |t|
-    t.integer  "exp_id"
-    t.string   "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "resume_exp_contents", ["exp_id"], :name => "index_resume_exp_contents_on_exp_id"
-
   create_table "resume_exp_sections", :force => true do |t|
     t.integer  "resume_id"
     t.string   "title",      :limit => 25
@@ -47,6 +38,7 @@ ActiveRecord::Schema.define(:version => 4) do
     t.string   "period",     :limit => 25
     t.string   "title",      :limit => 25
     t.string   "sub_title",  :limit => 15
+    t.string   "content",    :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -65,7 +57,7 @@ ActiveRecord::Schema.define(:version => 4) do
 
   create_table "resume_simple_contents", :force => true do |t|
     t.integer  "resume_id"
-    t.string   "job_intentions"
+    t.string   "job_intention"
     t.string   "hobbies"
     t.string   "awards"
     t.datetime "created_at"

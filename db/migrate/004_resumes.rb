@@ -61,7 +61,7 @@ class Resumes < ActiveRecord::Migration
     create_table :resume_simple_contents, :force => true do |t|
       t.column :resume_id, :integer
       
-      t.column :job_intentions, :string
+      t.column :job_intention, :string
       
       t.column :hobbies, :string
       
@@ -97,6 +97,8 @@ class Resumes < ActiveRecord::Migration
       t.column :title, :string, :limit => 25
       t.column :sub_title, :string, :limit => 15
       
+      t.column :content, :string, :limit => 500
+      
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
@@ -104,19 +106,6 @@ class Resumes < ActiveRecord::Migration
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_exps (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_exps WHERE id = 10000")
-    
-    create_table :resume_exp_contents, :force => true do |t|
-      t.column :exp_id, :integer
-      
-      t.column :content, :string
-      
-      t.column :created_at, :datetime
-      t.column :updated_at, :datetime
-    end
-    add_index :resume_exp_contents, :exp_id
-    # reserve first 10000 ID
-    ActiveRecord::Base.connection.execute("INSERT INTO resume_exp_contents (id) VALUES (10000)")
-    ActiveRecord::Base.connection.execute("DELETE FROM resume_exp_contents WHERE id = 10000")
     
     
     create_table :resume_list_sections, :force => true do |t|
@@ -140,7 +129,6 @@ class Resumes < ActiveRecord::Migration
     
     drop_table :resume_list_sections
     
-    drop_table :resume_exp_contents
     drop_table :resume_exps
     drop_table :resume_exp_sections
     

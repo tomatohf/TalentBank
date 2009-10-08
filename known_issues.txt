@@ -1,5 +1,3 @@
-更新 public 下的 500.html 404.html 422.html
-
 上传求职照
 
 http://railscasts.com/episodes/182-cropping-images
