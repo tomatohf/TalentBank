@@ -1,0 +1,113 @@
+<% talent_page_title("编辑个人信息") %>
+
+
+<h2>编辑个人信息</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @profile.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@profile) %>
+	</p>
+<% end %>
+
+<% form_tag "/students/#{@student.id}/update_profile", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				<label for="phone">
+					电话(<font color="red">*</font>)
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= @profile.phone %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="email">
+					电子邮件(<font color="red">*</font>)
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @profile.email %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="address">
+					地址
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="address" name="address" class="text_field" size="30" value="<%= @profile.address %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="zip">
+					邮编
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="zip" name="zip" class="text_field" size="30" value="<%= @profile.zip %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="gender">
+					性别
+				</label>
+			</td>
+			
+			<td>
+				<select name="gender" id="gender" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.gender.nil? %>></option>
+					<option value="true"<%= %Q! selected="selected"! if @profile.gender == true %>>男 - ♂</option>
+					<option value="false"<%= %Q! selected="selected"! if @profile.gender == false %>>女 - ♀</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="political_status">
+					政治面貌
+				</label>
+			</td>
+			
+			<td>
+				<select name="political_status" id="political_status" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.political_status_id.nil? %>></option>
+					<% PoliticalStatus.data.each do |status| %>
+						<option value="<%= status[:id] %>"<%= %Q! selected="selected"! if @profile.political_status_id == status[:id] %>><%= status[:name] %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<br />
+				<%= submit_tag "修改个人信息", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

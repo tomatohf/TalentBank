@@ -2,7 +2,7 @@ class StudentsController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:update]
+  before_filter :check_active, :only => [:update, :update_profile]
   
   before_filter :check_student
   
@@ -48,6 +48,44 @@ class StudentsController < ApplicationController
     ).each do |resume|
       @resumes[resume.domain_id] = resume
     end
+  end
+  
+  
+  def edit_profile
+    @profile = StudentProfile.get_profile(@student.id)
+  end
+  
+  
+  def update_profile
+    @profile = StudentProfile.get_profile(@student.id)
+    
+    @profile.phone = params[:phone] && params[:phone].strip
+    @profile.email = params[:email] && params[:email].strip
+    
+    @profile.address = params[:address] && params[:address].strip
+    @profile.zip = params[:zip] && params[:zip].strip
+    
+    @profile.gender = case params[:gender]
+      when "true"
+        true
+      when "false"
+        false
+      else
+        nil
+    end
+    @profile.political_status_id = params[:political_status]
+    
+    if @profile.save
+      flash[:success_msg] = "修改成功, 个人信息已更新 !"
+      return jump_to("/students/#{@student.id}")
+    end
+    
+    render :action => "edit_profile"
+  end
+  
+  
+  def edu_exps
+    
   end
   
   

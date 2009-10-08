@@ -5,9 +5,12 @@ ActionController::Routing::Routes.draw do |map|
     
   }, :member => {
     :teachers => :get,
+    
     :new_teacher => :get,
     :create_teacher => :post,
+    
     :destroy_teacher => :post,
+    
     :adjust_teacher_admin => :post
   }
   
@@ -17,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   }, :member => {
     :edit_password => :get,
     :update_password => :post,
+    
     :students => :get
   }
   
@@ -24,7 +28,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :students, :collection => {
     
   }, :member => {
-    :resumes => :get
+    :resumes => :get,
+    
+    :edit_profile => :get,
+    :update_profile => :post,
+    
+    :edu_exps => :get
   }
   
   

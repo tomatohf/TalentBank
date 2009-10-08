@@ -16,4 +16,11 @@ class StudentProfile < ActiveRecord::Base
   
   validates_length_of :zip, :maximum => 10, :message => "邮编 超过长度限制", :allow_nil => true
   
+  
+  
+  def self.get_profile(student_id)
+    profile = self.find(:first, :conditions => ["student_id = ?", student_id])
+    profile || self.new(:student_id => student_id)
+  end
+  
 end
