@@ -45,6 +45,25 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "resume_exps", ["section_id"], :name => "index_resume_exps_on_section_id"
 
+  create_table "resume_job_intentions", :force => true do |t|
+    t.integer  "resume_id"
+    t.string   "job_intention"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resume_job_intentions", ["resume_id"], :name => "index_resume_job_intentions_on_resume_id", :unique => true
+
+  create_table "resume_list_contents", :force => true do |t|
+    t.integer  "resume_id"
+    t.string   "hobbies"
+    t.string   "awards"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resume_list_contents", ["resume_id"], :name => "index_resume_list_contents_on_resume_id", :unique => true
+
   create_table "resume_list_sections", :force => true do |t|
     t.integer  "resume_id"
     t.string   "title",      :limit => 25
@@ -55,21 +74,10 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "resume_list_sections", ["resume_id"], :name => "index_resume_list_sections_on_resume_id"
 
-  create_table "resume_simple_contents", :force => true do |t|
-    t.integer  "resume_id"
-    t.string   "job_intention"
-    t.string   "hobbies"
-    t.string   "awards"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "resume_simple_contents", ["resume_id"], :name => "index_resume_simple_contents_on_resume_id", :unique => true
-
   create_table "resumes", :force => true do |t|
     t.integer  "student_id"
     t.integer  "domain_id",  :limit => 2
-    t.boolean  "published",               :default => false
+    t.boolean  "online",                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

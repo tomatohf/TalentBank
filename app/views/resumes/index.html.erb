@@ -1,5 +1,7 @@
 <% talent_page_title("管理简历") %>
 
+<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+
 
 <h2>管理简历</h2>
 
@@ -16,6 +18,9 @@
 	<% end %>
 	<% form_tag "", :method => :delete, :id => "del_resume_form" do %>
 	<% end %>
+	<% form_tag "", :method => :put, :id => "update_resume_form" do %>
+		<input type="hidden" id="online" name="online" />
+	<% end %>
 	<script language="JavaScript">
 		function create_resume(domain_id) {
 			document.getElementById("domain_id").value = domain_id;
@@ -29,6 +34,16 @@
 				del_form.submit();
 			}
 		}
+		
+		function update_resume(resume_id, domain, online) {
+			var msg = online ? "确定要将 " + domain + " 的简历上线么 ?" : "确定要将 " + domain + " 的简历下线么 ? 下线后该简历将无法被企业检索和浏览";
+			if(confirm(msg)) {
+				update_form = document.getElementById("update_resume_form");
+				update_form.action = "/students/<%= @student.id %>/resumes/" + resume_id;
+				document.getElementById("online").value = online.toString();
+				update_form.submit();
+			}
+		}
 	</script>
 	
 	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
@@ -36,6 +51,7 @@
 			<tr>
 				<td style="width: 150px;">求职方向</td>
 				<td style="width: 80px;">状态</td>
+				<td style="width: 50px;"></td>
 				<td style="width: 50px;"></td>
 				<td style="width: 50px;"></td>
 				<td style="width: 50px;"></td>
@@ -48,3 +64,27 @@
 		</tbody>
 	</table>
 </div>
+
+
+<script src="/lib/jquery/jquery-1.3.2.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	$(document).ready(
+		function() {
+			$(".edit_link").click(
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+					$(this).parent().hover(
+						function() {
+						},
+						function() {
+							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+						}
+					);
+					
+					return false;
+				}
+			);
+		}
+	);
+</script>

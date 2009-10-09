@@ -5,11 +5,13 @@ class ResumesController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:create, :update, :destroy]
+  before_filter :check_active, :only => [:create, :update, :destroy,
+                                          :update_job_intention]
   
   before_filter :check_student
   
-  before_filter :check_resume, :only => [:edit, :update, :destroy, :preview]
+  before_filter :check_resume, :only => [:update, :destroy, :show,
+                                          :edit_job_intention, :update_job_intention]
   
   
   def index
@@ -31,19 +33,19 @@ class ResumesController < ApplicationController
     resume.domain_id = params[:domain_id] && params[:domain_id].strip
     
     if resume.save
-      jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit")
+      jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
     else
       jump_to("/students/#{@student.id}/resumes")
     end
   end
   
   
-  def edit
-    @simple_content = ResumeSimpleContent.get_simple_content(@resume.id)
-  end
-  
   def update
-    # it's used to update the published status
+    @resume.online = (params[:online] == "true")
+    
+    flash[:success_msg] = %Q!操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历#{@resume.online ? "上线" : "下线"}! if @resume.save
+  
+    jump_to("/students/#{@student.id}/resumes")
   end
   
   
@@ -56,7 +58,16 @@ class ResumesController < ApplicationController
   end
   
   
-  def preview
+  def edit_job_intention
+    
+  end
+  
+  def update_job_intention
+    
+  end
+  
+  
+  def show
     
   end
   

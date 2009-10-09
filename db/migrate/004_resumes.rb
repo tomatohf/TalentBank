@@ -47,7 +47,7 @@ class Resumes < ActiveRecord::Migration
       
       t.column :domain_id, :integer, :limit => 2
       
-      t.column :published, :boolean, :default => false
+      t.column :online, :boolean, :default => false
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
@@ -58,10 +58,22 @@ class Resumes < ActiveRecord::Migration
     ActiveRecord::Base.connection.execute("DELETE FROM resumes WHERE id = 10000")
     
     
-    create_table :resume_simple_contents, :force => true do |t|
+    create_table :resume_job_intentions, :force => true do |t|
       t.column :resume_id, :integer
       
       t.column :job_intention, :string
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
+    end
+    add_index :resume_job_intentions, :resume_id, :unique => true
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_job_intentions (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_job_intentions WHERE id = 10000")
+    
+    
+    create_table :resume_list_contents, :force => true do |t|
+      t.column :resume_id, :integer
       
       t.column :hobbies, :string
       
@@ -70,10 +82,10 @@ class Resumes < ActiveRecord::Migration
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
-    add_index :resume_simple_contents, :resume_id, :unique => true
+    add_index :resume_list_contents, :resume_id, :unique => true
     # reserve first 10000 ID
-    ActiveRecord::Base.connection.execute("INSERT INTO resume_simple_contents (id) VALUES (10000)")
-    ActiveRecord::Base.connection.execute("DELETE FROM resume_simple_contents WHERE id = 10000")
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_list_contents (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_list_contents WHERE id = 10000")
     
     
     create_table :resume_exp_sections, :force => true do |t|
@@ -132,7 +144,8 @@ class Resumes < ActiveRecord::Migration
     drop_table :resume_exps
     drop_table :resume_exp_sections
     
-    drop_table :resume_simple_contents
+    drop_table :resume_list_contents
+    drop_table :resume_job_intentions
     
     drop_table :resumes
     
