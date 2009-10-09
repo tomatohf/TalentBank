@@ -35,7 +35,13 @@ ActionController::Routing::Routes.draw do |map|
     
     students.resources :resumes, :member => {
       :edit_job_intention => :get,
-      :update_job_intention => :post
+      :update_job_intention => :post,
+      
+      :edit_hobbies => :get,
+      :update_hobbies => :post,
+      
+      :edit_awards => :get,
+      :update_awards => :post
     }
   end
   

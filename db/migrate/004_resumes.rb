@@ -61,7 +61,7 @@ class Resumes < ActiveRecord::Migration
     create_table :resume_job_intentions, :force => true do |t|
       t.column :resume_id, :integer
       
-      t.column :job_intention, :string
+      t.column :content, :string
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
@@ -72,20 +72,32 @@ class Resumes < ActiveRecord::Migration
     ActiveRecord::Base.connection.execute("DELETE FROM resume_job_intentions WHERE id = 10000")
     
     
-    create_table :resume_list_contents, :force => true do |t|
+    create_table :resume_hobbies, :force => true do |t|
       t.column :resume_id, :integer
       
-      t.column :hobbies, :string
-      
-      t.column :awards, :string
+      t.column :content, :string
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
-    add_index :resume_list_contents, :resume_id, :unique => true
+    add_index :resume_hobbies, :resume_id, :unique => true
     # reserve first 10000 ID
-    ActiveRecord::Base.connection.execute("INSERT INTO resume_list_contents (id) VALUES (10000)")
-    ActiveRecord::Base.connection.execute("DELETE FROM resume_list_contents WHERE id = 10000")
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_hobbies (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_hobbies WHERE id = 10000")
+    
+    
+    create_table :resume_awards, :force => true do |t|
+      t.column :resume_id, :integer
+      
+      t.column :content, :string
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
+    end
+    add_index :resume_awards, :resume_id, :unique => true
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_awards (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_awards WHERE id = 10000")
     
     
     create_table :resume_exp_sections, :force => true do |t|
@@ -144,7 +156,8 @@ class Resumes < ActiveRecord::Migration
     drop_table :resume_exps
     drop_table :resume_exp_sections
     
-    drop_table :resume_list_contents
+    drop_table :resume_awards
+    drop_table :resume_hobbies
     drop_table :resume_job_intentions
     
     drop_table :resumes

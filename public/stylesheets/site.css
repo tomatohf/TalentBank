@@ -225,3 +225,32 @@ a.none:hover {
 	border: 1px dashed green;
 	color: green;
 }
+
+
+.info, .info_with_icon {
+	color: #B3ABA2;
+}
+
+.info_with_icon {
+	background: transparent url(/images/students/info_small.gif) no-repeat scroll left center;
+	padding-left: 20px;
+}
+
+
+.horizontal_nav {
+	word-spacing: 15px;
+}
+
+.horizontal_nav a {
+	color: #666699;
+}
+
+.horizontal_nav a:hover {
+	text-decoration: underline;
+}
+
+.horizontal_nav a.selected_link {
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+}

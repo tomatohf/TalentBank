@@ -6,12 +6,14 @@ class ResumesController < ApplicationController
   before_filter :check_login_for_student
   
   before_filter :check_active, :only => [:create, :update, :destroy,
-                                          :update_job_intention]
+                                          :update_job_intention, :update_hobbies, :update_awards]
   
   before_filter :check_student
   
   before_filter :check_resume, :only => [:update, :destroy, :show,
-                                          :edit_job_intention, :update_job_intention]
+                                          :edit_job_intention, :update_job_intention,
+                                          :edit_awards, :update_awards,
+                                          :edit_hobbies, :update_hobbies]
   
   
   def index
@@ -59,11 +61,59 @@ class ResumesController < ApplicationController
   
   
   def edit_job_intention
-    
+    @job_intention = ResumeJobIntention.get_job_intention(@resume.id)
   end
   
   def update_job_intention
+    @job_intention = ResumeJobIntention.get_job_intention(@resume.id)
+
+    @job_intention.content = params[:job_intention] && params[:job_intention].strip
     
+    if @job_intention.save
+      flash.now[:success_msg] = "修改成功, 求职意向已更新"
+    else
+      flash.now[:error_msg] = "修改失败, 再试一次吧"
+    end
+    
+    render :action => "edit_job_intention"
+  end
+  
+  
+  def edit_hobbies
+    @hobby = ResumeHobby.get_hobby(@resume.id)
+  end
+  
+  def update_hobbies
+    @hobby = ResumeHobby.get_hobby(@resume.id)
+
+    @hobby.content = params[:hobbies] && params[:hobbies].strip
+    
+    if @hobby.save
+      flash.now[:success_msg] = "修改成功, 特长和爱好已更新"
+    else
+      flash.now[:error_msg] = "修改失败, 再试一次吧"
+    end
+    
+    render :action => "edit_hobbies"
+  end
+  
+  
+  def edit_awards
+    @award = ResumeAward.get_award(@resume.id)
+  end
+  
+  def update_awards
+    @award = ResumeAward.get_award(@resume.id)
+
+    @award.content = params[:awards] && params[:awards].strip
+    
+    if @award.save
+      flash.now[:success_msg] = "修改成功, 荣誉和奖励已更新"
+    else
+      flash.now[:error_msg] = "修改失败, 再试一次吧"
+    end
+    
+    render :action => "edit_awards"
   end
   
   

@@ -4,7 +4,7 @@
 
 <h2>编辑 <%= domain %> 的简历</h2>
 
-<%= render :partial => "edit_resume_nav", :locals => {:current_link => "edit_job_intention"} %>
+<%= render :partial => "edit_resume_nav", :locals => {:current_link => "edit_hobbies"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -16,24 +16,24 @@
 	    <%= flash[:error_msg] %>
 	</p>
 <% end %>
-<% if @job_intention.errors.size > 0 %>
+<% if @hobby.errors.size > 0 %>
 	<p class="error_msg">
-		<%= list_model_validate_errors(@job_intention) %>
+		<%= list_model_validate_errors(@hobby) %>
 	</p>
 <% end %>
 
-<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/update_job_intention", :method => :post do %>
+<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/update_hobbies", :method => :post do %>
 
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
 		<tr>
-			<td style="width: 75px;">
-				<label for="job_intention">
-					求职意向
+			<td valign="top" style="width: 75px;">
+				<label for="hobbies">
+					特长和爱好
 				</label>
 			</td>
 			
 			<td>
-				<input type="text" id="job_intention" name="job_intention" class="text_field" size="50" value="<%= @job_intention.content %>" />
+				<textarea id="hobbies" name="hobbies" class="text_field" cols="50" rows="8"><%= @hobby.content %></textarea>
 			</td>
 		</tr>
 		

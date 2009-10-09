@@ -40,26 +40,12 @@
 				
 			<div class="dropdown_menu" style="font-size: 12px;">
 				<ul class="dropdown_sub_menu">
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>/edit_job_intention">
-							求职意向</a>
-					</li>
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>">
-							相关经历</a>
-					</li>
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>">
-							相关能力</a>
-					</li>
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>">
-							特长和奖励</a>
-					</li>
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>">
-							附加信息</a>
-					</li>
+					<% Resume.edit_parts.each do |part| %>
+						<li>
+							<a href="/students/<%= @student.id %>/resumes/<%= resume.id %>/<%= part[0] %>">
+								<%= part[1] %></a>
+						</li>
+					<% end %>
 				</ul>
 			</div>
 		<% end %>

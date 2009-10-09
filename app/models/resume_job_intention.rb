@@ -5,7 +5,7 @@ class ResumeJobIntention < ActiveRecord::Base
   
   validates_presence_of :resume_id
   
-  validates_length_of :job_intention, :maximum => 250, :message => "求职意向 超过长度限制", :allow_nil => true
+  validates_length_of :content, :maximum => 250, :message => "求职意向 超过长度限制", :allow_nil => true
   
   
   
