@@ -10,10 +10,7 @@ class ResumesController < ApplicationController
   
   before_filter :check_student
   
-  before_filter :check_resume, :only => [:update, :destroy, :show,
-                                          :edit_job_intention, :update_job_intention,
-                                          :edit_awards, :update_awards,
-                                          :edit_hobbies, :update_hobbies]
+  before_filter :check_resume, :except => [:index, :create]
   
   
   def index

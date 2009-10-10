@@ -79,14 +79,16 @@ class StudentsController < ApplicationController
     
     @photo.image = params[:image_file] if params[:image_file]
     
-    if params[:crop_x] && params[:crop_y] && params[:crop_w] && params[:crop_h]
-      @photo.crop_x = params[:crop_x]
-      @photo.crop_y = params[:crop_y]
-      @photo.crop_w = params[:crop_w]
-      @photo.crop_h = params[:crop_h]
-    end
+    @photo.crop_x = params[:crop_x]
+    @photo.crop_y = params[:crop_y]
+    @photo.crop_w = params[:crop_w]
+    @photo.crop_h = params[:crop_h]
     
-    @photo.save
+    if @photo.save
+      flash.now[:success_msg] = "操作成功, 求职照已更新"
+    else
+      flash.now[:error_msg] = "操作失败, 再试一次吧"
+    end
     
     render :action => "edit_job_photo"
   end

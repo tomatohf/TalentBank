@@ -1,0 +1,36 @@
+<% domain = ResumeDomain.find(@resume.domain_id)[:name] %>
+<% talent_page_title("编辑 #{domain} 的简历") %>
+
+
+<h2>编辑 <%= domain %> 的简历</h2>
+
+<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "resume_list_sections"} %>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections/new">
+		添加附加信息</a>
+</div>
+
+<div>
+	<% form_tag "", :method => :delete, :id => "del_section_form" do %>
+	<% end %>
+	<script language="JavaScript">
+		function del_section(section_id, section_title) {
+			if(confirm("确定要删除附加信息 " + section_title + " 么 ?")) {
+				del_form = document.getElementById("del_section_form");
+				del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections/" + section_id;
+				del_form.submit();
+			}
+		}
+	</script>
+	
+	<div>
+		<%= render :partial => "section", :collection => @sections %>
+	</div>
+</div>

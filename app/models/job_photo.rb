@@ -16,13 +16,15 @@ class JobPhoto < ActiveRecord::Base
     :image,
     :styles => {
       :large => "#{Large_W}x#{Large_H}>",
-      :normal => "#{Normal_W}x#{Normal_H}#"
+      :normal => {
+        :processors => [:jcropper],
+        :geometry => "#{Normal_W}x#{Normal_H}#"
+      }
     },
     :path => ":rails_root/public/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:id/:style_:id.:extension",
     :url => "/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:id/:style_:id.:extension",
     :storage => :filesystem,
-    :whiny_thumbnails => false, # to avoid displaying internal errors
-    :processors => [:jcropper]
+    :whiny_thumbnails => false # to avoid displaying internal errors
   )
 
   validates_attachment_presence :image, :message => "请选择 照片"
@@ -39,10 +41,10 @@ class JobPhoto < ActiveRecord::Base
   
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-  after_update :reprocess_image, :if => :cropping?
+  after_update :reprocess_image, :if => :crop?
 
 
-  def cropping?
+  def crop?
     !crop_x.blank? && !crop_y.blank? && !crop_w.blank? && !crop_h.blank?
   end
 
