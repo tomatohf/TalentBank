@@ -2,7 +2,7 @@ class StudentsController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:update, :update_profile]
+  before_filter :check_active, :only => [:update, :update_profile, :update_job_photo, :destroy_job_photo]
   
   before_filter :check_student
   
@@ -39,12 +39,11 @@ class StudentsController < ApplicationController
   
   
   def edit_profile
-    @profile = StudentProfile.get_profile(@student.id)
+    @profile = StudentProfile.get_record(@student.id)
   end
   
-  
   def update_profile
-    @profile = StudentProfile.get_profile(@student.id)
+    @profile = StudentProfile.get_record(@student.id)
     
     @profile.phone = params[:phone] && params[:phone].strip
     @profile.email = params[:email] && params[:email].strip
@@ -68,6 +67,38 @@ class StudentsController < ApplicationController
     end
     
     render :action => "edit_profile"
+  end
+  
+  
+  def edit_job_photo
+    @photo = JobPhoto.get_record(@student.id)
+  end
+  
+  def update_job_photo
+    @photo = JobPhoto.get_record(@student.id)
+    
+    @photo.image = params[:image_file] if params[:image_file]
+    
+    if params[:crop_x] && params[:crop_y] && params[:crop_w] && params[:crop_h]
+      @photo.crop_x = params[:crop_x]
+      @photo.crop_y = params[:crop_y]
+      @photo.crop_w = params[:crop_w]
+      @photo.crop_h = params[:crop_h]
+    end
+    
+    @photo.save
+    
+    render :action => "edit_job_photo"
+  end
+  
+  
+  def destroy_job_photo
+    @photo = JobPhoto.get_record(@student.id)
+    
+    @photo.destroy unless @photo.new_record?
+    flash[:success_msg] = "操作成功, 已删除求职照"
+    
+    jump_to("/students/#{@student.id}/edit_job_photo")
   end
   
   

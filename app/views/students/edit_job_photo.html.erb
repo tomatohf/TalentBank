@@ -1,0 +1,115 @@
+<% no_photo = @photo.new_record? %>
+<% token = Time.now.to_i %>
+
+<% talent_page_title("编辑求职照") %>
+
+
+<h2>编辑求职照</h2>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @photo.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@photo) %>
+	</p>
+<% end %>
+
+<div>
+	<% unless no_photo %>
+		<div class="float_l" style="margin-right: 50px;">
+			<div>
+				<img src="<%= @photo.image.url(:normal) %>?token=<%= token %>" border="0" />
+			</div>
+				
+			<div>
+				<% form_tag "/students/#{@student.id}/destroy_job_photo", :method => :post, :id => "del_photo_form" do %>
+				<% end %>
+				<a href="#" onclick="if(confirm('确定要删除求职照么 ?')) { document.getElementById('del_photo_form').submit(); }; return false;">
+					删除求职照</a>
+			</div>
+		</div>
+	<% end %>
+	
+	<div>
+		<% form_tag "/students/#{@student.id}/update_job_photo", :method => :post, :multipart => true do %>
+			<% action_label = no_photo ? "上传" : "更新" %>
+			<div>
+				<%= action_label %>求职照
+			</div>
+			<div>
+				<input type="file" name="image_file" id="image_file" />
+			</div>
+			<div>
+				<%= submit_tag action_label, :class => "button", :disabled => !@account_active %>
+			</div>
+		<% end %>
+	</div>
+	
+	<div class="clear_l"></div>
+</div>
+
+<% unless no_photo %>
+	<h3>剪裁</h3>
+	<img src="<%= @photo.image.url(:large) %>?token=<%= token %>" id="crop_img" border="0" />
+	
+	<h3>预览</h3>
+	<div style="width: <%= JobPhoto::Normal_W %>px; height: <%= JobPhoto::Normal_H %>px; overflow: hidden;">
+		<img src="<%= @photo.image.url(:large) %>?token=<%= token %>" border="0" id="preview_img" />
+	</div>
+	
+	<% form_tag "/students/#{@student.id}/update_job_photo", :method => :post do %>
+		<input type="hidden" id="crop_x" name="crop_x" />
+		<input type="hidden" id="crop_y" name="crop_y" />
+		<input type="hidden" id="crop_w" name="crop_w" />
+		<input type="hidden" id="crop_h" name="crop_h" />
+		<br />
+		<%= submit_tag "保存", :class => "button", :disabled => !@account_active %>
+	<% end %>
+	
+	
+	<link href="/lib/Jcrop/css/jquery.Jcrop.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/jquery/jquery-1.3.2.min.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/Jcrop/js/jquery.Jcrop.min.js" type="text/javascript" language="JavaScript"></script>
+	<script language="JavaScript">
+		function update_preview(coords) {
+			var rx = <%= JobPhoto::Normal_W %> / coords.w;
+			var ry = <%= JobPhoto::Normal_H %> / coords.h;
+			<% large_geometry = @photo.image_geometry(:large) %>
+			var ratio = <%= @photo.image_geometry(:original).width %> / <%= large_geometry.width %>;
+
+			$("#preview_img").css(
+				{
+					width: Math.round(rx * <%= large_geometry.width.to_i %>) + "px",
+					height: Math.round(ry * <%= large_geometry.height.to_i %>) + "px",
+					marginLeft: "-" + Math.round(rx * coords.x) + "px",
+					marginTop: "-" + Math.round(ry * coords.y) + "px"
+				}
+			);
+			$("#crop_x").val(Math.round(coords.x * ratio));
+			$("#crop_y").val(Math.round(coords.y * ratio));
+			$("#crop_w").val(Math.round(coords.w * ratio));
+			$("#crop_h").val(Math.round(coords.h * ratio));
+		}
+
+		$(
+			function() {
+				$("#crop_img").Jcrop(
+					{
+						onSelect: update_preview,
+						onChange: update_preview,
+						setSelect:   [0, 0, 600, 600],
+						aspectRatio: <%= JobPhoto::Normal_W %>/<%= JobPhoto::Normal_H %>
+					}
+				);
+			}
+		);
+	</script>
+<% end %>

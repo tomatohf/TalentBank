@@ -24,6 +24,18 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "edu_exps", ["student_id"], :name => "index_edu_exps_on_student_id"
 
+  create_table "job_photos", :force => true do |t|
+    t.integer  "student_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "job_photos", ["student_id"], :name => "index_job_photos_on_student_id", :unique => true
+
   create_table "resume_awards", :force => true do |t|
     t.integer  "resume_id"
     t.string   "content"

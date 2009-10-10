@@ -25,7 +25,6 @@ module Utils
   
   
   module CountCacheable
-    
     def self.included(including_model)
       
       def including_model.get_count(group_field_id)
@@ -70,7 +69,18 @@ module Utils
       }
       
     end
-    
+  end
+  
+  
+  module UniqueBelongs
+    def self.included(including_model)
+      
+      def including_model.get_record(belongs_to_id)
+        record = self.find(:first, :conditions => ["#{self::Belongs_To_Key} = ?", belongs_to_id])
+        record || self.new(self::Belongs_To_Key => belongs_to_id)
+      end
+      
+    end
   end
 
 end

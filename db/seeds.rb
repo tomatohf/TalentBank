@@ -15,10 +15,10 @@ School.create(:abbr => "shift", :password => Utils.generate_password("shift"))
 
 
 # TO BE DELETED !!! ... only for development ...
-school_id = School.get_school_info("shift")[0]
+school_id = School.get_school_info("qiaobutang")[0]
 Teacher.create(:uid => "tomato", :password => "tomato", :admin => true, :school_id => school_id)
 Teacher.create(:uid => "wahaha", :password => "tomato", :admin => false, :school_id => school_id)
-college_id = College.data["shift"].first[:id]
+college_id = College.data["qiaobutang"].first[:id]
 Student.create(
   :school_id => school_id,
   :number => "11111",

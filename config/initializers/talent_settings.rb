@@ -29,8 +29,6 @@ require "redcloth"
 
 # require "digest/sha1"
 # 
-# require "paperclip"
-# 
 # require "hpricot"
 # require "open-uri"
 # 

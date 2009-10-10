@@ -1,6 +1,24 @@
 class Resumes < ActiveRecord::Migration
   def self.up
     
+    create_table :job_photos, :force => true do |t|
+      t.column :student_id, :integer
+      
+      # for paperclip ...
+      t.column :image_file_name, :string # Original filename
+      t.column :image_content_type, :string # Mime type
+      t.column :image_file_size, :integer # File size in bytes
+      t.column :image_updated_at, :datetime
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
+    end
+    add_index :job_photos, :student_id, :unique => true
+    # reserve first 1000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO job_photos (id) VALUES (1000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM job_photos WHERE id = 1000")
+    
+    
     create_table :student_profiles, :force => true do |t|
       t.column :student_id, :integer
       
@@ -164,6 +182,7 @@ class Resumes < ActiveRecord::Migration
     
     drop_table :edu_exps
     drop_table :student_profiles
+    drop_table :job_photos
     
   end
 end

@@ -18,9 +18,7 @@ class StudentProfile < ActiveRecord::Base
   
   
   
-  def self.get_profile(student_id)
-    profile = self.find(:first, :conditions => ["student_id = ?", student_id])
-    profile || self.new(:student_id => student_id)
-  end
+  Belongs_To_Key = :student_id
+  include Utils::UniqueBelongs
   
 end

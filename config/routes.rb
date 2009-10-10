@@ -28,6 +28,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :students, :collection => {
     
   }, :member => {
+    :edit_job_photo => :get,
+    :update_job_photo => :post,
+    :destroy_job_photo => :post,
+    
     :edit_profile => :get,
     :update_profile => :post
   } do |students|

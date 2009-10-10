@@ -61,11 +61,11 @@ class ResumesController < ApplicationController
   
   
   def edit_job_intention
-    @job_intention = ResumeJobIntention.get_job_intention(@resume.id)
+    @job_intention = ResumeJobIntention.get_record(@resume.id)
   end
   
   def update_job_intention
-    @job_intention = ResumeJobIntention.get_job_intention(@resume.id)
+    @job_intention = ResumeJobIntention.get_record(@resume.id)
 
     @job_intention.content = params[:job_intention] && params[:job_intention].strip
     
@@ -80,11 +80,11 @@ class ResumesController < ApplicationController
   
   
   def edit_hobbies
-    @hobby = ResumeHobby.get_hobby(@resume.id)
+    @hobby = ResumeHobby.get_record(@resume.id)
   end
   
   def update_hobbies
-    @hobby = ResumeHobby.get_hobby(@resume.id)
+    @hobby = ResumeHobby.get_record(@resume.id)
 
     @hobby.content = params[:hobbies] && params[:hobbies].strip
     
@@ -99,11 +99,11 @@ class ResumesController < ApplicationController
   
   
   def edit_awards
-    @award = ResumeAward.get_award(@resume.id)
+    @award = ResumeAward.get_record(@resume.id)
   end
   
   def update_awards
-    @award = ResumeAward.get_award(@resume.id)
+    @award = ResumeAward.get_record(@resume.id)
 
     @award.content = params[:awards] && params[:awards].strip
     

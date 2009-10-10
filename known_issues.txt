@@ -1,5 +1,4 @@
-上传求职照
-http://railscasts.com/episodes/182-cropping-images
+重启时登录会提示登录失败
 
 添加老师时, 提示初始密码
 

@@ -9,9 +9,7 @@ class ResumeJobIntention < ActiveRecord::Base
   
   
   
-  def self.get_job_intention(resume_id)
-    job_intention = self.find(:first, :conditions => ["resume_id = ?", resume_id])
-    job_intention || self.new(:resume_id => resume_id)
-  end
+  Belongs_To_Key = :resume_id
+  include Utils::UniqueBelongs
   
 end

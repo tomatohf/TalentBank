@@ -9,9 +9,7 @@ class ResumeAward < ActiveRecord::Base
   
   
   
-  def self.get_award(resume_id)
-    list_content = self.find(:first, :conditions => ["resume_id = ?", resume_id])
-    list_content || self.new(:resume_id => resume_id)
-  end
+  Belongs_To_Key = :resume_id
+  include Utils::UniqueBelongs
   
 end
