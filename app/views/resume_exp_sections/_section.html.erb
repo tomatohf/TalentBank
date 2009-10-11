@@ -1,0 +1,67 @@
+<div class="resume_list_section">
+	<div class="resume_list_section_title">
+		<% section_title = h(section.title) %>
+		<div class="float_r">
+			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new" title="添加经历" class="none">
+				<img src="/images/students/add_icon.png" border="0" alt="添加经历" />
+				添加经历</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="#" title="删除" class="none" onclick="del_section(<%= section.id %>, '<%= a(section_title) %>'); return false;">
+				<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+				删除</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/edit" title="编辑" class="none">
+				<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+				编辑</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+		
+		<%= section_title %>		
+	</div>
+	
+	<% section.exps.each do |exp| %>
+		<div class="resume_list_section_content" onmouseover="document.getElementById('exp_operations_<%= exp.id %>').style.visibility='visible';" onmouseout="document.getElementById('exp_operations_<%= exp.id %>').style.visibility='hidden';">
+			<div style="margin: 0px 10px;">
+				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<tr>
+						<td valign="top" style="width: 120px;">
+							<% exp_period = h(exp.period) %>
+							<%= exp_period %>
+							
+							<div id="exp_operations_<%= exp.id %>" style="visibility: hidden;">
+								<div>
+									<a href="#" title="删除" class="none" onclick="del_exp(<%= section.id %>, <%= exp.id %>, '<%= a(exp_period) %>'); return false;">
+										<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+										删除</a>
+								</div>
+								<div>
+									<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/<%= exp.id %>/edit" title="编辑" class="none">
+										<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+										编辑</a>
+								</div>
+							</div>
+						</td>
+
+						<td>
+							<div class="float_r">
+								<%= h(exp.sub_title) %>
+							</div>
+							
+							<div>
+								<%= h(exp.title) %>
+							</div>
+
+							<ul>
+								<% Utils.lines(h(exp.content)).each do |line| %>
+									<li><%= line %></li>
+								<% end %>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	<% end %>
+</div>

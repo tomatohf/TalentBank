@@ -254,3 +254,26 @@ a.none:hover {
 	font-weight: bold;
 	text-decoration: none;
 }
+
+
+.resume_list_section {
+	width: 600px;
+	margin: 10px;
+	overflow: hidden;
+}
+
+.resume_list_section_title {
+	margin: 1px ;
+	padding: 5px;
+	background-color: #F7F7F7;
+	font-size: 14px;
+}
+
+.resume_list_section_content {
+	padding: 5px;
+}
+
+.resume_list_section_content ul {
+	padding: 0px;
+	margin: 0px;
+}

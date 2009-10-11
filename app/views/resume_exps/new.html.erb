@@ -1,0 +1,22 @@
+<% section_title = h(@section.title) %>
+<% talent_page_title("添加 #{section_title} 中的经历") %>
+
+
+<h2>添加 <%= section_title %> 中的经历</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @exp.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@exp) %>
+	</p>
+<% end %>
+
+<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections/#{@section.id}/resume_exps", :method => :post do %>
+
+	<%= render :partial => "exp_form", :locals => {:submit_label => "添加"} %>
+	
+<% end %>

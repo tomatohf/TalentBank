@@ -1,4 +1,4 @@
-class ResumeListSectionsController < ApplicationController
+class ResumeExpSectionsController < ApplicationController
   
   layout "students"
   
@@ -11,27 +11,30 @@ class ResumeListSectionsController < ApplicationController
   
   before_filter :check_resume
   
-  before_filter :check_resume_list_section, :except => [:index, :new, :create]
+  before_filter :check_resume_exp_section, :except => [:index, :new, :create]
   
   
   def index
-    @sections = ResumeListSection.find(:all, :conditions => ["resume_id = ?", @resume.id])
+    @sections = ResumeExpSection.find(
+      :all,
+      :conditions => ["resume_id = ?", @resume.id],
+      :include => [:exps]
+    )
   end
   
   
   def new
-    @section = ResumeListSection.new(:resume_id => @resume.id)
+    @section = ResumeExpSection.new(:resume_id => @resume.id)
   end
   
   def create
-    @section = ResumeListSection.new(:resume_id => @resume.id)
+    @section = ResumeExpSection.new(:resume_id => @resume.id)
     
     @section.title = params[:title] && params[:title].strip
-    @section.content = params[:content] && params[:content].strip
     
     if @section.save
-      flash[:success_msg] = "操作成功, 已添加附加信息 #{@section.title}"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+      flash[:success_msg] = "操作成功, 已添加经历块 #{@section.title}"
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
     end
     
     render :action => "new"
@@ -44,11 +47,10 @@ class ResumeListSectionsController < ApplicationController
   
   def update
     @section.title = params[:title] && params[:title].strip
-    @section.content = params[:content] && params[:content].strip
     
     if @section.save
-      flash[:success_msg] = "操作成功, 附加信息 #{@section.title} 已更新"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+      flash[:success_msg] = "操作成功, 经历块 #{@section.title} 已更新"
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
     end
     
     render :action => "edit"
@@ -58,9 +60,9 @@ class ResumeListSectionsController < ApplicationController
   def destroy
     @section.destroy
     
-    flash[:success_msg] = "操作成功, 已删除附加信息 #{@section.title}"
+    flash[:success_msg] = "操作成功, 已删除经历块 #{@section.title}"
   
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
   end
   
   
@@ -78,8 +80,8 @@ class ResumeListSectionsController < ApplicationController
   end
   
   
-  def check_resume_list_section
-    @section = ResumeListSection.find(params[:id])
+  def check_resume_exp_section
+    @section = ResumeExpSection.find(params[:id])
     jump_to("/errors/forbidden") unless @section.resume_id == @resume.id
   end
   

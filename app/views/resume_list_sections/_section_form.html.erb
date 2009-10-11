@@ -1,0 +1,42 @@
+<table border="0" cellspacing="10" cellpadding="5">
+	<tr>
+		<td style="width: 80px;">
+			<label for="title">
+				标题<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= @section.title %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+			<label for="content">
+				内容<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<textarea id="content" name="content" class="text_field" cols="50" rows="8"><%= @section.content %></textarea>
+			
+			<div class="info_with_icon" style="margin-top: 10px; font-size: 12px;">
+				每行输入一条
+			</div>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			
+		</td>
+		
+		<td>
+			<%= submit_tag submit_label, :class => "button", :disabled => !@account_active %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections">
+				返回附加信息列表</a>
+		</td>
+	</tr>
+</table>

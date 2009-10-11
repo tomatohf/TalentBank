@@ -1,0 +1,26 @@
+<table border="0" cellspacing="10" cellpadding="5">
+	<tr>
+		<td style="width: 80px;">
+			<label for="title">
+				标题<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= @section.title %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			
+		</td>
+		
+		<td>
+			<%= submit_tag submit_label, :class => "button", :disabled => !@account_active %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections">
+				返回经历列表</a>
+		</td>
+	</tr>
+</table>

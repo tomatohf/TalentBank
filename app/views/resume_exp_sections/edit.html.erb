@@ -1,0 +1,21 @@
+<% talent_page_title("编辑经历块") %>
+
+
+<h2>编辑经历块</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @section.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@section) %>
+	</p>
+<% end %>
+
+<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections/#{@section.id}", :method => :put do %>
+
+	<%= render :partial => "section_form", :locals => {:submit_label => "修改"} %>
+	
+<% end %>

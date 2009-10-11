@@ -48,6 +48,10 @@ ActionController::Routing::Routes.draw do |map|
       :update_awards => :post
     } do |resumes|
       resumes.resources :resume_list_sections
+      
+      resumes.resources :resume_exp_sections do |resume_exp_sections|
+        resume_exp_sections.resources :resume_exps
+      end
     end
   end
   

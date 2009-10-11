@@ -34,6 +34,10 @@
 			
 			<td>
 				<textarea id="hobbies" name="hobbies" class="text_field" cols="50" rows="8"><%= @hobby.content %></textarea>
+				
+				<div class="info_with_icon" style="margin-top: 10px; font-size: 12px;">
+					每行输入一条
+				</div>
 			</td>
 		</tr>
 		
@@ -44,10 +48,6 @@
 			
 			<td>
 				<%= submit_tag "修改", :class => "button", :disabled => !@account_active %>
-				
-				<span class="info_with_icon" style="margin-left: 20px; font-size: 12px;">
-					每行输入一条
-				</span>
 			</td>
 		</tr>
 	</table>

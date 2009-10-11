@@ -23,7 +23,7 @@ class Resume < ActiveRecord::Base
   def self.edit_parts
     [
       ["edit_job_intention", "求职意向"],
-  		["job_exps", "相关经历"],
+  		["resume_exp_sections", "相关经历"],
   		["edit_abilities", "相关能力"],
   		["edit_hobbies", "特长和爱好"],
   		["edit_awards", "荣誉和奖励"],

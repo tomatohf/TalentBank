@@ -1,0 +1,26 @@
+<div class="resume_list_section">
+	<div class="resume_list_section_title">
+		<% section_title = h(section.title) %>
+		<div class="float_r">
+			<a href="#" title="删除" class="none" onclick="del_section(<%= section.id %>, '<%= a(section_title) %>'); return false;">
+				<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+				删除</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections/<%= section.id %>/edit" title="编辑" class="none">
+				<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+				编辑</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+		
+		<%= section_title %>		
+	</div>
+	
+	<div class="resume_list_section_content">
+		<ul style="padding-left: 50px;">
+			<% Utils.lines(h(section.content)).each do |line| %>
+				<li><%= line %></li>
+			<% end %>
+		</ul>
+	</div>
+</div>

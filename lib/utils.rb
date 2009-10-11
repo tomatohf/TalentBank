@@ -5,6 +5,13 @@ module Utils
     "pass#{uid}word"
   end
   
+  def self.lines(text, remove_empty = true)
+    text.gsub!(/\r\n?/, "\n")
+    lines = text.split(/\n/)
+    lines.delete_if { |line| line.blank? } if remove_empty
+    lines
+  end
+  
   def self.expand_cache_key(key)
     ActiveSupport::Cache.expand_cache_key(key, :views)
   end
