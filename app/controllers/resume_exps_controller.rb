@@ -67,9 +67,15 @@ class ResumeExpsController < ApplicationController
   
   def add_tag
     tag_id = params[:tag_id] && params[:tag_id].strip
-    tagger = ResumeExpTagger.get_tagger(@exp.id, tag_id)
     
-    return render(:partial => "tagger", :object => tagger, :locals => {:section => @section, :exp => @exp}) if tagger.new_record? && tagger.save
+    if ResumeExpTagger.check_tag_domain((tag_id && tag_id.to_i), @resume.domain_id)
+      tagger = ResumeExpTagger.get_tagger(@exp.id, tag_id)
+      
+      if tagger.new_record? && tagger.save
+        return render(:partial => "tagger", :object => tagger, :locals => {:section => @section, :exp => @exp})
+      end
+    
+    end
     
     render :nothing => true
   end

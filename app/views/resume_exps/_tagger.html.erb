@@ -1,3 +1,3 @@
-<% tag = ResumeExpTag.find(@resume.domain_id, tagger.tag_id) %>
+<% tag = ResumeExpTag.find_by_id(tagger.tag_id) %>
 
 <a href="#" title="删除标签 <%= tag[:name] %>" class="none remove_exp_tag_link" onclick="remove_tag(<%= section.id %>, <%= exp.id %>, <%= tagger.id %>, this); return false;"><img class="remove_exp_tag_icon" src="/images/teachers/delete_icon.gif" border="0" alt="删除标签 <%= tag[:name] %>" style="visibility: hidden; margin-right: 1px;" /><%= tag[:name] %></a>

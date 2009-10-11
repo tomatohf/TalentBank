@@ -48,7 +48,7 @@
 									
 									<div class="dropdown_menu">
 										<ul class="dropdown_sub_menu">
-											<% ResumeExpTag.data[@resume.domain_id].each do |tag| %>
+											<% (ResumeDomain.general?(@resume.domain_id) ? ResumeExpTag.data.values.flatten : ResumeExpTag.data[@resume.domain_id]).each do |tag| %>
 												<li>
 													<a href="#" onclick="add_tag(<%= section.id %>, <%= exp.id %>, <%= tag[:id] %>); return false;">
 														<%= tag[:name] %></a>
@@ -78,7 +78,7 @@
 					</tr>
 				</table>
 				
-				<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 15px;">
+				<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 8px;">
 					<img src="/images/students/tag_icon.gif" border="0" title="标签" alt="标签" style="margin-bottom: -2px; margin-right: 3px;" />标签:
 					<%= render :partial => "/resume_exps/tagger", :collection => exp.taggers, :locals => {:section => section, :exp => exp} %>
 				</div>

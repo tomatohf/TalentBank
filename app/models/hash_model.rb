@@ -42,6 +42,10 @@ module HashModel
       self.select_one(self.data[group_id], field, value)
     end
     
+    def self.find_by_id(id)
+      self.select_one(self.data.values.flatten, :id, id)
+    end
+    
     def self.data
       {
         # group_id => [

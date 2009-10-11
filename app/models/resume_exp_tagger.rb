@@ -12,4 +12,9 @@ class ResumeExpTagger < ActiveRecord::Base
     tagger || self.new(:exp_id => exp_id, :tag_id => tag_id)
   end
   
+  
+  def self.check_tag_domain(tag_id, domain_id)
+    ResumeDomain.general?(domain_id) || ResumeExpTag.find(domain_id, tag_id)
+  end
+  
 end
