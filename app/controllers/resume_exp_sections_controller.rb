@@ -18,7 +18,7 @@ class ResumeExpSectionsController < ApplicationController
     @sections = ResumeExpSection.find(
       :all,
       :conditions => ["resume_id = ?", @resume.id],
-      :include => [:exps]
+      :include => [:exps => [:taggers]]
     )
   end
   

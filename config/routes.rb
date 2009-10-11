@@ -50,7 +50,10 @@ ActionController::Routing::Routes.draw do |map|
       resumes.resources :resume_list_sections
       
       resumes.resources :resume_exp_sections do |resume_exp_sections|
-        resume_exp_sections.resources :resume_exps
+        resume_exp_sections.resources :resume_exps, :member => {
+          :add_tag => :post,
+          :remove_tag => :post
+        }
       end
     end
   end

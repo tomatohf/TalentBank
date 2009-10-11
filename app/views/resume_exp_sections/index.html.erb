@@ -1,6 +1,8 @@
 <% domain = ResumeDomain.find(@resume.domain_id)[:name] %>
 <% talent_page_title("编辑 #{domain} 的简历") %>
 
+<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+
 
 <h2>编辑 <%= domain %> 的简历</h2>
 
@@ -22,25 +24,16 @@
 	<% end %>
 	<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
 	<% end %>
-	<script language="JavaScript">
-		function del_section(section_id, section_title) {
-			if(confirm("确定要删除经历块 " + section_title + " 么 ? 该经历块中所有的经历都将被删除 !")) {
-				var section_del_form = document.getElementById("del_section_form");
-				section_del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/" + section_id;
-				section_del_form.submit();
-			}
-		}
-		
-		function del_exp(section_id, exp_id, exp_period) {
-			if(confirm("确定要删除 " + exp_period + " 的经历么 ?")) {
-				var exp_del_form = document.getElementById("del_exp_form");
-				exp_del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/" + section_id + "/resume_exps/" + exp_id;
-				exp_del_form.submit();
-			}
-		}
-	</script>
 	
 	<div>
 		<%= render :partial => "section", :collection => @sections %>
 	</div>
 </div>
+
+
+<script src="/lib/jquery/jquery-1.3.2.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var STUDENT_ID = <%= @student.id %>;
+	var RESUME_ID = <%= @resume.id %>;
+</script>
+<script src="/javascripts/resumes/exps.js" type="text/javascript" language="JavaScript"></script>

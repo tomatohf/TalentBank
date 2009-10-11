@@ -5,7 +5,7 @@ class ResumeExpsController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:create, :update, :destroy]
+  before_filter :check_active, :only => [:create, :update, :destroy, :add_tag, :remove_tag]
   
   before_filter :check_student
   
@@ -62,6 +62,27 @@ class ResumeExpsController < ApplicationController
     flash[:success_msg] = "操作成功, 已删除 #{@section.title} 中 #{@exp.period} 的经历"
   
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+  end
+  
+  
+  def add_tag
+    tag_id = params[:tag_id] && params[:tag_id].strip
+    tagger = ResumeExpTagger.get_tagger(@exp.id, tag_id)
+    
+    return render(:partial => "tagger", :object => tagger, :locals => {:section => @section, :exp => @exp}) if tagger.new_record? && tagger.save
+    
+    render :nothing => true
+  end
+  
+  def remove_tag
+    tagger = ResumeExpTagger.find(params[:tagger_id])
+    
+    if tagger.exp_id == @exp.id
+      tagger.destroy
+      return render(:layout => false, :text => "true")
+    end
+    
+    render :nothing => true
   end
   
   

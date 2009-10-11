@@ -259,13 +259,12 @@ a.none:hover {
 .resume_list_section {
 	width: 600px;
 	margin: 10px;
-	overflow: hidden;
 }
 
 .resume_list_section_title {
 	margin: 1px ;
 	padding: 5px;
-	background-color: #F7F7F7;
+	background-color: #F8F8F8;
 	font-size: 14px;
 }
 

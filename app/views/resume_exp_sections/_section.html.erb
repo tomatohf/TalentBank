@@ -22,7 +22,7 @@
 	</div>
 	
 	<% section.exps.each do |exp| %>
-		<div class="resume_list_section_content" onmouseover="document.getElementById('exp_operations_<%= exp.id %>').style.visibility='visible';" onmouseout="document.getElementById('exp_operations_<%= exp.id %>').style.visibility='hidden';">
+		<div class="resume_list_section_content">
 			<div style="margin: 0px 10px;">
 				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 					<tr>
@@ -30,7 +30,7 @@
 							<% exp_period = h(exp.period) %>
 							<%= exp_period %>
 							
-							<div id="exp_operations_<%= exp.id %>" style="visibility: hidden;">
+							<div class="exp_operations" style="visibility: hidden;">
 								<div>
 									<a href="#" title="删除" class="none" onclick="del_exp(<%= section.id %>, <%= exp.id %>, '<%= a(exp_period) %>'); return false;">
 										<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
@@ -41,10 +41,26 @@
 										<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
 										编辑</a>
 								</div>
+								<div>
+									<a href="#" title="添加标签" class="none tag_link">
+										<img src="/images/students/add_tag_icon.gif" border="0" alt="添加标签" style="margin-bottom: -2px;" />
+										添加标签</a>
+									
+									<div class="dropdown_menu">
+										<ul class="dropdown_sub_menu">
+											<% ResumeExpTag.data[@resume.domain_id].each do |tag| %>
+												<li>
+													<a href="#" onclick="add_tag(<%= section.id %>, <%= exp.id %>, <%= tag[:id] %>); return false;">
+														<%= tag[:name] %></a>
+												</li>
+											<% end %>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</td>
 
-						<td>
+						<td valign="top">
 							<div class="float_r">
 								<%= h(exp.sub_title) %>
 							</div>
@@ -61,6 +77,11 @@
 						</td>
 					</tr>
 				</table>
+				
+				<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 15px;">
+					<img src="/images/students/tag_icon.gif" border="0" title="标签" alt="标签" style="margin-bottom: -2px; margin-right: 3px;" />标签:
+					<%= render :partial => "/resume_exps/tagger", :collection => exp.taggers, :locals => {:section => section, :exp => exp} %>
+				</div>
 			</div>
 		</div>
 	<% end %>
