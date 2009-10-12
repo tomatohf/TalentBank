@@ -1,0 +1,207 @@
+<%
+	no_photo = photo.new_record?
+%>
+
+
+<link href="/stylesheets/resume.css" rel="stylesheet" type="text/css" />
+
+<div class="resume">
+	<div>
+		<% student_name = h(student.name) %>
+		
+		<% unless no_photo %>
+			<div class="float_r">
+				<img src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
+			</div>
+		<% end %>
+		
+		
+		<div>
+			<h1><%= student_name %></h1>
+			<div>
+				<span>
+					电话:
+					<%= h(profile.phone) %>
+				</span>
+				
+				<span>
+					电子邮件:
+					<%= h(profile.email) %>
+				</span>
+			</div>
+			<div>
+				<% unless profile.gender.nil? %>
+					<span>
+						性别:
+						<%= profile.gender ? "男" : "女" %>
+					</span>
+				<% end %>
+				
+				<% unless profile.political_status_id.nil? %>
+					<span>
+						政治面貌:
+						<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
+					</span>
+				<% end %>
+			</div>
+			<div>
+				<% unless profile.address.blank? %>
+					<span>
+						地址:
+						<%= h(profile.address) %>
+					</span>
+				<% end %>
+				
+				<% unless profile.zip.blank? %>
+					<span>
+						邮编:
+						<%= h(profile.zip) %>
+					</span>
+				<% end %>
+			</div>
+		</div>
+		<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
+			<div>
+				<div class="resume_section_title">
+					求职意向
+				</div>
+
+				<div class="resume_section">
+					<%= h(resume.job_intention.content) %>
+				</div>
+			</div>
+		<% end %>
+		
+		
+		<% unless no_photo %>
+			<div class="clear_r"></div>
+		<% end %>
+	</div>
+	
+	
+	<div>
+		<div class="resume_section_title">
+			教育经历
+		</div>
+		
+		<div class="resume_section">
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<% edus.each do |edu| %>
+					<tr>
+						<td style="width: 125px;">
+							<%= h(edu.period) %>
+						</td>
+
+
+						<td>
+							<%= h(edu.university) %>
+						</td>
+
+
+						<td>
+							<%= h(edu.college) %>
+						</td>
+
+
+						<td>
+							<%= h(edu.major) %>
+						</td>
+
+
+						<td>
+							<%= h(edu.edu_type) %>
+						</td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+	</div>
+	
+	
+	<% resume.exp_sections.each do |exp_section| %>
+		<div>
+			<div class="resume_section_title">
+				<%= h(exp_section.title) %>
+			</div>
+
+			<div class="resume_section">
+				<% exp_section.exps.each do |exp| %>
+					<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+						<tr>
+							<td valign="top" style="width: 120px;">
+								<%= h(exp.period) %>
+							</td>
+
+							<td valign="top">
+								<div class="float_r">
+									<%= h(exp.sub_title) %>
+								</div>
+
+								<div>
+									<%= h(exp.title) %>
+								</div>
+
+								<ul>
+									<% Utils.lines(h(exp.content)).each do |line| %>
+										<li><%= line %></li>
+									<% end %>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+	
+	
+	<% unless resume.award.nil? || resume.award.content.blank? %>
+		<div>
+			<div class="resume_section_title">
+				荣誉和奖励
+			</div>
+
+			<div class="resume_section">
+				<ul>
+					<% Utils.lines(h(resume.award.content)).each do |line| %>
+						<li><%= line %></li>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+	<% end %>
+	
+	
+	<% unless resume.hobby.nil? || resume.hobby.content.blank? %>
+		<div>
+			<div class="resume_section_title">
+				特长和爱好
+			</div>
+
+			<div class="resume_section">
+				<ul>
+					<% Utils.lines(h(resume.hobby.content)).each do |line| %>
+						<li><%= line %></li>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+	<% end %>
+	
+	
+	<% resume.list_sections.each do |list_section| %>
+		<div>
+			<div class="resume_section_title">
+				<%= h(list_section.title) %>
+			</div>
+
+			<div class="resume_section">
+				<ul>
+					<% Utils.lines(h(list_section.content)).each do |line| %>
+						<li><%= line %></li>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+	<% end %>
+</div>

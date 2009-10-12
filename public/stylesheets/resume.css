@@ -1,0 +1,26 @@
+.resume {
+	width: 700px;
+	border: 1px dashed #EAEAEA;
+	font-size: 13px;
+}
+
+.resume h1 {
+	margin-top: 0px;
+}
+
+.resume ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+
+.resume_section_title {
+	padding: 3px 5px 2px;
+	background-color: #F0F0F0;
+	font-size: 14px;
+}
+
+.resume_section {
+	padding: 5px 25px;
+}

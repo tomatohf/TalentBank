@@ -115,7 +115,20 @@ class ResumesController < ApplicationController
   
   
   def show
+    Resume.load_contents(
+      @resume,
+      [
+        :job_intention,
+        :hobby,
+        :award,
+        :list_sections,
+        {:exp_sections => [:exps]}
+      ]
+    )
     
+    @profile = StudentProfile.get_record(@student.id)
+    @photo = JobPhoto.get_record(@student.id)
+    @edus = EduExp.find(:all, :conditions => ["student_id = ?", @student.id])
   end
   
   

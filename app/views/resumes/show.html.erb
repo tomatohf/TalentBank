@@ -3,3 +3,18 @@
 
 
 <h2>预览 <%= domain %> 的简历</h2>
+
+<div>
+	<%=
+		render(
+			:partial => "resume",
+			:locals => {
+				:resume => @resume,
+				:student => @student,
+				:profile => @profile,
+				:photo => @photo,
+				:edus => @edus
+			}
+		)
+	%>
+</div>
