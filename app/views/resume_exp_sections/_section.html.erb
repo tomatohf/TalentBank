@@ -1,3 +1,5 @@
+<% tags = ResumeExpTag.data[@resume.domain_id] || [] %>
+
 <div class="resume_list_section">
 	<div class="resume_list_section_title">
 		<% section_title = h(section.title) %>
@@ -41,22 +43,24 @@
 										<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
 										编辑</a>
 								</div>
-								<div>
-									<a href="#" title="添加标签" class="none tag_link">
-										<img src="/images/students/add_tag_icon.gif" border="0" alt="添加标签" style="margin-bottom: -2px;" />
-										添加标签</a>
+								<% if tags.size > 0 %>
+									<div>
+										<a href="#" title="添加标签" class="none tag_link">
+											<img src="/images/students/add_tag_icon.gif" border="0" alt="添加标签" style="margin-bottom: -2px;" />
+											添加标签</a>
 									
-									<div class="dropdown_menu">
-										<ul class="dropdown_sub_menu">
-											<% (ResumeDomain.general?(@resume.domain_id) ? ResumeExpTag.data.values.flatten : ResumeExpTag.data[@resume.domain_id]).each do |tag| %>
-												<li>
-													<a href="#" onclick="add_tag(<%= section.id %>, <%= exp.id %>, <%= tag[:id] %>); return false;">
-														<%= tag[:name] %></a>
-												</li>
-											<% end %>
-										</ul>
+										<div class="dropdown_menu">
+											<ul class="dropdown_sub_menu">
+												<% tags.each do |tag| %>
+													<li>
+														<a href="#" onclick="add_tag(<%= section.id %>, <%= exp.id %>, <%= tag[:id] %>); return false;">
+															<%= tag[:name] %></a>
+													</li>
+												<% end %>
+											</ul>
+										</div>
 									</div>
-								</div>
+								<% end %>
 							</div>
 						</td>
 
@@ -78,10 +82,12 @@
 					</tr>
 				</table>
 				
-				<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 8px;">
-					<img src="/images/students/tag_icon.gif" border="0" title="标签" alt="标签" style="margin-bottom: -2px; margin-right: 3px;" />标签:
-					<%= render :partial => "/resume_exps/tagger", :collection => exp.taggers, :locals => {:section => section, :exp => exp} %>
-				</div>
+				<% if tags.size > 0 %>
+					<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 8px;">
+						<img src="/images/students/tag_icon.gif" border="0" title="标签" alt="标签" style="margin-bottom: -2px; margin-right: 3px;" />标签:
+						<%= render :partial => "/resume_exps/tagger", :collection => exp.taggers, :locals => {:section => section, :exp => exp} %>
+					</div>
+				<% end %>
 			</div>
 		</div>
 	<% end %>

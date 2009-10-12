@@ -7,7 +7,7 @@ class ResumeDomain < HashModel::Simple
     
     [
       # first 100 ids are reserved by general versions ...
-      {:id => 10, :name => "通用版"},
+      {:id => 10, :name => "不限方向"},
       
       {:id => 110, :name => "销售"},
       {:id => 120, :name => "研发"}

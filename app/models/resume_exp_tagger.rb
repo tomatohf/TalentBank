@@ -14,7 +14,7 @@ class ResumeExpTagger < ActiveRecord::Base
   
   
   def self.check_tag_domain(tag_id, domain_id)
-    ResumeDomain.general?(domain_id) || ResumeExpTag.find(domain_id, tag_id)
+    ResumeExpTag.find(domain_id, tag_id)
   end
   
 end
