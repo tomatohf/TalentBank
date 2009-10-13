@@ -42,18 +42,20 @@ class School < ActiveRecord::Base
   end
   
   def self.get_school_info(abbr)
-    s = Cache.get(self.school_info_key(abbr))
+    school_info = Cache.get(self.school_info_key(abbr))
     
-    unless s
-      s = self.get_from_abbr(abbr)
-      
-      self.set_school_info_cache(abbr, s)
+    unless school_info
+      school = self.get_from_abbr(abbr)
+      school_info = self.set_school_info_cache(abbr, school)
     end
-    s
+    
+    school_info
   end
   
   def self.set_school_info_cache(abbr, school)
-    Cache.set(self.school_info_key(abbr), [school.id, school.abbr, school.active], Cache_TTL)
+    school_info = [school.id, school.abbr, school.active]
+    Cache.set(self.school_info_key(abbr), school_info, Cache_TTL)
+    school_info
   end
   
   def self.clear_school_info_cache(abbr)

@@ -1,8 +1,5 @@
 class IndexController < ApplicationController
   
-  skip_before_filter :verify_authenticity_token, :only => [:student, :school, :corporation]
-  
-  
   def index
 
     return jump_to("/#{session[:account_type]}/#{session[:account_id]}") if login?

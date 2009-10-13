@@ -24,7 +24,7 @@ class Resume < ActiveRecord::Base
     [
       ["edit_job_intention", "求职意向"],
   		["resume_exp_sections", "相关经历"],
-  		["edit_abilities", "相关能力"],
+  		["edit_skills", "技能与证书"],
   		["edit_awards", "荣誉和奖励"],
   		["edit_hobbies", "特长和爱好"],
   		["resume_list_sections", "附加信息"]
