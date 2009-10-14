@@ -36,7 +36,10 @@ ActionController::Routing::Routes.draw do |map|
     :update_profile => :post,
     
     :edit_skills => :get,
-    :update_skills => :post
+    :update_skills => :post,
+    
+    :add_skill => :post,
+    :remove_skill => :post
   } do |students|
     students.resources :edu_exps
     

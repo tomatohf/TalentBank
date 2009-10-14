@@ -42,7 +42,7 @@ function remove_tag(section_id, exp_id, tagger_id, tagger_link) {
 				$(tagger_link).remove();
 			}
 		},
-		"script"
+		"text"
 	);
 }
 

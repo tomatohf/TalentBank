@@ -24,9 +24,10 @@
 		</div>
 	<% end %>
 	
+	<div class="sep_line"></div>
+	
 	<% unselected_skills.each do |skill| %>
-		<div class="unselected_skill">
-			<%= skill[:name] %>
-		</div>
+		<a href="#" class="unselected_skill" onclick="add_skill(<%= skill[:id] %>, this); return false;">
+			<%= skill[:name] %></a>
 	<% end %>
 </div>

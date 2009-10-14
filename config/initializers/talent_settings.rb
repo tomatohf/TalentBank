@@ -69,6 +69,8 @@ require_dependency "utils"
 
 require_dependency "schools/base"
 
+require_dependency "skill_value_types/base"
+
 ##################################################
 ### END
 ##################################################

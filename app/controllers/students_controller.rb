@@ -4,7 +4,7 @@ class StudentsController < ApplicationController
   
   before_filter :check_active, :only => [:update, :update_profile,
                                           :update_job_photo, :destroy_job_photo,
-                                          :update_skills]
+                                          :add_skill, :remove_skill, :update_skills]
   
   before_filter :check_student
   
@@ -111,8 +111,32 @@ class StudentsController < ApplicationController
     @selected_skill_ids = @student_skills.collect { |skill| skill.skill_id }
   end
   
-  def update_skills
+  def add_skill
+    skill_id = params[:skill_id] && params[:skill_id].strip
     
+    if (skill = Skill.find(skill_id.to_i))
+      student_skill = StudentSkill.get_record(@student.id, skill[:id])
+    
+      if student_skill.new_record?
+        student_skill.value = SkillValueTypes.get_type(skill[:value_type]).default_value
+        # no need to save it ...
+        # student_skill.save
+      end
+      
+      return render(:partial => "student_skill", :object => student_skill)
+    end
+    
+    render :nothing => true
+  end
+  
+  def remove_skill
+    
+  end
+  
+  def update_skills
+    # no need to save all values ... 
+    # just find out what values have been changed
+    # and just save the values that have been changed ...
   end
   
   

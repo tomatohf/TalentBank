@@ -1,0 +1,22 @@
+<%
+	skill = Skill.find(student_skill.skill_id)
+	element_id = "skill_#{skill[:id]}"
+%>
+
+<tr id="skill_row_<%= skill[:id] %>">
+	<td>
+		<label for="<%= element_id %>">
+			<%= skill[:name] %>
+		</label>
+	</td>
+
+	<td>
+		<%= SkillValueTypes.get_type(skill[:value_type]).render_input(skill[:data], student_skill.value, element_id) %>
+	</td>
+	
+	<td>
+		<a href="#" title="删除" class="none">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+			删除</a>
+	</td>
+</tr>
