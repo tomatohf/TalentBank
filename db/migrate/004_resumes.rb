@@ -175,10 +175,41 @@ class Resumes < ActiveRecord::Migration
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_list_sections (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_list_sections WHERE id = 10000")
+    
+    
+    create_table :student_skills, :force => true do |t|
+      t.column :student_id, :integer
+      
+      t.column :skill_id, :integer
+      
+      t.column :value, :integer, :limit => 2
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
+    end
+    add_index :student_skills, [:student_id, :skill_id], :unique => true
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO student_skills (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM student_skills WHERE id = 10000")
+    
+    create_table :resume_skills, :force => true do |t|
+      t.column :resume_id, :integer
+      
+      t.column :student_skill_id, :integer
+      
+      t.column :created_at, :datetime
+    end
+    add_index :resume_skills, :resume_id
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_skills (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_skills WHERE id = 10000")
 
   end
 
   def self.down
+    
+    drop_table :resume_skills
+    drop_table :student_skills
     
     drop_table :resume_list_sections
     

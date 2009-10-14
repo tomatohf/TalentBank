@@ -102,6 +102,14 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "resume_list_sections", ["resume_id"], :name => "index_resume_list_sections_on_resume_id"
 
+  create_table "resume_skills", :force => true do |t|
+    t.integer  "resume_id"
+    t.integer  "student_skill_id"
+    t.datetime "created_at"
+  end
+
+  add_index "resume_skills", ["resume_id"], :name => "index_resume_skills_on_resume_id"
+
   create_table "resumes", :force => true do |t|
     t.integer  "student_id"
     t.integer  "domain_id",  :limit => 2
@@ -135,6 +143,16 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   add_index "student_profiles", ["student_id"], :name => "index_student_profiles_on_student_id", :unique => true
+
+  create_table "student_skills", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "skill_id"
+    t.integer  "value",      :limit => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "student_skills", ["student_id", "skill_id"], :name => "index_student_skills_on_student_id_and_skill_id", :unique => true
 
   create_table "students", :force => true do |t|
     t.string   "number",       :limit => 25

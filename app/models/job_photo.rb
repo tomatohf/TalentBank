@@ -55,7 +55,7 @@ class JobPhoto < ActiveRecord::Base
   end
   
   
-  Belongs_To_Key = :student_id
+  Belongs_To_Keys = [:student_id]
   include Utils::UniqueBelongs
 
 

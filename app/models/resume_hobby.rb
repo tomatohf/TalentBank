@@ -9,7 +9,7 @@ class ResumeHobby < ActiveRecord::Base
   
   
   
-  Belongs_To_Key = :resume_id
+  Belongs_To_Keys = [:resume_id]
   include Utils::UniqueBelongs
   
 end

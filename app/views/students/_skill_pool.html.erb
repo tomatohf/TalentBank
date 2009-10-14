@@ -1,0 +1,32 @@
+<%
+	selected_ids ||= []
+	
+	skills = Skill.data
+	selected_skills = []
+	unselected_skills = []
+	skills.each do |skill|
+		if selected_ids.include?(skill[:id])
+			selected_skills << skill
+			selected_ids.delete(skill[:id])
+		else
+			unselected_skills << skill
+		end
+	end
+%>
+
+
+<link href="/stylesheets/skill_pool.css" rel="stylesheet" type="text/css" />
+
+<div class="skill_pool">
+	<% selected_skills.each do |skill| %>
+		<div class="selected_skill">
+			<%= skill[:name] %>
+		</div>
+	<% end %>
+	
+	<% unselected_skills.each do |skill| %>
+		<div class="unselected_skill">
+			<%= skill[:name] %>
+		</div>
+	<% end %>
+</div>

@@ -1,0 +1,20 @@
+<% talent_page_title("技能和证书") %>
+
+
+<h2>技能和证书</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<div class="float_r" style="margin-right: 80px;">
+	<%= render :partial => "skill_pool", :locals => {:selected_ids => @selected_skill_ids} %>
+</div>
+
+<div style="margin-right: 300px;">
+	
+</div>
+
+<div class="clear_r"></div>

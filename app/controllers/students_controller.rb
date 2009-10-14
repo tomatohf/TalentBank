@@ -2,7 +2,9 @@ class StudentsController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:update, :update_profile, :update_job_photo, :destroy_job_photo]
+  before_filter :check_active, :only => [:update, :update_profile,
+                                          :update_job_photo, :destroy_job_photo,
+                                          :update_skills]
   
   before_filter :check_student
   
@@ -101,6 +103,16 @@ class StudentsController < ApplicationController
     flash[:success_msg] = "操作成功, 已删除求职照"
     
     jump_to("/students/#{@student.id}/edit_job_photo")
+  end
+  
+  
+  def edit_skills
+    @student_skills = StudentSkill.find(:all, :conditions => ["student_id = ?", @student.id])
+    @selected_skill_ids = @student_skills.collect { |skill| skill.skill_id }
+  end
+  
+  def update_skills
+    
   end
   
   

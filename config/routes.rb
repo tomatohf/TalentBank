@@ -33,7 +33,10 @@ ActionController::Routing::Routes.draw do |map|
     :destroy_job_photo => :post,
     
     :edit_profile => :get,
-    :update_profile => :post
+    :update_profile => :post,
+    
+    :edit_skills => :get,
+    :update_skills => :post
   } do |students|
     students.resources :edu_exps
     

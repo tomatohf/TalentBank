@@ -82,9 +82,27 @@ module Utils
   module UniqueBelongs
     def self.included(including_model)
       
-      def including_model.get_record(belongs_to_id)
-        record = self.find(:first, :conditions => ["#{self::Belongs_To_Key} = ?", belongs_to_id])
-        record || self.new(self::Belongs_To_Key => belongs_to_id)
+      def including_model.get_record(*belongs_to_ids)
+        record = self.find(
+          :first,
+          :conditions => [
+            self::Belongs_To_Keys.collect { |key|
+              "#{key} = ?"
+            }.join(" and "),
+            *belongs_to_ids
+          ]
+        )
+        
+        unless record
+          init = {}
+          self::Belongs_To_Keys.each_index do |i|
+            init[self::Belongs_To_Keys[i]] = belongs_to_ids[i]
+          end
+          
+          record = self.new(init)
+        end
+        
+        record
       end
       
     end

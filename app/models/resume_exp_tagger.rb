@@ -7,10 +7,8 @@ class ResumeExpTagger < ActiveRecord::Base
   
   
   
-  def self.get_tagger(exp_id, tag_id)
-    tagger = self.find(:first, :conditions => ["exp_id = ? and tag_id = ?", exp_id, tag_id])
-    tagger || self.new(:exp_id => exp_id, :tag_id => tag_id)
-  end
+  Belongs_To_Keys = [:exp_id, :tag_id]
+  include Utils::UniqueBelongs
   
   
   def self.check_tag_domain(tag_id, domain_id)
