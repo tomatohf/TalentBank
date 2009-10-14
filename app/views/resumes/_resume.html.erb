@@ -11,15 +11,15 @@
 		
 		<% unless no_photo %>
 			<div class="float_r">
-				<img src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
+				<img class="resume_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
 			</div>
 		<% end %>
 		
 		
-		<div>
-			<h1><%= student_name %></h1>
-			<div>
-				<span>
+		<div class="resume_info_container">
+			<h1 class="resume_name"><%= student_name %></h1>
+			<div class="resume_info_row">
+				<span class="resume_info">
 					电话:
 					<%= h(profile.phone) %>
 				</span>
@@ -29,24 +29,23 @@
 					<%= h(profile.email) %>
 				</span>
 			</div>
-			<div>
+			<div class="resume_info_row">
 				<% unless profile.gender.nil? %>
-					<span>
+					<span class="resume_info">
 						性别:
 						<%= profile.gender ? "男" : "女" %>
 					</span>
 				<% end %>
 				
 				<% unless profile.political_status_id.nil? %>
-					<span>
+					<span class="resume_info">
 						政治面貌:
 						<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
 					</span>
 				<% end %>
-			</div>
-			<div>
+				
 				<% unless profile.address.blank? %>
-					<span>
+					<span class="resume_info">
 						地址:
 						<%= h(profile.address) %>
 					</span>
@@ -59,18 +58,20 @@
 					</span>
 				<% end %>
 			</div>
-		</div>
-		<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
-			<div>
-				<div class="resume_section_title">
-					求职意向
-				</div>
+			
+			
+			<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
+				<div>
+					<div class="resume_section_title">
+						求职意向
+					</div>
 
-				<div class="resume_section">
-					<%= h(resume.job_intention.content) %>
+					<div class="resume_section">
+						<%= h(resume.job_intention.content) %>
+					</div>
 				</div>
-			</div>
-		<% end %>
+			<% end %>
+		</div>
 		
 		
 		<% unless no_photo %>
@@ -88,7 +89,7 @@
 			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 				<% edus.each do |edu| %>
 					<tr>
-						<td style="width: 125px;">
+						<td class="edu_exp_period">
 							<%= h(edu.period) %>
 						</td>
 
@@ -126,18 +127,18 @@
 
 			<div class="resume_section">
 				<% exp_section.exps.each do |exp| %>
-					<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_exp_section">
 						<tr>
-							<td valign="top" style="width: 120px;">
+							<td valign="top" class="resume_exp_period">
 								<%= h(exp.period) %>
 							</td>
 
 							<td valign="top">
-								<div class="float_r">
+								<div class="float_r resume_exp_sub_title">
 									<%= h(exp.sub_title) %>
 								</div>
 
-								<div>
+								<div class="resume_exp_title">
 									<%= h(exp.title) %>
 								</div>
 
@@ -162,7 +163,7 @@
 			</div>
 
 			<div class="resume_section">
-				<ul>
+				<ul class="no_bullet">
 					<% Utils.lines(h(resume.award.content)).each do |line| %>
 						<li><%= line %></li>
 					<% end %>
@@ -179,7 +180,7 @@
 			</div>
 
 			<div class="resume_section">
-				<ul>
+				<ul class="no_bullet">
 					<% Utils.lines(h(resume.hobby.content)).each do |line| %>
 						<li><%= line %></li>
 					<% end %>
@@ -196,7 +197,7 @@
 			</div>
 
 			<div class="resume_section">
-				<ul>
+				<ul class="no_bullet">
 					<% Utils.lines(h(list_section.content)).each do |line| %>
 						<li><%= line %></li>
 					<% end %>

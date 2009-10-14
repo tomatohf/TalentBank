@@ -1,26 +1,67 @@
 .resume {
 	width: 700px;
-	border: 1px dashed #EAEAEA;
+	line-height: 1.5;
 	font-size: 13px;
+	border: 1px dashed #EAEAEA;
 }
 
-.resume h1 {
-	margin-top: 0px;
+.resume_name {
+	margin: 0px 5px;
 }
 
-.resume ul {
-	margin: 0px;
-	padding: 0px;
-	list-style-type: none;
+.resume_photo {
+	margin: 12px 15px 0px;
 }
 
+.resume_info_container {
+	margin-right: 120px;
+}
+
+.resume_info_row {
+	margin: 0px 10px;
+}
+
+.resume_info {
+	margin-right: 20px;
+}
+
+.resume_exp_period {
+	width: 120px;
+}
+
+.edu_exp_period {
+	width: 125px;
+}
 
 .resume_section_title {
+	margin: 5px;
 	padding: 3px 5px 2px;
 	background-color: #F0F0F0;
 	font-size: 14px;
 }
 
 .resume_section {
-	padding: 5px 25px;
+	padding: 1px 20px 1px 25px;
+}
+
+.resume_exp_section {
+	margin: 3px 0px;
+}
+
+.resume_exp_title, .resume_exp_sub_title {
+	font-weight: bold;
+}
+
+.resume_exp_title {
+	margin: 0px 0px 2px 8px;
+}
+
+.resume ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: disc;
+}
+
+ul.no_bullet {
+	list-style-type: none;
 }
