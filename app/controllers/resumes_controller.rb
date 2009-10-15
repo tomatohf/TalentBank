@@ -6,7 +6,8 @@ class ResumesController < ApplicationController
   before_filter :check_login_for_student
   
   before_filter :check_active, :only => [:create, :update, :destroy,
-                                          :update_job_intention, :update_hobbies, :update_awards]
+                                          :update_job_intention, :include_skill, :exclude_skill,
+                                          :update_hobbies, :update_awards]
   
   before_filter :check_student
   
@@ -27,15 +28,22 @@ class ResumesController < ApplicationController
   
   
   def create
-    resume = Resume.new(:student_id => @student.id)
+    domain_id = params[:domain_id] && params[:domain_id].strip
     
-    resume.domain_id = params[:domain_id] && params[:domain_id].strip
-    
-    if resume.save
-      jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
-    else
-      jump_to("/students/#{@student.id}/resumes")
+    unless domain_id.blank?
+      if @school.resume_domains.include?(domain_id.to_i)
+        resume = Resume.new(
+          :student_id => @student.id,
+          :domain_id => domain_id
+        )
+
+        if resume.save
+          return jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
+        end
+      end
     end
+    
+    jump_to("/students/#{@student.id}/resumes")
   end
   
   
@@ -73,6 +81,45 @@ class ResumesController < ApplicationController
     end
     
     render :action => "edit_job_intention"
+  end
+  
+  
+  def edit_skills
+    @student_skills = StudentSkill.find(
+      :all,
+      :conditions => ["student_id = ?", @student.id]
+    )
+    
+    @resume_skills = {}
+    ResumeSkill.find(
+      :all,
+      :conditions => ["resume_id = ?", @resume.id]
+    ).each do |resume_skill|
+      @resume_skills[resume_skill.student_skill_id] = resume_skill
+    end
+  end
+  
+  def include_skill
+    student_skill = StudentSkill.find(params[:student_skill_id])
+    
+    if (student_skill.student_id == @student.id) && student_skill.value > 0
+      resume_skill = ResumeSkill.new(
+        :resume_id => @resume.id,
+        :student_skill_id => student_skill.id
+      )
+      
+      resume_skill.save
+    end
+    
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/edit_skills")
+  end
+  
+  def exclude_skill
+    resume_skill = ResumeSkill.find(params[:resume_skill_id])
+    
+    resume_skill.destroy if resume_skill.resume_id == @resume.id
+    
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/edit_skills")
   end
   
   

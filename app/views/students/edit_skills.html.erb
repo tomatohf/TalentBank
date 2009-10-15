@@ -34,6 +34,11 @@
 					<td colspan="2">
 						<input type="hidden" id="modified_skills" name="modified_skills" />
 						<%= submit_tag "保存", :class => "button", :disabled => !@account_active %>
+						
+						<span id="loading" style="display: none;">
+							<img src="/images/loading_icon.gif" border="0" style="margin: 0px 2px -3px 20px;" />
+							操作中 ... 
+						</span>
 					</td>
 				</tr>
 			</tbody>

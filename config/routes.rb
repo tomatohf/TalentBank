@@ -47,6 +47,10 @@ ActionController::Routing::Routes.draw do |map|
       :edit_job_intention => :get,
       :update_job_intention => :post,
       
+      :edit_skills => :get,
+      :include_skill => :post,
+      :exclude_skill => :post,
+      
       :edit_hobbies => :get,
       :update_hobbies => :post,
       

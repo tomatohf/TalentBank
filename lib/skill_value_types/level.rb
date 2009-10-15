@@ -16,6 +16,26 @@ module SkillValueTypes
       html
     end
     
+    
+    def render_label(data, value)
+      value ||= default_value
+      
+      record = select_one(data, :value, value)
+      record && record[:label]
+    end
+    
+    
+    private
+    
+    def select_one(array, field, value)
+      (array || []).each do |record|
+        return record if record[field] == value
+      end
+      
+      # NOT found
+      nil
+    end
+    
   end
   
 end

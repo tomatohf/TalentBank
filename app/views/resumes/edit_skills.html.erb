@@ -1,0 +1,54 @@
+<% domain = ResumeDomain.find(@resume.domain_id)[:name] %>
+<% talent_page_title("编辑 #{domain} 的简历") %>
+
+
+<h2>编辑 <%= domain %> 的简历</h2>
+
+<%= render :partial => "edit_resume_nav", :locals => {:current_link => "edit_skills"} %>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/include_skill", :method => :post, :id => "include_skill_form" do %>
+		<input type="hidden" id="student_skill_id" name="student_skill_id" />
+	<% end %>
+	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/exclude_skill", :method => :post, :id => "exclude_skill_form" do %>
+		<input type="hidden" id="resume_skill_id" name="resume_skill_id" />
+	<% end %>
+	<script language="JavaScript">
+		function include_skill(student_skill_id) {
+			document.getElementById("student_skill_id").value = student_skill_id;
+			document.getElementById("include_skill_form").submit();
+		}
+		
+		function exclude_skill(resume_skill_id) {
+			document.getElementById("resume_skill_id").value = resume_skill_id;
+			document.getElementById("exclude_skill_form").submit();
+		}
+	</script>
+	
+	<table border="0" cellspacing="0" cellpadding="10" style="font-size: 13px;">
+		<thead>
+			<tr>
+				<td>技能和证书</td>
+				<td>程度</td>
+				<td style="width: 30px;">显示</td>
+				<td style="width: 30px;"></td>
+				<td style="width: 120px;"></td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "student_skill", :collection => @student_skills, :locals => {:resume_skills => @resume_skills} %>
+		</tbody>
+	</table>
+</div>

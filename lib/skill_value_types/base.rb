@@ -19,6 +19,11 @@ module SkillValueTypes
     end
     
     
+    def render_label(data, value)
+      ""
+    end
+    
+    
   end
   
 

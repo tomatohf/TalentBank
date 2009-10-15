@@ -70,7 +70,7 @@ class Resumes < ActiveRecord::Migration
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
-    add_index :resumes, [:student_id, :domain_id]
+    add_index :resumes, [:student_id, :domain_id], :unique => true
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resumes (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resumes WHERE id = 10000")
@@ -199,7 +199,7 @@ class Resumes < ActiveRecord::Migration
       
       t.column :created_at, :datetime
     end
-    add_index :resume_skills, :resume_id
+    add_index :resume_skills, [:resume_id, :student_skill_id], :unique => true
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_skills (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_skills WHERE id = 10000")

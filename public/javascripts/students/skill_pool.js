@@ -16,7 +16,15 @@ function add_skill(skill_id, skill_link) {
 			handle_skill_input();
 			
 			// adjust list
-			$(".sep_line:first").before("<div class='selected_skill' id='selected_skill_" + skill_id + "'>" + $(skill_link).html() + "</div>")
+			var selected_skill_id = "selected_skill_" + skill_id;
+			var selected_skill_html = "<div class='selected_skill' id='" + selected_skill_id + "'>" + $(skill_link).html() + "</div>";
+			var selected_skill = document.getElementById(selected_skill_id);
+			if(selected_skill) {
+				$(selected_skill).replaceWith(selected_skill_html);
+			}
+			else {
+				$(".sep_line:first").before(selected_skill_html);
+			}
 			$(skill_link).remove();
 		},
 		"html"
@@ -92,6 +100,17 @@ $(document).ready(
 		$("#update_skill_form").submit(
 			function() {
 				$("#modified_skills").val(MODIFIED_SKILLS.join(","));
+			}
+		);
+		
+		$("#loading").ajaxStart(
+			function() {
+				$(this).show();
+			}
+		);
+		$("#loading").ajaxStop(
+			function() {
+				$(this).hide();
 			}
 		);
 	}

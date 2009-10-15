@@ -114,7 +114,7 @@ class StudentsController < ApplicationController
   def add_skill
     skill_id = params[:skill_id] && params[:skill_id].strip
     
-    if (skill = Skill.find(skill_id.to_i))
+    if !skill_id.blank? && (skill = Skill.find(skill_id.to_i))
       student_skill = StudentSkill.get_record(@student.id, skill[:id])
     
       if student_skill.new_record?
@@ -132,7 +132,7 @@ class StudentsController < ApplicationController
   def remove_skill
     skill_id = params[:skill_id] && params[:skill_id].strip
     
-    if (skill = Skill.find(skill_id.to_i))
+    if !skill_id.blank? && (skill = Skill.find(skill_id.to_i))
       student_skill = StudentSkill.get_record(@student.id, skill[:id])
     
       student_skill.destroy unless student_skill.new_record?

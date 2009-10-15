@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(:version => 4) do
     t.datetime "created_at"
   end
 
-  add_index "resume_skills", ["resume_id"], :name => "index_resume_skills_on_resume_id"
+  add_index "resume_skills", ["resume_id", "student_skill_id"], :name => "index_resume_skills_on_resume_id_and_student_skill_id", :unique => true
 
   create_table "resumes", :force => true do |t|
     t.integer  "student_id"
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(:version => 4) do
     t.datetime "updated_at"
   end
 
-  add_index "resumes", ["student_id", "domain_id"], :name => "index_resumes_on_student_id_and_domain_id"
+  add_index "resumes", ["student_id", "domain_id"], :name => "index_resumes_on_student_id_and_domain_id", :unique => true
 
   create_table "schools", :force => true do |t|
     t.string   "abbr",       :limit => 15
