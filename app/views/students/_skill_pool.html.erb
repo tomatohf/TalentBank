@@ -19,7 +19,7 @@
 
 <div class="skill_pool">
 	<% selected_skills.each do |skill| %>
-		<div class="selected_skill">
+		<div class="selected_skill" id="selected_skill_<%= skill[:id] %>">
 			<%= skill[:name] %>
 		</div>
 	<% end %>

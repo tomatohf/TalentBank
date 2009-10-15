@@ -14,8 +14,8 @@
 		<%= SkillValueTypes.get_type(skill[:value_type]).render_input(skill[:data], student_skill.value, element_id) %>
 	</td>
 	
-	<td>
-		<a href="#" title="删除" class="none">
+	<td style="width: 60px;" align="right">
+		<a href="#" title="删除" class="none" style="display: none;" onclick="remove_skill(<%= skill[:id] %>); return false;">
 			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
 			删除</a>
 	</td>

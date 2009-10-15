@@ -130,13 +130,42 @@ class StudentsController < ApplicationController
   end
   
   def remove_skill
+    skill_id = params[:skill_id] && params[:skill_id].strip
     
+    if (skill = Skill.find(skill_id.to_i))
+      student_skill = StudentSkill.get_record(@student.id, skill[:id])
+    
+      student_skill.destroy unless student_skill.new_record?
+    end
+    
+    render :nothing => true
   end
   
   def update_skills
-    # no need to save all values ... 
-    # just find out what values have been changed
-    # and just save the values that have been changed ...
+    modified_skills = params[:modified_skills] && params[:modified_skills].strip
+    
+    modified_skill_ids = modified_skills.blank? ? [] : modified_skills.split(",").uniq
+    
+    saved = true
+    modified_skill_ids.each do |skill_id|
+      param_key = "skill_#{skill_id}".to_sym
+      skill_value = params[param_key] && params[param_key].strip
+      if !skill_value.blank? && (skill = Skill.find(skill_id.to_i))
+        student_skill = StudentSkill.get_record(@student.id, skill[:id])
+        if student_skill.new_record? || (student_skill.value != skill_value.to_i)
+          student_skill.value = skill_value
+          saved &&= student_skill.save
+        end
+      end
+    end
+    
+    if saved
+      flash[:success_msg] = "保存成功, 技能和证书已更新"
+      jump_to("/students/#{@student.id}")
+    else
+      flash[:error_msg] = "操作失败, 再试一次吧"
+      jump_to("/students/#{@student.id}/edit_skills");
+    end
   end
   
   

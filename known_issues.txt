@@ -1,4 +1,4 @@
-ajax 操作的 loading 标识
+ajax 操作的 loading 标识 / disable 被点过的 link
 
 简历上填写系统没有定义的技能和证书
 
