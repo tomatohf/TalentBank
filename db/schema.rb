@@ -102,6 +102,15 @@ ActiveRecord::Schema.define(:version => 4) do
 
   add_index "resume_list_sections", ["resume_id"], :name => "index_resume_list_sections_on_resume_id"
 
+  create_table "resume_list_skills", :force => true do |t|
+    t.integer  "resume_id"
+    t.string   "name",       :limit => 50
+    t.string   "level",      :limit => 15
+    t.datetime "created_at"
+  end
+
+  add_index "resume_list_skills", ["resume_id"], :name => "index_resume_list_skills_on_resume_id"
+
   create_table "resume_skills", :force => true do |t|
     t.integer  "resume_id"
     t.integer  "student_skill_id"

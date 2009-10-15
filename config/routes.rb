@@ -47,7 +47,6 @@ ActionController::Routing::Routes.draw do |map|
       :edit_job_intention => :get,
       :update_job_intention => :post,
       
-      :edit_skills => :get,
       :include_skill => :post,
       :exclude_skill => :post,
       
@@ -65,6 +64,8 @@ ActionController::Routing::Routes.draw do |map|
           :remove_tag => :post
         }
       end
+      
+      resumes.resources :resume_skills
     end
   end
   

@@ -1,0 +1,21 @@
+<% talent_page_title("编辑自定义的技能和证书") %>
+
+
+<h2>编辑自定义的技能和证书</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @list_skill.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@list_skill) %>
+	</p>
+<% end %>
+
+<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/resume_skills/#{@list_skill.id}", :method => :put do %>
+
+	<%= render :partial => "list_skill_form", :locals => {:submit_label => "修改"} %>
+	
+<% end %>

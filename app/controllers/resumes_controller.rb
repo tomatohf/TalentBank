@@ -84,21 +84,6 @@ class ResumesController < ApplicationController
   end
   
   
-  def edit_skills
-    @student_skills = StudentSkill.find(
-      :all,
-      :conditions => ["student_id = ?", @student.id]
-    )
-    
-    @resume_skills = {}
-    ResumeSkill.find(
-      :all,
-      :conditions => ["resume_id = ?", @resume.id]
-    ).each do |resume_skill|
-      @resume_skills[resume_skill.student_skill_id] = resume_skill
-    end
-  end
-  
   def include_skill
     student_skill = StudentSkill.find(params[:student_skill_id])
     
@@ -111,7 +96,7 @@ class ResumesController < ApplicationController
       resume_skill.save
     end
     
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/edit_skills")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
   end
   
   def exclude_skill
@@ -119,7 +104,7 @@ class ResumesController < ApplicationController
     
     resume_skill.destroy if resume_skill.resume_id == @resume.id
     
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/edit_skills")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
   end
   
   

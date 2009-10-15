@@ -4,7 +4,7 @@
 
 <h2>编辑 <%= domain %> 的简历</h2>
 
-<%= render :partial => "edit_resume_nav", :locals => {:current_link => "edit_skills"} %>
+<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "resume_skills"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -24,6 +24,8 @@
 	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/exclude_skill", :method => :post, :id => "exclude_skill_form" do %>
 		<input type="hidden" id="resume_skill_id" name="resume_skill_id" />
 	<% end %>
+	<% form_tag "", :method => :delete, :id => "del_skill_form" do %>
+	<% end %>
 	<script language="JavaScript">
 		function include_skill(student_skill_id) {
 			document.getElementById("student_skill_id").value = student_skill_id;
@@ -34,6 +36,14 @@
 			document.getElementById("resume_skill_id").value = resume_skill_id;
 			document.getElementById("exclude_skill_form").submit();
 		}
+		
+		function del_skill(list_skill_id, skill_name) {
+			if(confirm("确定要删除自定义的技能和证书 " + skill_name + " 么 ?")) {
+				var del_form = document.getElementById("del_skill_form");
+				del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_skills/" + list_skill_id;
+				del_form.submit();
+			}
+		}
 	</script>
 	
 	<table border="0" cellspacing="0" cellpadding="10" style="font-size: 13px;">
@@ -42,13 +52,23 @@
 				<td>技能和证书</td>
 				<td>程度</td>
 				<td style="width: 30px;">显示</td>
-				<td style="width: 30px;"></td>
-				<td style="width: 120px;"></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 110px;"></td>
 			</tr>
 		</thead>
 		
 		<tbody>
 			<%= render :partial => "student_skill", :collection => @student_skills, :locals => {:resume_skills => @resume_skills} %>
+			
+			<tr>
+				<td colspan="6">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_skills/new">
+						添加自定义的技能和证书</a>
+				</td>
+			</tr>
+			
+			<%= render :partial => "resume_list_skill", :collection => @resume_list_skills %>
 		</tbody>
 	</table>
 </div>

@@ -156,13 +156,59 @@
 	<% end %>
 	
 	
+	<%
+		student_skills = StudentSkill.find(
+			:all,
+			:joins => "INNER JOIN resume_skills ON resume_skills.student_skill_id = student_skills.id",
+			:conditions => ["resume_skills.resume_id = ?", resume.id]
+		)
+		resume_list_skills = resume.list_skills
+	%>
+	<% if student_skills.size + resume_list_skills.size > 0 %>
+		<div>
+			<div class="resume_section_title">
+				技能和证书
+			</div>
+
+			<div class="resume_section_narrow">
+				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<% student_skills.each do |student_skill| %>
+						<% skill = Skill.find(student_skill.skill_id) %>
+						<tr>
+							<td>
+								<%= skill[:name] %>
+							</td>
+							
+							<td align="right">
+								<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value) %>
+							</td>
+						</tr>
+					<% end %>
+					
+					<% resume_list_skills.each do |resume_list_skill| %>
+						<tr>
+							<td>
+								<%= h(resume_list_skill.name) %>
+							</td>
+							
+							<td align="right">
+								<%= h(resume_list_skill.level) %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</div>
+		</div>
+	<% end %>
+	
+	
 	<% unless resume.award.nil? || resume.award.content.blank? %>
 		<div>
 			<div class="resume_section_title">
 				荣誉和奖励
 			</div>
 
-			<div class="resume_section">
+			<div class="resume_section_narrow">
 				<ul class="no_bullet">
 					<% Utils.lines(h(resume.award.content)).each do |line| %>
 						<li><%= line %></li>
@@ -179,7 +225,7 @@
 				特长和爱好
 			</div>
 
-			<div class="resume_section">
+			<div class="resume_section_narrow">
 				<ul class="no_bullet">
 					<% Utils.lines(h(resume.hobby.content)).each do |line| %>
 						<li><%= line %></li>
@@ -196,7 +242,7 @@
 				<%= h(list_section.title) %>
 			</div>
 
-			<div class="resume_section">
+			<div class="resume_section_narrow">
 				<ul class="no_bullet">
 					<% Utils.lines(h(list_section.content)).each do |line| %>
 						<li><%= line %></li>

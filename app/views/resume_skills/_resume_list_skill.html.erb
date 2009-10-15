@@ -1,0 +1,29 @@
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<% skill_name = h(resume_list_skill.name) %>
+	<td>
+		<%= skill_name %>
+	</td>
+
+	<td>
+		<%= h(resume_list_skill.level) %>
+	</td>
+
+	<td align="center">
+		<img src="/images/students/selected_icon.gif" border="0" alt="当前显示在简历上" title="当前显示在简历上" />
+	</td>
+	
+	<td>
+		<a href="#" title="删除" class="none" onclick="del_skill(<%= resume_list_skill.id %>, '<%= a(skill_name) %>'); return false;">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+			删除</a>
+	</td>
+	
+	
+	<td>
+		<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_skills/<%= resume_list_skill.id %>/edit" title="编辑" class="none">
+			<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+			编辑</a>
+	</td>
+
+	<td></td>
+</tr>
