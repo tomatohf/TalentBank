@@ -26,9 +26,9 @@ class Student < ActiveRecord::Base
   
   
   def self.authenticate(abbr, number, pwd)
-    s = self.get_from_number(abbr, number)
-    s = nil if s && s.password != pwd
-    s
+    student = self.get_from_number(abbr, number)
+    student = nil if student && (student.password != pwd)
+    student
   end
   
   def self.get_from_number(abbr, number)

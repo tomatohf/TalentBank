@@ -9,7 +9,7 @@ class TeachersController < ApplicationController
   
   before_filter :check_teacher
   
-  before_filter :check_teacher_admin, :only => [:students]
+  before_filter :check_teacher_admin, :only => [:corporations]
   
   
   def show
@@ -61,6 +61,11 @@ class TeachersController < ApplicationController
   
   
   def students
+    
+  end
+  
+  
+  def corporations
     
   end
   

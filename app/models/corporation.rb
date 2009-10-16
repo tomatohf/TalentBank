@@ -1,4 +1,4 @@
-class Teacher < ActiveRecord::Base
+class Corporation < ActiveRecord::Base
   
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
@@ -9,7 +9,8 @@ class Teacher < ActiveRecord::Base
   validates_presence_of :password, :message => "请输入 密码"
   
   validates_length_of :uid, :maximum => 25, :message => "用户名 超过长度限制", :allow_nil => false
-  validates_length_of :name, :maximum => 15, :message => "名称 超过长度限制", :allow_nil => true
+  
+  validates_length_of :name, :maximum => 50, :message => "企业名称 超过长度限制", :allow_nil => true
   
   validates_uniqueness_of :uid, :case_sensitive => false, :scope => :school_id, :message => "用户名 已经存在"
   
@@ -17,14 +18,14 @@ class Teacher < ActiveRecord::Base
   validates_confirmation_of :password, :message => "密码 与 确认密码 不相同"
   
   
-  named_scope :admin, :conditions => { :admin => true }
+  named_scope :allow, :conditions => { :allow => true }
   
   
   
   def self.authenticate(abbr, uid, pwd)
-    teacher = self.get_from_uid(abbr, uid)
-    teacher = nil if teacher && (teacher.password != pwd)
-    teacher
+    corp = self.get_from_uid(abbr, uid)
+    corp = nil if corp && (corp.password != pwd)
+    corp
   end
   
   def self.get_from_uid(abbr, uid)

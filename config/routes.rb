@@ -21,7 +21,9 @@ ActionController::Routing::Routes.draw do |map|
     :edit_password => :get,
     :update_password => :post,
     
-    :students => :get
+    :students => :get,
+    
+    :corporations => :get
   }
   
   
