@@ -9,7 +9,7 @@ class IndexController < ApplicationController
     elsif cookies[:logintype] == "schools"
       jump_to("/index/school")
     elsif cookies[:logintype] == "teachers"
-      jump_to("/index/school/t")
+      jump_to("/index/school/teacher")
     end
 
   end
@@ -77,6 +77,8 @@ class IndexController < ApplicationController
   
   
   def corporation
+    
+    
     
   end
   

@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   
   
   def check_login_for_teacher
-    check_login { jump_to("/index/school/t") unless session[:account_type] == :teachers }
+    check_login { jump_to("/index/school/teacher") unless session[:account_type] == :teachers }
   end
   
   

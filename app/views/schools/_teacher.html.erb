@@ -22,7 +22,7 @@
 	</td>
 	
 	<td align="right">
-		<a href="#" class="none" onclick="adjust_admin(<%= teacher.id %>, '<%= teacher_uid %>', <%= !teacher.admin %>); return false;">
+		<a href="#" class="none" onclick="adjust_admin(<%= teacher.id %>, '<%= a(teacher_uid) %>', <%= !teacher.admin %>); return false;">
 			<% if teacher.admin %>
 				<img src="/images/teachers/admin_remove_icon.gif" border="0" alt="取消管理权限" />
 				取消管理权限

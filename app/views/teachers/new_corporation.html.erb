@@ -1,0 +1,58 @@
+<% talent_page_title("添加企业帐号") %>
+
+
+<h2>添加企业帐号</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @corporation.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@corporation) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/create_corporation", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 150px;">
+				<label for="uid">
+					用户名<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="uid" name="uid" class="text_field" size="30" value="<%= @corporation.uid %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="allow">
+					允许企业查询学生简历
+				</label>
+			</td>
+			
+			<td>
+				<%= check_box_tag :allow, value = "true", @corporation.allow %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/teachers/<%= @teacher.id %>/corporations">
+					返回企业帐号列表</a>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

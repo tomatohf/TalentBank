@@ -33,7 +33,8 @@ function add_skill(skill_id, skill_link) {
 
 
 function remove_skill(skill_id) {
-	if(!confirm("确定要删除 " + $("#selected_skill_" + skill_id).html().trim() + " 么 ?")) {
+	var skill_name = $.trim($("#selected_skill_" + skill_id).html());
+	if(!confirm("确定要删除 " + skill_name + " 么 ?")) {
 		return;
 	}
 	

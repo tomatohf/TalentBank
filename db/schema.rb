@@ -9,7 +9,44 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 4) do
+ActiveRecord::Schema.define(:version => 5) do
+
+  create_table "corporation_profiles", :force => true do |t|
+    t.integer  "corporation_id"
+    t.string   "email"
+    t.string   "phone",          :limit => 25
+    t.string   "contact",        :limit => 15
+    t.boolean  "contact_gender"
+    t.string   "contact_title",  :limit => 15
+    t.string   "address"
+    t.string   "zip",            :limit => 10
+    t.string   "website"
+    t.integer  "nature_id",      :limit => 2
+    t.integer  "size_id",        :limit => 2
+    t.integer  "industry_id",    :limit => 2
+    t.integer  "province_id",    :limit => 2
+    t.integer  "city_id",        :limit => 2
+    t.string   "desc",           :limit => 500
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corporation_profiles", ["corporation_id"], :name => "index_corporation_profiles_on_corporation_id", :unique => true
+
+  create_table "corporations", :force => true do |t|
+    t.string   "uid",        :limit => 25
+    t.string   "password"
+    t.boolean  "active",                   :default => true
+    t.integer  "school_id"
+    t.boolean  "allow",                    :default => false
+    t.string   "name",       :limit => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corporations", ["school_id", "allow", "created_at"], :name => "index_corporations_on_school_id_and_allow_and_created_at"
+  add_index "corporations", ["school_id", "created_at"], :name => "index_corporations_on_school_id_and_created_at"
+  add_index "corporations", ["school_id", "uid"], :name => "index_corporations_on_school_id_and_uid", :unique => true
 
   create_table "edu_exps", :force => true do |t|
     t.integer  "student_id"
