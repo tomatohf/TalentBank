@@ -1,0 +1,64 @@
+<% talent_page_title("企业用户") %>
+
+
+<h2>企业用户登录</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<% form_tag "", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 60px;">
+				<label for="username">
+					用户名
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password">
+					密码
+				</label>
+			</td>
+			
+			<td>
+				<input type="password" id="password" name="password" class="text_field" size="30" />
+				&nbsp;&nbsp;&nbsp;
+				<a href="#">
+					忘记密码?</a>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+				<label for="save_username">记住用户名</label>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "登录", :class => "button" %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

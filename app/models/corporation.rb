@@ -32,4 +32,9 @@ class Corporation < ActiveRecord::Base
     self.find(:first, :conditions => ["school_id = ? and uid = ?", School.get_school_info(abbr)[0], uid])
   end
   
+  
+  def name?
+    !self.name.blank?
+  end
+  
 end

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+		
+		<% page_title = yield(:page_title) %>
+		<title><%= @school.page_title(page_title) %></title>
+		<%= stylesheet_link_tag("site") %>
+    </head>
+    <body>
+	
+		<div class="page_container">
+			
+			<div class="float_l" style="width: 200px;">
+
+				<div>
+					<a href="/corporations/<%= @corporation.id %>">
+						首页</a>
+				</div>
+				
+				<div>
+					<a href="/corporations/<%= @corporation.id %>/edit_password">
+						修改密码</a>
+				</div>
+				
+				<div>
+					<a href="/corporations/<%= @corporation.id %>/edit_profile">
+						企业信息</a>
+				</div>
+				
+				<% if @corporation.allow %>
+					<div>
+						<a href="#">
+							查询简历</a>
+					</div>
+				<% end %>
+				
+				<div>
+					<a href="/index/logout">
+						退出系统</a>
+				</div>
+
+			</div>
+
+			<div style="margin-left: 200px;">
+				<%= yield %>
+			</div>
+
+			<div class="clear_l"></div>
+			
+		</div>
+		
+		<% school_abbr = @school.abbr %>
+		<%= render_school_view("/common/bottom_line", school_abbr) %>
+
+		
+		
+		<%= render_school_view("/common/page_track", school_abbr) if Rails.env.production? %>
+    </body>
+</html>

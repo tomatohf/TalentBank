@@ -6,6 +6,8 @@ class IndexController < ApplicationController
   
     if cookies[:logintype] == "students"
       jump_to("/index/student")
+    elsif cookies[:logintype] == "corporations"
+      jump_to("/index/corporation")
     elsif cookies[:logintype] == "schools"
       jump_to("/index/school")
     elsif cookies[:logintype] == "teachers"
@@ -78,7 +80,25 @@ class IndexController < ApplicationController
   
   def corporation
     
+    @uid = cookies[:loginid] if cookies[:logintype] == "corporations"
     
+    if request.post?
+      @uid = params[:username] && params[:username].strip
+      password = params[:password]
+      @save_username = (params[:save_username] == "true")
+      
+      authenticated = Corporation.authenticate(@school.abbr, @uid, password)
+      
+      if authenticated
+        do_login(authenticated.id, :corporations, authenticated.active)
+
+        set_login_cookie(@uid, :corporations, @save_username)
+        
+        redirect_to_original_address
+      else
+        flash.now[:error_msg] = %Q?登录失败, 用户名 或 密码 错误 !?
+      end
+    end
     
   end
   

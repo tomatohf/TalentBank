@@ -82,6 +82,17 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   
+  map.resources :corporations, :collection => {
+    
+  }, :member => {
+    :edit_password => :get,
+    :update_password => :post,
+    
+    :edit_profile => :get,
+    :update_profile => :post
+  }
+  
+  
   
   # The priority is based upon order of creation: first created -> highest priority.
 
