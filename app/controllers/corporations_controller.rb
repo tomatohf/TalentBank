@@ -1,16 +1,26 @@
 class CorporationsController < ApplicationController
   
-  before_filter :check_login_for_corporation
+  before_filter :check_login_for_corporation, :except => [:new, :create]
   
   before_filter :check_active, :only => [:update, :update_password, :update_profile]
   
-  before_filter :check_corporation
+  before_filter :check_corporation, :except => [:new, :create]
   
   before_filter :check_corporation_allow, :only => []
   
-  before_filter :check_corporation_name, :except => [:edit, :update]
+  before_filter :check_corporation_name, :except => [:edit, :update, :new, :create]
   before_filter :protect_corporation_name, :only => [:edit, :update]
   
+  
+  def new
+    
+  end
+  
+  def create
+    
+  end
+  
+  # ========== login required separate line ==========
   
   def show
     
@@ -64,11 +74,43 @@ class CorporationsController < ApplicationController
   
   
   def edit_profile
-    
+    @profile = CorporationProfile.get_record(@corporation.id)
   end
   
   def update_profile
+    @profile = CorporationProfile.get_record(@corporation.id)
     
+    @profile.email = params[:email] && params[:email].strip
+    @profile.phone = params[:phone] && params[:phone].strip
+    @profile.contact = params[:contact] && params[:contact].strip
+    @profile.contact_gender = case params[:contact_gender]
+      when "true"
+        true
+      when "false"
+        false
+      else
+        nil
+    end
+    @profile.contact_title = params[:contact_title] && params[:contact_title].strip
+    
+    @profile.address = params[:address] && params[:address].strip
+    @profile.zip = params[:zip] && params[:zip].strip
+    @profile.website = params[:website] && params[:website].strip
+    
+    @profile.nature_id = params[:nature]
+    @profile.size_id = params[:size]
+    @profile.industry_id = params[:industry]
+    @profile.province_id = params[:province]
+    @profile.city_id = params[:city]
+    
+    @profile.desc = params[:desc] && params[:desc].strip
+    
+    if @profile.save
+      flash[:success_msg] = "修改成功, 企业信息已更新"
+      return jump_to("/corporations/#{@corporation.id}")
+    end
+    
+    render :action => "edit_profile"
   end
   
   

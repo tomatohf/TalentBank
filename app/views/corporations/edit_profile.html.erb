@@ -1,0 +1,220 @@
+<% talent_page_title("编辑企业信息") %>
+
+
+<h2>编辑企业信息</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @profile.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@profile) %>
+	</p>
+<% end %>
+
+<% form_tag "/corporations/#{@corporation.id}/update_profile", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				企业名称
+			</td>
+			
+			<td>
+				<%= @corporation.name %>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				<label for="email">
+					邮箱<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @profile.email %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="phone">
+					联系电话<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= @profile.phone %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="contact">
+					联系人<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="contact" name="contact" class="text_field" size="20" value="<%= @profile.contact %>" />
+				&nbsp;
+				<input type="radio" value="true" name="contact_gender" id="contact_male"<%= %Q! checked="checked"! if @profile.contact_gender == true %> />
+				<label for="contact_male">
+					先生
+				</label>
+				&nbsp;
+				<input type="radio" value="false" name="contact_gender" id="contact_female"<%= %Q! checked="checked"! if @profile.contact_gender == false %> />
+				<label for="contact_female">
+					女士
+				</label>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="contact_title">
+					联系人职位
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="contact_title" name="contact_title" class="text_field" size="20" value="<%= @profile.contact_title %>" />
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				<label for="address">
+					地址
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="address" name="address" class="text_field" size="30" value="<%= @profile.address %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="zip">
+					邮编
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="zip" name="zip" class="text_field" size="15" value="<%= @profile.zip %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="website">
+					企业网站
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="website" name="website" class="text_field" size="30" value="<%= @profile.website %>" />
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				<label for="nature">
+					企业性质
+				</label>
+			</td>
+			
+			<td>
+				<select name="nature" id="nature" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.nature_id.nil? %>></option>
+					<% CorporationNature.data.each do |nature| %>
+						<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @profile.nature_id == nature[:id] %>><%= nature[:name] %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="size">
+					企业规模
+				</label>
+			</td>
+			
+			<td>
+				<select name="size" id="size" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.size_id.nil? %>></option>
+					<% CorporationSize.data.each do |size| %>
+						<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @profile.size_id == size[:id] %>><%= size[:name] %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="industry">
+					所属行业
+				</label>
+			</td>
+			
+			<td>
+				<select name="industry" id="industry" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.industry_id.nil? %>></option>
+					<% CorporationIndustry.data.each do |industry| %>
+						<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @profile.industry_id == industry[:id] %>><%= industry[:name] %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="province">
+					企业所在地
+				</label>
+			</td>
+			
+			<td>
+				<select name="province" id="province" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @profile.province_id.nil? %>></option>
+					<% Province.data.each do |province| %>
+						<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @profile.province_id == province[:id] %>><%= province[:name] %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				<label for="desc">
+					企业简介
+				</label>
+			</td>
+			
+			<td>
+				<textarea id="desc" name="desc" class="text_field" cols="50" rows="8"><%= @profile.desc %></textarea>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "修改企业信息", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>
