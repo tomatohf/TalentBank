@@ -13,7 +13,7 @@ class CorporationsController < ApplicationController
   
   
   def new
-    
+    # should use different layout ...
   end
   
   def create
