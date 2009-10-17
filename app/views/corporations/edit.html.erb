@@ -1,0 +1,65 @@
+<% talent_page_title("填写企业名称") %>
+
+
+<h2>填写企业名称</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @corporation.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@corporation) %>
+	</p>
+<% end %>
+
+<% form_tag "/corporations/#{@corporation.id}", :method => :put do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 120px;">
+				用户名
+			</td>
+			
+			<td>
+				<%= @corporation.uid %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="name">
+					企业名称<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @corporation.name %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<div class="info_with_icon">
+					50个字符以内, 企业名称一经填写, 不可修改 
+				</div>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "填写名称", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

@@ -8,7 +8,8 @@ class CorporationsController < ApplicationController
   
   before_filter :check_corporation_allow, :only => []
   
-  # before_filter :check_corporation_name
+  before_filter :check_corporation_name, :except => [:edit, :update]
+  before_filter :protect_corporation_name, :only => [:edit, :update]
   
   
   def show
@@ -17,15 +18,19 @@ class CorporationsController < ApplicationController
   
   
   def edit
-    # should check and prevent modifying ...
+    
   end
   
   def update
     @corporation.name = params[:name] && params[:name].strip
     
-    if @corporation.save
-      flash[:success_msg] = "修改成功, 企业名称已更新"
-      return jump_to("/corporations/#{@corporation.id}")
+    unless @corporation.name.blank?
+      if @corporation.save
+        flash[:success_msg] = "修改成功, 企业名称已更新"
+        return jump_to("/corporations/#{@corporation.id}")
+      end
+    else
+      flash.now[:error_msg] = "修改失败, 请输入  企业名称"
     end
     
     render :action => "edit"
@@ -82,6 +87,11 @@ class CorporationsController < ApplicationController
   
   def check_corporation_name
     jump_to("/corporations/#{@corporation.id}/edit") unless @corporation.name?
+  end
+  
+  
+  def protect_corporation_name
+    jump_to("/corporations/#{@corporation.id}") if @corporation.name?
   end
   
 end
