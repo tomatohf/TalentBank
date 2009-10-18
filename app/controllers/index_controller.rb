@@ -103,6 +103,79 @@ class IndexController < ApplicationController
   end
   
   
+  def corporation_register
+    @corporation = Corporation.new(:registering => true)
+    @profile = CorporationProfile.new(:registering => true)
+    
+    if request.post?
+      # corporation
+      @corporation.uid = params[:username] && params[:username].strip
+      @corporation.password = params[:password]
+      @corporation.password_confirmation = params[:password_confirmation]
+      
+      @corporation.name = params[:name] && params[:name].strip
+      
+      # corporation profile
+      @profile.email = params[:email] && params[:email].strip
+      @profile.phone = params[:phone] && params[:phone].strip
+      @profile.contact = params[:contact] && params[:contact].strip
+      @profile.contact_gender = case params[:contact_gender]
+        when "true"
+          true
+        when "false"
+          false
+        else
+          nil
+      end
+      @profile.contact_title = params[:contact_title] && params[:contact_title].strip
+
+      @profile.address = params[:address] && params[:address].strip
+      @profile.zip = params[:zip] && params[:zip].strip
+      @profile.website = params[:website] && params[:website].strip
+
+      @profile.nature_id = params[:nature]
+      @profile.size_id = params[:size]
+      @profile.industry_id = params[:industry]
+      @profile.province_id = params[:province]
+      @profile.city_id = params[:city]
+
+      @profile.desc = params[:desc] && params[:desc].strip
+      
+      # do validation
+      valid = @corporation.valid?
+      valid = @profile.valid? && valid
+      # check corporation name
+      unless @corporation.name?
+        flash.now[:error_msg] = "请输入 企业名称"
+        valid = false
+      end
+      
+      if valid
+        @corporation.school_id = School.get_school_info(@school.abbr)[0]
+        if @corporation.save
+          # login the corporation
+          do_login(@corporation.id, :corporations, @corporation.active)
+          set_login_cookie(@corporation.uid, :corporations, false)
+          
+          # TODO - NOTIFY ADMIN TEACHER !!!
+          
+          @profile.corporation_id = @corporation.id
+          if false #@profile.save
+            flash[:success_msg] = "注册成功, 已创建企业帐号"
+            return jump_to("/corporations/#{@corporation.id}")
+          else
+            flash[:error_msg] = "企业信息保存失败, 再试一次吧"
+            return jump_to("/corporations/#{@corporation.id}/edit_profile")
+          end
+          
+        else
+          flash.now[:error_msg] = "注册失败, 再试一次吧"
+        end
+      end
+    end
+  end
+  
+  
   def logout
     do_logout
     

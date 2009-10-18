@@ -1,26 +1,16 @@
 class CorporationsController < ApplicationController
   
-  before_filter :check_login_for_corporation, :except => [:new, :create]
+  before_filter :check_login_for_corporation
   
   before_filter :check_active, :only => [:update, :update_password, :update_profile]
   
-  before_filter :check_corporation, :except => [:new, :create]
+  before_filter :check_corporation
   
   before_filter :check_corporation_allow, :only => []
   
-  before_filter :check_corporation_name, :except => [:edit, :update, :new, :create]
+  before_filter :check_corporation_name, :except => [:edit, :update]
   before_filter :protect_corporation_name, :only => [:edit, :update]
   
-  
-  def new
-    # should use different layout ...
-  end
-  
-  def create
-    
-  end
-  
-  # ========== login required separate line ==========
   
   def show
     
@@ -34,13 +24,13 @@ class CorporationsController < ApplicationController
   def update
     @corporation.name = params[:name] && params[:name].strip
     
-    unless @corporation.name.blank?
+    if @corporation.name?
       if @corporation.save
         flash[:success_msg] = "修改成功, 企业名称已更新"
         return jump_to("/corporations/#{@corporation.id}")
       end
     else
-      flash.now[:error_msg] = "修改失败, 请输入  企业名称"
+      flash.now[:error_msg] = "修改失败, 请输入 企业名称"
     end
     
     render :action => "edit"

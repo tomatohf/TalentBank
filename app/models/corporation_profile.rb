@@ -3,7 +3,8 @@ class CorporationProfile < ActiveRecord::Base
   belongs_to :corporation, :class_name => "Corporation", :foreign_key => "corporation_id"
   
   
-  validates_presence_of :corporation_id
+  attr_accessor :registering
+  validates_presence_of :corporation_id, :unless => Proc.new { |profile| profile.registering == true }
   
   validates_presence_of :email, :message => "请输入 邮箱"
   validates_length_of :email, :maximum => 250, :message => "邮箱 超过长度限制", :allow_nil => false

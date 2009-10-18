@@ -1,0 +1,123 @@
+<% talent_page_title("注册企业帐号") %>
+
+
+<h2>注册企业帐号</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @corporation.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@corporation) %>
+	</p>
+<% end %>
+<% if @profile.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@profile) %>
+	</p>
+<% end %>
+
+
+<% form_tag "", :method => :post do %>
+
+	<table border="0" cellspacing="0" cellpadding="10">
+		<tr>
+			<td style="width: 100px;">
+				<div style="font-size: 14px;">
+					» 企业帐号
+				</div>
+			</td>
+			
+			<td>
+				
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="username">
+					用户名<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @corporation.uid %>" />
+				&nbsp;
+				<span class="info_with_icon">
+					注册后不可修改 
+				</span>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password">
+					密码<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="password" id="password" name="password" class="text_field" size="30" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password_confirmation">
+					确认密码<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="password" id="password_confirmation" name="password_confirmation" class="text_field" size="30" />
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>
+				<div style="font-size: 14px;">
+					» 企业信息
+				</div>
+			</td>
+			
+			<td>
+				
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="name">
+					企业名称<%= required_mark %>
+				</label>
+			</td>
+
+			<td>
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @corporation.name %>" />
+				&nbsp;
+				<span class="info_with_icon">
+					注册后不可修改 
+				</span>
+			</td>
+		</tr>
+
+		<%= render :partial => "/corporations/profile_form" %>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "注册", :class => "button" %>
+				
+				<a href="/index/corporation" style="margin-left: 20px; font-size: 13px;">
+					返回企业用户登录</a>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

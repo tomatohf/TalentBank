@@ -2,8 +2,11 @@ class Corporation < ActiveRecord::Base
   
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
+  has_one :profile, :class_name => "CorporationProfile", :foreign_key => "corporation_id", :dependent => :destroy
   
-  validates_presence_of :school_id
+  
+  attr_accessor :registering
+  validates_presence_of :school_id, :unless => Proc.new { |corp| corp.registering == true }
   
   validates_presence_of :uid, :message => "请输入 用户名"
   validates_presence_of :password, :message => "请输入 密码"
