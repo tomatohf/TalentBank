@@ -1,0 +1,31 @@
+<% talent_page_title("查询简历") %>
+
+
+<h2>查询简历</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<% form_tag "/corporations/#{@corporation.id}/query", :method => :post do %>
+	
+<% end %>
+
+<div>
+	学校:
+	<span>
+		<%= @school.name %>
+	</span>
+	
+	&nbsp;&nbsp;&nbsp;
+	
+	学院:
+	<select name="college" id="college" class="dropdown_list">
+		<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
+		<% College.data[@school.abbr].each do |college| %>
+			<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
+		<% end %>
+	</select>
+</div>

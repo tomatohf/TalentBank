@@ -9,7 +9,43 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 6) do
+
+  create_table "corp_queries", :force => true do |t|
+    t.integer  "corporation_id"
+    t.integer  "school_id"
+    t.integer  "college_id"
+    t.integer  "major_id"
+    t.integer  "edu_level_id",   :limit => 2
+    t.integer  "enter_year",     :limit => 2
+    t.integer  "domain_id",      :limit => 2
+    t.string   "keyword"
+    t.string   "conditions"
+    t.datetime "created_at"
+  end
+
+  create_table "corp_query_exp_tags", :force => true do |t|
+    t.integer  "query_id"
+    t.integer  "tag_id"
+    t.datetime "created_at"
+  end
+
+  create_table "corp_query_marks", :force => true do |t|
+    t.integer  "corporation_id"
+    t.integer  "query_id"
+    t.string   "name",           :limit => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corp_query_marks", ["corporation_id"], :name => "index_corp_query_marks_on_corporation_id"
+
+  create_table "corp_query_skills", :force => true do |t|
+    t.integer  "query_id"
+    t.integer  "skill_id"
+    t.integer  "value",      :limit => 2
+    t.datetime "created_at"
+  end
 
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"

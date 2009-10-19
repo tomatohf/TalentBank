@@ -3,11 +3,11 @@ class CorporationsController < ApplicationController
   before_filter :check_login_for_corporation
   
   before_filter :check_active, :only => [:update, :update_password, :update_profile,
-                                          :query]
+                                          :resumes]
   
   before_filter :check_corporation
   
-  before_filter :check_corporation_allow, :only => [:query]
+  before_filter :check_corporation_allow, :only => [:resumes]
   
   before_filter :check_corporation_name, :except => [:edit, :update]
   before_filter :protect_corporation_name, :only => [:edit, :update]
@@ -105,8 +105,13 @@ class CorporationsController < ApplicationController
   end
   
   
-  def query
+  def resumes
+    # conditions = params[:query] && params[:query].strip
     
+    @query = CorpQuery.new(
+      :corporation_id => @corporation.id,
+      :school_id => @corporation.school_id
+    )
   end
   
   

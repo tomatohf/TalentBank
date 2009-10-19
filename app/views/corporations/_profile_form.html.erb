@@ -103,7 +103,7 @@
 	
 	<td>
 		<select name="nature" id="nature" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.nature_id.nil? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @profile.nature_id.blank? %>></option>
 			<% CorporationNature.data.each do |nature| %>
 				<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @profile.nature_id == nature[:id] %>><%= nature[:name] %></option>
 			<% end %>
@@ -120,7 +120,7 @@
 	
 	<td>
 		<select name="size" id="size" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.size_id.nil? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @profile.size_id.blank? %>></option>
 			<% CorporationSize.data.each do |size| %>
 				<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @profile.size_id == size[:id] %>><%= size[:name] %></option>
 			<% end %>
@@ -137,7 +137,7 @@
 	
 	<td>
 		<select name="industry" id="industry" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.industry_id.nil? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @profile.industry_id.blank? %>></option>
 			<% CorporationIndustry.data.each do |industry| %>
 				<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @profile.industry_id == industry[:id] %>><%= industry[:name] %></option>
 			<% end %>
@@ -154,7 +154,7 @@
 	
 	<td>
 		<select name="province" id="province" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.province_id.nil? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @profile.province_id.blank? %>></option>
 			<% Province.data.each do |province| %>
 				<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @profile.province_id == province[:id] %>><%= province[:name] %></option>
 			<% end %>

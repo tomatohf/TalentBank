@@ -12,6 +12,8 @@ class CorpQueries < ActiveRecord::Migration
       
       t.column :domain_id, :integer, :limit => 2
       
+      t.column :keyword, :string
+      
       t.column :conditions, :string
       
       t.column :created_at, :datetime
