@@ -2,7 +2,7 @@ class CorporationsController < ApplicationController
   
   before_filter :check_login_for_corporation
   
-  before_filter :check_active, :only => [:update, :update_password, :update_profile
+  before_filter :check_active, :only => [:update, :update_password, :update_profile,
                                           :query]
   
   before_filter :check_corporation
