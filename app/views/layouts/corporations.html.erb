@@ -30,7 +30,7 @@
 				
 				<div>
 					<% if @corporation.allow %>
-						<a href="#">
+						<a href="/corporations/<%= @corporation.id %>/query">
 							查询简历</a>
 					<% else %>
 						<a href="#">

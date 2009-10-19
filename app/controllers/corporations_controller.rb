@@ -2,11 +2,12 @@ class CorporationsController < ApplicationController
   
   before_filter :check_login_for_corporation
   
-  before_filter :check_active, :only => [:update, :update_password, :update_profile]
+  before_filter :check_active, :only => [:update, :update_password, :update_profile
+                                          :query]
   
   before_filter :check_corporation
   
-  before_filter :check_corporation_allow, :only => []
+  before_filter :check_corporation_allow, :only => [:query]
   
   before_filter :check_corporation_name, :except => [:edit, :update]
   before_filter :protect_corporation_name, :only => [:edit, :update]
@@ -101,6 +102,11 @@ class CorporationsController < ApplicationController
     end
     
     render :action => "edit_profile"
+  end
+  
+  
+  def query
+    
   end
   
   

@@ -89,7 +89,9 @@ ActionController::Routing::Routes.draw do |map|
     :update_password => :post,
     
     :edit_profile => :get,
-    :update_profile => :post
+    :update_profile => :post,
+    
+    :query => [:get, :post]
   }
   
   
