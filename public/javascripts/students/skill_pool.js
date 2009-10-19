@@ -23,7 +23,7 @@ function add_skill(skill_id, skill_link) {
 				$(selected_skill).replaceWith(selected_skill_html);
 			}
 			else {
-				$(".sep_line:first").before(selected_skill_html);
+				$(".skill_pool_sep_line:first").before(selected_skill_html);
 			}
 			$(skill_link).remove();
 		},
@@ -52,7 +52,7 @@ function remove_skill(skill_id) {
 			
 			// adjust list
 			var selected_skill = $("#selected_skill_" + skill_id);
-			$(".sep_line:first").after("<a href='#' class='unselected_skill' onclick='add_skill(" + skill_id + ", this); return false;'>" + selected_skill.html() + "</a>")
+			$(".skill_pool_sep_line:first").after("<a href='#' class='unselected_skill' onclick='add_skill(" + skill_id + ", this); return false;'>" + selected_skill.html() + "</a>")
 			selected_skill.remove();
 		},
 		"html"

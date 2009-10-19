@@ -15,8 +15,6 @@
 %>
 
 
-<link href="/stylesheets/skill_pool.css" rel="stylesheet" type="text/css" />
-
 <div class="skill_pool">
 	<% selected_skills.each do |skill| %>
 		<div class="selected_skill" id="selected_skill_<%= skill[:id] %>">
@@ -24,7 +22,7 @@
 		</div>
 	<% end %>
 	
-	<div class="sep_line"></div>
+	<div class="skill_pool_sep_line"></div>
 	
 	<% unselected_skills.each do |skill| %>
 		<a href="#" class="unselected_skill" onclick="add_skill(<%= skill[:id] %>, this); return false;">

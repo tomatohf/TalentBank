@@ -7,4 +7,11 @@ class CorpQuery < ActiveRecord::Base
   
   has_many :marks, :class_name => "CorpQueryMark", :foreign_key => "query_id", :dependent => :destroy
   
+  
+  
+  def tags
+    # TODO - parse out the tag ids from conditions field ...
+    []
+  end
+  
 end

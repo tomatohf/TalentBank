@@ -1,3 +1,4 @@
+<% school_abbr = @school.abbr %>
 <% talent_page_title("查询简历") %>
 
 
@@ -24,8 +25,87 @@
 	学院:
 	<select name="college" id="college" class="dropdown_list">
 		<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
-		<% College.data[@school.abbr].each do |college| %>
+		<% College.data[school_abbr].each do |college| %>
 			<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
 		<% end %>
 	</select>
+	
+	&nbsp;&nbsp;&nbsp;
+	
+	专业:
+	<select name="major" id="major" class="dropdown_list">
+	</select>
+	
+	&nbsp;&nbsp;&nbsp;
+	
+	教育水平:
+	<select name="edu_level" id="edu_level" class="dropdown_list">
+		<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>></option>
+		<% @school.edu_levels.each do |level_id| %>
+			<% level = EduLevel.find(level_id) %>
+			<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
+		<% end %>
+	</select>
+	
+	&nbsp;&nbsp;&nbsp;
+	
+	入学年份:
+	<select name="enter_year" id="enter_year" class="dropdown_list">
+		<option value=""<%= %Q! selected="selected"! if @query.enter_year.blank? %>></option>
+		<% [2006].each do |year| %>
+			<option value="<%= year %>"<%= %Q! selected="selected"! if @query.enter_year == year %>><%= year %></option>
+		<% end %>
+	</select>
 </div>
+
+
+<div>
+	关键字:
+	<input type="text" id="keyword" name="keyword" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
+</div>
+
+
+<div>
+	<% domains = @school.resume_domains.collect { |domain_id| ResumeDomain.find(domain_id) } %>
+	求职方向:
+	<select name="domain" id="domain" class="dropdown_list">
+		<% domains.each do |domain| %>
+			<option value="<%= domain[:id] %>"<%= %Q! selected="selected"! if @query.domain_id == domain[:id] %>><%= domain[:name] %></option>
+		<% end %>
+	</select>
+</div>
+
+
+<div>
+	<% domains.each do |domain| %>
+		<% tags = ResumeExpTag.data[domain[:id]] || [] %>
+		<% if tags.size > 0 %>
+			<div id="tags_<%= domain[:id] %>" class="query_tags" style="display: none;">
+				<% tags.each do |tag| %>
+					<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query.tags.include?(tag[:id]) %><label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
+				<% end %>
+			</div>
+		<% end %>
+	<% end %>
+</div>
+
+
+<div>
+	
+</div>
+
+
+
+<script src="/lib/jquery/jquery-1.3.2.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var INIT_COLLEGE = "<%= @query.college_id %>";
+	var INIT_MAJOR = "<%= @query.major_id %>";
+	var MAJORS = {};
+	<% College.data[school_abbr].each do |college| %>
+		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+	<% end %>
+	
+	var INIT_DOMAIN = "<%= @query.domain_id %>";
+	var DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
+</script>
+<script src="/javascripts/corporations/query.js" type="text/javascript" language="JavaScript"></script>

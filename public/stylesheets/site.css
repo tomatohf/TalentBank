@@ -276,3 +276,44 @@ a.none:hover {
 	padding: 0px;
 	margin: 0px;
 }
+
+
+.skill_pool {
+	width: 250px;
+	height: 400px;
+	overflow: auto;
+	border: 1px solid #EAEAEA;
+}
+
+.skill_pool_sep_line {
+	height: 1px;
+	border-bottom: 1px dashed #DDDDDD;
+	margin: 8px 25px 10px 30px;
+}
+
+.selected_skill, .unselected_skill {
+	font-size: 13px;
+}
+
+.selected_skill {
+	margin: 10px;
+	padding-left: 22px;
+	background: transparent url(/images/students/selected_icon.gif) no-repeat scroll left center;
+}
+
+a.unselected_skill {
+	display: block;
+	margin: 0px 5px 0px 3px;
+	padding: 5px 10px;
+	text-decoration: none;
+}
+
+a.unselected_skill:hover {
+	text-decoration: underline;
+	background: #F8F8F8 url(/images/students/selected_icon.gif) no-repeat scroll right center;
+}
+
+
+.query_tags {
+	word-spacing: 20px;
+}
