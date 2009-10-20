@@ -91,7 +91,8 @@ ActionController::Routing::Routes.draw do |map|
     :edit_profile => :get,
     :update_profile => :post,
     
-    :resumes => [:get, :post]
+    :resumes => [:get, :post],
+    :add_skill => :post
   }
   
   

@@ -314,6 +314,10 @@ a.unselected_skill:hover {
 }
 
 
-.query_tags {
-	word-spacing: 20px;
+.query_tag {
+	margin: 0px 10px;
+}
+
+.query_skill {
+	margin: 0px 10px;
 }

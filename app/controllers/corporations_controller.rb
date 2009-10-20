@@ -3,11 +3,11 @@ class CorporationsController < ApplicationController
   before_filter :check_login_for_corporation
   
   before_filter :check_active, :only => [:update, :update_password, :update_profile,
-                                          :resumes]
+                                          :resumes, :add_skill]
   
   before_filter :check_corporation
   
-  before_filter :check_corporation_allow, :only => [:resumes]
+  before_filter :check_corporation_allow, :only => [:resumes, :add_skill]
   
   before_filter :check_corporation_name, :except => [:edit, :update]
   before_filter :protect_corporation_name, :only => [:edit, :update]
@@ -112,6 +112,16 @@ class CorporationsController < ApplicationController
       :corporation_id => @corporation.id,
       :school_id => @corporation.school_id
     )
+  end
+  
+  def add_skill
+    skill_id = params[:skill_id] && params[:skill_id].strip
+    
+    if !skill_id.blank?
+      return render(:partial => "query_skill", :object => [skill_id.to_i, nil])
+    end
+    
+    render :nothing => true
   end
   
   

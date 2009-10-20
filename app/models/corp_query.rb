@@ -9,6 +9,11 @@ class CorpQuery < ActiveRecord::Base
   
   
   
+  def fill()
+    
+  end
+  
+  
   def tags
     # TODO - parse out the tag ids from conditions field ...
     []

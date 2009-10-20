@@ -30,6 +30,40 @@ function show_tags(domain_id) {
 }
 
 
+function add_skill(skill_id) {
+	$.post(
+		"/corporations/" + CORPORATION_ID + "/add_skill",
+		{
+			skill_id: skill_id
+		},
+		function(data) {
+			// add skill input
+			var query_skill = document.getElementById("query_skill_" + skill_id);
+			if(query_skill) {
+				$(query_skill).replaceWith(data);
+			}
+			else {
+				$("#skills").append(data);
+			}
+			
+			// adjust skill list
+			$("#skill_" + skill_id).remove();
+		},
+		"html"
+	);
+}
+
+
+function remove_skill(skill_id, skill_name) {
+	// remove skill input
+	$("#query_skill_" + skill_id).remove();
+	
+	// adjust skill list
+	var option = "<option value='" + skill_id + "' id='skill_" + skill_id + "'>" + skill_name + "</option>";
+	$("#skill_list").append(option);
+}
+
+
 $(document).ready(
 	function() {
 		$("#college").change(
@@ -38,9 +72,29 @@ $(document).ready(
 			}
 		);
 		
+		
 		$("#domain").change(
 			function() {
 				show_tags($(this).val());
+			}
+		);
+		
+		
+		$("#add_skill_link").click(
+			function() {
+				add_skill($("#skill_list").val());
+			}
+		);
+		
+		
+		$("#loading").ajaxStart(
+			function() {
+				$(this).show();
+			}
+		);
+		$("#loading").ajaxStop(
+			function() {
+				$(this).hide();
 			}
 		);
 		
