@@ -13,7 +13,7 @@
 	</p>
 <% end %>
 
-<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post do %>
+<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post, :id => "query_form" do %>
 	<div>
 		学校:
 		<span>
@@ -69,8 +69,9 @@
 
 
 	<div>
-		<label for="keyword">关键字:</label>
-		<input type="text" id="keyword" name="keyword" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
+		<label for="keyword_input">关键字:</label>
+		<input type="text" id="keyword_input" name="keyword_input" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
+		<input type="hidden" id="keyword" name="keyword" />
 	</div>
 
 
@@ -128,6 +129,13 @@
 	
 	<div class="align_c">
 		<%= submit_tag "查询", :class => "button", :disabled => !@account_active %>
+		
+		<% unless @conditions.blank? %>
+			<span style="margin-left: 30px;">
+				<a href="#">
+					保存此查询条件</a>
+			</span>
+		<% end %>
 	</div>
 <% end %>
 

@@ -106,16 +106,15 @@ class CorporationsController < ApplicationController
   
   
   def resumes
-    conditions = params[:query] && params[:query].strip
-    
-    @query = CorpQuery.parse_from_conditions(conditions)
+    @conditions = params[:q] && params[:q].strip
+    @query = CorpQuery.parse_from_conditions(@conditions)
     @query_tags, @query_skills = @query.tags_and_skills
   end
   
   def create_query
-    query = params[:query] && params[:query].strip
-    conditions = unless query.blank?
-      query
+    q = params[:q] && params[:q].strip
+    conditions = unless q.blank?
+      q
     else
       college_id = params[:college]
       major_id = params[:major]
@@ -146,7 +145,18 @@ class CorporationsController < ApplicationController
       )
     end
     
-    jump_to("/corporations/#{@corporation.id}/resumes?query=#{conditions}")
+    
+    # ========== save the query ==========
+    query = CorpQuery.parse_from_conditions(conditions)
+    query.corporation_id = @corporation.id
+    # the params[:keyword] has been encodeURIComponent by javascript
+    # and should be only used in URL
+    query.keyword = params[:keyword_input] && params[:keyword_input].strip
+    query.save
+    # ========== end ==========
+    
+    
+    return jump_to("/corporations/#{@corporation.id}/resumes?q=#{conditions}")
   end
   
   def add_skill

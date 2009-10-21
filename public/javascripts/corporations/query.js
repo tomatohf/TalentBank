@@ -80,6 +80,13 @@ function remove_skill(skill_id) {
 
 $(document).ready(
 	function() {
+		$("#query_form").submit(
+			function() {
+				$("#keyword").val(encodeURIComponent($("#keyword_input").val()));
+			}
+		);
+		
+		
 		$("#college").change(
 			function() {
 				fill_majors($(this).val(), "");
