@@ -1,4 +1,7 @@
-<% school_abbr = @school.abbr %>
+<%
+	school_abbr = @school.abbr
+	domains = @school.resume_domains.collect { |domain_id| ResumeDomain.find(domain_id) }
+%>
 <% talent_page_title("查询简历") %>
 
 
@@ -10,109 +13,128 @@
 	</p>
 <% end %>
 
-<% form_tag "/corporations/#{@corporation.id}/query", :method => :post do %>
-	
-<% end %>
-
-<div>
-	学校:
-	<span>
-		<%= @school.name %>
-	</span>
-	
-	&nbsp;&nbsp;&nbsp;
-	
-	<label for="college">学院:</label>
-	<select name="college" id="college" class="dropdown_list">
-		<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
-		<% College.data[school_abbr].each do |college| %>
-			<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
-		<% end %>
-	</select>
-	
-	&nbsp;&nbsp;&nbsp;
-	
-	<label for="major">专业:</label>
-	<select name="major" id="major" class="dropdown_list">
-	</select>
-	
-	&nbsp;&nbsp;&nbsp;
-	
-	<label for="edu_level">教育水平:</label>
-	<select name="edu_level" id="edu_level" class="dropdown_list">
-		<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>></option>
-		<% @school.edu_levels.each do |level_id| %>
-			<% level = EduLevel.find(level_id) %>
-			<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
-		<% end %>
-	</select>
-	
-	&nbsp;&nbsp;&nbsp;
-	
-	<label for="enter_year">入学年份:</label>
-	<select name="enter_year" id="enter_year" class="dropdown_list">
-		<option value=""<%= %Q! selected="selected"! if @query.enter_year.blank? %>></option>
-		<% [2006].each do |year| %>
-			<option value="<%= year %>"<%= %Q! selected="selected"! if @query.enter_year == year %>><%= year %></option>
-		<% end %>
-	</select>
-</div>
-
-
-<div>
-	<label for="keyword">关键字:</label>
-	<input type="text" id="keyword" name="keyword" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
-</div>
-
-
-<div>
-	<% domains = @school.resume_domains.collect { |domain_id| ResumeDomain.find(domain_id) } %>
-	<label for="domain">求职方向:</label>
-	<select name="domain" id="domain" class="dropdown_list">
-		<% domains.each do |domain| %>
-			<option value="<%= domain[:id] %>"<%= %Q! selected="selected"! if @query.domain_id == domain[:id] %>><%= domain[:name] %></option>
-		<% end %>
-	</select>
-</div>
-
-
-<div>
-	<% domains.each do |domain| %>
-		<% tags = ResumeExpTag.data[domain[:id]] || [] %>
-		<% if tags.size > 0 %>
-			<div id="tags_<%= domain[:id] %>" style="display: none;">
-				需要具备的经历标签:
-				<% tags.each do |tag| %>
-					<span class="query_tag">
-						<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query.tags.include?(tag[:id]) %>
-						<label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
-					</span>
-				<% end %>
-			</div>
-		<% end %>
-	<% end %>
-</div>
-
-
-<div>
+<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post do %>
 	<div>
-		<label for="skill_list">需要具备的技能和证书:</label>
-		<select id="skill_list" class="dropdown_list">
-			<% Skill.data.each do |skill| %>
-				<option value="<%= skill[:id] %>" id="skill_<%= skill[:id] %>"><%= skill[:name] %></option>
-			<% end %>
-		</select>
-
-		<a href="#" id="add_skill_link">
-			添加</a>
-		
-		<span id="loading" style="display: none;">
-			<img src="/images/loading_icon.gif" border="0" style="margin: 0px 2px -3px 20px;" />
-			操作中 ... 
+		学校:
+		<span>
+			<%= @school.name %>
 		</span>
 	</div>
 	
-	<div id="skills" class="query_skills"></div>
+	
+	<div>
+		<label for="college">学院:</label>
+		<select name="college" id="college" class="dropdown_list">
+			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
+			<% College.data[school_abbr].each do |college| %>
+				<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
+			<% end %>
+		</select>
+	
+		&nbsp;&nbsp;&nbsp;
+	
+		<label for="major">专业:</label>
+		<select name="major" id="major" class="dropdown_list">
+		</select>
+	
+		&nbsp;&nbsp;&nbsp;
+	
+		<label for="edu_level">教育水平:</label>
+		<select name="edu_level" id="edu_level" class="dropdown_list">
+			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>></option>
+			<% @school.edu_levels.each do |level_id| %>
+				<% level = EduLevel.find(level_id) %>
+				<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
+			<% end %>
+		</select>
+	
+		&nbsp;&nbsp;&nbsp;
+	
+		<label for="graduation_year">毕业时间:</label>
+		<select name="graduation_year" id="graduation_year" class="dropdown_list">
+			<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>></option>
+			<%
+				today = Date.today
+				this_year = today.year
+				this_month = today.month
+				coming_graduation_year = (this_month > 6) ? (this_year + 1) : this_year
+			%>
+			<option value="<%= coming_graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == coming_graduation_year %>><%= coming_graduation_year %> 年 (应届)</option>
+			<% 3.times do |i| %>
+				<% year = coming_graduation_year + i + 1 %>
+				<option value="<%= year %>"<%= %Q! selected="selected"! if @query.graduation_year == year %>><%= year %> 年</option>
+			<% end %>
+		</select>
+	</div>
+
+
+	<div>
+		<label for="keyword">关键字:</label>
+		<input type="text" id="keyword" name="keyword" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
+	</div>
+
+
+	<div>
+		<label for="domain">求职方向:</label>
+		<select name="domain" id="domain" class="dropdown_list">
+			<% domains.each do |domain| %>
+				<option value="<%= domain[:id] %>"<%= %Q! selected="selected"! if @query.domain_id == domain[:id] %>><%= domain[:name] %></option>
+			<% end %>
+		</select>
+	</div>
+
+
+	<div>
+		<% domains.each do |domain| %>
+			<% tags = ResumeExpTag.data[domain[:id]] || [] %>
+			<% if tags.size > 0 %>
+				<div id="tags_<%= domain[:id] %>" style="display: none;">
+					需要具备的经历标签:
+					<% tags.each do |tag| %>
+						<span class="query_tag">
+							<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query_tags.include?(tag[:id].to_s) %>
+							<label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
+						</span>
+					<% end %>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+
+
+	<div>
+		<div>
+			<label for="skill_list">需要具备的技能和证书:</label>
+			<select id="skill_list" class="dropdown_list">
+				<% Skill.data.each do |skill| %>
+					<option value="<%= skill[:id] %>" id="skill_<%= skill[:id] %>"><%= skill[:name] %></option>
+				<% end %>
+			</select>
+
+			<a href="#" id="add_skill_link">
+				添加</a>
+		
+			<span id="loading" style="display: none;">
+				<img src="/images/loading_icon.gif" border="0" style="margin: 0px 2px -3px 20px;" />
+				操作中 ... 
+			</span>
+		</div>
+	
+		<div id="skills" class="query_skills">
+			<%= render :partial => "query_skill", :collection => @query_skills %>
+		</div>
+	</div>
+	
+	
+	<div class="align_c">
+		<%= submit_tag "查询", :class => "button", :disabled => !@account_active %>
+	</div>
+<% end %>
+
+
+
+<div>
+	简历列表
 </div>
 
 

@@ -1,14 +1,19 @@
 <%
-	skill = Skill.find(query_skill[0])
-	value = query_skill[1]
+	skill_id, value = if query_skill.kind_of?(CorpQuerySkill)
+		[query_skill.skill_id, query_skill.value]
+	else
+		[query_skill[0].to_i, query_skill[1].to_i]
+	end
+	
+	skill = Skill.find(skill_id)
 	element_id = "skill_input_#{skill[:id]}"
 %>
 
 <% if skill %>
 	<span id="query_skill_<%= skill[:id] %>" class="query_skill">
-		<label for="<%= element_id %>"><%= skill[:name] %>:</label>
+		<label for="<%= element_id %>"><%= skill[:name] %></label>
 		<%= SkillValueTypes.get_type(skill[:value_type]).render_input(skill[:data], value, element_id) %>
-		<a href="#" title="删除" class="none" onclick="remove_skill(<%= skill[:id] %>, '<%= a(skill[:name]) %>'); return false;">
+		<a href="#" title="删除" class="none" onclick="remove_skill(<%= skill[:id] %>); return false;">
 			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" /></a>
 	</span>
 <% end %>

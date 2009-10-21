@@ -13,14 +13,13 @@ ActiveRecord::Schema.define(:version => 6) do
 
   create_table "corp_queries", :force => true do |t|
     t.integer  "corporation_id"
-    t.integer  "school_id"
     t.integer  "college_id"
     t.integer  "major_id"
-    t.integer  "edu_level_id",   :limit => 2
-    t.integer  "enter_year",     :limit => 2
-    t.integer  "domain_id",      :limit => 2
+    t.integer  "edu_level_id",     :limit => 2
+    t.integer  "graduation_year",  :limit => 2
+    t.integer  "domain_id",        :limit => 2
     t.string   "keyword"
-    t.string   "conditions"
+    t.string   "other_conditions"
     t.datetime "created_at"
   end
 
@@ -30,22 +29,22 @@ ActiveRecord::Schema.define(:version => 6) do
     t.datetime "created_at"
   end
 
-  create_table "corp_query_marks", :force => true do |t|
-    t.integer  "corporation_id"
-    t.integer  "query_id"
-    t.string   "name",           :limit => 50
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "corp_query_marks", ["corporation_id"], :name => "index_corp_query_marks_on_corporation_id"
-
   create_table "corp_query_skills", :force => true do |t|
     t.integer  "query_id"
     t.integer  "skill_id"
     t.integer  "value",      :limit => 2
     t.datetime "created_at"
   end
+
+  create_table "corp_saved_queries", :force => true do |t|
+    t.integer  "corporation_id"
+    t.string   "conditions"
+    t.string   "name",           :limit => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corp_saved_queries", ["corporation_id"], :name => "index_corp_saved_queries_on_corporation_id"
 
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"
@@ -237,15 +236,15 @@ ActiveRecord::Schema.define(:version => 6) do
   add_index "student_skills", ["student_id", "skill_id"], :name => "index_student_skills_on_student_id_and_skill_id", :unique => true
 
   create_table "students", :force => true do |t|
-    t.string   "number",       :limit => 25
+    t.string   "number",          :limit => 25
     t.string   "password"
-    t.boolean  "active",                     :default => true
+    t.boolean  "active",                        :default => true
     t.integer  "school_id"
-    t.string   "name",         :limit => 25
+    t.string   "name",            :limit => 25
     t.integer  "college_id"
     t.integer  "major_id"
-    t.integer  "edu_level_id", :limit => 2
-    t.integer  "enter_year",   :limit => 2
+    t.integer  "edu_level_id",    :limit => 2
+    t.integer  "graduation_year", :limit => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

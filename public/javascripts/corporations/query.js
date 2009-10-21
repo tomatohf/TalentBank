@@ -47,20 +47,34 @@ function add_skill(skill_id) {
 			}
 			
 			// adjust skill list
-			$("#skill_" + skill_id).remove();
+			remove_skill_from_list(skill_id);
 		},
 		"html"
 	);
 }
 
+function remove_skill_from_list(skill_id) {
+	$("#skill_" + skill_id).remove();
+}
 
-function remove_skill(skill_id, skill_name) {
+
+function remove_skill(skill_id) {
+	var query_skill = $("#query_skill_" + skill_id);
+	var skill_name = query_skill.find("label").html();
+	
 	// remove skill input
-	$("#query_skill_" + skill_id).remove();
+	query_skill.remove();
 	
 	// adjust skill list
-	var option = "<option value='" + skill_id + "' id='skill_" + skill_id + "'>" + skill_name + "</option>";
-	$("#skill_list").append(option);
+	var skill_option_id = "skill_" + skill_id;
+	var option = "<option value='" + skill_id + "' id='" + skill_option_id + "'>" + skill_name + "</option>";
+	var skill_option = document.getElementById(skill_option_id);
+	if(skill_option) {
+		$(skill_option).replaceWith(option);
+	}
+	else {
+		$("#skill_list").append(option);
+	}
 }
 
 
@@ -101,5 +115,15 @@ $(document).ready(
 		
 		fill_majors(INIT_COLLEGE, INIT_MAJOR);
 		show_tags(INIT_DOMAIN);
+		
+		
+		// remove selected skill from list
+		$.each(
+			$("#skills").find(".query_skill"),
+			function(i, ele) {
+				var skill_id = $(ele).attr("id").substr("query_skill_".length);
+				remove_skill_from_list(skill_id);
+			}
+		);
 	}
 );

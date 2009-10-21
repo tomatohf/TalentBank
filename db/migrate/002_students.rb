@@ -47,7 +47,7 @@ class Students < ActiveRecord::Migration
       t.column :major_id, :integer
       
       t.column :edu_level_id, :integer, :limit => 2
-      t.column :enter_year, :integer, :limit => 2
+      t.column :graduation_year, :integer, :limit => 2
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
