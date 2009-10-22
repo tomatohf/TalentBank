@@ -5,4 +5,9 @@ class CorpQueryExpTag < ActiveRecord::Base
   
   validates_presence_of :query_id, :tag_id
   
+  
+  
+  Belongs_To_Keys = [:tag_id, :query_id]
+  include Utils::UniqueBelongs
+  
 end

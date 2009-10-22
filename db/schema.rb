@@ -29,12 +29,16 @@ ActiveRecord::Schema.define(:version => 6) do
     t.datetime "created_at"
   end
 
+  add_index "corp_query_exp_tags", ["tag_id", "query_id"], :name => "index_corp_query_exp_tags_on_tag_id_and_query_id", :unique => true
+
   create_table "corp_query_skills", :force => true do |t|
     t.integer  "query_id"
     t.integer  "skill_id"
     t.integer  "value",      :limit => 2
     t.datetime "created_at"
   end
+
+  add_index "corp_query_skills", ["skill_id", "query_id"], :name => "index_corp_query_skills_on_skill_id_and_query_id", :unique => true
 
   create_table "corp_saved_queries", :force => true do |t|
     t.integer  "corporation_id"

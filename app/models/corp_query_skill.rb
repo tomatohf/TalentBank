@@ -5,4 +5,9 @@ class CorpQuerySkill < ActiveRecord::Base
   
   validates_presence_of :query_id, :skill_id, :value
   
+  
+  
+  Belongs_To_Keys = [:skill_id, :query_id]
+  include Utils::UniqueBelongs
+  
 end
