@@ -78,6 +78,35 @@ function remove_skill(skill_id) {
 }
 
 
+function save_query() {
+	var content = 	'<label for="query_name">' + 
+						'保存为(名称):' + 
+					'</label>' +
+					'&nbsp;&nbsp;&nbsp;' +
+					'<input type="text" id="query_name" name="query_name" class="text_field" size="30" value="" />' +
+					'';
+	DIALOG.appear(
+		{
+			title: "保存查询",
+			content: content,
+			button_text: { ok: "保存", cancel: "取消" },
+			width: 400,
+			margin_top: 150,
+			fixed: true,
+			data: {},
+			modal: false,
+			ok_event: function(data) {
+				return true;
+			}
+		}
+	);
+}
+
+function do_save_query() {
+	
+}
+
+
 $(document).ready(
 	function() {
 		$("#query_form").submit(
@@ -104,6 +133,17 @@ $(document).ready(
 		$("#add_skill_link").click(
 			function() {
 				add_skill($("#skill_list").val());
+				
+				return false;
+			}
+		);
+		
+		
+		$("#save_query_link").click(
+			function() {
+				save_query();
+				
+				return false;
 			}
 		);
 		

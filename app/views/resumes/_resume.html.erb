@@ -80,43 +80,45 @@
 	</div>
 	
 	
-	<div>
-		<div class="resume_section_title">
-			教育经历
-		</div>
+	<% if edus.size > 0 %>
+		<div>
+			<div class="resume_section_title">
+				教育经历
+			</div>
 		
-		<div class="resume_section">
-			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-				<% edus.each do |edu| %>
-					<tr>
-						<td class="edu_exp_period">
-							<%= h(edu.period) %>
-						</td>
+			<div class="resume_section">
+				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<% edus.each do |edu| %>
+						<tr>
+							<td class="edu_exp_period">
+								<%= h(edu.period) %>
+							</td>
 
 
-						<td>
-							<%= h(edu.university) %>
-						</td>
+							<td>
+								<%= h(edu.university) %>
+							</td>
 
 
-						<td>
-							<%= h(edu.college) %>
-						</td>
+							<td>
+								<%= h(edu.college) %>
+							</td>
 
 
-						<td>
-							<%= h(edu.major) %>
-						</td>
+							<td>
+								<%= h(edu.major) %>
+							</td>
 
 
-						<td>
-							<%= h(edu.edu_type) %>
-						</td>
-					</tr>
-				<% end %>
-			</table>
+							<td>
+								<%= h(edu.edu_type) %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</div>
 		</div>
-	</div>
+	<% end %>
 	
 	
 	<% resume.exp_sections.each do |exp_section| %>

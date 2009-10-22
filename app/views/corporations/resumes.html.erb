@@ -129,21 +129,24 @@
 	
 	<div class="align_c">
 		<%= submit_tag "查询", :class => "button", :disabled => !@account_active %>
-		
-		<% unless @conditions.blank? %>
-			<span style="margin-left: 30px;">
-				<a href="#">
-					保存此查询条件</a>
-			</span>
-		<% end %>
 	</div>
 <% end %>
 
 
 
-<div>
-	简历列表
-</div>
+<% unless @conditions.blank? %>
+	<div style="height: 1000px;">
+		<div>
+			简历列表
+		</div>
+		
+		<div class="align_r">
+			<input type="hidden" id="conditions" name="conditions" value="<%= h(@conditions) %>" />
+			<a href="#" id="save_query_link">
+				保存此次查询</a>
+		</div>
+	</div>
+<% end %>
 
 
 
@@ -161,4 +164,6 @@
 	var INIT_DOMAIN = "<%= @query.domain_id %>";
 	var DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
 </script>
+<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
 <script src="/javascripts/corporations/query.js" type="text/javascript" language="JavaScript"></script>
