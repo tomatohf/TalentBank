@@ -3,7 +3,7 @@ module Schools
   class Qiaobutang < Base
     
     def name
-      "乔布堂学院"
+      "乔布堂"
     end
     
     def page_title(sub_title)

@@ -1,17 +1,22 @@
 <% talent_page_title("") %>
 
 
-<div>
-	<a href="/index/student">
-		学生登录</a>
-</div>
+<div class="align_c" style="margin-top: 60px;">
+	
+	<div style="margin-bottom: 80px;">
+		<a href="/" title="<%= @school.logo_title %>">
+			<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
+	</div>
+	
+	<div style="width: 950px; height: 304px; background: transparent url(/images/index/background.jpg) no-repeat scroll bottom center; overflow: hidden; word-spacing: 50px;">
+		<a href="/index/student" title="学生登录">
+			<img src="/images/index/student.png" border="0" alt="学生登录" /></a>
+			
+		<a href="/index/school" title="学校登录">
+			<img src="/images/index/school.png" border="0" alt="学校登录" /></a>
+				
+		<a href="/index/corporation" title="企业登录">
+			<img src="/images/index/corporation.png" border="0" alt="企业登录" /></a>
+	</div>
 
-<div>
-	<a href="/index/school">
-		学校登录</a>
-</div>
-
-<div>
-	<a href="/index/corporation">
-		企业登录</a>
 </div>
