@@ -129,22 +129,21 @@
 	
 	<div class="align_c">
 		<%= submit_tag "查询", :class => "button", :disabled => !@account_active %>
+		
+		<a href="#" id="save_query_link" style="margin-left: 20px;">
+			保存此查询条件</a>
 	</div>
 <% end %>
 
 
 
 <% unless @conditions.blank? %>
-	<div style="height: 1000px;">
+	<div>
+		
 		<div>
 			简历列表
 		</div>
 		
-		<div class="align_r">
-			<input type="hidden" id="conditions" name="conditions" value="<%= h(@conditions) %>" />
-			<a href="#" id="save_query_link">
-				保存此次查询</a>
-		</div>
 	</div>
 <% end %>
 

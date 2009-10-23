@@ -143,12 +143,15 @@ form {
 }
 
 .button {
-	padding: 1px 2px;
+	cursor: pointer;
+	background-color: #005EAC;
+	border-color: #B8D4E8 #124680 #124680 #B8D4E8;
 	border-style: solid;
 	border-width: 1px;
-	border-color: #A3988C;
-	background: #FFF5E8;
-	cursor: pointer;
+	color: #FFFFFF;
+	font-weight: bold;
+	padding: 3px 10px 2px;
+	* padding: 6px 10px 0px;
 }
 
 .button:hover {

@@ -40,134 +40,104 @@
 	overflow: visible;
 }
 
-.dialog_blue .dialog_top {
-	height: 10px;
-	position: relative;
+.dialog_blue table.dialog_wrapper {
+	height: 100%;
 	width: 100%;
+	
+	margin: 0px;
+	padding: 0px;
+	
+	border-collapse: collapse;
+	table-layout: fixed;
 }
 
-.dialog_blue .dialog_top div {
+.dialog_blue td.dialog_top_left,
+.dialog_blue td.dialog_top_right,
+.dialog_blue td.dialog_bottom_left,
+.dialog_blue td.dialog_bottom_right {
 	height: 10px;
-	position: absolute;
-	top: 0px;
+	overflow: hidden;
+	padding: 0px !important;
+	width: 10px !important;
+}
+.dialog_blue td.dialog_top_left {
+	background-image: url(../images/dialog_top_left.png) !important;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_left.png',sizingMethod='crop') !important;
 }
 
-.dialog_blue .dialog_top_left {
-	width: 10px;
-	left: 0px;
-	background: url(../images/dialog_top_left.png) center bottom no-repeat;
+.dialog_blue td.dialog_top_right {
+	background-image: url(../images/dialog_top_right.png) !important;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_right.png',sizingMethod='crop') !important;
 }
 
-.dialog_blue .dialog_top_right {
-	width: 10px;
-	right: 0px;
-	background: url(../images/dialog_top_right.png) center bottom no-repeat;
+.dialog_blue td.dialog_bottom_left {
+	background-image: url(../images/dialog_bottom_left.png) !important;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_left.png',sizingMethod='crop') !important;
 }
 
-.dialog_blue .dialog_border_top {
-	left: 10px;
-	right: 10px;
-	background: url(../images/dialog_border.png) center bottom repeat-x;
+.dialog_blue td.dialog_bottom_right {
+	background-image: url(../images/dialog_bottom_right.png) !important;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_right.png',sizingMethod='scale') !important;
 }
 
-.dialog_blue .dialog_middle {
-	position: relative;
-	width: 100%;
-	height: auto;
-	left: 0px;
-	top: 0px;
+.dialog_blue td.dialog_border {
+	background-image: url(../images/dialog_border.png) !important;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_border.png',sizingMethod='scale');
 }
 
-.dialog_blue .dialog_border_left {
-	background: url(../images/dialog_border.png) right bottom repeat-y;
-	width: 10px;
-	left: 0px;
-	position: absolute;
-	top: 0px;
-	bottom: 0px;
+.dialog_blue td.dialog_content_container {
+	background-color: #FFFFFF;
+	padding: 0px;
 }
 
-.dialog_blue .dialog_border_right {
-	width: 10px;
-	right: 0px;
-	position: absolute;
-	top: 0px;
-	bottom: 0px;
-	background: url(../images/dialog_border.png) left bottom repeat-y;
-}
 
-.dialog_blue .dialog_middle_content {
-	padding: 0px 10px;
-}
-
-.dialog_blue  .dialog_title {
-	height: 30px;
-	background-color: #87CEEB;
+.dialog_blue .dialog_title_container {
+	float: none !important;
+	background: #3777BC;
+	border: 1px solid #005EAC;
+	color: #FFFFFF;
+	font-size: 14px;
 	font-weight: bold;
-	text-indent: 10px;
-	color: #fff;
-	letter-spacing: 2px;
-	line-height: 30px;
-	border-bottom: groove 2px #4682B4;
+	margin: 0px;
+}
+
+
+.dialog_blue .dialog_title_container .dialog_title {
+	display: block;
+	padding: 4px 10px 5px;
+}
+
+.dialog_blue .dialog_title_container a.dialog_close {
+	font-size: 12px;
+	font-weight: normal;
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.dialog_blue .dialog_title_container a.dialog_close:hover {
+	text-decoration: underline;
 }
 
 .dialog_blue .dialog_content {
-	height: auto;
-	background-color: #F5FFFA;
+	background-color: #FDFDFD;
+	border-bottom: 1px solid #CCCCCC;
 	padding: 20px 10px;
 }
 
 .dialog_blue .dialog_actions {
-	background-color: #eee;
-	border-top: 1px solid #ccc;
-	padding: 5px;
+	background: #F0F5F8;
+	padding: 8px;
 	text-align: right;
 }
 
 .dialog_blue .dialog_actions input {
-	background-color: #87CEEB;
-	border-color: #B8D4E8 #124680 #124680 #B8D4E8;
-	border-style: solid;
-	border-width: 1px;
-	color: #008080;
-	cursor: pointer;
-	font-size: 12px;
-	padding: 2px 10px;
-	text-align: center;
-	margin-right: 5px;
-}
-
-/* fix ie png issue */
-.dialog_png_fiexed {
-	filter: alpha(opacity=50);
-}
-
-.dialog_blue .dialog_bottom {
-	height: 10px;
-	position: relative;
-	width: 100%;
-}
-
-.dialog_blue .dialog_bottom div {
-	position: absolute;
-	top: 0px;
-	height: 10px;
-}
-
-.dialog_blue .dialog_border_bottom {
-	left: 10px;
-	right: 10px;
-	background: url(../images/dialog_border.png) center top repeat-x;
-}
-
-.dialog_blue .dialog_bottom_left {
-	width: 10px;
-	left: 0px;
-	background: url(../images/dialog_bottom_left.png) center top no-repeat;
-}
-
-.dialog_blue .dialog_bottom_right {
-	width: 10px;
-	right: 0px;
-	background: url(../images/dialog_bottom_right.png) center top no-repeat;
+	margin-left: 10px;
 }

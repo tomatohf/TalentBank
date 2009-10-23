@@ -29,13 +29,15 @@ var DIALOG = {
 			{
 				data: {},
 				margin_top: 100,
-				button_text: { ok: "确定", cancel: "取消" },
-				ok_event: function(data, args) { },
+				button_text: { ok: "", cancel: "" },
+				ok_event: function(data) { },
+				cancel_event: function(data) { DIALOG.disappear(); },
 				width: 400,
 				fixed: true,
 				title: "",
 				content: "",
 				modal: true,
+				close: false,
 				skin: "dialog_blue"
 			},
 			options
@@ -54,29 +56,35 @@ var DIALOG = {
 			$(
 				'<div id="dialog_overlay" class="dialog_overlay" />' +
 				'<div id="dialog_window" class="dialog_blue dialog_position_absolute">' +
-					'<div class="dialog_top">' +
-						'<div class="dialog_top_left dialog_png_fiexed">&nbsp;</div>' +
-						'<div class="dialog_border_top dialog_png_fiexed">&nbsp;</div>' +
-						'<div class="dialog_top_right dialog_png_fiexed">&nbsp;</div>' +
-					'</div>' +
-					'<div class="dialog_middle">' +
-						'<div class="dialog_border_left dialog_png_fiexed">&nbsp;</div>' +
-						'<div class="dialog_middle_content">' +
-							'<div class="dialog_title" />' +
-							'<div class="dialog_content" id="dialog_container_content" />' +
-							'<div class="dialog_actions">' +
-								'<input id="dialog_ok_btn" type="button" value="" />' +
-								'&nbsp;&nbsp;' +
-								'<input id="dialog_cancel_btn" type="button" value="" />' +
-							'</div>' +
-						'</div>' +
-						'<div class="dialog_border_right dialog_png_fiexed">&nbsp;</div>' +
-					'</div>' +
-					'<div class="dialog_bottom">' +
-						'<div class="dialog_bottom_left dialog_png_fiexed">&nbsp;</div>' +
-						'<div class="dialog_border_bottom dialog_png_fiexed">&nbsp;</div>' +
-						'<div class="dialog_bottom_right dialog_png_fiexed">&nbsp;</div>' +
-					'</div>' +
+					'<table class="dialog_wrapper">' +
+						'<tbody>' +
+							'<tr>' +
+								'<td class="dialog_top_left"></td>' +
+								'<td class="dialog_border"></td>' +
+								'<td class="dialog_top_right"></td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td class="dialog_border"></td>' +
+								'<td class="dialog_content_container">' +
+									'<div class="dialog_title_container">' +
+										'<div class="dialog_title"></div>' +
+										'<a href="#" class="dialog_close">关闭</a>' +
+									'</div>' +
+									'<div class="dialog_content" id="dialog_content"></div>' +
+									'<div class="dialog_actions">' +
+										'<input id="dialog_ok_btn" class="button" type="button" value="" />' +
+										'<input id="dialog_cancel_btn" class="button" type="button" value="" />' +
+									'</div>' +
+								'</td>' +
+								'<td class="dialog_border"></td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td class="dialog_bottom_left"></td>' +
+								'<td class="dialog_border"></td>' +
+								'<td class="dialog_bottom_right"></td>' +
+							'</tr>' +
+						'</tbody>' + 
+					'</table>' +
 				'</div>'
 			).appendTo($(document.body));
 			
@@ -101,7 +109,9 @@ var DIALOG = {
 		dialog.attr("class", setting.skin + " " + (setting.fixed ? "dialog_position_fixed" : "dialog_position_absolute"));
 		
 		dialog.find(".dialog_title").html(setting.title);
-		dialog.find("#dialog_ok_btn")
+		var ok_btn = dialog.find("#dialog_ok_btn");
+		if(setting.button_text.ok && setting.button_text.ok != "") {
+			ok_btn
 				.val(setting.button_text.ok)
 				.one(
 					"click",
@@ -111,15 +121,38 @@ var DIALOG = {
 						}
 					}
 				);
-		dialog.find("#dialog_cancel_btn")
+		}
+		else {
+			ok_btn.hide();
+		}
+		var cancel_btn = dialog.find("#dialog_cancel_btn")
+		if(setting.button_text.cancel && setting.button_text.cancel != "") {
+			cancel_btn
 				.val(setting.button_text.cancel)
-				.one("click", DIALOG.disappear);
+				.one(
+					"click",
+					function(e) {
+						setting.cancel_event(setting.data);
+					}
+				);
+		}
+		else {
+			cancel_btn.hide();
+		}
+		var close_link = dialog.find("a.dialog_close");
+		if(setting.close) {
+			close_link.show();
+			close_link.one("click", DIALOG.disappear);
+		}
+		else {
+			close_link.hide();
+		}
 
 		if (typeof(setting.content) == "string") {
-			$("#dialog_container_content").html(setting.content);
+			$("#dialog_content").html(setting.content);
 		}
 		if (typeof(setting.content) == "function") {
-			var e = $("#jdialog_container_content");
+			var e = $("#dialog_content");
 			e.holder = dialog;
 			setting.content(e);
 		}
