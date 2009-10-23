@@ -1,83 +1,106 @@
 <% talent_page_title("学校用户") %>
 
 
-<h2>学校用户登录</h2>
-
-<% if flash[:error_msg] %>
-	<p class="error_msg">
-	    <%= flash[:error_msg] %>
-	</p>
-<% end %>
-
-<% form_tag "", :method => :post do %>
-
-	<table border="0" cellspacing="10" cellpadding="5">
-		<tr>
-			<td style="width: 60px;">
-
-			</td>
-
-			<td>
-				<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
-				<label for="user_type_school">
-					总管理员
-				</label>
-
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-				<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
-				<label for="user_type_teacher">
-					学校老师
-				</label>
-			</td>
-		</tr>
+<div style="margin: 40px 225px 8px;">
+	<div class="align_r" style="margin-bottom: 30px;">
+		<a href="/" title="<%= @school.logo_title %>">
+			<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
+	</div>
+	
+	
+	<% if flash[:error_msg] %>
+		<p class="error_msg">
+		    <%= flash[:error_msg] %>
+		</p>
+	<% end %>
+	
+	<div class="float_r">
+		<span>
+			<a href="/index/login" class="none" style="font-size: 12px; color: #555555;">
+				返回</a>
+		</span>
+	</div>
+	
+	<div>
+		<span style="margin-right: 30px;">
+			<a href="/index/corporation" class="none" style="font-size: 14px;">
+				<img src="/images/index/corporation_login_icon.jpg" border="0" alt="企业用户登录" style="margin: 0px 3px -1px 0px;" />
+				企业用户登录</a>
+		</span>
 		
-		<tr>
-			<td>
-				<label for="username">
-					用户名
-				</label>
-			</td>
+		<span>
+			<a href="/index/student" class="none" style="font-size: 14px;">
+				<img src="/images/index/student_login_icon.jpg" border="0" alt="学生用户登录" style="margin: 0px 3px -1px 0px;" />
+				学生用户登录</a>
+		</span>
+	</div>
 
-			<td>
-				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				<label for="password">
-					密码
-				</label>
-			</td>
+	<div class="clear_r"></div>
+</div>
 
-			<td>
-				<input type="password" id="password" name="password" class="text_field" size="30" />
-				&nbsp;&nbsp;&nbsp;
-				<a href="#">
-					忘记密码?</a>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				
-			</td>
+<div style="height: 350px; background: transparent url(/images/index/school_bg.jpg) no-repeat scroll bottom center; overflow: hidden;">
+	<% form_tag "", :method => :post do %>
 
-			<td>
-				<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
-				<label for="save_username">记住用户名</label>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				
-			</td>
+		<table border="0" cellspacing="10" cellpadding="0" style="font-size: 14px; color: #FFFFFF; margin: 132px 0px 0px 281px;">
+			<tr>
+				<td colspan="2" align="right" style="font-size: 13px; padding-right: 5px;">
+					<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
+					<label for="user_type_school" style="margin-right: 20px;">
+						总管理员
+					</label>
 
-			<td>
-				<%= submit_tag "登录", :class => "button" %>
-			</td>
-		</tr>
-	</table>
-<% end %>
+					<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
+					<label for="user_type_teacher">
+						学校老师
+					</label>
+				</td>
+			</tr>
+
+			<tr>
+				<td style="width: 50px;">
+					<label for="username">
+						<strong>用户名</strong>
+					</label>
+				</td>
+
+				<td>
+					<input type="text" id="username" name="username" class="text_field" value="<%= @uid %>" style="width: 150px;" />
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<label for="password">
+						<strong>密码</strong>
+					</label>
+				</td>
+
+				<td>
+					<input type="password" id="password" name="password" class="text_field" style="width: 150px;" />
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+
+				</td>
+
+				<td>
+					<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+					<label for="save_username" style="font-size: 12px;">记住用户名</label>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+
+				</td>
+
+				<td align="right">
+					<%= submit_tag "登录", :class => "button", :style=> "background-color: #078D53; border-color: #B8D4E8 #666666 #666666 #B8D4E8;" %>
+				</td>
+			</tr>
+		</table>
+
+	<% end %>
+</div>

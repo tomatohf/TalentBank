@@ -1,67 +1,95 @@
 <% talent_page_title("企业用户") %>
 
 
-<h2>企业用户登录</h2>
-
-<% if flash[:error_msg] %>
-	<p class="error_msg">
-	    <%= flash[:error_msg] %>
-	</p>
-<% end %>
-
-<% form_tag "", :method => :post do %>
-
-	<table border="0" cellspacing="10" cellpadding="5">
-		<tr>
-			<td style="width: 60px;">
-				<label for="username">
-					用户名
-				</label>
-			</td>
-			
-			<td>
-				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @uid %>" />
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				<label for="password">
-					密码
-				</label>
-			</td>
-			
-			<td>
-				<input type="password" id="password" name="password" class="text_field" size="30" />
-				&nbsp;&nbsp;&nbsp;
-				<a href="#">
-					忘记密码?</a>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				
-			</td>
-			
-			<td>
-				<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
-				<label for="save_username">记住用户名</label>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				
-			</td>
-			
-			<td>
-				<%= submit_tag "登录", :class => "button" %>
-				
-				<a href="/index/corporation_register" style="margin-left: 20px; font-size: 13px;">
-					注册企业帐号</a>
-			</td>
-		</tr>
-	</table>
+<div style="margin: 40px 225px 8px;">
+	<div class="align_r" style="margin-bottom: 30px;">
+		<a href="/" title="<%= @school.logo_title %>">
+			<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
+	</div>
 	
-<% end %>
+	
+	<% if flash[:error_msg] %>
+		<p class="error_msg">
+		    <%= flash[:error_msg] %>
+		</p>
+	<% end %>
+	
+	<div class="float_r">
+		<span>
+			<a href="/index/login" class="none" style="font-size: 12px; color: #555555;">
+				返回</a>
+		</span>
+	</div>
+	
+	<div>
+		<span style="margin-right: 30px;">
+			<a href="/index/student" class="none" style="font-size: 14px;">
+				<img src="/images/index/student_login_icon.jpg" border="0" alt="学生用户登录" style="margin: 0px 3px -1px 0px;" />
+				学生用户登录</a>
+		</span>
+		
+		<span>
+			<a href="/index/school" class="none" style="font-size: 14px;">
+				<img src="/images/index/school_login_icon.jpg" border="0" alt="学校用户登录" style="margin: 0px 3px -1px 0px;" />
+				学校用户登录</a>
+		</span>
+	</div>
+
+	<div class="clear_r"></div>
+</div>
+
+<div style="height: 350px; background: transparent url(/images/index/corporation_bg.jpg) no-repeat scroll bottom center; overflow: hidden;">
+	<% form_tag "", :method => :post do %>
+
+		<table border="0" cellspacing="10" cellpadding="0" style="font-size: 14px; color: #FFFFFF; margin: 140px 0px 0px 281px;">
+			<tr>
+				<td style="width: 50px;">
+					<label for="username">
+						<strong>用户名</strong>
+					</label>
+				</td>
+
+				<td>
+					<input type="text" id="username" name="username" class="text_field" value="<%= @uid %>" style="width: 150px;" />
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<label for="password">
+						<strong>密码</strong>
+					</label>
+				</td>
+
+				<td>
+					<input type="password" id="password" name="password" class="text_field" style="width: 150px;" />
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+
+				</td>
+
+				<td>
+					<%= check_box_tag :save_username, value = "true", @save_username.nil? ? true : @save_username %>
+					<label for="save_username" style="font-size: 12px;">记住用户名</label>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" align="right">
+					<div class="float_l">
+						<a href="/index/corporation_register" style="color: #FFFFFF; font-size: 13px; font-weight: bold;">
+							注册企业帐号</a>
+					</div>
+					
+					<%= submit_tag "登录", :class => "button", :style=> "background-color: #686FBE; border-color: #B8D4E8 #666666 #666666 #B8D4E8;" %>
+					
+					<div class="clear_l"></div>
+				</td>
+			</tr>
+		</table>
+
+	<% end %>
+</div>
