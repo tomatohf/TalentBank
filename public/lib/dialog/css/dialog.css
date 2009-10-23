@@ -63,25 +63,25 @@
 .dialog_blue td.dialog_top_left {
 	background-image: url(../images/dialog_top_left.png) !important;
 	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_left.png',sizingMethod='crop') !important;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_left.png',sizingMethod='crop');
 }
 
 .dialog_blue td.dialog_top_right {
 	background-image: url(../images/dialog_top_right.png) !important;
 	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_right.png',sizingMethod='crop') !important;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_top_right.png',sizingMethod='crop');
 }
 
 .dialog_blue td.dialog_bottom_left {
 	background-image: url(../images/dialog_bottom_left.png) !important;
 	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_left.png',sizingMethod='crop') !important;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_left.png',sizingMethod='crop');
 }
 
 .dialog_blue td.dialog_bottom_right {
 	background-image: url(../images/dialog_bottom_right.png) !important;
 	background-image: none;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_right.png',sizingMethod='scale') !important;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/lib/dialog/images/dialog_bottom_right.png',sizingMethod='scale');
 }
 
 .dialog_blue td.dialog_border {

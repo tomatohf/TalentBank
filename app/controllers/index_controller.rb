@@ -17,6 +17,11 @@ class IndexController < ApplicationController
   end
   
   
+  def login
+    render :action => "index"
+  end
+  
+  
   def student
     
     @uid = cookies[:loginid] if cookies[:logintype] == "students"
