@@ -18,7 +18,12 @@
 		从右侧列表中选择添加你要填写的技能和证书
 	</div>
 	
-	<br />
+	<div class="align_r" style="height: 20px; padding-right: 30px;">
+		<span id="loading" style="display: none;">
+			<img src="/images/loading_icon.gif" border="0" style="margin: 0px 2px -3px 0px;" />
+			操作中 ... 
+		</span>
+	</div>
 	
 	<% form_tag "/students/#{@student.id}/update_skills", :method => :post, :id => "update_skill_form" do %>
 
@@ -34,11 +39,6 @@
 					<td colspan="2">
 						<input type="hidden" id="modified_skills" name="modified_skills" />
 						<%= submit_tag "保存", :class => "button", :disabled => !@account_active %>
-						
-						<span id="loading" style="display: none;">
-							<img src="/images/loading_icon.gif" border="0" style="margin: 0px 2px -3px 20px;" />
-							操作中 ... 
-						</span>
 					</td>
 				</tr>
 			</tbody>

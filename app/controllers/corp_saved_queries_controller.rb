@@ -1,5 +1,8 @@
 class CorpSavedQueriesController < ApplicationController
   
+  layout "corporations"
+  
+  
   before_filter :check_login_for_corporation
   
   before_filter :check_active, :only => [:create, :update, :destroy]
@@ -39,7 +42,11 @@ class CorpSavedQueriesController < ApplicationController
   
   
   def index
-    
+    @saved_queries = CorpSavedQuery.find(
+      :all,
+      :conditions => ["corporation_id = ?", @corporation.id],
+      :order => "created_at DESC"
+    )
   end
   
   

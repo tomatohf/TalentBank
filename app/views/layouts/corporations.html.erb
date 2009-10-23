@@ -28,15 +28,26 @@
 						企业信息</a>
 				</div>
 				
-				<div>
-					<% if @corporation.allow %>
+				<% if @corporation.allow %>
+				
+					<div>
 						<a href="/corporations/<%= @corporation.id %>/resumes">
 							查询简历</a>
-					<% else %>
+					</div>
+					
+					<div>
+						<a href="/corporations/<%= @corporation.id %>/corp_saved_queries">
+							保存的查询</a>
+					</div>
+					
+				<% else %>
+				
+					<div>
 						<a href="#">
 							申请查询简历</a>
-					<% end %>
-				</div>
+					</div>
+					
+				<% end %>
 				
 				<div>
 					<a href="/index/logout">

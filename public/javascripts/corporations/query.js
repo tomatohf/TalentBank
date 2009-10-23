@@ -169,18 +169,6 @@ $(document).ready(
 		);
 		
 		
-		$("#loading").ajaxStart(
-			function() {
-				$(this).show();
-			}
-		);
-		$("#loading").ajaxStop(
-			function() {
-				$(this).hide();
-			}
-		);
-		
-		
 		fill_majors(INIT_COLLEGE, INIT_MAJOR);
 		show_tags(INIT_DOMAIN);
 		
