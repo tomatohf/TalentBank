@@ -9,12 +9,33 @@
 	padding: 0px;
 }
 
+
+.dialog_position_fixed {
+	position: fixed;
+}
+/* implement ie6 position fixed */
+* html .dialog_position_fixed {
+	position: absolute;
+	bottom: auto;
+	top: expression(eval(document.documentElement.scrollTop));
+}
+/* fix ie6 lag bug */
+* html, * html body {
+	background-image:url(about:blank);
+	background-attachment:fixed;
+}
+
+
+.dialog_position_absolute {
+	position: absolute;
+}
+
+
 .dialog_blue {
 	left: 0px;
 	padding: 0px;
 	margin: 0px;
 	top: 0px;
-	position: absolute;
 	z-index: 1010;
 	overflow: visible;
 }
@@ -116,7 +137,7 @@
 	margin-right: 5px;
 }
 
-/* ie png fixed */
+/* fix ie png issue */
 .dialog_png_fiexed {
 	filter: alpha(opacity=50);
 }

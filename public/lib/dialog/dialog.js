@@ -53,7 +53,7 @@ var DIALOG = {
 			
 			$(
 				'<div id="dialog_overlay" class="dialog_overlay" />' +
-				'<div class="dialog_blue" id="dialog_window">' +
+				'<div id="dialog_window" class="dialog_blue dialog_position_absolute">' +
 					'<div class="dialog_top">' +
 						'<div class="dialog_top_left dialog_png_fiexed">&nbsp;</div>' +
 						'<div class="dialog_border_top dialog_png_fiexed">&nbsp;</div>' +
@@ -98,7 +98,7 @@ var DIALOG = {
 		);
 
 
-		dialog.attr("class", setting.skin);
+		dialog.attr("class", setting.skin + " " + (setting.fixed ? "dialog_position_fixed" : "dialog_position_absolute"));
 		
 		dialog.find(".dialog_title").html(setting.title);
 		dialog.find("#dialog_ok_btn")
@@ -140,10 +140,10 @@ var DIALOG = {
 
         dialog.css(
 			{
-				position: (setting.fixed ? "fixed" : "absolute"),
 				width: setting.width,
 				left: (setting.docWidth - setting.width) / 2,
-				top: (setting.margin_top + document.documentElement.scrollTop)
+				marginTop: setting.margin_top,
+				top: document.documentElement.scrollTop
 			}
 		).animate(
 			{
