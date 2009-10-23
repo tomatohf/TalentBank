@@ -57,7 +57,7 @@ class CorpQueries < ActiveRecord::Migration
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
-    add_index :corp_saved_queries, :corporation_id
+    add_index :corp_saved_queries, [:corporation_id, :created_at]
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO corp_saved_queries (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM corp_saved_queries WHERE id = 10000")

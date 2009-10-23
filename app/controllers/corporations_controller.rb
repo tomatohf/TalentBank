@@ -113,40 +113,11 @@ class CorporationsController < ApplicationController
   
   def create_query
     q = params[:q] && params[:q].strip
-    conditions = unless q.blank?
-      q
-    else
-      college_id = params[:college]
-      major_id = params[:major]
-      edu_level_id = params[:edu_level]
-      graduation_year = params[:graduation_year]
-
-      keyword = params[:keyword] && params[:keyword].strip
-
-      domain_id = params[:domain] && params[:domain].to_i
-
-      tags = []
-      (ResumeExpTag.data[domain_id] || []).each do |tag|
-        tags << tag[:id] if params["tag_#{tag[:id]}".to_sym] == "true"
-      end
-
-      skills = []
-      Skill.data.each do |skill|
-        param = params["skill_input_#{skill[:id]}".to_sym]
-        skills << [skill[:id], param.to_i] unless param.blank?
-      end
-      
-      CorpQuery.build_conditions(
-        domain_id,
-        [college_id, major_id, edu_level_id, graduation_year],
-        tags,
-        skills,
-        keyword
-      )
-    end
+    
+    conditions = q.blank? ? CorporationsController.helpers.collect_query_conditions(params, :keyword) : q
     
     
-    # ========== save the query ==========
+    # ========== log the query to db ==========
     query = CorpQuery.parse_from_conditions(conditions)
     query.corporation_id = @corporation.id
     # the params[:keyword] has been encodeURIComponent by javascript

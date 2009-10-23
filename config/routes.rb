@@ -94,7 +94,9 @@ ActionController::Routing::Routes.draw do |map|
     :resumes => [:get, :post],
     :add_skill => :post,
     :create_query => :post
-  }
+  } do |corporations|
+    corporations.resources :corp_saved_queries
+  end
   
   
   

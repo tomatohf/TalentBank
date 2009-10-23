@@ -162,6 +162,8 @@
 	
 	var INIT_DOMAIN = "<%= @query.domain_id %>";
 	var DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
+	
+	var required_mark = '<%= required_mark(false).strip %>';
 </script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 <script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>

@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.datetime "updated_at"
   end
 
-  add_index "corp_saved_queries", ["corporation_id"], :name => "index_corp_saved_queries_on_corporation_id"
+  add_index "corp_saved_queries", ["corporation_id", "created_at"], :name => "index_corp_saved_queries_on_corporation_id_and_created_at"
 
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"

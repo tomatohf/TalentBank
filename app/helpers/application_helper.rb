@@ -37,9 +37,9 @@ module ApplicationHelper
   end
   
   
-  def required_mark
+  def required_mark(bracket = true)
     %Q!
-      (<font color="red">*</font>)
+      #{"(" if bracket}<font color="red">*</font>#{")" if bracket}
     !
   end
   

@@ -79,31 +79,52 @@ function remove_skill(skill_id) {
 
 
 function save_query() {
-	var content = 	'<label for="query_name">' + 
-						'保存为(名称):' + 
+	var content = 	'<label for="query_name" style="margin-right: 10px;">' + 
+						required_mark + ' 保存为(名称):' +
 					'</label>' +
-					'&nbsp;&nbsp;&nbsp;' +
 					'<input type="text" id="query_name" name="query_name" class="text_field" size="30" value="" />' +
 					'';
+					
+	show_dialog(
+		content,
+		{ ok: "保存", cancel: "取消" },
+		function(data) {
+			do_save_query($("#query_name").val());
+			
+			return true;
+		}
+	);
+}
+
+function do_save_query(query_name) {
+	$.post(
+		"/corporations/" + CORPORATION_ID + "/corp_saved_queries",
+		$("#query_form").serialize() + "&name=" + encodeURIComponent(query_name),
+		function(data) {
+			show_dialog(
+				data,
+				{ cancel: "确定" },
+				null
+			);
+		},
+		"html"
+	);
+}
+
+function show_dialog(content, button_text, ok_event) {
 	DIALOG.appear(
 		{
 			title: "保存查询",
 			content: content,
-			button_text: { ok: "保存", cancel: "取消" },
+			button_text: button_text,
 			width: 400,
 			margin_top: 150,
 			fixed: true,
 			data: {},
 			modal: false,
-			ok_event: function(data) {
-				return true;
-			}
+			ok_event: ok_event
 		}
 	);
-}
-
-function do_save_query() {
-	
 }
 
 

@@ -120,7 +120,8 @@ var DIALOG = {
 							DIALOG.disappear();
 						}
 					}
-				);
+				)
+				.show();
 		}
 		else {
 			ok_btn.hide();
@@ -134,7 +135,8 @@ var DIALOG = {
 					function(e) {
 						setting.cancel_event(setting.data);
 					}
-				);
+				)
+				.show();
 		}
 		else {
 			cancel_btn.hide();
