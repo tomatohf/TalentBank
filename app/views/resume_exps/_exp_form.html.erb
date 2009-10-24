@@ -7,7 +7,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="period" name="period" class="text_field" size="30" value="<%= @exp.period %>" />
+			<input type="text" id="period" name="period" class="text_field" size="30" value="<%= h(@exp.period) %>" />
 		</td>
 	</tr>
 	
@@ -19,7 +19,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= @exp.title %>" />
+			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= h(@exp.title) %>" />
 		</td>
 	</tr>
 	
@@ -31,7 +31,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="sub_title" name="sub_title" class="text_field" size="30" value="<%= @exp.sub_title %>" />
+			<input type="text" id="sub_title" name="sub_title" class="text_field" size="30" value="<%= h(@exp.sub_title) %>" />
 		</td>
 	</tr>
 	

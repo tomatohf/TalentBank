@@ -7,7 +7,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @list_skill.name %>" />
+			<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@list_skill.name) %>" />
 		</td>
 	</tr>
 	
@@ -19,7 +19,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="level" name="level" class="text_field" size="30" value="<%= @list_skill.level %>" />
+			<input type="text" id="level" name="level" class="text_field" size="30" value="<%= h(@list_skill.level) %>" />
 		</td>
 	</tr>
 	

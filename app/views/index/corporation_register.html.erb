@@ -43,7 +43,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= @corporation.uid %>" />
+				<input type="text" id="username" name="username" class="text_field" size="30" value="<%= h(@corporation.uid) %>" />
 				&nbsp;
 				<span class="info_with_icon">
 					注册后不可修改 
@@ -96,7 +96,7 @@
 			</td>
 
 			<td>
-				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @corporation.name %>" />
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@corporation.name) %>" />
 				&nbsp;
 				<span class="info_with_icon">
 					注册后不可修改 

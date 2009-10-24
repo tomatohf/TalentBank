@@ -25,7 +25,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= @profile.phone %>" />
+				<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= h(@profile.phone) %>" />
 			</td>
 		</tr>
 		
@@ -37,7 +37,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @profile.email %>" />
+				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= h(@profile.email) %>" />
 			</td>
 		</tr>
 		
@@ -49,7 +49,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="address" name="address" class="text_field" size="30" value="<%= @profile.address %>" />
+				<input type="text" id="address" name="address" class="text_field" size="30" value="<%= h(@profile.address) %>" />
 			</td>
 		</tr>
 		
@@ -61,7 +61,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="zip" name="zip" class="text_field" size="30" value="<%= @profile.zip %>" />
+				<input type="text" id="zip" name="zip" class="text_field" size="30" value="<%= h(@profile.zip) %>" />
 			</td>
 		</tr>
 		

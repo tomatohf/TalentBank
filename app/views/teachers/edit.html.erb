@@ -35,7 +35,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= @teacher.name %>" />
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@teacher.name) %>" />
 			</td>
 		</tr>
 		
@@ -47,7 +47,7 @@
 			</td>
 			
 			<td>
-				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @teacher.email %>" />
+				<input type="text" id="email" name="email" class="text_field" size="30" value="<%= h(@teacher.email) %>" />
 			</td>
 		</tr>
 		

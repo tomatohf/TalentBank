@@ -6,7 +6,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="email" name="email" class="text_field" size="30" value="<%= @profile.email %>" />
+		<input type="text" id="email" name="email" class="text_field" size="30" value="<%= h(@profile.email) %>" />
 	</td>
 </tr>
 
@@ -18,7 +18,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= @profile.phone %>" />
+		<input type="text" id="phone" name="phone" class="text_field" size="30" value="<%= h(@profile.phone) %>" />
 	</td>
 </tr>
 
@@ -30,7 +30,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="contact" name="contact" class="text_field" size="20" value="<%= @profile.contact %>" />
+		<input type="text" id="contact" name="contact" class="text_field" size="20" value="<%= h(@profile.contact) %>" />
 		&nbsp;
 		<input type="radio" value="true" name="contact_gender" id="contact_male"<%= %Q! checked="checked"! if @profile.contact_gender == true %> />
 		<label for="contact_male">
@@ -52,7 +52,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="contact_title" name="contact_title" class="text_field" size="20" value="<%= @profile.contact_title %>" />
+		<input type="text" id="contact_title" name="contact_title" class="text_field" size="20" value="<%= h(@profile.contact_title) %>" />
 	</td>
 </tr>
 
@@ -65,7 +65,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="address" name="address" class="text_field" size="30" value="<%= @profile.address %>" />
+		<input type="text" id="address" name="address" class="text_field" size="30" value="<%= h(@profile.address) %>" />
 	</td>
 </tr>
 
@@ -77,7 +77,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="zip" name="zip" class="text_field" size="15" value="<%= @profile.zip %>" />
+		<input type="text" id="zip" name="zip" class="text_field" size="15" value="<%= h(@profile.zip) %>" />
 	</td>
 </tr>
 
@@ -89,7 +89,7 @@
 	</td>
 	
 	<td>
-		<input type="text" id="website" name="website" class="text_field" size="30" value="<%= @profile.website %>" />
+		<input type="text" id="website" name="website" class="text_field" size="30" value="<%= h(@profile.website) %>" />
 	</td>
 </tr>
 
