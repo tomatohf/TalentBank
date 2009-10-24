@@ -318,7 +318,7 @@ a.unselected_skill:hover {
 
 
 .query_tag {
-	margin: 0px 10px;
+	margin: 0px 8px;
 }
 
 .query_skill {
@@ -339,9 +339,13 @@ a.unselected_skill:hover {
 }
 
 .saved_query_title a {
-	margin: 0px 15px;
+	margin: 0px 5px;
 }
 
 .saved_query_conditions {
-	padding: 5px 10px;
+	padding: 10px 15px;
+}
+
+.saved_query_conditions span {
+	margin-right: 15px;
 }

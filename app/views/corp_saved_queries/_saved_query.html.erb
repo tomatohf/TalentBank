@@ -1,17 +1,16 @@
 <%
 	saved_query_name = h(saved_query.name)
-	saved_query_conditions = h(saved_query.conditions)
 	
-	keyword = saved_query_conditions.split(CorpQuery::Sep_Part)[4]
+	query = CorpQuery.parse_from_conditions(saved_query.conditions)
 %>
 
 <div class="saved_query">
 	<div class="saved_query_title">
 		<div class="float_r">
 			<a href="#" title="查询简历" class="none" onclick="exe_saved_query(<%= saved_query.id %>); return false;">
-				<input type="hidden" id="saved_query_conditions_<%= saved_query.id %>" value="<%= saved_query_conditions %>" />
-				<input type="hidden" id="saved_query_keyword_<%= saved_query.id %>" value="<%= keyword %>" />
-				<img src="/images/corporations/exe_icon.png" border="0" alt="查询简历" />
+				<input type="hidden" id="saved_query_conditions_<%= saved_query.id %>" value="<%= h(saved_query.conditions) %>" />
+				<input type="hidden" id="saved_query_keyword_<%= saved_query.id %>" value="<%= h(query.keyword) %>" />
+				<img src="/images/corporations/exe_icon.png" border="0" alt="查询简历" style="margin-bottom: -1px;" />
 				查询简历</a>
 				
 			<a href="/corporations/<%= @corporation.id %>/corp_saved_queries/<%= saved_query.id %>/edit" title="编辑" class="none">
@@ -24,8 +23,8 @@
 		</div>
 		
 		<div style="cursor: pointer; margin-left: 10px;" title="点击 展开/收起 查询详情" onclick="toggle_saved_query_detail(<%= saved_query.id %>);">
-			<img src="/images/corporations/expand_icon.gif" id="save_query_detail_icon_<%= saved_query.id %>" border="0" alt="展开/收起 查询详情" style="margin: 0px 2px -4px 0px;" />
-			<span style="font-size: 14px; margin-right: 10px;">
+			<img src="/images/corporations/expand_icon.gif" id="save_query_detail_icon_<%= saved_query.id %>" border="0" alt="展开/收起 查询详情" style="margin: 0px 5px -1px 0px;" />
+			<span style="font-size: 14px; margin-right: 5px;">
 				<%= saved_query_name %>
 			</span>
 			<span style="color: #777777;">
@@ -38,6 +37,85 @@
 	</div>
 	
 	<div class="saved_query_conditions" id="save_query_detail_<%= saved_query.id %>" style="display: none;">
-		<%= saved_query_conditions %>
+		<div>
+			<span>
+				学校:
+				<%= @school.name %>
+			</span>
+			
+			<% unless query.college_id.blank? %>
+				<span>
+					学院:
+					<%= College.find(@school.abbr, query.college_id)[:name] %>
+				</span>
+			<% end %>
+			
+			<% unless query.major_id.blank? %>
+				<span>
+					专业:
+					<%= Major.find(query.college_id, query.major_id)[:name] %>
+				</span>
+			<% end %>
+			
+			<% unless query.edu_level_id.blank? %>
+				<span>
+					教育水平:
+					<%= EduLevel.find(query.edu_level_id)[:name] %>
+				</span>
+			<% end %>
+			
+			<% unless query.graduation_year.blank? %>
+				<span>
+					毕业时间:
+					<%= query.graduation_year %> 年
+				</span>
+			<% end %>
+		</div>
+		
+		<div>
+			<span>
+				求职方向:
+				<%= ResumeDomain.find(query.domain_id)[:name] %>
+			</span>
+
+			<% unless query.keyword.blank? %>
+				<span>
+					关键字:
+					<%= h(query.keyword) %>
+				</span>
+			<% end %>
+		</div>
+		
+		<% tags, skills = query.tags_and_skills %>
+		
+		<% if tags.size > 0 %>
+			<div>
+				经历标签:
+				&nbsp;&nbsp;&nbsp;
+				<% tags.each do |tag_id| %>
+					<span>
+						<%= ResumeExpTag.find(query.domain_id, tag_id.to_i)[:name] %>
+					</span>
+				<% end %>
+			</div>
+		<% end %>
+		
+		<% if skills.size > 0 %>
+			<div>
+				技能和证书:
+				&nbsp;&nbsp;&nbsp;
+				<% skills.each do |skill| %>
+					<span>
+						<%
+							skill_id, value = [skill[0].to_i, skill[1].to_i]
+							skill = Skill.find(skill_id)
+						%>
+						<%= skill[:name] %>
+						:
+						<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], value) %>
+					</span>
+				<% end %>
+			</div>
+		<% end %>
 	</div>
 </div>
