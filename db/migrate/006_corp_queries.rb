@@ -15,6 +15,9 @@ class CorpQueries < ActiveRecord::Migration
       
       t.column :other_conditions, :string
       
+      
+      t.column :from_saved, :boolean
+      
       t.column :created_at, :datetime
     end
     # reserve first 10000 ID

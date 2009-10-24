@@ -8,6 +8,8 @@ class CorpQuery < ActiveRecord::Base
   
   validates_presence_of :corporation_id
   
+  validates_inclusion_of :from_saved, :in => [true, false]
+  
   
   
   Sep_Part = "!"

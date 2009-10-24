@@ -126,6 +126,7 @@ class CorporationsController < ApplicationController
     # ========== log the query to db ==========
     query = CorpQuery.parse_from_conditions(conditions)
     query.corporation_id = @corporation.id
+    query.from_saved = from_saved
     # the params[:keyword] has been encodeURIComponent by javascript
     # and should be only used in URL
     query.keyword = params[:keyword_input] && params[:keyword_input].strip

@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.integer  "domain_id",        :limit => 2
     t.string   "keyword"
     t.string   "other_conditions"
+    t.boolean  "from_saved"
     t.datetime "created_at"
   end
 
