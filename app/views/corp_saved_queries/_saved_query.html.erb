@@ -1,0 +1,43 @@
+<%
+	saved_query_name = h(saved_query.name)
+	saved_query_conditions = h(saved_query.conditions)
+	
+	keyword = saved_query_conditions.split(CorpQuery::Sep_Part)[4]
+%>
+
+<div class="saved_query">
+	<div class="saved_query_title">
+		<div class="float_r">
+			<a href="#" title="查询简历" class="none" onclick="exe_saved_query(<%= saved_query.id %>); return false;">
+				<input type="hidden" id="saved_query_conditions_<%= saved_query.id %>" value="<%= saved_query_conditions %>" />
+				<input type="hidden" id="saved_query_keyword_<%= saved_query.id %>" value="<%= keyword %>" />
+				<img src="/images/corporations/exe_icon.gif" border="0" alt="查询简历" />
+				查询简历</a>
+				
+			<a href="/corporations/<%= @corporation.id %>/corp_saved_queries/<%= saved_query.id %>/edit" title="编辑" class="none">
+				<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+				编辑</a>
+				
+			<a href="#" title="删除查询" class="none" onclick="del_saved_query(<%= saved_query.id %>, '<%= a(saved_query_name) %>'); return false;">
+				<img src="/images/teachers/delete_icon.gif" border="0" alt="删除查询" />
+				删除</a>
+		</div>
+		
+		<div style="cursor: pointer; margin-left: 10px;" title="点击 展开/收起 查询详情" onclick="toggle_saved_query_detail(<%= saved_query.id %>);">
+			<img src="/images/corporations/expand_icon.gif" id="save_query_detail_icon_<%= saved_query.id %>" border="0" alt="展开/收起 查询详情" style="margin: 0px 2px -4px 0px;" />
+			<span style="font-size: 14px; margin-right: 10px;">
+				<%= saved_query_name %>
+			</span>
+			<span style="color: #777777;">
+				»
+				&nbsp;
+				保存于
+				<%= format_datetime(saved_query.created_at) %>
+			</span>
+		</div>
+	</div>
+	
+	<div class="saved_query_conditions" id="save_query_detail_<%= saved_query.id %>" style="display: none;">
+		<%= saved_query_conditions %>
+	</div>
+</div>

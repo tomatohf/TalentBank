@@ -1,0 +1,68 @@
+<% talent_page_title("编辑保存的查询") %>
+
+
+<h2>编辑保存的查询</h2>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @saved_query.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@saved_query) %>
+	</p>
+<% end %>
+
+<% form_tag "/corporations/#{@corporation.id}/corp_saved_queries/#{@saved_query.id}", :method => :put do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 120px;">
+				保存于
+			</td>
+			
+			<td>
+				<%= format_datetime(@saved_query.created_at) %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="name">
+					查询的名称<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@saved_query.name) %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<div class="info_with_icon">
+					50个字符以内
+				</div>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "修改", :class => "button", :disabled => !@account_active %>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/corporations/<%= @corporation.id %>/corp_saved_queries">
+					返回已保存的查询列表</a>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

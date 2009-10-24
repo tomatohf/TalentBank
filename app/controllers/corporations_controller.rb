@@ -114,7 +114,13 @@ class CorporationsController < ApplicationController
   def create_query
     q = params[:q] && params[:q].strip
     
-    conditions = q.blank? ? CorporationsController.helpers.collect_query_conditions(params, :keyword) : q
+    from_saved = !q.blank?
+    
+    conditions = if from_saved
+      q
+    else
+      CorporationsController.helpers.collect_query_conditions(params, :keyword)
+    end
     
     
     # ========== log the query to db ==========

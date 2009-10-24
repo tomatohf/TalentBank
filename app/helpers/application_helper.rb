@@ -1,6 +1,19 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   
+  def format_datetime(datetime)
+    datetime && datetime.strftime("%Y-%m-%d %H:%M:%S")
+  end
+  
+  def format_date(date)
+    date && date.strftime("%Y-%m-%d")
+  end
+  
+  def format_time(date)
+    date && date.strftime("%H:%M:%S")
+  end
+  
+  
   def paging_buttons(collection, params = {})
     will_paginate(
       collection,

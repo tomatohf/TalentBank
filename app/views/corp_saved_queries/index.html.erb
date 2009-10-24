@@ -11,5 +11,42 @@
 <% end %>
 
 <div>
+	<% form_tag "", :method => :delete, :id => "del_saved_query_form" do %>
+	<% end %>
+	<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post, :id => "exe_saved_query_form" do %>
+		<input type="hidden" id="saved_query_conditions" name="q" />
+		<input type="hidden" id="saved_query_keyword" name="keyword_input" />
+	<% end %>
+	<script language="JavaScript">
+		function del_saved_query(saved_query_id, saved_query_name) {
+			if(confirm("确定要删除查询 " + saved_query_name + " 么 ?")) {
+				var del_form = document.getElementById("del_saved_query_form");
+				del_form.action = "/corporations/<%= @corporation.id %>/corp_saved_queries/" + saved_query_id;
+				del_form.submit();
+			}
+		}
+		
+		function toggle_saved_query_detail(saved_query_id) {
+			var saved_query_detail = document.getElementById("save_query_detail_" + saved_query_id);
+			var saved_query_detail_icon = document.getElementById("save_query_detail_icon_" + saved_query_id);
+			if(saved_query_detail.style.display == "none") {
+				saved_query_detail.style.display = "";
+				saved_query_detail_icon.src = "/images/corporations/collapse_icon.gif";
+			}
+			else {
+				saved_query_detail.style.display = "none";
+				saved_query_detail_icon.src = "/images/corporations/expand_icon.gif";
+			}
+		}
+		
+		function exe_saved_query(saved_query_id) {
+			document.getElementById("saved_query_conditions").value = encodeURIComponent(document.getElementById("saved_query_conditions_" + saved_query_id).value);
+			document.getElementById("saved_query_keyword").value = document.getElementById("saved_query_keyword_" + saved_query_id).value;
+			document.getElementById("exe_saved_query_form").submit();
+		}
+	</script>
 	
+	<div>
+		<%= render :partial => "saved_query", :collection => @saved_queries %>
+	</div>
 </div>

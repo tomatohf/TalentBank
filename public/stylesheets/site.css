@@ -324,3 +324,24 @@ a.unselected_skill:hover {
 .query_skill {
 	margin: 0px 10px;
 }
+
+
+.saved_query {
+	border: 1px dotted #C2E3EF;
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+
+.saved_query_title {
+	margin: 1px;
+	padding: 5px 0px 3px;
+	background-color: #F0F0F0;
+}
+
+.saved_query_title a {
+	margin: 0px 15px;
+}
+
+.saved_query_conditions {
+	padding: 5px 10px;
+}
