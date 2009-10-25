@@ -16,14 +16,14 @@ function del_exp(section_id, exp_id, exp_period) {
 
 
 
-function add_tag(section_id, exp_id, tag_id) {
+function add_tag(tag_id) {
 	$.post(
-		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/resume_exps/" + exp_id + "/add_tag",
+		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/add_exp_tag",
 		{
 			tag_id: tag_id
 		},
 		function(data) {
-			$("#exp_tags_" + exp_id).append(data);
+			$("#exp_tags").append(data);
 			
 			remove_exp_tag_icon_hover();
 		},
@@ -31,9 +31,9 @@ function add_tag(section_id, exp_id, tag_id) {
 	);
 }
 
-function remove_tag(section_id, exp_id, tagger_id, tagger_link) {
+function remove_tag(tagger_id, tagger_link) {
 	$.post(
-		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/resume_exps/" + exp_id + "/remove_tag",
+		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/remove_exp_tag",
 		{
 			tagger_id: tagger_id
 		},
@@ -58,12 +58,24 @@ function remove_exp_tag_icon_hover() {
 }
 
 
+function adjust_exp_tags() {
+	var scroll_top = $(document).scrollTop();
+	
+	$("#exp_tags").animate(
+		{
+			top: (scroll_top > 0) ? (scroll_top - 50 + "px") : "0px"
+		}
+	);
+}
+
+
 
 $(document).ready(
 	function() {
 		$(".resume_list_section_content").hover(
 			function() {
 				$(this).find("div.exp_operations").css("visibility", "visible");
+				adjust_exp_tags();
 			},
 			function() {
 				$(this).find("div.exp_operations").css("visibility", "hidden");
@@ -87,5 +99,26 @@ $(document).ready(
 		);
 		
 		remove_exp_tag_icon_hover();
+		
+		
+		$("#loading").ajaxStart(
+			function() {
+				$(this).show();
+				$("#tag_icon_img").hide();
+			}
+		);
+		$("#loading").ajaxStop(
+			function() {
+				$(this).hide();
+				$("#tag_icon_img").show();
+			}
+		);
+		
+		
+		$(".tag_link").click(
+			function() {
+				adjust_exp_tags();
+			}
+		);
 	}
 );

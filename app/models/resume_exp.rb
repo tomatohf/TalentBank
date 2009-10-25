@@ -2,8 +2,6 @@ class ResumeExp < ActiveRecord::Base
   
   belongs_to :section, :class_name => "ResumeExpSection", :foreign_key => "section_id"
   
-  has_many :taggers, :class_name => "ResumeExpTagger", :foreign_key => "exp_id", :dependent => :destroy
-  
   
   validates_presence_of :section_id
   

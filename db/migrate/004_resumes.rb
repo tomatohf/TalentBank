@@ -150,12 +150,12 @@ class Resumes < ActiveRecord::Migration
     ActiveRecord::Base.connection.execute("DELETE FROM resume_exps WHERE id = 10000")
     
     create_table :resume_exp_taggers, :force => true do |t|
-      t.column :exp_id, :integer
+      t.column :resume_id, :integer
       t.column :tag_id, :integer
       
       t.column :created_at, :datetime
     end
-    add_index :resume_exp_taggers, [:exp_id, :tag_id], :unique => true
+    add_index :resume_exp_taggers, [:resume_id, :tag_id], :unique => true
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_exp_taggers (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_exp_taggers WHERE id = 10000")

@@ -280,6 +280,26 @@ a.none:hover {
 	margin: 0px;
 }
 
+.resume_exp_tags {
+	width: 110px;
+	position: relative;
+	font-size: 14px;
+	text-align: center;
+	border: 1px solid #EAEAEA;
+	padding: 5px;
+}
+
+.resume_exp_tags a {
+	display: block;
+	padding: 4px 0px;
+}
+
+.resume_exp_tags_title {
+	margin-bottom: 5px;
+	background-color: #F0F0F0;
+	padding: 5px 0px;
+}
+
 
 .skill_pool {
 	width: 250px;

@@ -7,7 +7,8 @@ class ResumesController < ApplicationController
   
   before_filter :check_active, :only => [:create, :update, :destroy,
                                           :update_job_intention, :include_skill, :exclude_skill,
-                                          :update_hobbies, :update_awards]
+                                          :update_hobbies, :update_awards,
+                                          :add_exp_tag, :remove_exp_tag]
   
   before_filter :check_student
   
@@ -161,6 +162,33 @@ class ResumesController < ApplicationController
     @profile = StudentProfile.get_record(@student.id)
     @photo = JobPhoto.get_record(@student.id)
     @edus = EduExp.find(:all, :conditions => ["student_id = ?", @student.id])
+  end
+  
+  
+  def add_exp_tag
+    tag_id = params[:tag_id] && params[:tag_id].strip
+    
+    if ResumeExpTagger.check_tag_domain((tag_id && tag_id.to_i), @resume.domain_id)
+      tagger = ResumeExpTagger.get_record(@resume.id, tag_id)
+      
+      if tagger.new_record? && tagger.save
+        return render(:partial => "/resume_exps/tagger", :object => tagger)
+      end
+    
+    end
+    
+    render :nothing => true
+  end
+  
+  def remove_exp_tag
+    tagger = ResumeExpTagger.find(params[:tagger_id])
+    
+    if tagger.resume_id == @resume.id
+      tagger.destroy
+      return render(:layout => false, :text => "true")
+    end
+    
+    render :nothing => true
   end
   
   

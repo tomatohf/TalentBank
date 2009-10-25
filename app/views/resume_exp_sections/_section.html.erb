@@ -1,5 +1,3 @@
-<% tags = ResumeExpTag.data[@resume.domain_id] || [] %>
-
 <div class="resume_list_section">
 	<div class="resume_list_section_title">
 		<% section_title = h(section.title) %>
@@ -53,7 +51,7 @@
 											<ul class="dropdown_sub_menu">
 												<% tags.each do |tag| %>
 													<li>
-														<a href="#" onclick="add_tag(<%= section.id %>, <%= exp.id %>, <%= tag[:id] %>); return false;">
+														<a href="#" onclick="add_tag(<%= tag[:id] %>); return false;">
 															<%= tag[:name] %></a>
 													</li>
 												<% end %>
@@ -81,13 +79,6 @@
 						</td>
 					</tr>
 				</table>
-				
-				<% if tags.size > 0 %>
-					<div id="exp_tags_<%= exp.id %>" class="info" style="margin-left: 80px; margin-bottom: 5px; word-spacing: 8px;">
-						<img src="/images/students/tag_icon.gif" border="0" title="标签" alt="标签" style="margin-bottom: -2px; margin-right: 3px;" />标签:
-						<%= render :partial => "/resume_exps/tagger", :collection => exp.taggers, :locals => {:section => section, :exp => exp} %>
-					</div>
-				<% end %>
 			</div>
 		</div>
 	<% end %>

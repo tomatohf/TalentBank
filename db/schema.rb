@@ -132,12 +132,12 @@ ActiveRecord::Schema.define(:version => 6) do
   add_index "resume_exp_sections", ["resume_id"], :name => "index_resume_exp_sections_on_resume_id"
 
   create_table "resume_exp_taggers", :force => true do |t|
-    t.integer  "exp_id"
+    t.integer  "resume_id"
     t.integer  "tag_id"
     t.datetime "created_at"
   end
 
-  add_index "resume_exp_taggers", ["exp_id", "tag_id"], :name => "index_resume_exp_taggers_on_exp_id_and_tag_id", :unique => true
+  add_index "resume_exp_taggers", ["resume_id", "tag_id"], :name => "index_resume_exp_taggers_on_resume_id_and_tag_id", :unique => true
 
   create_table "resume_exps", :force => true do |t|
     t.integer  "section_id"

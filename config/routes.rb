@@ -66,15 +66,15 @@ ActionController::Routing::Routes.draw do |map|
       :update_hobbies => :post,
       
       :edit_awards => :get,
-      :update_awards => :post
+      :update_awards => :post,
+      
+      :add_exp_tag => :post,
+      :remove_exp_tag => :post
     } do |resumes|
       resumes.resources :resume_list_sections
       
       resumes.resources :resume_exp_sections do |resume_exp_sections|
-        resume_exp_sections.resources :resume_exps, :member => {
-          :add_tag => :post,
-          :remove_tag => :post
-        }
+        resume_exp_sections.resources :resume_exps
       end
       
       resumes.resources :resume_skills

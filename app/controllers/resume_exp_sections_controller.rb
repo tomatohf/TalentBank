@@ -18,7 +18,14 @@ class ResumeExpSectionsController < ApplicationController
     @sections = ResumeExpSection.find(
       :all,
       :conditions => ["resume_id = ?", @resume.id],
-      :include => [:exps => [:taggers]]
+      :include => [:exps]
+    )
+    
+    @tags = ResumeExpTag.data[@resume.domain_id] || []
+    
+    @taggers = ResumeExpTagger.find(
+      :all,
+      :conditions => ["resume_id = ?", @resume.id]
     )
   end
   

@@ -15,6 +15,8 @@ class Resume < ActiveRecord::Base
   has_many :skills, :class_name => "ResumeSkill", :foreign_key => "resume_id", :dependent => :destroy
   has_many :list_skills, :class_name => "ResumeListSkill", :foreign_key => "resume_id", :dependent => :destroy
   
+  has_many :exp_taggers, :class_name => "ResumeExpTagger", :foreign_key => "resume_id", :dependent => :destroy
+  
   
   validates_presence_of :student_id, :domain_id
   
