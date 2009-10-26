@@ -28,9 +28,17 @@ class ResumeExpsController < ApplicationController
     @exp.sub_title = params[:sub_title] && params[:sub_title].strip
     @exp.content = params[:content] && params[:content].strip
     
-    if @exp.save
+    begin
+      ActiveRecord::Base.transaction do
+        @exp.save!
+        @section.add_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
+        @section.save!
+      end
+
       flash[:success_msg] = "操作成功, 已添加 #{@section.title} 中 #{@exp.period} 的经历"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+    rescue
+      flash.now[:error_msg] = "操作失败, 再试一次吧"
     end
     
     render :action => "new"
@@ -57,7 +65,11 @@ class ResumeExpsController < ApplicationController
   
   
   def destroy
-    @exp.destroy
+    ActiveRecord::Base.transaction do
+      @exp.destroy
+      @section.remove_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
+      @section.save!
+    end
     
     flash[:success_msg] = "操作成功, 已删除 #{@section.title} 中 #{@exp.period} 的经历"
   

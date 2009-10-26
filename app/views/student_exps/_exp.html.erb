@@ -1,0 +1,43 @@
+<% hide_actions &&= true %>
+
+<div class="student_exp">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td valign="top" style="width: 120px;">
+				<% exp_period = h(exp.period) %>
+				<%= exp_period %>
+				
+				<% unless hide_actions %>
+					<div style="margin: 5px 0px 0px 15px;">
+						<div>
+							<a href="#" title="删除" class="none" onclick="del_exp(<%= exp.id %>, '<%= a(exp_period) %>'); return false;">
+								<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+								删除</a>
+						</div>
+						<div>
+							<a href="/students/<%= @student.id %>/student_exps/<%= exp.id %>/edit" title="编辑" class="none">
+								<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+								编辑</a>
+						</div>
+					</div>
+				<% end %>
+			</td>
+
+			<td valign="top">
+				<div class="float_r">
+					<%= h(exp.sub_title) %>
+				</div>
+				
+				<div class="student_exp_title">
+					<%= h(exp.title) %>
+				</div>
+
+				<ul>
+					<% Utils.lines(h(exp.content)).each do |line| %>
+						<li><%= line %></li>
+					<% end %>
+				</ul>
+			</td>
+		</tr>
+	</table>
+</div>

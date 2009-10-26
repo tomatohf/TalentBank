@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(:version => 6) do
   create_table "resume_exp_sections", :force => true do |t|
     t.integer  "resume_id"
     t.string   "title",      :limit => 25
+    t.string   "exp_order"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -196,6 +197,14 @@ ActiveRecord::Schema.define(:version => 6) do
 
   add_index "resume_skills", ["resume_id", "student_skill_id"], :name => "index_resume_skills_on_resume_id_and_student_skill_id", :unique => true
 
+  create_table "resume_student_exps", :force => true do |t|
+    t.integer  "section_id"
+    t.integer  "exp_id"
+    t.datetime "created_at"
+  end
+
+  add_index "resume_student_exps", ["section_id"], :name => "index_resume_student_exps_on_section_id"
+
   create_table "resumes", :force => true do |t|
     t.integer  "student_id"
     t.integer  "domain_id",  :limit => 2
@@ -215,6 +224,18 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   add_index "schools", ["abbr"], :name => "index_schools_on_abbr", :unique => true
+
+  create_table "student_exps", :force => true do |t|
+    t.integer  "student_id"
+    t.string   "period",     :limit => 25
+    t.string   "title",      :limit => 25
+    t.string   "sub_title",  :limit => 15
+    t.string   "content",    :limit => 500
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "student_exps", ["student_id"], :name => "index_student_exps_on_student_id"
 
   create_table "student_profiles", :force => true do |t|
     t.integer  "student_id"

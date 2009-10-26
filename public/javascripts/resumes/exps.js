@@ -14,6 +14,16 @@ function del_exp(section_id, exp_id, exp_period) {
 	}
 }
 
+function del_resume_student_exp(section_id, resume_student_exp_id, exp_period) {
+	if(confirm("确定要删除 " + exp_period + " 的经历么 ?")) {
+		document.getElementById("resume_student_exp_id").value = resume_student_exp_id;
+		
+		var resume_student_exp_del_form = document.getElementById("del_resume_student_exp_form");
+		resume_student_exp_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/destroy_resume_student_exp";
+		resume_student_exp_del_form.submit();
+	}
+}
+
 
 
 function add_tag(tag_id) {
@@ -72,6 +82,22 @@ function adjust_exp_tags() {
 
 $(document).ready(
 	function() {
+		$(".add_exp_link").click(
+			function() {
+				$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+				$(this).parent().hover(
+					function() {
+					},
+					function() {
+						$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+					}
+				);
+				
+				return false;
+			}
+		);
+		
 		$(".resume_list_section_content").hover(
 			function() {
 				$(this).find("div.exp_operations").css("visibility", "visible");

@@ -5,7 +5,8 @@ class ResumeExpSectionsController < ApplicationController
   
   before_filter :check_login_for_student
   
-  before_filter :check_active, :only => [:create, :update, :destroy]
+  before_filter :check_active, :only => [:create, :update, :destroy,
+                                          :create_resume_student_exp, :destroy_resume_student_exp]
   
   before_filter :check_student
   
@@ -18,7 +19,7 @@ class ResumeExpSectionsController < ApplicationController
     @sections = ResumeExpSection.find(
       :all,
       :conditions => ["resume_id = ?", @resume.id],
-      :include => [:exps]
+      :include => [{:resume_student_exps => :student_exp}, :exps]
     )
     
     @tags = ResumeExpTag.data[@resume.domain_id] || []
@@ -69,6 +70,54 @@ class ResumeExpSectionsController < ApplicationController
     
     flash[:success_msg] = "操作成功, 已删除经历块 #{@section.title}"
   
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+  end
+  
+  
+  def new_resume_student_exp
+    @student_exps = StudentExp.find(:all, :conditions => ["student_id = ?", @student.id])
+    
+    @added_student_exps = ResumeStudentExp.find(
+      :all,
+      :conditions => ["section_id = ?", @section.id]
+    ).collect { |resume_student_exp| resume_student_exp.exp_id }
+  end
+  
+  def create_resume_student_exp
+    student_exp = StudentExp.find(params[:student_exp_id])
+    
+    if student_exp.student_id == @student.id
+      resume_student_exp = ResumeStudentExp.new(
+        :section_id => @section.id,
+        :exp_id => student_exp.id
+      )
+      
+      ActiveRecord::Base.transaction do
+        resume_student_exp.save!
+        @section.add_exp_order(ResumeExpSection::Student_Exp, resume_student_exp.id)
+        @section.save!
+      end
+      
+      flash[:success_msg] = "操作成功, 已从经历库向 #{@section.title} 中添加了 #{student_exp.period} 的经历"
+    end
+    
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+  end
+  
+  
+  def destroy_resume_student_exp
+    resume_student_exp = ResumeStudentExp.find(params[:resume_student_exp_id])
+    
+    if resume_student_exp.section_id == @section.id
+      ActiveRecord::Base.transaction do
+        resume_student_exp.destroy
+        @section.remove_exp_order(ResumeExpSection::Student_Exp, resume_student_exp.id)
+        @section.save!
+      end
+      
+      flash[:success_msg] = "操作成功, 已删除 #{@section.title} 中的指定经历"
+    end
+    
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
   end
   

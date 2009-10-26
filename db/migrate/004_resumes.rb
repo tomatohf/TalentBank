@@ -60,6 +60,25 @@ class Resumes < ActiveRecord::Migration
     ActiveRecord::Base.connection.execute("DELETE FROM edu_exps WHERE id = 10000")
     
     
+    create_table :student_exps, :force => true do |t|
+      t.column :student_id, :integer
+      
+      t.column :period, :string, :limit => 25
+      
+      t.column :title, :string, :limit => 25
+      t.column :sub_title, :string, :limit => 15
+      
+      t.column :content, :string, :limit => 500
+      
+      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
+    end
+    add_index :student_exps, :student_id
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO student_exps (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM student_exps WHERE id = 10000")
+    
+    
     create_table :resumes, :force => true do |t|
       t.column :student_id, :integer
       
@@ -123,6 +142,8 @@ class Resumes < ActiveRecord::Migration
       
       t.column :title, :string, :limit => 25
       
+      t.column :exp_order, :string
+      
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end
@@ -130,6 +151,17 @@ class Resumes < ActiveRecord::Migration
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_exp_sections (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_exp_sections WHERE id = 10000")
+    
+    create_table :resume_student_exps, :force => true do |t|
+      t.column :section_id, :integer
+      t.column :exp_id, :integer
+      
+      t.column :created_at, :datetime
+    end
+    add_index :resume_student_exps, :section_id
+    # reserve first 10000 ID
+    ActiveRecord::Base.connection.execute("INSERT INTO resume_student_exps (id) VALUES (10000)")
+    ActiveRecord::Base.connection.execute("DELETE FROM resume_student_exps WHERE id = 10000")
     
     create_table :resume_exps, :force => true do |t|
       t.column :section_id, :integer
@@ -229,6 +261,7 @@ class Resumes < ActiveRecord::Migration
     
     drop_table :resume_exp_taggers
     drop_table :resume_exps
+    drop_table :resume_student_exps
     drop_table :resume_exp_sections
     
     drop_table :resume_awards
@@ -237,6 +270,7 @@ class Resumes < ActiveRecord::Migration
     
     drop_table :resumes
     
+    drop_table :student_exps
     drop_table :edu_exps
     drop_table :student_profiles
     drop_table :job_photos

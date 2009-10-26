@@ -1,85 +1,145 @@
+<%
+	order = section.get_exp_order
+	
+	exps = {}
+	section.exps.each do |exp|
+		exps[exp.id] = exp
+	end
+	
+	resume_student_exps = {}
+	section.resume_student_exps.each do |resume_student_exp|
+		resume_student_exps[resume_student_exp.id] = resume_student_exp
+	end
+%>
+
 <div class="resume_list_section">
 	<div class="resume_list_section_title">
 		<% section_title = h(section.title) %>
-		<div class="float_r">
-			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new" title="添加经历" class="none">
-				<img src="/images/students/add_icon.png" border="0" alt="添加经历" />
-				添加经历</a>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			
-			<a href="#" title="删除" class="none" onclick="del_section(<%= section.id %>, '<%= a(section_title) %>'); return false;">
-				<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
-				删除</a>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			
-			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/edit" title="编辑" class="none">
-				<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
-				编辑</a>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		</div>
-		
-		<%= section_title %>		
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td>
+					<%= section_title %>
+				</td>
+				
+				<td style="width: 80px;">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new" title="添加经历" class="none add_exp_link">
+						<img src="/images/students/add_icon.png" border="0" alt="添加经历" />
+						添加经历</a>
+						
+					<div class="dropdown_menu" style="font-size: 12px;">
+						<ul class="dropdown_sub_menu">
+							<li>
+								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/new_resume_student_exp">
+									从经历库选择</a>
+							</li>
+
+							<li>
+								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new">
+									填写新的经历</a>
+							</li>
+						</ul>
+					</div>
+				</td>
+				
+				<td style="width: 50px;">
+					<a href="#" title="删除" class="none" onclick="del_section(<%= section.id %>, '<%= a(section_title) %>'); return false;">
+						<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+						删除</a>
+				</td>
+				
+				<td style="width: 50px;">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/edit" title="编辑" class="none">
+						<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+						编辑</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 	
-	<% section.exps.each do |exp| %>
-		<div class="resume_list_section_content">
-			<div style="margin: 0px 10px;">
-				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-					<tr>
-						<td valign="top" style="width: 120px;">
-							<% exp_period = h(exp.period) %>
-							<%= exp_period %>
+	<% order.each do |o| %>
+		<%
+			exp_id = o[1].to_i
+			exp = case o[0].to_i
+				when ResumeExpSection::Student_Exp
+					resume_student_exps[exp_id].student_exp
+				when ResumeExpSection::Resume_Exp
+					exps[exp_id]
+				else
+					nil
+			end
+			
+			is_student_exp = exp.kind_of?(StudentExp)
+		%>
+		<% if exp %>
+			<div class="resume_list_section_content">
+				<div style="margin: 0px 10px;">
+					<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+						<tr>
+							<td valign="top" style="width: 120px;">
+								<% exp_period = h(exp.period) %>
+								<%= exp_period %>
 							
-							<div class="exp_operations" style="visibility: hidden;">
-								<div>
-									<a href="#" title="删除" class="none" onclick="del_exp(<%= section.id %>, <%= exp.id %>, '<%= a(exp_period) %>'); return false;">
-										<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
-										删除</a>
-								</div>
-								<div>
-									<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/<%= exp.id %>/edit" title="编辑" class="none">
-										<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
-										编辑</a>
-								</div>
-								<% if tags.size > 0 %>
+								<div class="exp_operations" style="visibility: hidden;">
 									<div>
-										<a href="#" title="添加标签" class="none tag_link">
-											<img src="/images/students/add_tag_icon.gif" border="0" alt="添加标签" style="margin-bottom: -2px;" />
-											添加标签</a>
-									
-										<div class="dropdown_menu">
-											<ul class="dropdown_sub_menu">
-												<% tags.each do |tag| %>
-													<li>
-														<a href="#" onclick="add_tag(<%= tag[:id] %>); return false;">
-															<%= tag[:name] %></a>
-													</li>
-												<% end %>
-											</ul>
-										</div>
+										<% if is_student_exp %>
+											<a href="#" title="删除" class="none" onclick="del_resume_student_exp(<%= section.id %>, <%= resume_student_exps[exp_id].id %>, '<%= a(exp_period) %>'); return false;">
+										<% else %>
+											<a href="#" title="删除" class="none" onclick="del_exp(<%= section.id %>, <%= exp.id %>, '<%= a(exp_period) %>'); return false;">
+										<% end %>
+												<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+												删除</a>
 									</div>
-								<% end %>
-							</div>
-						</td>
+									<div>
+										<% if is_student_exp %>
+											<a href="/students/<%= @student.id %>/student_exps" title="编辑经历库" class="none" target="_blank">
+												<img src="/images/students/edit_icon.gif" border="0" alt="编辑经历库" />
+												编辑经历库</a>
+										<% else %>
+											<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/<%= exp.id %>/edit" title="编辑" class="none">
+												<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
+												编辑</a>
+										<% end %>
+									</div>
+									<% if tags.size > 0 %>
+										<div>
+											<a href="#" title="添加标签" class="none tag_link">
+												<img src="/images/students/add_tag_icon.gif" border="0" alt="添加标签" style="margin-bottom: -2px;" />
+												添加标签</a>
+									
+											<div class="dropdown_menu">
+												<ul class="dropdown_sub_menu">
+													<% tags.each do |tag| %>
+														<li>
+															<a href="#" onclick="add_tag(<%= tag[:id] %>); return false;">
+																<%= tag[:name] %></a>
+														</li>
+													<% end %>
+												</ul>
+											</div>
+										</div>
+									<% end %>
+								</div>
+							</td>
 
-						<td valign="top">
-							<div class="float_r">
-								<%= h(exp.sub_title) %>
-							</div>
+							<td valign="top">
+								<div class="float_r">
+									<%= h(exp.sub_title) %>
+								</div>
 							
-							<div>
-								<%= h(exp.title) %>
-							</div>
+								<div>
+									<%= h(exp.title) %>
+								</div>
 
-							<ul>
-								<% Utils.lines(h(exp.content)).each do |line| %>
-									<li><%= line %></li>
-								<% end %>
-							</ul>
-						</td>
-					</tr>
-				</table>
+								<ul>
+									<% Utils.lines(h(exp.content)).each do |line| %>
+										<li><%= line %></li>
+									<% end %>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
-		</div>
+		<% end %>
 	<% end %>
 </div>

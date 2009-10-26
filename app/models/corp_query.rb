@@ -14,7 +14,7 @@ class CorpQuery < ActiveRecord::Base
   
   Sep_Part = "!"
   Sep_Value = "_"
-  Sep_pair = "-"
+  Sep_Pair = "-"
   def self.build_conditions(domain_id, info, tags, skills, keyword)
     [
       domain_id,
@@ -31,7 +31,7 @@ class CorpQuery < ActiveRecord::Base
     tags.join(Sep_Value)
   end
   def self.build_conditions_skills(skills)
-    skills.collect{|skill| skill.join(Sep_pair) }.join(Sep_Value)
+    skills.collect{|skill| skill.join(Sep_Pair) }.join(Sep_Value)
   end
   
   
@@ -60,7 +60,7 @@ class CorpQuery < ActiveRecord::Base
   
   def get_skills(skills_conditions)
     skills_conditions ||= (self.other_conditions || "").split(Sep_Part)[1]
-    (skills_conditions || "").split(Sep_Value).collect { |pair| pair.split(Sep_pair) }
+    (skills_conditions || "").split(Sep_Value).collect { |pair| pair.split(Sep_Pair) }
   end
   
   def tags_and_skills

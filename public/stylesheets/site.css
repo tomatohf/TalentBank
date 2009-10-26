@@ -337,6 +337,23 @@ a.unselected_skill:hover {
 }
 
 
+.student_exp {
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid #DDDDDD;
+}
+
+.student_exp ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+.student_exp_title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
 .query_tag {
 	margin: 0px 8px;
 }

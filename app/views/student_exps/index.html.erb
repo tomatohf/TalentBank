@@ -1,0 +1,34 @@
+<% talent_page_title("经历库") %>
+
+
+<h2>经历库</h2>
+
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<a href="/students/<%= @student.id %>/student_exps/new">
+		添加经历</a>
+</div>
+
+<div>
+	<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
+	<% end %>
+	<script language="JavaScript">
+		function del_exp(exp_id, exp_period) {
+			if(confirm("确定要删除 " + exp_period + " 的经历么 ?")) {
+				var del_form = document.getElementById("del_exp_form");
+				del_form.action = "/students/<%= @student.id %>/student_exps/" + exp_id;
+				del_form.submit();
+			}
+		}
+	</script>
+	
+	<div style="width: 600px;">
+		<%= render :partial => "exp", :collection => @exps %>
+	</div>
+</div>

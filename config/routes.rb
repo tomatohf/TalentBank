@@ -54,6 +54,7 @@ ActionController::Routing::Routes.draw do |map|
     :remove_skill => :post
   } do |students|
     students.resources :edu_exps
+    students.resources :student_exps
     
     students.resources :resumes, :member => {
       :edit_job_intention => :get,
@@ -73,7 +74,12 @@ ActionController::Routing::Routes.draw do |map|
     } do |resumes|
       resumes.resources :resume_list_sections
       
-      resumes.resources :resume_exp_sections do |resume_exp_sections|
+      resumes.resources :resume_exp_sections, :member => {
+        :new_resume_student_exp => :get,
+        :create_resume_student_exp => :post,
+        
+        :destroy_resume_student_exp => :post
+      } do |resume_exp_sections|
         resume_exp_sections.resources :resume_exps
       end
       

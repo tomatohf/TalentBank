@@ -9,7 +9,7 @@ class EduExpsController < ApplicationController
   
   before_filter :check_student
   
-  before_filter :check_exp, :only => [:edit, :update, :destroy]
+  before_filter :check_exp, :except => [:index, :new, :create]
   
   
   def index

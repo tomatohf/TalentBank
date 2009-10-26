@@ -40,6 +40,9 @@
 	<% end %>
 	<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
 	<% end %>
+	<% form_tag "", :method => :post, :id => "del_resume_student_exp_form" do %>
+		<input type="hidden" id="resume_student_exp_id" name="resume_student_exp_id" />
+	<% end %>
 	
 	<div>
 		<%= render :partial => "section", :collection => @sections, :locals => {:tags => @tags} %>
