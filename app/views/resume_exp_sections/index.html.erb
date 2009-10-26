@@ -23,12 +23,12 @@
 <div class="float_r">
 	<% if @tags.size > 0 %>
 		<div id="exp_tags" class="resume_exp_tags">
-			<div class="resume_exp_tags_title">
+			<div>
 				<img src="/images/loading_icon.gif" id="loading" border="0" title="操作中" alt="操作中" style="margin: 0px 5px -3px 0px; display: none;" />
 				<img src="/images/students/tag_icon.gif" id="tag_icon_img" border="0" title="标签" alt="标签" style="margin: 0px 5px -3px 0px;" />
 				经历标签
 			</div>
-			<div>
+			<div style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed #DDDDDD;">
 				<%= render :partial => "/resume_exps/tagger", :collection => @taggers %>
 			</div>
 		</div>
