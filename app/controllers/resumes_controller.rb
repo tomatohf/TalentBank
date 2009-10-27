@@ -155,7 +155,9 @@ class ResumesController < ApplicationController
         :hobby,
         :award,
         :list_sections,
-        {:exp_sections => [:exps]}
+        {
+          :exp_sections => [{:resume_student_exps => :student_exp}, :exps]
+        }
       ]
     )
     
