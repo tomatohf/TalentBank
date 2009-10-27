@@ -27,33 +27,55 @@ function del_resume_student_exp(section_id, resume_student_exp_id, exp_period) {
 
 
 function add_tag(tag_id) {
-	$.post(
-		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/add_exp_tag",
+	show_tag_loading();
+	
+	$.ajax(
 		{
-			tag_id: tag_id
-		},
-		function(data) {
-			$("#exp_tags").append(data);
-			
-			remove_exp_tag_icon_hover();
-		},
-		"html"
+			type: "POST",
+			url: "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/add_exp_tag",
+			dataType: "html",
+			data: {
+				tag_id: tag_id
+			},
+			complete: hide_tag_loading,
+			success: function(data, text_status) {
+				$("#exp_tags").append(data);
+
+				remove_exp_tag_icon_hover();
+			}
+		}
 	);
 }
 
 function remove_tag(tagger_id, tagger_link) {
-	$.post(
-		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/remove_exp_tag",
+	show_tag_loading();
+	
+	$.ajax(
 		{
-			tagger_id: tagger_id
-		},
-		function(data) {
-			if(data != null && data.substr(0, 4)  == "true") {
-				$(tagger_link).remove();
+			type: "POST",
+			url: "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/remove_exp_tag",
+			dataType: "text",
+			data: {
+				tagger_id: tagger_id
+			},
+			complete: hide_tag_loading,
+			success: function(data, text_status) {
+				if(data != null && data.substr(0, 4)  == "true") {
+					$(tagger_link).remove();
+				}
 			}
-		},
-		"text"
+		}
 	);
+}
+
+function show_tag_loading() {
+	$("#tag_icon_img").hide();
+	$("#loading").show();
+}
+
+function hide_tag_loading() {
+	$("#loading").hide();
+	$("#tag_icon_img").show();
 }
 
 function remove_exp_tag_icon_hover() {
@@ -75,6 +97,31 @@ function adjust_exp_tags() {
 		{
 			top: (scroll_top > 0) ? (scroll_top - 50 + "px") : "0px"
 		}
+	);
+}
+
+
+function update_exp_order(exps_container, order) {
+	section_id = exps_container.attr("id").substr("resume_exp_section_".length);
+
+	$.post(
+		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/update_exp_order",
+		{
+			order: order.join(SEP)
+		},
+		function(data) {
+			if(data != null && data.substr(0, 4)  == "true") {
+				// success, and do nothing
+			}
+			else {
+				// fail ...
+				// use the following line of code to restore the order
+				// HOWEVER, it's not necessary,
+				// since next success operation will correct it
+				// $(exps_container).sortable("cancel");
+			}
+		},
+		"text"
 	);
 }
 
@@ -127,20 +174,6 @@ $(document).ready(
 		remove_exp_tag_icon_hover();
 		
 		
-		$("#loading").ajaxStart(
-			function() {
-				$(this).show();
-				$("#tag_icon_img").hide();
-			}
-		);
-		$("#loading").ajaxStop(
-			function() {
-				$(this).hide();
-				$("#tag_icon_img").show();
-			}
-		);
-		
-		
 		$(".tag_link").click(
 			function() {
 				adjust_exp_tags();
@@ -159,7 +192,11 @@ $(document).ready(
 				//opacity: 1,
 				placeholder: "resume_exp_drag_placeholder",
 				revert: 200,
-				tolerance: "pointer"
+				tolerance: "pointer",
+				update: function(event, ui) {
+					order = $(this).sortable("toArray");
+					update_exp_order($(this), order);
+				}
 			}
 		);
 		$(".resume_exp_container .resume_exp_order_handle").disableSelection();

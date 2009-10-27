@@ -6,7 +6,8 @@ class ResumeExpSectionsController < ApplicationController
   before_filter :check_login_for_student
   
   before_filter :check_active, :only => [:create, :update, :destroy,
-                                          :create_resume_student_exp, :destroy_resume_student_exp]
+                                          :create_resume_student_exp, :destroy_resume_student_exp,
+                                          :update_exp_order]
   
   before_filter :check_student
   
@@ -119,6 +120,17 @@ class ResumeExpSectionsController < ApplicationController
     end
     
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+  end
+  
+  
+  def update_exp_order
+    @section.set_exp_order(ResumeExpSection.parse_exp_order([:order] && params[:order].strip))
+    
+    if @section.save
+      return render(:layout => false, :text => "true")
+    end
+    
+    render :nothing => true
   end
   
   

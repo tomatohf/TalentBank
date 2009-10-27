@@ -56,7 +56,7 @@
 		</table>
 	</div>
 	
-	<div class="resume_exp_container">
+	<div id="resume_exp_section_<%= section.id %>" class="resume_exp_container">
 		<% order.each do |o| %>
 			<%
 				exp_id = o[1].to_i
@@ -68,11 +68,11 @@
 					else
 						nil
 				end
-
+				
 				is_student_exp = exp.kind_of?(StudentExp)
 			%>
 			<% if exp %>
-				<div class="resume_list_section_content">
+				<div id="<%= ResumeExpSection.build_order_pair(o[0], o[1]) %>" class="resume_list_section_content">
 					<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 						<tr>
 							<td valign="top" style="width: 120px;">

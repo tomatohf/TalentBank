@@ -78,7 +78,9 @@ ActionController::Routing::Routes.draw do |map|
         :new_resume_student_exp => :get,
         :create_resume_student_exp => :post,
         
-        :destroy_resume_student_exp => :post
+        :destroy_resume_student_exp => :post,
+        
+        :update_exp_order => :post
       } do |resume_exp_sections|
         resume_exp_sections.resources :resume_exps
       end

@@ -19,8 +19,12 @@ class ResumeExpSection < ActiveRecord::Base
   Sep_Exp = "_"
   Sep_Pair = "-"
   
+  def self.parse_exp_order(order)
+    (order || "").split(Sep_Exp).collect { |pair| pair.split(Sep_Pair) }
+  end
+  
   def get_exp_order
-    (self.exp_order || "").split(Sep_Exp).collect { |pair| pair.split(Sep_Pair) }
+    self.class.parse_exp_order(self.exp_order)
   end
   
   def set_exp_order(order)
@@ -46,6 +50,10 @@ class ResumeExpSection < ActiveRecord::Base
     order.delete_at(position) if position > 0
     
     set_exp_order(order)
+  end
+  
+  def self.build_order_pair(exp_type, exp_id)
+    [exp_type, exp_id].join(Sep_Pair)
   end
   
 end
