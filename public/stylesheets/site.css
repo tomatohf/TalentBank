@@ -294,6 +294,19 @@ a.none:hover {
 	padding: 4px 0px;
 }
 
+.resume_exp_order_handle {
+	width: 25px;
+}
+
+.resume_exp_order_handle img {
+	cursor: move;
+}
+
+.resume_exp_drag_placeholder {
+	padding: 3px;
+	border: 2px dashed #CCCCCC;
+}
+
 
 .skill_pool {
 	width: 250px;

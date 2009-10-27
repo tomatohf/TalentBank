@@ -146,5 +146,22 @@ $(document).ready(
 				adjust_exp_tags();
 			}
 		);
+		
+		
+		$(".resume_exp_container").sortable(
+			{
+				items: "div.resume_list_section_content",
+				handle: ".resume_exp_order_handle img",
+				cursor: "move",
+				containment: "parent",
+				forceHelperSize: true,
+				forcePlaceholderSize: true,
+				//opacity: 1,
+				placeholder: "resume_exp_drag_placeholder",
+				revert: 200,
+				tolerance: "pointer"
+			}
+		);
+		$(".resume_exp_container .resume_exp_order_handle").disableSelection();
 	}
 );
