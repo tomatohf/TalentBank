@@ -1,6 +1,18 @@
 <%
 	school_abbr = @school.abbr
+	
 	domains = @school.resume_domains.collect { |domain_id| ResumeDomain.find(domain_id) }
+	
+	domain_category_mapping = domains.group_by do |domain|
+		domain[:category_id]
+	end
+	
+	categories = domain_category_mapping.keys.sort.collect do |category_id|
+		ResumeDomainCategory.find(category_id)
+	end
+	
+	init_domain = ResumeDomain.find(@query.domain_id)
+	init_category_id = (init_domain && init_domain[:category_id]) || categories[0][:id]
 %>
 <% talent_page_title("查询简历") %>
 
@@ -35,6 +47,10 @@
 	
 		<label for="major">专业:</label>
 		<select name="major" id="major" class="dropdown_list">
+			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
+			<% (Major.data[@query.college_id]|| []).each do |major| %>
+				<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
+			<% end %>
 		</select>
 	
 		&nbsp;&nbsp;&nbsp;
@@ -77,9 +93,18 @@
 
 	<div>
 		<label for="domain">求职方向:</label>
+		
+		<select id="domain_category" class="dropdown_list">
+			<% categories.each do |category| %>
+				<option value="<%= category[:id] %>"<%= %Q! selected="selected"! if category[:id] == init_category_id %>><%= category[:name] %></option>
+			<% end %>
+		</select>
+		
+		&nbsp;&nbsp;&nbsp;
+		
 		<select name="domain" id="domain" class="dropdown_list">
-			<% domains.each do |domain| %>
-				<option value="<%= domain[:id] %>"<%= %Q! selected="selected"! if @query.domain_id == domain[:id] %>><%= domain[:name] %></option>
+			<% domain_category_mapping[init_category_id].each do |domain| %>
+				<option value="<%= domain[:id] %>"<%= %Q! selected="selected"! if domain[:id] == @query.domain_id %>><%= domain[:name] %></option>
 			<% end %>
 		</select>
 	</div>
@@ -89,7 +114,7 @@
 		<% domains.each do |domain| %>
 			<% tags = ResumeExpTag.data[domain[:id]] || [] %>
 			<% if tags.size > 0 %>
-				<div id="tags_<%= domain[:id] %>" style="display: none;">
+				<div id="tags_<%= domain[:id] %>"<%= %Q! style="display: none;"! unless domain[:id] == @query.domain_id %>>
 					需要具备的经历标签:
 					<% tags.each do |tag| %>
 						<span class="query_tag">
@@ -148,15 +173,17 @@
 <script language="JavaScript">
 	var CORPORATION_ID = <%= @corporation.id %>;
 	
-	var INIT_COLLEGE = "<%= @query.college_id %>";
-	var INIT_MAJOR = "<%= @query.major_id %>";
 	var MAJORS = {};
 	<% College.data[school_abbr].each do |college| %>
 		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
 	<% end %>
 	
-	var INIT_DOMAIN = "<%= @query.domain_id %>";
-	var DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
+	var ALL_DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
+	
+	var DOMAINS = {};
+	<% categories.each do |category| %>
+		DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+	<% end %>
 	
 	var required_mark = '<%= required_mark(false).strip %>';
 </script>

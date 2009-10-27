@@ -16,14 +16,15 @@ class ResumesController < ApplicationController
   
   
   def index
-    @domains = @school.resume_domains
+    school_domains = @school.resume_domains
     
-    @resumes = {}
-    Resume.find(
+    @resumes = Resume.find(
       :all,
-      :conditions => ["student_id = ?  and domain_id in (?)", @student.id, @domains]
-    ).each do |resume|
-      @resumes[resume.domain_id] = resume
+      :conditions => ["student_id = ?  and domain_id in (?)", @student.id, school_domains]
+    )
+    
+    @available_domains = (school_domains - @resumes.collect{|resume| resume.domain_id}).collect do |domain_id|
+      ResumeDomain.find(domain_id)
     end
   end
   
@@ -39,7 +40,8 @@ class ResumesController < ApplicationController
         )
 
         if resume.save
-          return jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
+          flash[:success_msg] = "操作成功, 已添加 #{ResumeDomain.find(resume.domain_id)[:name]} 的简历"
+          # return jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
         end
       end
     end

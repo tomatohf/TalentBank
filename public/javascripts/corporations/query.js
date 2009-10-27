@@ -18,9 +18,30 @@ function fill_majors(college_id, major_id) {
 }
 
 
+function fill_domains(category_id, domain_id) {
+	$("#domain").html("");
+
+	var domain_objs = DOMAINS["c_" + category_id];
+	if(domain_objs != null && domain_objs.length > 0) {
+		var options = $.map(
+			domain_objs,
+			function(domain_obj, i) {
+				return "<option value='" + domain_obj.id + "'>" + domain_obj.name + "</option>";
+			}
+		);
+
+		$("#domain").append(options.join(""));
+		
+		$("#domain").val(domain_id);
+	}
+	
+	show_tags($("#domain").val());
+}
+
+
 function show_tags(domain_id) {
 	$.each(
-		DOMAINS,
+		ALL_DOMAINS,
 		function(i, domain) {
 			$("#tags_" + domain).hide();
 		}
@@ -144,6 +165,13 @@ $(document).ready(
 		);
 		
 		
+		$("#domain_category").change(
+			function() {
+				fill_domains($(this).val());
+			}
+		);
+		
+		
 		$("#domain").change(
 			function() {
 				show_tags($(this).val());
@@ -167,10 +195,6 @@ $(document).ready(
 				return false;
 			}
 		);
-		
-		
-		fill_majors(INIT_COLLEGE, INIT_MAJOR);
-		show_tags(INIT_DOMAIN);
 		
 		
 		// remove selected skill from list

@@ -27,7 +27,7 @@ module Schools
     
     
     def resume_domains
-      [ResumeDomain.general_version_id, 110, 120]
+      [10, 110, 120, 130, 140, 150, 160, 170, 180, 200]
     end
     
   end

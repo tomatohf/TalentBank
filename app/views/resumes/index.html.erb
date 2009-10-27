@@ -12,21 +12,71 @@
 	</p>
 <% end %>
 
+<% if @available_domains.size > 0 %>
+	<div>
+		<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
+			<%
+				domain_category_mapping = @available_domains.group_by do |domain|
+					domain[:category_id]
+				end
+				
+				categories = domain_category_mapping.keys.sort.collect do |category_id|
+					ResumeDomainCategory.find(category_id)
+				end
+			%>
+			
+			<script language="JavaScript">
+				var DOMAINS = {};
+				<% categories.each do |category| %>
+					DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+				<% end %>
+
+				function fill_domains(category_id) {
+					$("#domain_id").html("");
+
+					var domain_objs = DOMAINS["c_" + category_id];
+					if(domain_objs != null && domain_objs.length > 0) {
+						var options = $.map(
+							domain_objs,
+							function(domain_obj, i) {
+								return "<option value='" + domain_obj.id + "'>" + domain_obj.name + "</option>";
+							}
+						);
+
+						$("#domain_id").append(options.join(""));
+					}
+				}
+			</script>
+
+			<select id="domain_category" class="dropdown_list">
+				<% categories.each do |category| %>
+					<option value="<%= category[:id] %>"><%= category[:name] %></option>
+				<% end %>
+			</select>
+			
+			&nbsp;&nbsp;&nbsp;
+			
+			<select name="domain_id" id="domain_id" class="dropdown_list">
+				<% domain_category_mapping[categories[0][:id]].each do |domain| %>
+					<option value="<%= domain[:id] %>"><%= domain[:name] %></option>
+				<% end %>
+			</select>
+			
+			&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;
+			
+			<%= submit_tag "添加简历", :class => "button", :disabled => !@account_active %>
+		<% end %>
+	</div>
+<% end %>
+
 <div>
-	<% form_tag "/students/#{@student.id}/resumes", :method => :post, :id => "create_resume_form" do %>
-		<input type="hidden" id="domain_id" name="domain_id" />
-	<% end %>
 	<% form_tag "", :method => :delete, :id => "del_resume_form" do %>
 	<% end %>
 	<% form_tag "", :method => :put, :id => "update_resume_form" do %>
 		<input type="hidden" id="online" name="online" />
 	<% end %>
 	<script language="JavaScript">
-		function create_resume(domain_id) {
-			document.getElementById("domain_id").value = domain_id;
-			document.getElementById("create_resume_form").submit();
-		}
-		
 		function del_resume(resume_id, domain) {
 			if(confirm("确定要删除 " + domain + " 的简历么 ? 该简历中所有的数据都将被删除 !")) {
 				del_form = document.getElementById("del_resume_form");
@@ -49,18 +99,29 @@
 	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
 		<thead>
 			<tr>
-				<td style="width: 150px;">求职方向</td>
-				<td style="width: 80px;">状态</td>
-				<td style="width: 50px;"></td>
-				<td style="width: 50px;"></td>
-				<td style="width: 50px;"></td>
-				<td style="width: 50px;"></td>
 				<td></td>
+				<td></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
+				<td style="width: 50px;"></td>
 			</tr>
 		</thead>
 		
 		<tbody>
-			<%= render :partial => "resume_domain", :collection => @domains, :locals => {:resumes => @resumes} %>
+			<% grouped_resumes = @resumes.group_by{|resume| ResumeDomain.find(resume.domain_id)[:category_id]} %>
+			<% grouped_resumes.keys.sort.each do |category_id| %>
+				<% category = ResumeDomainCategory.find(category_id) %>
+				<tr>
+					<td colspan="6">
+						<div class="align_c" style="background-color: #EAEAEA; padding: 5px 0px;">
+							<%= category[:name] %>
+						</div>
+					</td>
+				</tr>
+				
+				<%= render :partial => "added_resume", :collection => grouped_resumes[category_id] %>
+			<% end %>
 		</tbody>
 	</table>
 </div>
@@ -83,6 +144,13 @@
 					);
 					
 					return false;
+				}
+			);
+			
+			
+			$("#domain_category").change(
+				function() {
+					fill_domains($(this).val());
 				}
 			);
 		}
