@@ -146,7 +146,8 @@
 						exp_id = o[1].to_i
 						exp = case o[0].to_i
 							when ResumeExpSection::Student_Exp
-								resume_student_exps[exp_id].student_exp
+								resume_student_exp = resume_student_exps[exp_id]
+								resume_student_exp && resume_student_exp.student_exp
 							when ResumeExpSection::Resume_Exp
 								exps[exp_id]
 							else

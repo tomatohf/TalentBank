@@ -65,13 +65,17 @@ class ResumeExpsController < ApplicationController
   
   
   def destroy
-    ActiveRecord::Base.transaction do
-      @exp.destroy
-      @section.remove_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
-      @section.save!
+    begin
+      ActiveRecord::Base.transaction do
+        @exp.destroy
+        @section.remove_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
+        @section.save!
+      end
+      
+      flash[:success_msg] = "操作成功, 已删除 #{@section.title} 中 #{@exp.period} 的经历"
+    rescue
+      flash[:error_msg] = "操作失败, 再试一次吧"
     end
-    
-    flash[:success_msg] = "操作成功, 已删除 #{@section.title} 中 #{@exp.period} 的经历"
   
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
   end
