@@ -94,7 +94,7 @@
 				&nbsp;&nbsp;&nbsp;
 				<% tags.each do |tag_id| %>
 					<span>
-						<%= ResumeExpTag.find(query.domain_id, tag_id.to_i)[:name] %>
+						<%= ResumeExpTag.find(query.domain_id, tag_id)[:name] %>
 					</span>
 				<% end %>
 			</div>

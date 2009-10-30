@@ -57,7 +57,7 @@ class Resume < ActiveRecord::Base
     has student.edu_level_id, :as => :edu_level_id
     has student.graduation_year, :as => :graduation_year
     
-    has domain_id, online
+    has domain_id, online, updated_at
     
     has exp_taggers.tag_id, :as => :exp_tag_id
     
@@ -108,7 +108,7 @@ class Resume < ActiveRecord::Base
       :page => page,
       :per_page => Resume_Page_Size,
       :match_mode => Search_Match_Mode,
-      # :order => "@relevance DESC, updated_at DESC",
+      :order => "@relevance DESC, updated_at DESC",
       :field_weights => {
         
       },

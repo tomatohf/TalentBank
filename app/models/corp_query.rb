@@ -53,14 +53,14 @@ class CorpQuery < ActiveRecord::Base
   end
   
   
-  def get_tags(tags_conditions)
+  def get_tags(tags_conditions = nil)
     tags_conditions ||= (self.other_conditions || "").split(Sep_Part)[0]
-    (tags_conditions || "").split(Sep_Value)
+    (tags_conditions || "").split(Sep_Value).collect(&:to_i)
   end
   
-  def get_skills(skills_conditions)
+  def get_skills(skills_conditions = nil)
     skills_conditions ||= (self.other_conditions || "").split(Sep_Part)[1]
-    (skills_conditions || "").split(Sep_Value).collect { |pair| pair.split(Sep_Pair) }
+    (skills_conditions || "").split(Sep_Value).collect { |pair| pair.split(Sep_Pair).collect(&:to_i) }
   end
   
   def tags_and_skills

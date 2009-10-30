@@ -2,7 +2,7 @@
 	skill_id, value = if query_skill.kind_of?(CorpQuerySkill)
 		[query_skill.skill_id, query_skill.value]
 	else
-		[query_skill[0].to_i, query_skill[1].to_i]
+		[query_skill[0], query_skill[1]]
 	end
 	
 	skill = Skill.find(skill_id)

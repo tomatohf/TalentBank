@@ -149,7 +149,7 @@ class CorporationsController < ApplicationController
     skill_id = params[:skill_id] && params[:skill_id].strip
     
     if !skill_id.blank?
-      return render(:partial => "query_skill", :object => [skill_id, nil])
+      return render(:partial => "query_skill", :object => [skill_id.to_i, nil])
     end
     
     render :nothing => true

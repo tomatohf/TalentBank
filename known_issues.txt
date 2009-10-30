@@ -1,5 +1,4 @@
 搜索的问题
-	- 排序, :order
 	- 通过标签搜索(string or integer 的影响?)
 	- 通过skill搜索
 

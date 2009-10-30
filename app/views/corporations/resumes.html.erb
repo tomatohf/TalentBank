@@ -118,7 +118,7 @@
 					需要具备的经历标签:
 					<% tags.each do |tag| %>
 						<span class="query_tag">
-							<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query_tags.include?(tag[:id].to_s) %>
+							<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query_tags.include?(tag[:id]) %>
 							<label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
 						</span>
 					<% end %>
