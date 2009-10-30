@@ -95,4 +95,40 @@ class Resume < ActiveRecord::Base
     self.preload_associations(resumes, includes)
   end
   
+  
+  
+  Search_Match_Mode = :extended
+  Resume_Page_Size = 20
+  
+  def self.do_search(query, school_id, page = 1, query_tags = nil, query_skills = nil)
+    query_tags, query_skills = query.tags_and_skills unless query_tags && query_skills
+    
+    Resume.search(
+      query.keyword,
+      :page => page,
+      :per_page => Resume_Page_Size,
+      :match_mode => Search_Match_Mode,
+      # :order => "@relevance DESC, updated_at DESC",
+      :field_weights => {
+        
+      },
+      :with => {
+        :online => true,
+        
+        :school_id => school_id,
+        :college_id => query.college_id,
+        :major_id => query.major_id,
+        :edu_level_id => query.edu_level_id,
+        :graduation_year => query.graduation_year,
+        
+        :domain_id => query.domain_id,
+        
+        :exp_tag_id => query_tags
+      },
+      :include => [
+        
+      ]
+    )
+  end
+  
 end

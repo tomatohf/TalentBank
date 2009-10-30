@@ -157,11 +157,26 @@
 
 
 
-<% unless @conditions.blank? %>
+<% if @resumes %>
 	<div>
 		
 		<div>
-			简历列表
+			<span style="font-size: 14px; font-weight: bold;">
+				简历列表
+			</span>
+			
+			<span>
+				(找到约 <%= @resumes.total_entries %> 份简历)
+			</span>
+		</div>
+		
+		
+		<div>
+			<%= render :partial => "resume", :collection => @resumes %>
+		</div>
+		
+		<div>
+			<%= paging_buttons(@resumes) %>
 		</div>
 		
 	</div>

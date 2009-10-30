@@ -106,9 +106,17 @@ class CorporationsController < ApplicationController
   
   
   def resumes
-    @conditions = params[:q] && params[:q].strip
-    @query = CorpQuery.parse_from_conditions(@conditions)
+    conditions = params[:q] && params[:q].strip
+    
+    @query = CorpQuery.parse_from_conditions(conditions)
     @query_tags, @query_skills = @query.tags_and_skills
+    
+    
+    unless conditions.blank?
+      page = params[:page]
+      page = 1 unless page =~ /\d+/
+      @resumes = Resume.do_search(@query, @corporation.school_id, page, @query_tags, @query_skills)
+    end
   end
   
   def create_query
