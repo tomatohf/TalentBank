@@ -121,8 +121,9 @@ class Resume < ActiveRecord::Base
         :edu_level_id => query.edu_level_id,
         :graduation_year => query.graduation_year,
         
-        :domain_id => query.domain_id,
-        
+        :domain_id => query.domain_id
+      },
+      :with_all => {
         :exp_tag_id => query_tags
       },
       :include => [
