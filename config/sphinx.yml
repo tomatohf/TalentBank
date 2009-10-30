@@ -1,0 +1,35 @@
+development:
+#  port: 3312
+  morphology: stem_en
+  mem_limit: 512M
+  charset_type: zh_cn.utf-8
+  sql_query_pre: SET NAMES utf8
+  searchd_file_path: /Users/tomato/Dev/git/projects/TalentBank/db/sphinx/development
+  config_file: /Users/tomato/Dev/git/projects/TalentBank/config/sphinx.deve.conf
+  searchd_log_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.log
+  query_log_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.query.log
+  pid_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.deve.pid
+
+test:
+#  port: 3312
+  morphology: stem_en
+  mem_limit: 512M
+  charset_type: zh_cn.utf-8
+  sql_query_pre: SET NAMES utf8
+  searchd_file_path: /Users/tomato/Dev/git/projects/TalentBank/db/sphinx/test
+  config_file: /Users/tomato/Dev/git/projects/TalentBank/config/sphinx.test.conf
+  searchd_log_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.log
+  query_log_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.query.log
+  pid_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.test.pid
+
+production:
+#  port: 3312
+  morphology: stem_en
+  mem_limit: 1024M
+  charset_type: zh_cn.utf-8
+  sql_query_pre: SET NAMES utf8
+  searchd_file_path: /home/tomato/websites/app/TalentBank/shared/sphinx/production
+  config_file: /home/tomato/websites/app/TalentBank/shared/sphinx/conf/sphinx.prod.conf
+  searchd_log_file: /home/tomato/websites/app/TalentBank/shared/log/searchd.log
+  query_log_file: /home/tomato/websites/app/TalentBank/shared/log/searchd.query.log
+  pid_file: /home/tomato/websites/app/TalentBank/shared/log/searchd.prod.pid

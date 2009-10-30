@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(:version => 6) do
   create_table "resume_exp_taggers", :force => true do |t|
     t.integer  "resume_id"
     t.integer  "tag_id"
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "resume_exp_taggers", ["resume_id", "tag_id"], :name => "index_resume_exp_taggers_on_resume_id_and_tag_id", :unique => true
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.string   "name",       :limit => 50
     t.string   "level",      :limit => 15
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "resume_list_skills", ["resume_id"], :name => "index_resume_list_skills_on_resume_id"
@@ -192,7 +193,7 @@ ActiveRecord::Schema.define(:version => 6) do
   create_table "resume_skills", :force => true do |t|
     t.integer  "resume_id"
     t.integer  "student_skill_id"
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "resume_skills", ["resume_id", "student_skill_id"], :name => "index_resume_skills_on_resume_id_and_student_skill_id", :unique => true
@@ -200,7 +201,7 @@ ActiveRecord::Schema.define(:version => 6) do
   create_table "resume_student_exps", :force => true do |t|
     t.integer  "section_id"
     t.integer  "exp_id"
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "resume_student_exps", ["section_id"], :name => "index_resume_student_exps_on_section_id"

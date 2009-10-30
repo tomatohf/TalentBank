@@ -3,6 +3,8 @@ class Student < ActiveRecord::Base
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   has_one :profile, :class_name => "StudentProfile", :foreign_key => "student_id", :dependent => :destroy
+  has_one :job_photo, :class_name => "JobPhoto", :foreign_key => "student_id", :dependent => :destroy
+  has_many :edu_exps, :class_name => "EduExp", :foreign_key => "student_id", :dependent => :destroy
   
   
   attr_protected :enabled, :active

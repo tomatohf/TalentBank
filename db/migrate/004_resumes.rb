@@ -156,7 +156,7 @@ class Resumes < ActiveRecord::Migration
       t.column :section_id, :integer
       t.column :exp_id, :integer
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :resume_student_exps, :section_id
     # reserve first 10000 ID
@@ -185,7 +185,7 @@ class Resumes < ActiveRecord::Migration
       t.column :resume_id, :integer
       t.column :tag_id, :integer
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :resume_exp_taggers, [:resume_id, :tag_id], :unique => true
     # reserve first 10000 ID
@@ -229,7 +229,7 @@ class Resumes < ActiveRecord::Migration
       
       t.column :student_skill_id, :integer
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :resume_skills, [:resume_id, :student_skill_id], :unique => true
     # reserve first 10000 ID
@@ -243,6 +243,7 @@ class Resumes < ActiveRecord::Migration
       t.column :level, :string, :limit => 15
       
       t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :resume_list_skills, :resume_id
     # reserve first 10000 ID
