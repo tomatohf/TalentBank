@@ -61,8 +61,12 @@ class Resume < ActiveRecord::Base
     
     has exp_taggers.tag_id, :as => :exp_tag_id
     
-    # TODO - how to index student skills for searching ...
-    # has skills.student_skill.skill_id, :as => :skill_id
+    has skills.student_skill.skill_id, :as => :skill_id # just used to include SQL fragment: join student_skills
+    has(
+      "GROUP_CONCAT(DISTINCT CONCAT(student_skills.skill_id, student_skills.value) SEPARATOR ',')",
+      :as => :skill_values,
+      :type => :multi
+    )
     
     
     # the index:delta operation will run every 60 minutes (1 hour),
@@ -100,8 +104,22 @@ class Resume < ActiveRecord::Base
   Search_Match_Mode = :extended
   Resume_Page_Size = 20
   
-  def self.do_search(query, school_id, page = 1, query_tags = nil, query_skills = nil)
+  def self.do_search(query, school_id = nil, page = 1, query_tags = nil, query_skills = nil)
     query_tags, query_skills = query.tags_and_skills unless query_tags && query_skills
+    valid_skill_values = query_skills.collect do |skill_id, skill_value|
+      Skill.find(skill_id)[:data].collect {|d| d[:value] }.select {|v| v >= skill_value }.collect do |v|
+        "#{skill_id}#{v}".to_i
+      end
+    end
+    
+    filters = {
+      :online => true
+    }
+    filters.merge!(:school_id => school_id) unless school_id.nil?
+    [:college_id, :major_id, :edu_level_id, :graduation_year, :domain_id].each do |filter_key|
+      filter_value = query.send(filter_key)
+      filters.merge!(filter_key => filter_value) unless filter_value.nil?
+    end
     
     Resume.search(
       query.keyword,
@@ -112,19 +130,10 @@ class Resume < ActiveRecord::Base
       :field_weights => {
         
       },
-      :with => {
-        :online => true,
-        
-        :school_id => school_id,
-        :college_id => query.college_id,
-        :major_id => query.major_id,
-        :edu_level_id => query.edu_level_id,
-        :graduation_year => query.graduation_year,
-        
-        :domain_id => query.domain_id
-      },
+      :with => filters,
       :with_all => {
-        :exp_tag_id => query_tags
+        :exp_tag_id => query_tags,
+        :skill_values => valid_skill_values
       },
       :include => [
         

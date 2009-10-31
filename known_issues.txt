@@ -1,3 +1,9 @@
+优化生成 skill_values 的算法
+
+设置简历搜索的权重
+
+setup delta index on server
+
 简历对比功能
 
 企业注册后 给学校管理员老师发通知, 通知对企业进行审核
