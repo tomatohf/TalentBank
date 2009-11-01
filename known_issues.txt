@@ -1,5 +1,8 @@
 setup delta index on server
 
+status/422 显示空白页面 ...
+	- 自定义 422 页面为需要重新登录 ?
+
 session 过期后的 invalidauthenticitytoken 问题
 
 简历对比功能
