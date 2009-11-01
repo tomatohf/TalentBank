@@ -1,8 +1,6 @@
-优化生成 skill_values 的算法
-
-设置简历搜索的权重
-
 setup delta index on server
+
+session 过期后的 invalidauthenticitytoken 问题
 
 简历对比功能
 

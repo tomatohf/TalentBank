@@ -121,15 +121,13 @@ class Resume < ActiveRecord::Base
       filters.merge!(filter_key => filter_value) unless filter_value.nil?
     end
     
-    Resume.search(
+    self.search(
       query.keyword,
       :page => page,
       :per_page => Resume_Page_Size,
       :match_mode => Search_Match_Mode,
       :order => "@relevance DESC, updated_at DESC",
-      :field_weights => {
-        
-      },
+      :field_weights => self.weights,
       :with => filters,
       :with_all => {
         :exp_tag_id => query_tags,
@@ -139,6 +137,41 @@ class Resume < ActiveRecord::Base
         
       ]
     )
+  end
+  
+  def self.weights
+    {
+      # default weight is 1
+      :student_name => 2,
+
+      # :edu_exp_period => 1,
+      :edu_exp_university => 4,
+      :edu_exp_college => 4,
+      :edu_exp_major => 4,
+      :edu_exp_edu_type => 2,
+
+      :job_intention => 8,
+      :award => 6,
+      :hobby => 5,
+
+      :list_section_title => 4,
+      :list_section_content => 5,
+
+      :list_skill_name => 8,
+      :list_skill_level => 2,
+
+      :exp_section_title => 5,
+
+      # :student_exp_period => 1,
+      :student_exp_title => 10,
+      :student_exp_sub_title => 10,
+      :student_exp_content => 10,
+
+      # :resume_exp_period => 1,
+      :resume_exp_title => 10,
+      :resume_exp_sub_title => 10,
+      :resume_exp_content => 10
+    }
   end
   
 end
