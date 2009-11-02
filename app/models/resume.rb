@@ -69,9 +69,16 @@ class Resume < ActiveRecord::Base
     )
     
     
-    # the index:delta operation will run every 60 minutes (1 hour),
-    # which reserves 15 minutes because the indexing will take some time.
-    set_property :delta => :datetime, :delta_column => :updated_at, :threshold => 75.minutes
+    # the :hour and :minute used here must be consistent with the values in crontab
+    # the :rate should be a little larger than the crontab rate,
+    # for the delta index itself would take some time
+    set_property(
+      :delta => DailyDelta,
+      :column => :updated_at,
+      # :rate => 70.minutes,
+      :hour => 4,
+      :batch => 100
+    )
     
   end
   

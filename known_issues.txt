@@ -1,9 +1,13 @@
 setup delta index on server
 
+resume related update should also modify de updated_at field of resume model
+
 status/422 显示空白页面 ...
 	- 自定义 422 页面为需要重新登录 ?
 
 session 过期后的 invalidauthenticitytoken 问题
+
+复制简历功能
 
 简历对比功能
 
