@@ -240,6 +240,32 @@ a.none:hover {
 }
 
 
+.student_menu {
+	margin-bottom: 25px;
+}
+
+.student_sub_menu {
+	width: 178px;
+	padding: 8px 0px;
+	border-bottom: 1px dashed #CCCCCC;
+}
+
+.student_sub_menu a {
+	display: block;
+	text-decoration: none;
+	color: #888888;
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 1.2;
+	padding-left: 36px;
+}
+
+.student_sub_menu a .english {
+	font-size: 10px;
+	font-weight: normal;
+}
+
+
 .horizontal_nav {
 	word-spacing: 15px;
 }
