@@ -70,13 +70,18 @@ class Resume < ActiveRecord::Base
     
     
     # the :hour and :minute used here must be consistent with the values in crontab
+    # while the :hour and :minute should be a little early than 
+    # the overall index time in crontab
+    # to ensure that the correct date is generated in sphinx conf file
+    # 
     # the :rate should be a little larger than the crontab rate,
     # for the delta index itself would take some time
     set_property(
       :delta => DailyDelta,
       :column => :updated_at,
       # :rate => 70.minutes,
-      :hour => 4,
+      :hour => 3,
+      :minute => 58,
       :batch => 100
     )
     

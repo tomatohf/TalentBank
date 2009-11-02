@@ -1,5 +1,3 @@
-setup delta index on server
-
 resume related update should also modify de updated_at field of resume model
 
 status/422 显示空白页面 ...

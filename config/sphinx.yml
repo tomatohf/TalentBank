@@ -1,5 +1,5 @@
 development:
-#  port: 3312
+  port: 3313
   morphology: stem_en
   mem_limit: 512M
   charset_type: zh_cn.utf-8
@@ -11,7 +11,7 @@ development:
   pid_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.deve.pid
 
 test:
-#  port: 3312
+  port: 3313
   morphology: stem_en
   mem_limit: 512M
   charset_type: zh_cn.utf-8
@@ -23,7 +23,7 @@ test:
   pid_file: /Users/tomato/Dev/git/projects/TalentBank/log/searchd.test.pid
 
 production:
-#  port: 3312
+  port: 3313
   morphology: stem_en
   mem_limit: 1024M
   charset_type: zh_cn.utf-8

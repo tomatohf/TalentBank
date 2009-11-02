@@ -70,10 +70,9 @@ class DailyDelta < ThinkingSphinx::Deltas::DefaultDelta
   
   
   
-  # the overall index should be a little late than the specified hour&minute values
   def last_overall_index_at
     date = DateTime.now
-    date = 1.day.ago unless date.hour > @hour
+    date = 1.day.ago unless "#{date.hour}#{date.min}".to_i > "#{@hour}#{@minute}".to_i
     
     Time.local(date.year, date.month, date.mday, @hour, @minute)
   end
