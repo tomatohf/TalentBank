@@ -1,10 +1,10 @@
-创建sphinx索引时的数据库索引问题
-
 resume related update should also modify de updated_at field of resume model
 
 复制简历功能
 
 简历对比功能
+
+导出简历为 PDF
 
 企业注册后 给学校管理员老师发通知, 通知对企业进行审核
 

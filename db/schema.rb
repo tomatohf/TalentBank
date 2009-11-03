@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "corp_queries", :force => true do |t|
     t.integer  "corporation_id"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   add_index "resumes", ["student_id", "domain_id"], :name => "index_resumes_on_student_id_and_domain_id", :unique => true
+  add_index "resumes", ["updated_at"], :name => "index_resumes_on_updated_at"
 
   create_table "schools", :force => true do |t|
     t.string   "abbr",       :limit => 15
