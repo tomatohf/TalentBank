@@ -17,7 +17,7 @@ class CorpSavedQueriesController < ApplicationController
   def create
     @saved_query = CorpSavedQuery.new(
       :corporation_id => @corporation.id,
-      :conditions => CorporationsController.helpers.collect_query_conditions(params, :keyword_input),
+      :conditions => CorpResumesController.helpers.collect_query_conditions(params, :keyword_input),
       :name => params[:name] && params[:name].strip
     )
 
@@ -88,11 +88,6 @@ class CorpSavedQueriesController < ApplicationController
   def check_saved_query
     @saved_query = CorpSavedQuery.find(params[:id])
     jump_to("/errors/forbidden") unless @saved_query.corporation_id == @corporation.id
-  end
-  
-  
-  def check_corporation_allow
-    jump_to("/errors/unauthorized") unless @corporation.allow
   end
   
 end

@@ -66,6 +66,11 @@ class ApplicationController < ActionController::Base
     check_login { jump_to("/index/corporation") unless session[:account_type] == :corporations }
   end
   
+  
+  def check_corporation_allow
+    jump_to("/errors/unauthorized") unless @corporation.allow
+  end
+  
   # ====================
   
   

@@ -53,7 +53,7 @@ function show_tags(domain_id) {
 
 function add_skill(skill_id) {
 	$.post(
-		"/corporations/" + CORPORATION_ID + "/add_skill",
+		"/corporations/" + CORPORATION_ID + "/corp_resumes/add_skill",
 		{
 			skill_id: skill_id
 		},

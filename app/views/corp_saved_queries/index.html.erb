@@ -13,7 +13,7 @@
 <div>
 	<% form_tag "", :method => :delete, :id => "del_saved_query_form" do %>
 	<% end %>
-	<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post, :id => "exe_saved_query_form" do %>
+	<% form_tag "/corporations/#{@corporation.id}/corp_resumes/create_query", :method => :post, :id => "exe_saved_query_form" do %>
 		<input type="hidden" id="saved_query_conditions" name="q" />
 		<input type="hidden" id="saved_query_keyword" name="keyword_input" />
 	<% end %>

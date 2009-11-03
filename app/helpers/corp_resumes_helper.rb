@@ -1,4 +1,4 @@
-module CorporationsHelper
+module CorpResumesHelper
 
   def collect_query_conditions(params, keyword_key)
     college_id = params[:college]

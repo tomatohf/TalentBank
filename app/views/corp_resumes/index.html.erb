@@ -25,7 +25,7 @@
 	</p>
 <% end %>
 
-<% form_tag "/corporations/#{@corporation.id}/create_query", :method => :post, :id => "query_form" do %>
+<% form_tag "/corporations/#{@corporation.id}/corp_resumes/create_query", :method => :post, :id => "query_form" do %>
 	<div>
 		学校:
 		<span>
@@ -204,4 +204,4 @@
 </script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 <script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
-<script src="/javascripts/corporations/query.js" type="text/javascript" language="JavaScript"></script>
+<script src="/javascripts/corp_resumes/query.js" type="text/javascript" language="JavaScript"></script>

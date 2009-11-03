@@ -97,13 +97,14 @@ ActionController::Routing::Routes.draw do |map|
     :update_password => :post,
     
     :edit_profile => :get,
-    :update_profile => :post,
-    
-    :resumes => [:get, :post],
-    :add_skill => :post,
-    :create_query => :post
+    :update_profile => :post
   } do |corporations|
     corporations.resources :corp_saved_queries
+    
+    corporations.resources :corp_resumes, :collection => {
+      :add_skill => :post,
+      :create_query => :post
+    }
   end
   
   
