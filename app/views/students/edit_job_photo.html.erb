@@ -24,7 +24,7 @@
 
 <div>
 	<% unless no_photo %>
-		<div class="float_l" style="margin-right: 50px;">
+		<div>
 			<div>
 				<img src="<%= @photo.image.url(:normal) %>?token=<%= token %>" border="0" />
 			</div>
@@ -52,8 +52,6 @@
 			</div>
 		<% end %>
 	</div>
-	
-	<div class="clear_l"></div>
 </div>
 
 <% unless no_photo %>
