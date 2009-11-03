@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
   
   before_filter :prepare_school
   
+  rescue_from(ActionController::InvalidAuthenticityToken) { |e|
+    save_original_address
+    jump_to("/")
+  }
+  
   
   
   private
@@ -109,6 +114,7 @@ class ApplicationController < ActionController::Base
     session[:original_url] = nil
     
     if original_method != :get && original_params
+      original_params[:authenticity_token] = form_authenticity_token
       redirect_non_get(original_params)
     else
       jump_to(original_url || "/")

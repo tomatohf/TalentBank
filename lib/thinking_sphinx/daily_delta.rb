@@ -71,10 +71,10 @@ class DailyDelta < ThinkingSphinx::Deltas::DefaultDelta
   
   
   def last_overall_index_at
-    date = DateTime.now
-    date = 1.day.ago unless "#{date.hour}#{date.min}".to_i > "#{@hour}#{@minute}".to_i
+    now = Time.now
+    date = Time.local(now.year, now.month, now.mday, @hour, @minute)
     
-    Time.local(date.year, date.month, date.mday, @hour, @minute)
+    (now < date) ? 1.day.ago(date) : date
   end
   
   def last_index_at
