@@ -107,5 +107,16 @@ module Utils
       
     end
   end
+  
+  
+  module NotDeletable
+    def self.included(including_model)
+      
+      including_model.before_destroy { |record|
+        raise "Can NOT destroy #{record.class.name} model !"
+      }
+      
+    end
+  end
 
 end

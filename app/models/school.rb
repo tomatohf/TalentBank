@@ -12,12 +12,10 @@ class School < ActiveRecord::Base
   
   
   
+  include Utils::NotDeletable
+  
   after_save { |school|
     self.set_school_info_cache(school.abbr, school)
-  }
-  
-  after_destroy { |school|
-    self.clear_school_info_cache(school.abbr)
   }
   
   

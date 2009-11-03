@@ -28,6 +28,13 @@ class Student < ActiveRecord::Base
   named_scope :active, :conditions => { :active => true }
   
   
+  include Utils::NotDeletable
+  
+  after_save { |student|
+    student.renew_resume_updated_at(student.updated_at)
+  }
+  
+  
   
   def self.authenticate(abbr, number, pwd)
     student = self.get_from_number(abbr, number)
@@ -37,6 +44,20 @@ class Student < ActiveRecord::Base
   
   def self.get_from_number(abbr, number)
     self.find(:first, :conditions => ["school_id = ? and number = ?", School.get_school_info(abbr)[0], number])
+  end
+  
+  
+  def renew_resume_updated_at(time)
+    self.class.renew_resume_updated_at(self.id, time)
+  end
+  
+  def self.renew_resume_updated_at(student_id, time)
+    Resume.find(
+      :all,
+      :conditions => ["student_id = ?", student_id]
+    ).each do |resume|
+      resume.renew_updated_at(time)
+    end
   end
   
 end

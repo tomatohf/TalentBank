@@ -78,6 +78,8 @@ class ResumesController < ApplicationController
     @job_intention.content = params[:job_intention] && params[:job_intention].strip
     
     if @job_intention.save
+      @resume.renew_updated_at(@job_intention.updated_at)
+      
       flash.now[:success_msg] = "修改成功, 求职意向已更新"
     else
       flash.now[:error_msg] = "修改失败, 再试一次吧"
@@ -96,7 +98,9 @@ class ResumesController < ApplicationController
         :student_skill_id => student_skill.id
       )
       
-      resume_skill.save
+      if resume_skill.save
+        @resume.renew_updated_at(resume_skill.updated_at)
+      end
     end
     
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
@@ -105,7 +109,11 @@ class ResumesController < ApplicationController
   def exclude_skill
     resume_skill = ResumeSkill.find(params[:resume_skill_id])
     
-    resume_skill.destroy if resume_skill.resume_id == @resume.id
+    if resume_skill.resume_id == @resume.id
+      resume_skill.destroy
+      
+      @resume.renew_updated_at(Time.now)
+    end
     
     jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
   end
@@ -121,6 +129,8 @@ class ResumesController < ApplicationController
     @hobby.content = params[:hobbies] && params[:hobbies].strip
     
     if @hobby.save
+      @resume.renew_updated_at(@hobby.updated_at)
+      
       flash.now[:success_msg] = "修改成功, 特长和爱好已更新"
     else
       flash.now[:error_msg] = "修改失败, 再试一次吧"
@@ -140,6 +150,8 @@ class ResumesController < ApplicationController
     @award.content = params[:awards] && params[:awards].strip
     
     if @award.save
+      @resume.renew_updated_at(@award.updated_at)
+      
       flash.now[:success_msg] = "修改成功, 荣誉和奖励已更新"
     else
       flash.now[:error_msg] = "修改失败, 再试一次吧"
@@ -176,6 +188,8 @@ class ResumesController < ApplicationController
       tagger = ResumeExpTagger.get_record(@resume.id, tag_id)
       
       if tagger.new_record? && tagger.save
+        @resume.renew_updated_at(tagger.updated_at)
+        
         return render(:partial => "/resume_exps/tagger", :object => tagger)
       end
     
@@ -189,6 +203,9 @@ class ResumesController < ApplicationController
     
     if tagger.resume_id == @resume.id
       tagger.destroy
+      
+      @resume.renew_updated_at(Time.now)
+      
       return render(:layout => false, :text => "true")
     end
     

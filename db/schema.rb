@@ -197,6 +197,7 @@ ActiveRecord::Schema.define(:version => 7) do
   end
 
   add_index "resume_skills", ["resume_id", "student_skill_id"], :name => "index_resume_skills_on_resume_id_and_student_skill_id", :unique => true
+  add_index "resume_skills", ["student_skill_id", "resume_id"], :name => "index_resume_skills_on_student_skill_id_and_resume_id"
 
   create_table "resume_student_exps", :force => true do |t|
     t.integer  "section_id"
@@ -204,6 +205,7 @@ ActiveRecord::Schema.define(:version => 7) do
     t.datetime "updated_at"
   end
 
+  add_index "resume_student_exps", ["exp_id"], :name => "index_resume_student_exps_on_exp_id"
   add_index "resume_student_exps", ["section_id"], :name => "index_resume_student_exps_on_section_id"
 
   create_table "resumes", :force => true do |t|

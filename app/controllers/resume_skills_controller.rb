@@ -47,6 +47,8 @@ class ResumeSkillsController < ApplicationController
     @list_skill.level = params[:level] && params[:level].strip
     
     if @list_skill.save
+      @resume.renew_updated_at(@list_skill.updated_at)
+      
       flash[:success_msg] = "操作成功, 已添加自定义的技能和证书 #{@list_skill.name}"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
     end
@@ -64,6 +66,8 @@ class ResumeSkillsController < ApplicationController
     @list_skill.level = params[:level] && params[:level].strip
     
     if @list_skill.save
+      @resume.renew_updated_at(@list_skill.updated_at)
+      
       flash[:success_msg] = "操作成功, 自定义的技能和证书 #{@list_skill.name} 已更新"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_skills")
     end
@@ -74,6 +78,8 @@ class ResumeSkillsController < ApplicationController
   
   def destroy
     @list_skill.destroy
+    
+    @resume.renew_updated_at(Time.now)
     
     flash[:success_msg] = "操作成功, 已删除自定义的技能和证书 #{@list_skill.name}"
   

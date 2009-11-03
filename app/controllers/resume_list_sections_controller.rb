@@ -30,6 +30,8 @@ class ResumeListSectionsController < ApplicationController
     @section.content = params[:content] && params[:content].strip
     
     if @section.save
+      @resume.renew_updated_at(@section.updated_at)
+      
       flash[:success_msg] = "操作成功, 已添加附加信息 #{@section.title}"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
     end
@@ -47,6 +49,8 @@ class ResumeListSectionsController < ApplicationController
     @section.content = params[:content] && params[:content].strip
     
     if @section.save
+      @resume.renew_updated_at(@section.updated_at)
+      
       flash[:success_msg] = "操作成功, 附加信息 #{@section.title} 已更新"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
     end
@@ -57,6 +61,8 @@ class ResumeListSectionsController < ApplicationController
   
   def destroy
     @section.destroy
+    
+    @resume.renew_updated_at(Time.now)
     
     flash[:success_msg] = "操作成功, 已删除附加信息 #{@section.title}"
   

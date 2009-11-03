@@ -31,6 +31,9 @@ class ResumeExpsController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         @exp.save!
+        
+        @resume.renew_updated_at(@exp.updated_at)
+        
         @section.add_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
         @section.save!
       end
@@ -56,6 +59,8 @@ class ResumeExpsController < ApplicationController
     @exp.content = params[:content] && params[:content].strip
     
     if @exp.save
+      @resume.renew_updated_at(@exp.updated_at)
+      
       flash[:success_msg] = "操作成功, #{@section.title} 中 #{@exp.period} 的经历已更新"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
     end
@@ -68,6 +73,9 @@ class ResumeExpsController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         @exp.destroy
+        
+        @resume.renew_updated_at(Time.now)
+        
         @section.remove_exp_order(ResumeExpSection::Resume_Exp, @exp.id)
         @section.save!
       end

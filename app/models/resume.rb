@@ -18,6 +18,9 @@ class Resume < ActiveRecord::Base
   has_many :exp_taggers, :class_name => "ResumeExpTagger", :foreign_key => "resume_id", :dependent => :destroy
   
   
+  Overall_Index_Hour = 3
+  Overall_Index_Minute = 58
+  
   define_index do
     
     indexes student.name, :as => :student_name
@@ -80,8 +83,8 @@ class Resume < ActiveRecord::Base
       :delta => DailyDelta,
       :column => :updated_at,
       # :rate => 70.minutes,
-      :hour => 3,
-      :minute => 58,
+      :hour => Overall_Index_Hour,
+      :minute => Overall_Index_Minute,
       :batch => 100
     )
     
@@ -111,6 +114,18 @@ class Resume < ActiveRecord::Base
     self.preload_associations(resumes, includes)
   end
   
+  
+  def renew_updated_at(time)
+    now = Time.now
+    date = Time.local(now.year, now.month, now.mday, Overall_Index_Hour, Overall_Index_Minute)
+    
+    last_index_at = (now < date) ? 1.day.ago(date) : date
+    
+    if (last_index_at >= self.updated_at) && (time > last_index_at)
+      self.updated_at = time
+      self.save
+    end
+  end
   
   
   Search_Match_Mode = :extended

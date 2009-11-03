@@ -1,4 +1,4 @@
-resume related update should also modify de updated_at field of resume model
+测试简历删除的情况, 搜索是否返回包含 nil 的数组
 
 复制简历功能
 
@@ -21,8 +21,6 @@ resume related update should also modify de updated_at field of resume model
 Database index
 set up 备份的脚本
 
-protect key data from being destroy
-
 
 
 ========== Function Modules ==========
@@ -43,8 +41,6 @@ Denpendencies besides CareerCommunity's:
 - 企业用户注册验证模块
 	* 允许企业注册成为人才库企业会员
 	* 支持学校对企业注册信息进行认证审核
-- 人才数据审核模块 (不需要时可关闭)
-	* 支持学校对学生提交的个人信息进行审核
 - 动态多属性检索模块
 	* 支持企业对人才库进行个性化检索
 	* 支持学校对注册企业信息进行检索
@@ -67,7 +63,3 @@ Denpendencies besides CareerCommunity's:
 - 信息发布模块
 	* 支持发布招聘信息
 	* 支持发布就业指导资料
-- 人才库部署、界面与入口
-	* 人才库部署在乙方服务器上
-	* 界面风格与甲方官方网站保持一致
-	* 人才库入口出现在甲方官方网站或甲方书面授权指定的其他网站
