@@ -1,0 +1,28 @@
+<%
+	student = @resume.student
+	student_name = h(student.name)
+	
+	talent_page_title("查看 #{student_name} 的简历")
+%>
+
+
+<h2>查看 <%= student_name %> 的简历</h2>
+
+
+<% if @available %>
+
+	<div>
+		<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => true} %>
+	</div>
+	
+<% else %>
+	
+	<div class="warn_msg">
+		<div style="margin-left: 15px;">
+			<%= student_name %> 的简历目前处于不可用状态
+			<br />
+			The resume is now unavailable
+		</div>
+	</div>
+	
+<% end %>

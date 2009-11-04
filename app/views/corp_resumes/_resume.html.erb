@@ -1,7 +1,55 @@
 <%
+	domain = ResumeDomain.find(resume.domain_id)
+	
 	student = resume.student
+	student_name = h(student.name)
+	college = College.find(@school.abbr, student.college_id)
+	major = Major.find(college[:id], student.major_id)
+	edu_level = EduLevel.find(student.edu_level_id)
+	graduation_year = student.graduation_year
+	
+	photo = student.job_photo
+	photo_w = JobPhoto::Normal_W/2
+	photo_h = JobPhoto::Normal_H/2
 %>
 
-<div>
-	<%= h(student.name) %>
+<div class="corp_resume">
+	
+	<table border="0" cellspacing="0" cellpadding="2" class="main_part_w">
+		<tr>
+			<td align="center" valign="top" style="width: <%= photo_w + 6 %>px;">
+				<div style="width: <%= photo_w %>px; height: <%= photo_h %>px;">
+					<% if photo %>
+						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/corp_resumes/<%= resume.id %>">
+							<img class="job_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" width="<%= photo_w %>" height="<%= photo_h %>" /></a>
+					<% end %>
+				</div>
+			</td>
+			
+			<td valign="top">
+				<div style="margin-left: 15px;">
+					<div style="font-size: 14px;">
+						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/corp_resumes/<%= resume.id %>" class="none">
+							<%= student_name %></a>
+					</div>
+					
+					<div>
+						<%= graduation_year %>
+						年
+						<%= edu_level[:name] %>
+						毕业于
+						<%= @school.name %>
+						»
+						<%= college[:name] %>
+						»
+						<%= major[:name] %>
+						,
+						求职方向:
+						<%= domain[:name] %>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	
 </div>

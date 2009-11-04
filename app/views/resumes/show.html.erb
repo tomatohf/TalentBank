@@ -1,20 +1,12 @@
-<% domain = ResumeDomain.find(@resume.domain_id)[:name] %>
-<% talent_page_title("预览 #{domain} 的简历") %>
+<%
+	domain = ResumeDomain.find(@resume.domain_id)[:name]
+	
+	talent_page_title("预览 #{domain} 的简历")
+%>
 
 
 <h2>预览 <%= domain %> 的简历</h2>
 
 <div>
-	<%=
-		render(
-			:partial => "resume",
-			:locals => {
-				:resume => @resume,
-				:student => @student,
-				:profile => @profile,
-				:photo => @photo,
-				:edus => @edus
-			}
-		)
-	%>
+	<%= render :partial => "resume", :object => @resume, :locals => {:protective => false} %>
 </div>

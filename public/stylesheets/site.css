@@ -207,7 +207,7 @@ a.none:hover {
 }
 
 
-.error_msg, .success_msg, .warning_msg {
+.error_msg, .success_msg, .warn_msg {
 	background-repeat: no-repeat;
 	background-position: 10px 5px;
 	background-color: #FFFDC0;
@@ -229,13 +229,19 @@ a.none:hover {
 	color: green;
 }
 
+.warn_msg {
+	background-image: url(/images/warn_icon.gif);
+	border: 1px dashed #DDDDDD;
+	color: #333333;
+}
+
 
 .info, .info_with_icon {
-	color: #B3ABA2;
+	color: #AAAAAA;
 }
 
 .info_with_icon {
-	background: transparent url(/images/students/info_small.gif) no-repeat scroll left center;
+	background: transparent url(/images/info_icon.gif) no-repeat scroll left center;
 	padding-left: 20px;
 }
 
@@ -254,14 +260,14 @@ a.none:hover {
 	display: block;
 	text-decoration: none;
 	color: #888888;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 	line-height: 1.2;
 	padding-left: 36px;
 }
 
 .student_sub_menu a .english {
-	font-size: 10px;
+	font-size: 9px;
 	font-weight: normal;
 }
 
@@ -418,4 +424,16 @@ a.unselected_skill:hover {
 
 .saved_query_conditions span {
 	margin-right: 15px;
+}
+
+
+.corp_resume {
+	margin: 20px 0px 0px 0px;
+	padding: 0px 0px 25px 0px;
+	border-bottom: 1px dashed #CDCDCD;
+}
+
+.corp_resume .job_photo {
+	border: 1px solid #999999;
+	padding: 1px;
 }

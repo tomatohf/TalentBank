@@ -161,7 +161,7 @@ class Resume < ActiveRecord::Base
         :skill_values => valid_skill_values
       },
       :include => [
-        
+        {:student => :job_photo}
       ]
     )
   end
@@ -199,6 +199,11 @@ class Resume < ActiveRecord::Base
       :resume_exp_sub_title => 10,
       :resume_exp_content => 10
     }
+  end
+  
+  
+  def available?(corp_id)
+    self.online
   end
   
 end

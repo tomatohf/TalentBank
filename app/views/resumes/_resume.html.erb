@@ -1,5 +1,12 @@
 <%
+	student = resume.student
+	student_name = h(student.name)
+	
+	photo = JobPhoto.get_record(student.id)
 	no_photo = photo.new_record?
+	
+	protective &&= true
+	profile = StudentProfile.get_record(student.id) unless protective
 %>
 
 
@@ -7,8 +14,6 @@
 
 <div class="resume">
 	<div>
-		<% student_name = h(student.name) %>
-		
 		<% unless no_photo %>
 			<div class="float_r">
 				<img class="resume_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
@@ -18,46 +23,53 @@
 		
 		<div<%= %Q! class="resume_info_container"! unless no_photo %>>
 			<h1 class="resume_name"><%= student_name %></h1>
-			<div class="resume_info_row">
-				<span class="resume_info">
-					电话:
-					<%= h(profile.phone) %>
-				</span>
-				
-				<span>
-					电子邮件:
-					<%= h(profile.email) %>
-				</span>
-			</div>
-			<div class="resume_info_row">
-				<% unless profile.gender.nil? %>
+			
+			<% unless protective %>
+				<div class="resume_info_row">
 					<span class="resume_info">
-						性别:
-						<%= profile.gender ? "男" : "女" %>
+						电话:
+						<%= h(profile.phone) %>
 					</span>
-				<% end %>
 				
-				<% unless profile.political_status_id.nil? %>
-					<span class="resume_info">
-						政治面貌:
-						<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
-					</span>
-				<% end %>
-				
-				<% unless profile.address.blank? %>
-					<span class="resume_info">
-						地址:
-						<%= h(profile.address) %>
-					</span>
-				<% end %>
-				
-				<% unless profile.zip.blank? %>
 					<span>
-						邮编:
-						<%= h(profile.zip) %>
+						电子邮件:
+						<%= h(profile.email) %>
 					</span>
-				<% end %>
-			</div>
+				</div>
+				<div class="resume_info_row">
+					<% unless profile.gender.nil? %>
+						<span class="resume_info">
+							性别:
+							<%= profile.gender ? "男" : "女" %>
+						</span>
+					<% end %>
+				
+					<% unless profile.political_status_id.nil? %>
+						<span class="resume_info">
+							政治面貌:
+							<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
+						</span>
+					<% end %>
+				
+					<% unless profile.address.blank? %>
+						<span class="resume_info">
+							地址:
+							<%= h(profile.address) %>
+						</span>
+					<% end %>
+				
+					<% unless profile.zip.blank? %>
+						<span>
+							邮编:
+							<%= h(profile.zip) %>
+						</span>
+					<% end %>
+				</div>
+			<% else %>
+				<div class="info_with_icon" style="margin-left: 225px;">
+					个人隐私信息已隐藏
+				</div>
+			<% end %>
 			
 			
 			<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
@@ -80,6 +92,19 @@
 	</div>
 	
 	
+	<%
+		edus = EduExp.find(:all, :conditions => ["student_id = ?", student.id])
+		
+		Resume.load_contents(
+			resume,
+			:exp_sections => [
+				{
+					:resume_student_exps => :student_exp
+				},
+				:exps
+			]
+		)
+	%>
 	<% if edus.size > 0 %>
 		<div>
 			<div class="resume_section_title">

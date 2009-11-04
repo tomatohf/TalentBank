@@ -63,6 +63,16 @@ class CorpResumesController < ApplicationController
   end
   
   
+  def show
+    @resume = Resume.find(params[:id])
+    
+    @available = @resume.available?(@corporation.id)
+    if @available
+      
+    end
+  end
+  
+  
   private
   
   def check_corporation
