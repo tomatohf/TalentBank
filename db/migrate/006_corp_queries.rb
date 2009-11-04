@@ -18,7 +18,7 @@ class CorpQueries < ActiveRecord::Migration
       
       t.column :from_saved, :boolean
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO corp_queries (id) VALUES (10000)")
@@ -28,7 +28,7 @@ class CorpQueries < ActiveRecord::Migration
       t.column :query_id, :integer
       t.column :tag_id, :integer
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :corp_query_exp_tags, [:tag_id, :query_id], :unique => true
     # reserve first 10000 ID
@@ -42,7 +42,7 @@ class CorpQueries < ActiveRecord::Migration
       
       t.column :value, :integer, :limit => 2
       
-      t.column :created_at, :datetime
+      t.column :updated_at, :datetime
     end
     add_index :corp_query_skills, [:skill_id, :query_id], :unique => true
     # reserve first 10000 ID

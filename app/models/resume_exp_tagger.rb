@@ -6,7 +6,6 @@ class ResumeExpTagger < ActiveRecord::Base
   validates_presence_of :resume_id, :tag_id
   
   
-  
   Belongs_To_Keys = [:resume_id, :tag_id]
   include Utils::UniqueBelongs
   

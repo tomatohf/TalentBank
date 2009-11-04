@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 8) do
 
   create_table "corp_queries", :force => true do |t|
     t.integer  "corporation_id"
@@ -21,13 +21,13 @@ ActiveRecord::Schema.define(:version => 7) do
     t.string   "keyword"
     t.string   "other_conditions"
     t.boolean  "from_saved"
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "corp_query_exp_tags", :force => true do |t|
     t.integer  "query_id"
     t.integer  "tag_id"
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "corp_query_exp_tags", ["tag_id", "query_id"], :name => "index_corp_query_exp_tags_on_tag_id_and_query_id", :unique => true
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 7) do
     t.integer  "query_id"
     t.integer  "skill_id"
     t.integer  "value",      :limit => 2
-    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "corp_query_skills", ["skill_id", "query_id"], :name => "index_corp_query_skills_on_skill_id_and_query_id", :unique => true
@@ -50,6 +50,20 @@ ActiveRecord::Schema.define(:version => 7) do
   end
 
   add_index "corp_saved_queries", ["corporation_id", "created_at"], :name => "index_corp_saved_queries_on_corporation_id_and_created_at"
+
+  create_table "corp_saved_resumes", :force => true do |t|
+    t.integer  "corporation_id"
+    t.integer  "resume_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "corp_saved_resumes", ["corporation_id", "resume_id"], :name => "index_corp_saved_resumes_on_corporation_id_and_resume_id", :unique => true
+
+  create_table "corp_viewed_resumes", :force => true do |t|
+    t.integer  "corporation_id"
+    t.integer  "resume_id"
+    t.datetime "updated_at"
+  end
 
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"

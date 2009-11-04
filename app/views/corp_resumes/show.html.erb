@@ -9,14 +9,8 @@
 <h2>查看 <%= student_name %> 的简历</h2>
 
 
-<% if @available %>
+<% unless @available %>
 
-	<div>
-		<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => true} %>
-	</div>
-	
-<% else %>
-	
 	<div class="warn_msg">
 		<div style="margin-left: 15px;">
 			<%= student_name %> 的简历目前处于不可用状态
@@ -24,5 +18,31 @@
 			The resume is now unavailable
 		</div>
 	</div>
+	
+<% else %>
+	
+	<div class="align_r">
+		<% unless @saved_resume.new_record? %>
+			<a href="#" id="save_resume_link">
+				收藏这份简历</a>
+		<% else %>
+			已收藏
+			(删除)
+		<% end %>
+	</div>
+	
+	<div>
+		<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => true} %>
+	</div>
+	
+	
+	<script src="/lib/jquery/jquery-1.3.2.min.js" type="text/javascript" language="JavaScript"></script>
+	<script language="JavaScript">
+		$(document).ready(
+			function() {
+				
+			}
+		);
+	</script>
 	
 <% end %>

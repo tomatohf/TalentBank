@@ -103,7 +103,11 @@ ActionController::Routing::Routes.draw do |map|
     
     corporations.resources :corp_resumes, :collection => {
       :add_skill => :post,
-      :create_query => :post
+      :create_query => :post,
+      
+      :saved => :get,
+      :create_saved => :post,
+      :destroy_saved => :post
     }
   end
   

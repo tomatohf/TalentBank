@@ -5,7 +5,7 @@ class CorpResumesController < ApplicationController
   
   before_filter :check_login_for_corporation
   
-  before_filter :check_active, :only => [:add_skill, :create_query]
+  before_filter :check_active, :only => [:add_skill, :create_query, :create_saved, :destroy_saved]
   
   before_filter :check_corporation
   
@@ -48,7 +48,7 @@ class CorpResumesController < ApplicationController
     end
     
     
-    # ========== log the query to db ==========
+    # ========== record the query to db ==========
     query = CorpQuery.parse_from_conditions(conditions)
     query.corporation_id = @corporation.id
     query.from_saved = from_saved
@@ -68,8 +68,25 @@ class CorpResumesController < ApplicationController
     
     @available = @resume.available?(@corporation.id)
     if @available
+      # ========== record the view to db ==========
+      CorpViewedResume.record(@corporation.id, @resume.id)
+      # ========== end ==========
       
+      @saved_resume = CorpSavedResume.get_record(@corporation.id, @resume.id)
     end
+  end
+  
+  
+  def saved
+    
+  end
+  
+  def create_saved
+    
+  end
+  
+  def destroy_saved
+    
   end
   
   
