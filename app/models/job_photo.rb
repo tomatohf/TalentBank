@@ -21,8 +21,8 @@ class JobPhoto < ActiveRecord::Base
         :geometry => "#{Normal_W}x#{Normal_H}#"
       }
     },
-    :path => ":rails_root/public/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:id/:style_:id.:extension",
-    :url => "/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:id/:style_:id.:extension",
+    :path => ":rails_root/public/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
+    :url => "/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
     :storage => :filesystem,
     :whiny_thumbnails => false # to avoid displaying internal errors
   )

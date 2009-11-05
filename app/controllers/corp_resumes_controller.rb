@@ -5,7 +5,7 @@ class CorpResumesController < ApplicationController
   
   before_filter :check_login_for_corporation
   
-  before_filter :check_active, :only => [:add_skill, :create_query, :create_saved, :destroy_saved]
+  before_filter :check_active, :only => [:add_skill, :create_query]
   
   before_filter :check_corporation
   
@@ -74,19 +74,6 @@ class CorpResumesController < ApplicationController
       
       @saved_resume = CorpSavedResume.get_record(@corporation.id, @resume.id)
     end
-  end
-  
-  
-  def saved
-    
-  end
-  
-  def create_saved
-    
-  end
-  
-  def destroy_saved
-    
   end
   
   
