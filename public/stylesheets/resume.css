@@ -1,9 +1,12 @@
-.resume {
+.resume_wrap {
 	width: 700px;
+	margin-left: 15px;
+}
+
+.resume {
 	line-height: 1.5;
 	font-size: 13px;
 	border: 1px dashed #EAEAEA;
-	margin-left: 15px;
 }
 
 .resume_name {

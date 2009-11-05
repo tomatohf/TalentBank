@@ -1,308 +1,319 @@
-<%
-	student = resume.student
-	student_name = h(student.name)
-	
-	photo = JobPhoto.get_record(student.id)
-	no_photo = photo.new_record?
-	
-	protective &&= true
-	profile = StudentProfile.get_record(student.id) unless protective
-%>
-
-
 <link href="/stylesheets/resume.css" rel="stylesheet" type="text/css" />
 
-<div class="resume">
+<div class="resume_wrap">
 	<div>
-		<% unless no_photo %>
-			<div class="float_r">
-				<img class="resume_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
-			</div>
-		<% end %>
 		
-		
-		<div<%= %Q! class="resume_info_container"! unless no_photo %>>
-			<h1 class="resume_name"><%= student_name %></h1>
-			
-			<% unless protective %>
-				<div class="resume_info_row">
-					<span class="resume_info">
-						电话:
-						<%= h(profile.phone) %>
-					</span>
-				
-					<span>
-						电子邮件:
-						<%= h(profile.email) %>
-					</span>
-				</div>
-				<div class="resume_info_row">
-					<% unless profile.gender.nil? %>
-						<span class="resume_info">
-							性别:
-							<%= profile.gender ? "男" : "女" %>
-						</span>
-					<% end %>
-				
-					<% unless profile.political_status_id.nil? %>
-						<span class="resume_info">
-							政治面貌:
-							<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
-						</span>
-					<% end %>
-				
-					<% unless profile.address.blank? %>
-						<span class="resume_info">
-							地址:
-							<%= h(profile.address) %>
-						</span>
-					<% end %>
-				
-					<% unless profile.zip.blank? %>
-						<span>
-							邮编:
-							<%= h(profile.zip) %>
-						</span>
-					<% end %>
-				</div>
-			<% else %>
-				<div class="info_with_icon" style="margin-left: 225px;">
-					个人隐私信息已隐藏
-				</div>
-			<% end %>
-			
-			
-			<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
-				<div>
-					<div class="resume_section_title">
-						求职意向
-					</div>
-
-					<div class="resume_section">
-						<%= h(resume.job_intention.content) %>
-					</div>
-				</div>
-			<% end %>
-		</div>
-		
-		
-		<% unless no_photo %>
-			<div class="clear_r"></div>
-		<% end %>
 	</div>
 	
 	
-	<%
-		edus = EduExp.find(:all, :conditions => ["student_id = ?", student.id])
-		
-		Resume.load_contents(
-			resume,
-			:exp_sections => [
-				{
-					:resume_student_exps => :student_exp
-				},
-				:exps
-			]
-		)
-	%>
-	<% if edus.size > 0 %>
+	<div class="resume">
 		<div>
-			<div class="resume_section_title">
-				教育经历
-			</div>
-		
-			<div class="resume_section">
-				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-					<% edus.each do |edu| %>
-						<tr>
-							<td class="edu_exp_period">
-								<%= h(edu.period) %>
-							</td>
+			<%
+				student = resume.student
+				student_name = h(student.name)
+
+				photo = JobPhoto.get_record(student.id)
+				no_photo = photo.new_record?
+
+				protective &&= true
+				profile = StudentProfile.get_record(student.id) unless protective
+			%>
+			
+			
+			<% unless no_photo %>
+				<div class="float_r">
+					<img class="resume_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" />
+				</div>
+			<% end %>
 
 
-							<td>
-								<%= h(edu.university) %>
-							</td>
+			<div<%= %Q! class="resume_info_container"! unless no_photo %>>
+				<h1 class="resume_name"><%= student_name %></h1>
+
+				<% unless protective %>
+					<div class="resume_info_row">
+						<span class="resume_info">
+							电话:
+							<%= h(profile.phone) %>
+						</span>
+
+						<span>
+							电子邮件:
+							<%= h(profile.email) %>
+						</span>
+					</div>
+					<div class="resume_info_row">
+						<% unless profile.gender.nil? %>
+							<span class="resume_info">
+								性别:
+								<%= profile.gender ? "男" : "女" %>
+							</span>
+						<% end %>
+
+						<% unless profile.political_status_id.nil? %>
+							<span class="resume_info">
+								政治面貌:
+								<%= PoliticalStatus.find(profile.political_status_id)[:name] %>
+							</span>
+						<% end %>
+
+						<% unless profile.address.blank? %>
+							<span class="resume_info">
+								地址:
+								<%= h(profile.address) %>
+							</span>
+						<% end %>
+
+						<% unless profile.zip.blank? %>
+							<span>
+								邮编:
+								<%= h(profile.zip) %>
+							</span>
+						<% end %>
+					</div>
+				<% else %>
+					<div class="info_with_icon" style="margin-left: 225px;">
+						个人隐私信息已隐藏
+					</div>
+				<% end %>
 
 
-							<td>
-								<%= h(edu.college) %>
-							</td>
+				<% unless resume.job_intention.nil? || resume.job_intention.content.blank? %>
+					<div>
+						<div class="resume_section_title">
+							求职意向
+						</div>
 
-
-							<td>
-								<%= h(edu.major) %>
-							</td>
-
-
-							<td>
-								<%= h(edu.edu_type) %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			</div>
-		</div>
-	<% end %>
-	
-	
-	<% resume.exp_sections.each do |exp_section| %>
-		<%
-			order = exp_section.get_exp_order
-
-			exps = {}
-			exp_section.exps.each do |exp|
-				exps[exp.id] = exp
-			end
-
-			resume_student_exps = {}
-			exp_section.resume_student_exps.each do |resume_student_exp|
-				resume_student_exps[resume_student_exp.id] = resume_student_exp
-			end
-		%>
-		<div>
-			<div class="resume_section_title">
-				<%= h(exp_section.title) %>
-			</div>
-
-			<div class="resume_section">
-				<% order.each do |o| %>
-					<%
-						exp_id = o[1].to_i
-						exp = case o[0].to_i
-							when ResumeExpSection::Student_Exp
-								resume_student_exp = resume_student_exps[exp_id]
-								resume_student_exp && resume_student_exp.student_exp
-							when ResumeExpSection::Resume_Exp
-								exps[exp_id]
-							else
-								nil
-						end
-					%>
-					<% if exp %>
-						<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_exp_section">
-							<tr>
-								<td valign="top" class="resume_exp_period">
-									<%= h(exp.period) %>
-								</td>
-
-								<td valign="top">
-									<div class="float_r resume_exp_sub_title">
-										<%= h(exp.sub_title) %>
-									</div>
-
-									<div class="resume_exp_title">
-										<%= h(exp.title) %>
-									</div>
-
-									<ul>
-										<% Utils.lines(h(exp.content)).each do |line| %>
-											<li><%= line %></li>
-										<% end %>
-									</ul>
-								</td>
-							</tr>
-						</table>
-					<% end %>
+						<div class="resume_section">
+							<%= h(resume.job_intention.content) %>
+						</div>
+					</div>
 				<% end %>
 			</div>
-		</div>
-	<% end %>
-	
-	
-	<%
-		student_skills = StudentSkill.find(
-			:all,
-			:joins => "INNER JOIN resume_skills ON resume_skills.student_skill_id = student_skills.id",
-			:conditions => ["resume_skills.resume_id = ?", resume.id]
-		)
-		resume_list_skills = resume.list_skills
-	%>
-	<% if student_skills.size + resume_list_skills.size > 0 %>
-		<div>
-			<div class="resume_section_title">
-				技能和证书
-			</div>
 
-			<div class="resume_section_narrow">
-				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-					<% student_skills.each do |student_skill| %>
-						<% skill = Skill.find(student_skill.skill_id) %>
-						<tr>
-							<td>
-								<%= skill[:name] %>
-							</td>
-							
-							<td align="right">
-								<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value) %>
-							</td>
-						</tr>
-					<% end %>
-					
-					<% resume_list_skills.each do |resume_list_skill| %>
-						<tr>
-							<td>
-								<%= h(resume_list_skill.name) %>
-							</td>
-							
-							<td align="right">
-								<%= h(resume_list_skill.level) %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			</div>
-		</div>
-	<% end %>
-	
-	
-	<% unless resume.award.nil? || resume.award.content.blank? %>
-		<div>
-			<div class="resume_section_title">
-				荣誉和奖励
-			</div>
 
-			<div class="resume_section_narrow">
-				<ul class="no_bullet">
-					<% Utils.lines(h(resume.award.content)).each do |line| %>
-						<li><%= line %></li>
-					<% end %>
-				</ul>
-			</div>
+			<% unless no_photo %>
+				<div class="clear_r"></div>
+			<% end %>
 		</div>
-	<% end %>
-	
-	
-	<% unless resume.hobby.nil? || resume.hobby.content.blank? %>
-		<div>
-			<div class="resume_section_title">
-				特长和爱好
-			</div>
 
-			<div class="resume_section_narrow">
-				<ul class="no_bullet">
-					<% Utils.lines(h(resume.hobby.content)).each do |line| %>
-						<li><%= line %></li>
-					<% end %>
-				</ul>
-			</div>
-		</div>
-	<% end %>
-	
-	
-	<% resume.list_sections.each do |list_section| %>
-		<div>
-			<div class="resume_section_title">
-				<%= h(list_section.title) %>
-			</div>
 
-			<div class="resume_section_narrow">
-				<ul class="no_bullet">
-					<% Utils.lines(h(list_section.content)).each do |line| %>
-						<li><%= line %></li>
-					<% end %>
-				</ul>
-			</div>
+		<div>
+			<%
+				edus = EduExp.find(:all, :conditions => ["student_id = ?", resume.student_id])
+
+				Resume.load_contents(
+					resume,
+					:exp_sections => [
+						{
+							:resume_student_exps => :student_exp
+						},
+						:exps
+					]
+				)
+			%>
+			
+			
+			<% if edus.size > 0 %>
+				<div>
+					<div class="resume_section_title">
+						教育经历
+					</div>
+
+					<div class="resume_section">
+						<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+							<% edus.each do |edu| %>
+								<tr>
+									<td class="edu_exp_period">
+										<%= h(edu.period) %>
+									</td>
+
+
+									<td>
+										<%= h(edu.university) %>
+									</td>
+
+
+									<td>
+										<%= h(edu.college) %>
+									</td>
+
+
+									<td>
+										<%= h(edu.major) %>
+									</td>
+
+
+									<td>
+										<%= h(edu.edu_type) %>
+									</td>
+								</tr>
+							<% end %>
+						</table>
+					</div>
+				</div>
+			<% end %>
+
+
+			<% resume.exp_sections.each do |exp_section| %>
+				<%
+					order = exp_section.get_exp_order
+
+					exps = {}
+					exp_section.exps.each do |exp|
+						exps[exp.id] = exp
+					end
+
+					resume_student_exps = {}
+					exp_section.resume_student_exps.each do |resume_student_exp|
+						resume_student_exps[resume_student_exp.id] = resume_student_exp
+					end
+				%>
+				<div>
+					<div class="resume_section_title">
+						<%= h(exp_section.title) %>
+					</div>
+
+					<div class="resume_section">
+						<% order.each do |o| %>
+							<%
+								exp_id = o[1].to_i
+								exp = case o[0].to_i
+									when ResumeExpSection::Student_Exp
+										resume_student_exp = resume_student_exps[exp_id]
+										resume_student_exp && resume_student_exp.student_exp
+									when ResumeExpSection::Resume_Exp
+										exps[exp_id]
+									else
+										nil
+								end
+							%>
+							<% if exp %>
+								<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_exp_section">
+									<tr>
+										<td valign="top" class="resume_exp_period">
+											<%= h(exp.period) %>
+										</td>
+
+										<td valign="top">
+											<div class="float_r resume_exp_sub_title">
+												<%= h(exp.sub_title) %>
+											</div>
+
+											<div class="resume_exp_title">
+												<%= h(exp.title) %>
+											</div>
+
+											<ul>
+												<% Utils.lines(h(exp.content)).each do |line| %>
+													<li><%= line %></li>
+												<% end %>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							<% end %>
+						<% end %>
+					</div>
+				</div>
+			<% end %>
+
+
+			<%
+				student_skills = StudentSkill.find(
+					:all,
+					:joins => "INNER JOIN resume_skills ON resume_skills.student_skill_id = student_skills.id",
+					:conditions => ["resume_skills.resume_id = ?", resume.id]
+				)
+				resume_list_skills = resume.list_skills
+			%>
+			<% if student_skills.size + resume_list_skills.size > 0 %>
+				<div>
+					<div class="resume_section_title">
+						技能和证书
+					</div>
+
+					<div class="resume_section_narrow">
+						<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+							<% student_skills.each do |student_skill| %>
+								<% skill = Skill.find(student_skill.skill_id) %>
+								<tr>
+									<td>
+										<%= skill[:name] %>
+									</td>
+
+									<td align="right">
+										<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value) %>
+									</td>
+								</tr>
+							<% end %>
+
+							<% resume_list_skills.each do |resume_list_skill| %>
+								<tr>
+									<td>
+										<%= h(resume_list_skill.name) %>
+									</td>
+
+									<td align="right">
+										<%= h(resume_list_skill.level) %>
+									</td>
+								</tr>
+							<% end %>
+						</table>
+					</div>
+				</div>
+			<% end %>
+
+
+			<% unless resume.award.nil? || resume.award.content.blank? %>
+				<div>
+					<div class="resume_section_title">
+						荣誉和奖励
+					</div>
+
+					<div class="resume_section_narrow">
+						<ul class="no_bullet">
+							<% Utils.lines(h(resume.award.content)).each do |line| %>
+								<li><%= line %></li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+			<% end %>
+
+
+			<% unless resume.hobby.nil? || resume.hobby.content.blank? %>
+				<div>
+					<div class="resume_section_title">
+						特长和爱好
+					</div>
+
+					<div class="resume_section_narrow">
+						<ul class="no_bullet">
+							<% Utils.lines(h(resume.hobby.content)).each do |line| %>
+								<li><%= line %></li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+			<% end %>
+
+
+			<% resume.list_sections.each do |list_section| %>
+				<div>
+					<div class="resume_section_title">
+						<%= h(list_section.title) %>
+					</div>
+
+					<div class="resume_section_narrow">
+						<ul class="no_bullet">
+							<% Utils.lines(h(list_section.content)).each do |line| %>
+								<li><%= line %></li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+			<% end %>
 		</div>
-	<% end %>
+	</div>
 </div>

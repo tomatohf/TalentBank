@@ -21,16 +21,6 @@
 	
 <% else %>
 	
-	<div class="align_r">
-		<% if @saved_resume.new_record? %>
-			<a href="#" id="save_resume_link">
-				收藏这份简历</a>
-		<% else %>
-			已收藏
-			(删除)
-		<% end %>
-	</div>
-	
 	<div>
 		<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => true} %>
 	</div>

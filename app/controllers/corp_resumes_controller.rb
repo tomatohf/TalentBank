@@ -72,7 +72,7 @@ class CorpResumesController < ApplicationController
       CorpViewedResume.record(@corporation.id, @resume.id)
       # ========== end ==========
       
-      @saved_resume = CorpSavedResume.get_record(@corporation.id, @resume.id)
+      
     end
   end
   

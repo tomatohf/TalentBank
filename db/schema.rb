@@ -51,14 +51,6 @@ ActiveRecord::Schema.define(:version => 8) do
 
   add_index "corp_saved_queries", ["corporation_id", "created_at"], :name => "index_corp_saved_queries_on_corporation_id_and_created_at"
 
-  create_table "corp_saved_resumes", :force => true do |t|
-    t.integer  "corporation_id"
-    t.integer  "resume_id"
-    t.datetime "updated_at"
-  end
-
-  add_index "corp_saved_resumes", ["corporation_id", "resume_id"], :name => "index_corp_saved_resumes_on_corporation_id_and_resume_id", :unique => true
-
   create_table "corp_viewed_resumes", :force => true do |t|
     t.integer  "corporation_id"
     t.integer  "resume_id"
