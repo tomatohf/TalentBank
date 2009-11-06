@@ -17,6 +17,10 @@ class StudentProfile < ActiveRecord::Base
   validates_length_of :zip, :maximum => 10, :message => "邮编 超过长度限制", :allow_nil => true
   
   
+  after_save { |student_profile|
+    StudentProfileCopy.copy_profile(student_profile)
+  }
+  
   
   Belongs_To_Keys = [:student_id]
   include Utils::UniqueBelongs

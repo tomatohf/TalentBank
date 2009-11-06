@@ -1,7 +1,7 @@
-<% talent_page_title(@title) %>
+<% talent_page_title("查询企业") %>
 
 
-<h2><%= @title %></h2>
+<h2>查询企业</h2>
 
 
 <% if flash[:success_msg] %>
@@ -14,39 +14,28 @@
 	<a href="/teachers/<%= @teacher.id %>/new_corporation">添加企业帐号</a>
 </div>
 
-<div class="align_r" style="word-spacing: 20px;">
-	<% unless action_name == "allowed_corporations" %>
-		<a href="/teachers/<%= @teacher.id %>/allowed_corporations">允许查询简历的企业帐号</a>
-	<% end %>
-	
-	<% unless action_name == "inhibitive_corporations" %>
-		<a href="/teachers/<%= @teacher.id %>/inhibitive_corporations">禁止查询简历的企业帐号</a>
-	<% end %>
-	
-	<% unless action_name == "corporations" %>
-		<a href="/teachers/<%= @teacher.id %>/corporations">全部企业帐号</a>
-	<% end %>
+<div class="align_r">
 </div>
 
 <div>
-	<% form_tag "/teachers/#{@teacher.id}/allow_corporation", :method => :post, :id => "allow_corp_form" do %>
-		<input type="hidden" id="allow_corp_id" name="corporation_id" />
+	<% form_tag "/teachers/#{@teacher.id}/allow_corporation_query", :method => :post, :id => "allow_query_corp_form" do %>
+		<input type="hidden" id="allow_query_corp_id" name="corporation_id" />
 	<% end %>
-	<% form_tag "/teachers/#{@teacher.id}/inhibit_corporation", :method => :post, :id => "inhibit_corp_form" do %>
-		<input type="hidden" id="inhibit_corp_id" name="corporation_id" />
+	<% form_tag "/teachers/#{@teacher.id}/inhibit_corporation_query", :method => :post, :id => "inhibit_query_corp_form" do %>
+		<input type="hidden" id="inhibit_query_corp_id" name="corporation_id" />
 	<% end %>
 	<script language="JavaScript">
-		function allow_corporation(corporation_id, corporation_uid) {
+		function allow_corporation_query(corporation_id, corporation_uid) {
 			if(confirm("确定要允许企业帐号 " + corporation_uid + " 查询学生简历么 ?")) {
-				document.getElementById("allow_corp_id").value = corporation_id;
-				document.getElementById("allow_corp_form").submit();
+				document.getElementById("allow_query_corp_id").value = corporation_id;
+				document.getElementById("allow_query_corp_form").submit();
 			}
 		}
 		
-		function inhibit_corporation(corporation_id, corporation_uid) {
+		function inhibit_corporation_query(corporation_id, corporation_uid) {
 			if(confirm("确定要禁止企业帐号 " + corporation_uid + " 查询学生简历么 ?")) {
-				document.getElementById("inhibit_corp_id").value = corporation_id;
-				document.getElementById("inhibit_corp_form").submit();
+				document.getElementById("inhibit_query_corp_id").value = corporation_id;
+				document.getElementById("inhibit_query_corp_form").submit();
 			}
 		}
 	</script>

@@ -8,7 +8,7 @@ class Corporations < ActiveRecord::Migration
       
       t.column :school_id, :integer
       
-      t.column :allow, :boolean, :default => false
+      t.column :allow_query, :boolean, :default => false
       
       t.column :name, :string, :limit => 50
       
@@ -16,8 +16,6 @@ class Corporations < ActiveRecord::Migration
       t.column :updated_at, :datetime
     end
     add_index :corporations, [:school_id, :uid], :unique => true
-    add_index :corporations, [:school_id, :created_at]
-    add_index :corporations, [:school_id, :allow, :created_at]
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO corporations (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM corporations WHERE id = 10000")

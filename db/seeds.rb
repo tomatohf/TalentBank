@@ -19,8 +19,8 @@ school_id = School.get_school_info("qiaobutang")[0]
 School.find(school_id).update_attribute(:password, "qiaobutangs")
 Teacher.create(:uid => "tomato", :password => "tomato", :admin => true, :school_id => school_id)
 Teacher.create(:uid => "wahaha", :password => "tomato", :admin => false, :school_id => school_id)
-Corporation.create(:uid => "ibm", :password => "ibm", :allow => true, :school_id => school_id, :name => "国际商用机器")
-Corporation.create(:uid => "ge", :password => "ge", :allow => false, :school_id => school_id, :name => "通用电器")
+Corporation.create(:uid => "ibm", :password => "ibm", :allow_query => true, :school_id => school_id, :name => "国际商用机器")
+Corporation.create(:uid => "ge", :password => "ge", :allow_query => false, :school_id => school_id, :name => "通用电器")
 college_id_0 = College.data["qiaobutang"][0][:id]
 Student.create(
   :school_id => school_id,

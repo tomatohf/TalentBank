@@ -7,9 +7,15 @@ class ResumesIndexForSphinx < ActiveRecord::Migration
     
     add_index :resume_skills, [:student_skill_id, :resume_id]
     
+    
+    add_index :corporations, :updated_at
+    
   end
 
   def self.down
+    
+    remove_index :corporations, :updated_at
+    
     
     remove_index :resume_skills, [:student_skill_id, :resume_id]
     

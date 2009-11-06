@@ -16,8 +16,6 @@ ActionController::Routing::Routes.draw do |map|
   
   
   map.connect "/teachers/:id/corporations/:page", :controller => "teachers", :action => "corporations", :id => /\d+/, :page => /\d+/
-  map.connect "/teachers/:id/allowed_corporations/:page", :controller => "teachers", :action => "allowed_corporations", :id => /\d+/, :page => /\d+/
-  map.connect "/teachers/:id/inhibitive_corporations/:page", :controller => "teachers", :action => "inhibitive_corporations", :id => /\d+/, :page => /\d+/
   map.resources :teachers, :collection => {
     
   }, :member => {
@@ -29,11 +27,8 @@ ActionController::Routing::Routes.draw do |map|
     :corporations => :get,
     :new_corporation => :get,
     :create_corporation => :post,
-    :allow_corporation => :post,
-    :inhibit_corporation => :post,
-    
-    :allowed_corporations => :get,
-    :inhibitive_corporations => :get
+    :allow_corporation_query => :post,
+    :inhibit_corporation_query => :post
   }
   
   

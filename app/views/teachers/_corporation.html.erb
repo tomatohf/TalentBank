@@ -10,20 +10,20 @@
 	</td>
 	
 	<td align="center">
-		<% if corporation.allow %>
-			<img src="/images/teachers/allow_icon.gif" border="0" alt="当前可以查询学生简历" title="当前可以查询学生简历" />
+		<% if corporation.allow_query %>
+			当前可以查询学生简历
 		<% else %>
-			<img src="/images/teachers/inhibit_icon.gif" border="0" alt="当前无法查询学生简历" title="当前无法查询学生简历" />
+			当前无法查询学生简历
 		<% end %>
 	</td>
 	
 	<td align="right">
-		<% if corporation.allow %>
-			<a href="#" title="禁止其查询学生简历" class="none" onclick="inhibit_corporation(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
+		<% if corporation.allow_query %>
+			<a href="#" title="禁止其查询学生简历" class="none" onclick="inhibit_corporation_query(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
 				<img src="/images/teachers/red_point.gif" border="0" alt="禁止" />
 				禁止其查询学生简历</a>
 		<% else %>
-			<a href="#" title="允许其查询学生简历" class="none" onclick="allow_corporation(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
+			<a href="#" title="允许其查询学生简历" class="none" onclick="allow_corporation_query(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
 				<img src="/images/teachers/green_point.gif" border="0" alt="允许" />
 				允许其查询学生简历</a>
 		<% end %>

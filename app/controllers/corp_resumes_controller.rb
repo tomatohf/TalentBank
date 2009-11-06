@@ -9,7 +9,7 @@ class CorpResumesController < ApplicationController
   
   before_filter :check_corporation
   
-  before_filter :check_corporation_allow
+  before_filter :check_corporation_allow_query
   
   
   def index

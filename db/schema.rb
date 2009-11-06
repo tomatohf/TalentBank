@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 8) do
+ActiveRecord::Schema.define(:version => 9) do
 
   create_table "corp_queries", :force => true do |t|
     t.integer  "corporation_id"
@@ -80,19 +80,18 @@ ActiveRecord::Schema.define(:version => 8) do
   add_index "corporation_profiles", ["corporation_id"], :name => "index_corporation_profiles_on_corporation_id", :unique => true
 
   create_table "corporations", :force => true do |t|
-    t.string   "uid",        :limit => 25
+    t.string   "uid",         :limit => 25
     t.string   "password"
-    t.boolean  "active",                   :default => true
+    t.boolean  "active",                    :default => true
     t.integer  "school_id"
-    t.boolean  "allow",                    :default => false
-    t.string   "name",       :limit => 50
+    t.boolean  "allow_query",               :default => false
+    t.string   "name",        :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "corporations", ["school_id", "allow", "created_at"], :name => "index_corporations_on_school_id_and_allow_and_created_at"
-  add_index "corporations", ["school_id", "created_at"], :name => "index_corporations_on_school_id_and_created_at"
   add_index "corporations", ["school_id", "uid"], :name => "index_corporations_on_school_id_and_uid", :unique => true
+  add_index "corporations", ["updated_at"], :name => "index_corporations_on_updated_at"
 
   create_table "edu_exps", :force => true do |t|
     t.integer  "student_id"
@@ -246,6 +245,20 @@ ActiveRecord::Schema.define(:version => 8) do
   end
 
   add_index "student_exps", ["student_id"], :name => "index_student_exps_on_student_id"
+
+  create_table "student_profile_copies", :force => true do |t|
+    t.integer  "student_id"
+    t.string   "phone",               :limit => 25
+    t.string   "email"
+    t.string   "address"
+    t.string   "zip",                 :limit => 10
+    t.boolean  "gender"
+    t.integer  "political_status_id", :limit => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "student_profile_copies", ["student_id"], :name => "index_student_profile_copies_on_student_id", :unique => true
 
   create_table "student_profiles", :force => true do |t|
     t.integer  "student_id"

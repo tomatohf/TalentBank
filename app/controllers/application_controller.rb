@@ -67,8 +67,8 @@ class ApplicationController < ActionController::Base
   end
   
   
-  def check_corporation_allow
-    jump_to("/errors/unauthorized") unless @corporation.allow
+  def check_corporation_allow_query
+    jump_to("/errors/unauthorized") unless @corporation.allow_query
   end
   
   # ====================

@@ -21,8 +21,10 @@ class Corporation < ActiveRecord::Base
   validates_confirmation_of :password, :message => "密码 与 确认密码 不相同"
   
   
-  named_scope :allow, :conditions => { :allow => true }
+  named_scope :allow_query, :conditions => { :allow_query => true }
   
+  
+  include Utils::NotDeletable
   
   
   def self.authenticate(abbr, uid, pwd)

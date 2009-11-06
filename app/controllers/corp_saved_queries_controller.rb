@@ -11,7 +11,7 @@ class CorpSavedQueriesController < ApplicationController
   
   before_filter :check_saved_query, :except => [:index, :create]
   
-  before_filter :check_corporation_allow
+  before_filter :check_corporation_allow_query
   
   
   def create
