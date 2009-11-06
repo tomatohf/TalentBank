@@ -233,7 +233,7 @@
 						技能和证书
 					</div>
 
-					<div class="resume_section_narrow">
+					<div class="resume_section">
 						<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 							<% student_skills.each do |student_skill| %>
 								<% skill = Skill.find(student_skill.skill_id) %>
@@ -271,7 +271,7 @@
 						荣誉和奖励
 					</div>
 
-					<div class="resume_section_narrow">
+					<div class="resume_section">
 						<ul class="no_bullet">
 							<% Utils.lines(h(resume.award.content)).each do |line| %>
 								<li><%= line %></li>
@@ -288,7 +288,7 @@
 						特长和爱好
 					</div>
 
-					<div class="resume_section_narrow">
+					<div class="resume_section">
 						<ul class="no_bullet">
 							<% Utils.lines(h(resume.hobby.content)).each do |line| %>
 								<li><%= line %></li>
@@ -305,7 +305,7 @@
 						<%= h(list_section.title) %>
 					</div>
 
-					<div class="resume_section_narrow">
+					<div class="resume_section">
 						<ul class="no_bullet">
 							<% Utils.lines(h(list_section.content)).each do |line| %>
 								<li><%= line %></li>
