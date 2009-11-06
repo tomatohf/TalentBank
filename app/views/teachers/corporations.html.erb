@@ -1,5 +1,7 @@
 <% talent_page_title("查询企业") %>
 
+<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+
 
 <h2>查询企业</h2>
 
@@ -14,39 +16,21 @@
 	<a href="/teachers/<%= @teacher.id %>/new_corporation">添加企业帐号</a>
 </div>
 
-<div class="align_r">
+<div>
+	
 </div>
 
 <div>
-	<% form_tag "/teachers/#{@teacher.id}/allow_corporation_query", :method => :post, :id => "allow_query_corp_form" do %>
-		<input type="hidden" id="allow_query_corp_id" name="corporation_id" />
-	<% end %>
-	<% form_tag "/teachers/#{@teacher.id}/inhibit_corporation_query", :method => :post, :id => "inhibit_query_corp_form" do %>
-		<input type="hidden" id="inhibit_query_corp_id" name="corporation_id" />
-	<% end %>
-	<script language="JavaScript">
-		function allow_corporation_query(corporation_id, corporation_uid) {
-			if(confirm("确定要允许企业帐号 " + corporation_uid + " 查询学生简历么 ?")) {
-				document.getElementById("allow_query_corp_id").value = corporation_id;
-				document.getElementById("allow_query_corp_form").submit();
-			}
-		}
-		
-		function inhibit_corporation_query(corporation_id, corporation_uid) {
-			if(confirm("确定要禁止企业帐号 " + corporation_uid + " 查询学生简历么 ?")) {
-				document.getElementById("inhibit_query_corp_id").value = corporation_id;
-				document.getElementById("inhibit_query_corp_form").submit();
-			}
-		}
-	</script>
-	
-	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w">
+	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
 		<thead>
 			<tr>
 				<td>用户名</td>
 				<td>名称</td>
-				<td style="width: 60px;">查询简历</td>
-				<td style="width: 150px;"></td>
+				<td align="center" style="width: 85px;">
+					查询简历
+					<img src="/images/loading_icon.gif" id="query_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
+				</td>
+				<td style="width: 120px;"></td>
 			</tr>
 		</thead>
 		
@@ -59,3 +43,10 @@
 		<%= paging_buttons(@corporations) %>
 	</div>
 </div>
+
+
+<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var	TEACHER_ID = <%= @teacher.id %>;
+</script>
+<script src="/javascripts/teachers/corporations.js" type="text/javascript" language="JavaScript"></script>

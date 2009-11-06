@@ -1,7 +1,7 @@
 class TeachersController < ApplicationController
   
   Student_Page_Size = 50
-  Corporation_Page_Size = 50
+  Corporation_Page_Size = 10
   
   
   before_filter :check_login_for_teacher
@@ -130,11 +130,10 @@ class TeachersController < ApplicationController
     corporation.allow_query = allow_query
     
     if (corporation.school_id == @teacher.school_id) && corporation.save
-      verb = allow_query ? "允许" : "禁止"
-      flash[:success_msg] = "操作成功, 已#{verb}企业帐号 #{corporation.uid} 查询学生简历"
+      return render(:partial => "allow_query_field", :locals => {:corporation => corporation})
     end
     
-    jump_to("/teachers/#{@teacher.id}/corporations")
+    render :nothing => true
   end
   
 end

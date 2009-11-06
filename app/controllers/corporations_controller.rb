@@ -94,6 +94,8 @@ class CorporationsController < ApplicationController
     @profile.desc = params[:desc] && params[:desc].strip
     
     if @profile.save
+      @corporation.renew_updated_at(@profile.updated_at)
+      
       flash[:success_msg] = "修改成功, 企业信息已更新"
       return jump_to("/corporations/#{@corporation.id}")
     end

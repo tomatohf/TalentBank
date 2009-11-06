@@ -165,7 +165,7 @@ class IndexController < ApplicationController
           # TODO - NOTIFY ADMIN TEACHER !!!
           
           @profile.corporation_id = @corporation.id
-          if false #@profile.save
+          if @profile.save
             flash[:success_msg] = "注册成功, 已创建企业帐号"
             return jump_to("/corporations/#{@corporation.id}")
           else

@@ -118,5 +118,31 @@ module Utils
       
     end
   end
+  
+  
+  module Searchable
+    def self.included(including_model)
+      
+      including_model.const_set(:Overall_Index_Hour, 3)
+      including_model.const_set(:Overall_Index_Minute, 58)
+      
+      including_model.class_eval {
+        
+        define_method(:renew_updated_at) do |time|
+          now = Time.now
+          date = Time.local(now.year, now.month, now.mday, including_model::Overall_Index_Hour, including_model::Overall_Index_Minute)
+
+          last_index_at = (now < date) ? 1.day.ago(date) : date
+
+          if (last_index_at >= self.updated_at) && (time > last_index_at)
+            self.updated_at = time
+            self.save
+          end
+        end
+        
+      }
+      
+    end
+  end
 
 end

@@ -10,22 +10,12 @@
 	</td>
 	
 	<td align="center">
-		<% if corporation.allow_query %>
-			当前可以查询学生简历
-		<% else %>
-			当前无法查询学生简历
-		<% end %>
+		<%= render :partial => "allow_query_field", :locals => {:corporation => corporation} %>
 	</td>
 	
 	<td align="right">
-		<% if corporation.allow_query %>
-			<a href="#" title="禁止其查询学生简历" class="none" onclick="inhibit_corporation_query(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
-				<img src="/images/teachers/red_point.gif" border="0" alt="禁止" />
-				禁止其查询学生简历</a>
-		<% else %>
-			<a href="#" title="允许其查询学生简历" class="none" onclick="allow_corporation_query(<%= corporation.id %>, '<%= a(uid) %>'); return false;">
-				<img src="/images/teachers/green_point.gif" border="0" alt="允许" />
-				允许其查询学生简历</a>
-		<% end %>
+		<a href="#" class="none">
+			<img src="/images/teachers/corporation_icon.gif" border="0" />
+			查看企业信息</a>
 	</td>
 </tr>

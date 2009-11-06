@@ -5,6 +5,41 @@ class Corporation < ActiveRecord::Base
   has_one :profile, :class_name => "CorporationProfile", :foreign_key => "corporation_id", :dependent => :destroy
   
   
+  include Utils::Searchable
+  
+  define_index do
+    
+    indexes name, :as => :name
+    
+    indexes profile.email, :as => :email
+    indexes profile.phone, :as => :phone
+    indexes profile.contact, :as => :contact
+    indexes profile.address, :as => :address
+    indexes profile.zip, :as => :zip
+    indexes profile.website, :as => :website
+    indexes profile.desc, :as => :desc
+    
+    
+    has school_id, allow_query, updated_at
+    
+    has profile.nature_id, :as => :nature_id
+    has profile.size_id, :as => :size_id
+    has profile.industry_id, :as => :industry_id
+    has profile.province_id, :as => :province_id
+    
+    
+    set_property(
+      :delta => DailyDelta,
+      :column => :updated_at,
+      # :rate => 70.minutes,
+      :hour => Overall_Index_Hour,
+      :minute => Overall_Index_Minute,
+      :batch => 100
+    )
+    
+  end
+  
+  
   attr_accessor :registering
   validates_presence_of :school_id, :unless => Proc.new { |corp| corp.registering == true }
   
