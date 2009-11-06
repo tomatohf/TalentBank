@@ -7,6 +7,19 @@ class Student < ActiveRecord::Base
   has_many :edu_exps, :class_name => "EduExp", :foreign_key => "student_id", :dependent => :destroy
   
   
+  include Utils::Searchable
+  
+  define_index do
+    
+    indexes number, name
+    
+    has school_id, college_id, major_id, edu_level_id, graduation_year, updated_at
+    
+    set_property(:delta => false)
+    
+  end
+  
+  
   attr_protected :enabled, :active
   
   validates_presence_of :school_id

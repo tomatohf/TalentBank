@@ -1,6 +1,6 @@
 class TeachersController < ApplicationController
   
-  Student_Page_Size = 50
+  Student_Page_Size = 10
   Corporation_Page_Size = 10
   
   
@@ -65,10 +65,39 @@ class TeachersController < ApplicationController
   
   
   def students
-    @students = Student.find(
-      :all,
-      :conditions => ["school_id = ?", @teacher.school_id]
-    )
+    @number = params[:n] && params[:n].strip
+    
+    @students = unless @number.blank?
+      Student.search(
+        :conditions => {:number => @number},
+        :with => {:school_id => @teacher.school_id}
+      )
+    else
+      @college_id = params[:c] && params[:c].strip
+      @major_id = params[:m] && params[:m].strip
+      @edu_level_id = params[:e] && params[:e].strip
+      @graduation_year = params[:g] && params[:g].strip
+      
+      @name = params[:name] && params[:name].strip
+      
+      filters = {:school_id => @teacher.school_id}
+      [:college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
+        filter_value = self.instance_variable_get("@#{filter_key}")
+        filters.merge!(filter_key => filter_value) unless filter_value.blank?
+      end
+      
+      page = params[:page]
+      page = 1 unless page =~ /\d+/
+      Student.search(
+        @name,
+        :page => page,
+        :per_page => Student_Page_Size,
+        :match_mode => Student::Search_Match_Mode,
+        :order => "@relevance DESC, updated_at DESC",
+        :field_weights => {},
+        :with => filters
+      )
+    end
   end
   
   

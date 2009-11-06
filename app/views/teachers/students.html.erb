@@ -1,4 +1,8 @@
-<% talent_page_title("查询学生") %>
+<%
+	talent_page_title("查询学生")
+	
+	school_abbr = @school.abbr
+%>
 
 
 <h2>查询学生</h2>
@@ -9,6 +13,66 @@
 	    <%= flash[:success_msg] %>
 	</p>
 <% end %>
+
+<div>
+	<div>
+		<% form_tag "", :method => :get do %>
+			<label for="number">
+				通过学号
+			</label>
+			<input type="text" id="number" name="n" class="text_field" size="20" value="<%= h(@number) %>" />
+			<input type="submit" value="确定" class="button" />
+		<% end %>
+	</div>
+	
+	<div>
+		<% form_tag "", :method => :get do %>
+			<select name="c" id="college_id" class="dropdown_list" onchange="fill_majors(this.value);">
+				<option value=""<%= %Q! selected="selected"! if @college_id.blank? %>>不限学院</option>
+				<% College.data[school_abbr].each do |college| %>
+					<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @college_id.to_i == college[:id] %>><%= college[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="m" id="major_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @major_id.blank? %>>不限专业</option>
+				<% (Major.data[@college_id.to_i]|| []).each do |major| %>
+					<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @major_id.to_i == major[:id] %>><%= major[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="e" id="edu_level_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @edu_level_id.blank? %>>不限教育水平</option>
+				<% @school.edu_levels.each do |level_id| %>
+					<% level = EduLevel.find(level_id) %>
+					<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @edu_level_id == level[:id].to_s %>><%= level[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="g" id="graduation_year" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @graduation_year.blank? %>>不限毕业时间</option>
+				<%
+					today = Date.today
+					this_year = today.year
+					this_month = today.month
+					coming_graduation_year = (this_month > 6) ? (this_year + 1) : this_year
+				%>
+				<option value="<%= coming_graduation_year %>"<%= %Q! selected="selected"! if @graduation_year == coming_graduation_year.to_s %>><%= coming_graduation_year %> 年 (应届)</option>
+				<% 3.times do |i| %>
+					<% year = coming_graduation_year + i + 1 %>
+					<option value="<%= year %>"<%= %Q! selected="selected"! if @graduation_year == year.to_s %>><%= year %> 年</option>
+				<% end %>
+			</select>
+			
+			<label for="name">
+				姓名
+			</label>
+			<input type="text" id="name" name="name" class="text_field" size="20" value="<%= h(@name) %>" />
+			
+			<input type="submit" value="查找学生" class="button" />
+		<% end %>
+	</div>
+</div>
 
 <div>
 	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w">
@@ -24,3 +88,29 @@
 		</tbody>
 	</table>
 </div>
+
+
+<script language="JavaScript">
+	var MAJORS = {};
+	<% College.data[school_abbr].each do |college| %>
+		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+	<% end %>
+	
+	function fill_majors(college_id) {
+		var major_select = document.getElementById("major_id");
+		
+		major_select.options.length = 0;
+		
+		var empty_option = new Option("不限专业", "");
+		empty_option.selected = true;
+		major_select.options.add(empty_option);
+		
+		var major_objs = MAJORS["c_" + college_id];
+		if(major_objs != null && major_objs.length > 0) {
+			for(var i = 0; i < major_objs.length; i++) {
+				var major_obj = major_objs[i];
+				major_select.options.add(new Option(major_obj.name, major_obj.id));
+			}
+		}
+	}
+</script>
