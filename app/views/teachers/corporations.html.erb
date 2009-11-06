@@ -17,7 +17,64 @@
 </div>
 
 <div>
+	<div>
+		<% form_tag "", :method => :get do %>
+			<label for="uid">
+				通过用户名
+			</label>
+			<input type="text" id="uid" name="u" class="text_field" size="20" value="<%= h(@uid) %>" />
+			<input type="submit" value="搜索" class="button" />
+		<% end %>
+	</div>
 	
+	<div>
+		<% form_tag "", :method => :get do %>
+			<div>
+				<select name="n" id="nature_id" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @nature_id.blank? %>>不限企业性质</option>
+					<% CorporationNature.data.each do |nature| %>
+						<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @nature_id == nature[:id].to_s %>><%= nature[:name] %></option>
+					<% end %>
+				</select>
+
+				<select name="s" id="size_id" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @size_id.blank? %>>不限企业规模</option>
+					<% CorporationSize.data.each do |size| %>
+						<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @size_id == size[:id].to_s %>><%= size[:name] %></option>
+					<% end %>
+				</select>
+
+				<select name="i" id="industry_id" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @industry_id.blank? %>>不限企业所属行业</option>
+					<% CorporationIndustry.data.each do |industry| %>
+						<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @industry_id == industry[:id].to_s %>><%= industry[:name] %></option>
+					<% end %>
+				</select>
+
+				<select name="p" id="province_id" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限企业所在地</option>
+					<% Province.data.each do |province| %>
+						<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
+					<% end %>
+				</select>
+			</div>
+			
+			<div>
+				<label for="keyword">
+					关键字
+				</label>
+				<input type="text" id="keyword" name="k" class="text_field" size="20" value="<%= h(@keyword) %>" />
+				
+				<select name="aq" id="allow_query" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @allow_query.nil? %>>不限查询权限</option>
+					<option value="t"<%= %Q! selected="selected"! if @allow_query == true %>>允许查询简历</option>
+					<option value="f"<%= %Q! selected="selected"! if @allow_query == false %>>禁止查询简历</option>
+				</select>
+				
+				<input type="submit" value="查找企业" class="button" />
+			</div>
+		<% end %>
+	</div>
 </div>
 
 <div>

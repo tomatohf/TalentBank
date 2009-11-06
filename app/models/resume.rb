@@ -114,7 +114,6 @@ class Resume < ActiveRecord::Base
   end
   
   
-  Search_Match_Mode = :extended
   Resume_Page_Size = 20
   
   def self.do_search(query, school_id = nil, page = 1, query_tags = nil, query_skills = nil)

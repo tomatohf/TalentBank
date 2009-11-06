@@ -9,7 +9,7 @@ class Corporation < ActiveRecord::Base
   
   define_index do
     
-    indexes name, :as => :name
+    indexes uid, name
     
     indexes profile.email, :as => :email
     indexes profile.phone, :as => :phone

@@ -126,6 +126,8 @@ module Utils
       including_model.const_set(:Overall_Index_Hour, 3)
       including_model.const_set(:Overall_Index_Minute, 58)
       
+      including_model.const_set(:Search_Match_Mode, :extended)
+      
       including_model.class_eval {
         
         define_method(:renew_updated_at) do |time|

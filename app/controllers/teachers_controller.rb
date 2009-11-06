@@ -73,13 +73,48 @@ class TeachersController < ApplicationController
   
   
   def corporations
-    page = params[:page]
-    page = 1 unless page =~ /\d+/
-    @corporations = Corporation.paginate(
-      :page => page,
-      :per_page => Corporation_Page_Size,
-      :conditions => ["school_id = ?", @teacher.school_id]
-    )
+    @uid = params[:u] && params[:u].strip
+    
+    @corporations = unless @uid.blank?
+      Corporation.search(
+        :conditions => {:uid => @uid},
+        :with => {:school_id => @teacher.school_id}
+      )
+    else
+      @nature_id = params[:n] && params[:n].strip
+      @size_id = params[:s] && params[:s].strip
+      @industry_id = params[:i] && params[:i].strip
+      @province_id = params[:p] && params[:p].strip
+      
+      @keyword = params[:k] && params[:k].strip
+      
+      @allow_query = if (aq = params[:aq] && params[:aq].strip) == "t"
+        true
+      elsif aq == "f"
+        false
+      else
+        nil
+      end
+      
+      filters = {:school_id => @teacher.school_id}
+      filters.merge!(:allow_query => @allow_query) unless @allow_query.nil?
+      [:nature_id, :size_id, :industry_id, :province_id].each do |filter_key|
+        filter_value = self.instance_variable_get("@#{filter_key}")
+        filters.merge!(filter_key => filter_value) unless filter_value.blank?
+      end
+      
+      page = params[:page]
+      page = 1 unless page =~ /\d+/
+      Corporation.search(
+        @keyword,
+        :page => page,
+        :per_page => Corporation_Page_Size,
+        :match_mode => Corporation::Search_Match_Mode,
+        :order => "@relevance DESC, updated_at DESC",
+        :field_weights => {},
+        :with => filters
+      )
+    end
   end
   
   
