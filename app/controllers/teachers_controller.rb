@@ -12,7 +12,11 @@ class TeachersController < ApplicationController
   
   before_filter :check_teacher_admin, :only => [:corporations,
                                                 :new_corporation, :create_corporation,
-                                                :allow_corporation_query, :inhibit_corporation_query]
+                                                :allow_corporation_query, :inhibit_corporation_query,
+                                                :show_corporation]
+  
+  before_filter :check_corporation, :only => [:allow_corporation_query, :inhibit_corporation_query,
+                                              :show_corporation]
   
   
   def show
@@ -138,6 +142,11 @@ class TeachersController < ApplicationController
   end
   
   
+  def show_corporation
+    @profile = @corporation.profile || CorporationProfile.new
+  end
+  
+  
   private
   
   def check_teacher
@@ -151,15 +160,24 @@ class TeachersController < ApplicationController
   end
   
   
+  def check_corporation
+    @corporation = Corporation.find(params[:corporation_id])
+    jump_to("/errors/forbidden") unless @corporation.school_id == @teacher.school_id
+  end
+  
+  
   def adjust_corporation_permission(name, value)
-    corporation = Corporation.find(params[:corporation_id])
-    corporation.send("#{name}=", value)
+    @corporation.send("#{name}=", value)
     
-    if (corporation.school_id == @teacher.school_id) && corporation.save
-      return render(:partial => "#{name}_field", :locals => {:corporation => corporation})
+    if @corporation.save
+      return render(:partial => "#{name}_field", :locals => {:corporation => @corporation}) if request.xhr?
     end
     
-    render :nothing => true
+    if request.xhr?
+      render :nothing => true
+    else
+      jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}")
+    end
   end
   
 end

@@ -15,6 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   }
   
   
+  map.connect "/teachers/:id/corporations/:corporation_id", :controller => "teachers", :action => "show_corporation", :id => /\d+/, :corporation_id => /\d+/
   map.resources :teachers, :collection => {
     
   }, :member => {

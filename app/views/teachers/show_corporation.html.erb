@@ -1,0 +1,182 @@
+<%
+	corp_name = h(@corporation.name)
+	
+	talent_page_title("企业 #{corp_name} 的信息")
+%>
+
+
+<h2>企业 <%= corp_name %> 的信息</h2>
+
+
+<div>
+	<% form_tag "/teachers/#{@teacher.id}/#{@corporation.allow_query ? 'inhibit' : 'allow'}_corporation_query", :method => :post, :id => "adjust_allow_query_form" do %>
+		<input type="hidden" id="corporation_id" name="corporation_id" value="<%= @corporation.id %>" />
+	<% end %>
+	
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				企业用户名:
+			</td>
+
+			<td>
+				<%= h(@corporation.uid) %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				企业名称:
+			</td>
+
+			<td>
+				<%= corp_name %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				查询简历:
+			</td>
+
+			<td>
+				<% if @corporation.allow_query %>
+					<font color="green">允许查询简历</font>
+				<% else %>
+					<font color="red">禁止查询简历</font>
+				<% end %>
+				
+				&nbsp;&nbsp;&nbsp;
+				
+				(
+					<a href="#" class="none" onclick="document.getElementById('adjust_allow_query_form').submit(); return false;">
+						<% if @corporation.allow_query %>
+							禁止
+						<% else %>
+							允许
+						<% end %>
+					</a>
+				)
+			</td>
+		</tr>
+
+		
+		<tr>
+			<td>
+				邮箱:
+			</td>
+
+			<td>
+				<%= h(@profile.email) %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				联系电话:
+			</td>
+
+			<td>
+				<%= h(@profile.phone) %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				联系人:
+			</td>
+
+			<td>
+				<%= h(@profile.contact) %>
+				<%= @profile.contact_gender ? "先生" : "女士" unless @profile.contact_gender.nil? %>
+				<%= %Q!, (职位: #{@profile.contact_title})! unless @profile.contact_title.blank? %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				地址:
+			</td>
+
+			<td>
+				<%= h(@profile.address) %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				邮编:
+			</td>
+
+			<td>
+				<%= h(@profile.zip) %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				企业网站:
+			</td>
+
+			<td>
+				<%= h(@profile.website) %>
+			</td>
+		</tr>
+
+
+		<tr>
+			<td>
+				企业性质:
+			</td>
+
+			<td>
+				<% nature = @profile.nature_id && CorporationNature.find(@profile.nature_id) %>
+				<%= nature && nature[:name] %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				企业规模:
+			</td>
+
+			<td>
+				<% size = @profile.size_id && CorporationSize.find(@profile.size_id) %>
+				<%= size && size[:name] %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				所属行业:
+			</td>
+
+			<td>
+				<% industry = @profile.industry_id && CorporationIndustry.find(@profile.industry_id) %>
+				<%= industry && industry[:name] %>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				企业所在地:
+			</td>
+
+			<td>
+				<% province = @profile.province_id && Province.find(@profile.province_id) %>
+				<%= province && province[:name] %>
+			</td>
+		</tr>
+
+
+		<tr>
+			<td>
+				企业简介:
+			</td>
+
+			<td>
+				<%= simple_format(h(@profile.desc)) %>
+			</td>
+		</tr>
+	</table>
+</div>
