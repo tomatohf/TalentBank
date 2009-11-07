@@ -1,0 +1,14 @@
+<%
+	domain = ResumeDomain.find(@resume.domain_id)[:name]
+	
+	student_name = h(@resume.student.name)
+	
+	talent_page_title("查看 #{student_name} 的 #{domain} 的简历")
+%>
+
+
+<h2>查看 <%= student_name %> 的 <%= domain %> 的简历</h2>
+
+<div>
+	<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => false} %>
+</div>

@@ -1,0 +1,65 @@
+<%
+	college = College.find(@school.abbr, student.college_id)
+	major = Major.find(college[:id], student.major_id)
+	
+	edu_level = EduLevel.find(student.edu_level_id)
+	graduation_year = student.graduation_year
+	
+	student_name = h(student.name)
+	
+	resumes = student.resumes.sort { |x, y| x.domain_id <=> y.domain_id }
+%>
+
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<td>
+		<% if resumes.size > 0 %>
+			<a href="#" title="查看<%= student_name %>的简历" class="none view_resume_link">
+				<img src="/images/students/preview_resume_icon.gif" border="0" alt="查看简历" style="margin-bottom: -1px;" />
+				查看简历</a>
+
+			<div class="dropdown_menu" style="font-size: 12px;">
+				<ul class="dropdown_sub_menu">
+					<% resumes.each do |resume| %>
+						<% domain = ResumeDomain.find(resume.domain_id) %>
+						<li>
+							<a target="_blank" href="/teachers/<%= @teacher.id %>/teach_students/<%= resume.id %>/resume">
+								<%= domain[:name] %></a>
+						</li>
+					<% end %>
+				</ul>
+			</div>
+		<% else %>
+			<span class="info">(未添加简历)</span>
+		<% end %>
+	</td>
+	
+	
+	<td>
+		<%= h(student.number) %>
+	</td>
+	
+	
+	<td>
+		<%= student_name %>
+	</td>
+	
+	
+	<td>
+		<%= college[:name] %>
+	</td>
+	
+	
+	<td>
+		<%= major[:name] %>
+	</td>
+	
+	
+	<td>
+		<%= edu_level[:name] %>
+	</td>
+	
+	
+	<td>
+		<%= graduation_year %> 年 <%= %Q! (应届)! if graduation_year == @school.coming_graduation_year %>
+	</td>
+</tr>

@@ -4,6 +4,8 @@
 	school_abbr = @school.abbr
 %>
 
+<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+
 
 <h2>查询学生</h2>
 
@@ -27,7 +29,7 @@
 	
 	<div>
 		<% form_tag "", :method => :get do %>
-			<select name="c" id="college_id" class="dropdown_list" onchange="fill_majors(this.value);">
+			<select name="c" id="college_id" class="dropdown_list">
 				<option value=""<%= %Q! selected="selected"! if @college_id.blank? %>>不限学院</option>
 				<% College.data[school_abbr].each do |college| %>
 					<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @college_id.to_i == college[:id] %>><%= college[:name] %></option>
@@ -68,11 +70,16 @@
 </div>
 
 <div>
-	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w">
+	<table border="0" cellspacing="0" cellpadding="5" class="main_part_w">
 		<thead>
 			<tr>
-				<td style="width: 200px;">学号</td>
-				<td></td>
+				<td style="width: 80px;"></td>
+				<td style="width: 80px;">学号</td>
+				<td style="width: 50px;">姓名</td>
+				<td>学院</td>
+				<td>专业</td>
+				<td style="width: 50px;">教育水平</td>
+				<td style="width: 85px;">毕业时间</td>
 			</tr>
 		</thead>
 		
@@ -83,27 +90,57 @@
 </div>
 
 
+<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var MAJORS = {};
 	<% College.data[school_abbr].each do |college| %>
 		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
 	<% end %>
 	
-	function fill_majors(college_id) {
-		var major_select = document.getElementById("major_id");
+	function fill_majors(college_id, major_id) {
+		$("#major_id").html("");
 		
-		major_select.options.length = 0;
-		
-		var empty_option = new Option("不限专业", "");
-		empty_option.selected = true;
-		major_select.options.add(empty_option);
-		
+		$("#major_id").append("<option value=''>不限专业</option>");
+
 		var major_objs = MAJORS["c_" + college_id];
 		if(major_objs != null && major_objs.length > 0) {
-			for(var i = 0; i < major_objs.length; i++) {
-				var major_obj = major_objs[i];
-				major_select.options.add(new Option(major_obj.name, major_obj.id));
-			}
+			var options = $.map(
+				major_objs,
+				function(major_obj, i) {
+					return "<option value='" + major_obj.id + "'>" + major_obj.name + "</option>";
+				}
+			);
+
+			$("#major_id").append(options.join(""));
+
+			$("#major_id").val(major_id);
 		}
 	}
+	
+	$(document).ready(
+		function() {
+			$(".view_resume_link").click(
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+					$(this).parent().hover(
+						function() {
+						},
+						function() {
+							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+						}
+					);
+					
+					return false;
+				}
+			);
+			
+			
+			$("#college_id").change(
+				function() {
+					fill_majors($(this).val(), "");
+				}
+			);
+		}
+	);
 </script>

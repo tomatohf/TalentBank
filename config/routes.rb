@@ -21,14 +21,16 @@ ActionController::Routing::Routes.draw do |map|
     :edit_password => :get,
     :update_password => :post,
     
-    :students => :get,
-    
     :corporations => :get,
     :new_corporation => :get,
     :create_corporation => :post,
     :allow_corporation_query => :post,
     :inhibit_corporation_query => :post
-  }
+  } do |teachers|
+    teachers.resources :teach_students, :member => {
+      :resume => :get
+    }
+  end
   
   
   map.resources :students, :collection => {

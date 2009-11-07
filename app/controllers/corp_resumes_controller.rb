@@ -11,6 +11,8 @@ class CorpResumesController < ApplicationController
   
   before_filter :check_corporation_allow_query
   
+  before_filter :check_resume, :only => [:show]
+  
   
   def index
     conditions = params[:q] && params[:q].strip
@@ -64,8 +66,6 @@ class CorpResumesController < ApplicationController
   
   
   def show
-    @resume = Resume.find(params[:id])
-    
     @available = @resume.available?(@corporation.id)
     if @available
       # ========== record the view to db ==========
@@ -82,6 +82,12 @@ class CorpResumesController < ApplicationController
   def check_corporation
     corporation_id = params[:corporation_id] && params[:corporation_id].strip
     jump_to("/errors/forbidden") unless (session[:account_id].to_s == corporation_id) && ((@corporation = Corporation.find(corporation_id)).school_id == School.get_school_info(@school.abbr)[0])
+  end
+  
+  
+  def check_resume
+    @resume = Resume.find(params[:id])
+    jump_to("/errors/forbidden") unless @resume.student.school_id == @corporation.school_id
   end
   
 end

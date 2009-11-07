@@ -37,7 +37,7 @@
 	<div>
 		<label for="college">学院:</label>
 		<select name="college" id="college" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限学院</option>
 			<% College.data[school_abbr].each do |college| %>
 				<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
 			<% end %>
@@ -47,7 +47,7 @@
 	
 		<label for="major">专业:</label>
 		<select name="major" id="major" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限专业</option>
 			<% (Major.data[@query.college_id]|| []).each do |major| %>
 				<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
 			<% end %>
@@ -57,7 +57,7 @@
 	
 		<label for="edu_level">教育水平:</label>
 		<select name="edu_level" id="edu_level" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>>不限教育水平</option>
 			<% @school.edu_levels.each do |level_id| %>
 				<% level = EduLevel.find(level_id) %>
 				<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
@@ -68,7 +68,7 @@
 	
 		<label for="graduation_year">毕业时间:</label>
 		<select name="graduation_year" id="graduation_year" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>></option>
+			<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>>不限毕业时间</option>
 			<% year = @school.coming_graduation_year %>
 			<% @school.graduation_years.each do |graduation_year| %>
 				<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == graduation_year %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>

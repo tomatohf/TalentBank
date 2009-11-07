@@ -6,6 +6,8 @@ class Student < ActiveRecord::Base
   has_one :job_photo, :class_name => "JobPhoto", :foreign_key => "student_id", :dependent => :destroy
   has_many :edu_exps, :class_name => "EduExp", :foreign_key => "student_id", :dependent => :destroy
   
+  has_many :resumes, :class_name => "Resume", :foreign_key => "student_id", :dependent => :destroy
+  
   
   include Utils::Searchable
   
