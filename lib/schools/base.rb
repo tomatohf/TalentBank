@@ -5,8 +5,19 @@ module Schools
   end
   
   
+  module Helpers
+    
+    def coming_graduation_year
+      today = Date.today
+      (today.month > 6) ? (today.year + 1) : today.year
+    end
+    
+  end
+  
+  
   class Base
     include Singleton
+    include Helpers
     
     
     def abbr
@@ -40,6 +51,21 @@ module Schools
     
     def resume_domains
       []
+    end
+    
+    
+    def all_graduation_years
+			year = self.coming_graduation_year
+      Array.new(4) { |i| year + i }
+    end
+    
+    def show_past_graduation_years
+      false
+    end
+    
+    def graduation_years
+      year = self.coming_graduation_year
+      all_graduation_years.delete_if { |graduation_year| graduation_year < year }
     end
     
     

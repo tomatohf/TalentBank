@@ -51,16 +51,9 @@
 
 			<select name="g" id="graduation_year" class="dropdown_list">
 				<option value=""<%= %Q! selected="selected"! if @graduation_year.blank? %>>不限毕业时间</option>
-				<%
-					today = Date.today
-					this_year = today.year
-					this_month = today.month
-					coming_graduation_year = (this_month > 6) ? (this_year + 1) : this_year
-				%>
-				<option value="<%= coming_graduation_year %>"<%= %Q! selected="selected"! if @graduation_year == coming_graduation_year.to_s %>><%= coming_graduation_year %> 年 (应届)</option>
-				<% 3.times do |i| %>
-					<% year = coming_graduation_year + i + 1 %>
-					<option value="<%= year %>"<%= %Q! selected="selected"! if @graduation_year == year.to_s %>><%= year %> 年</option>
+				<% year = @school.coming_graduation_year %>
+				<% @school.graduation_years.each do |graduation_year| %>
+					<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @graduation_year == graduation_year.to_s %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>
 				<% end %>
 			</select>
 			

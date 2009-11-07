@@ -168,11 +168,11 @@ class TeachersController < ApplicationController
   
   
   def allow_corporation_query
-    adjust_corporation_allow_query(true)
+    adjust_corporation_permission(:allow_query, true)
   end
   
   def inhibit_corporation_query
-    adjust_corporation_allow_query(false)
+    adjust_corporation_permission(:allow_query, false)
   end
   
   
@@ -189,12 +189,12 @@ class TeachersController < ApplicationController
   end
   
   
-  def adjust_corporation_allow_query(allow_query)
+  def adjust_corporation_permission(name, value)
     corporation = Corporation.find(params[:corporation_id])
-    corporation.allow_query = allow_query
+    corporation.send("#{name}=", value)
     
     if (corporation.school_id == @teacher.school_id) && corporation.save
-      return render(:partial => "allow_query_field", :locals => {:corporation => corporation})
+      return render(:partial => "#{name}_field", :locals => {:corporation => corporation})
     end
     
     render :nothing => true
