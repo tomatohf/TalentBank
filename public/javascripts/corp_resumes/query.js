@@ -1,6 +1,8 @@
 function fill_majors(college_id, major_id) {
 	$("#major").html("");
 	
+	$("#major").append("<option value=''>不限专业</option>");
+
 	var major_objs = MAJORS["c_" + college_id];
 	if(major_objs != null && major_objs.length > 0) {
 		var options = $.map(
@@ -10,7 +12,6 @@ function fill_majors(college_id, major_id) {
 			}
 		);
 		
-		$("#major").append("<option value=''></option>");
 		$("#major").append(options.join(""));
 		
 		$("#major").val(major_id);

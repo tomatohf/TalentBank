@@ -73,6 +73,26 @@ class Corporation < ActiveRecord::Base
   end
   
   
+  def self.school_search(keyword, school_id, page = 1, per_page = 10, options = {})
+    filters = {:school_id => school_id}
+    filters.merge!(:allow_query => options[:allow_query]) unless options[:allow_query].nil?
+    [:nature_id, :size_id, :industry_id, :province_id].each do |filter_key|
+      filter_value = options[filter_key]
+      filters.merge!(filter_key => filter_value) unless filter_value.blank?
+    end
+    
+    self.search(
+      keyword,
+      :page => page,
+      :per_page => per_page,
+      :match_mode => Search_Match_Mode,
+      :order => "@relevance DESC, updated_at DESC",
+      :field_weights => {},
+      :with => filters
+    )
+  end
+  
+  
   def name?
     !self.name.blank?
   end

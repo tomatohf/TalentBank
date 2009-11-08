@@ -24,7 +24,7 @@ class CorpResumesController < ApplicationController
     unless conditions.blank?
       page = params[:page]
       page = 1 unless page =~ /\d+/
-      @resumes = Resume.do_search(@query, @corporation.school_id, page, @query_tags, @query_skills)
+      @resumes = Resume.corp_search(@query, @corporation, page, @query_tags, @query_skills)
     end
   end
   

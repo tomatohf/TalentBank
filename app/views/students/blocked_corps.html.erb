@@ -1,0 +1,55 @@
+<% talent_page_title("企业黑名单 - 我的设置") %>
+
+
+<h2>我的设置 - 企业黑名单</h2>
+
+<%= render :partial => "setting_nav", :locals => {:current_link => "blocked_corps"} %>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div class="blocked_corps">
+	<div class="blocked_corps_title">
+		<a class="float_r none" href="/students/<%= @student.id %>/new_blocked_corp">
+			<img src="/images/students/blocked_corp_icon.gif" border="0" style="margin-bottom: -2px;" />
+			添加企业到黑名单</a>
+			
+		当前企业黑名单:
+	</div>
+	
+	<div class="info_with_icon">
+		黑名单中的企业将无法查询和查看到你的简历
+	</div>
+	
+	<div>
+		<% form_tag "/students/#{@student.id}/destroy_blocked_corp", :method => :post, :id => "destroy_blocked_corp_form" do %>
+			<input type="hidden" id="corporation_id" name="corporation_id" />
+		<% end %>
+
+		<script language="JavaScript">
+			function destroy_blocked_corp(corp_id, corp_name) {
+				if(confirm("确定要将企业 " + corp_name + " 从黑名单中移除么 ?")) {
+					document.getElementById("corporation_id").value = corp_id;
+					document.getElementById("destroy_blocked_corp_form").submit();
+				}
+			}
+		</script>
+		
+		<%= render :partial => "blocked_corp", :collection=> @blocked_corps %>
+		
+		<% unless @blocked_corps.size > 0 %>
+			<br />
+			<div class="info align_c">
+				(当前黑名单为空)
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 9) do
+ActiveRecord::Schema.define(:version => 10) do
+
+  create_table "blocked_corps", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "corporation_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "blocked_corps", ["student_id", "corporation_id"], :name => "index_blocked_corps_on_student_id_and_corporation_id", :unique => true
 
   create_table "corp_queries", :force => true do |t|
     t.integer  "corporation_id"

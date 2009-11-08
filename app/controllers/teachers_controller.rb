@@ -1,8 +1,5 @@
 class TeachersController < ApplicationController
   
-  Corporation_Page_Size = 10
-  
-  
   before_filter :check_login_for_teacher
   
   before_filter :check_active, :only => [:update, :update_password, :create_corporation,
@@ -91,23 +88,17 @@ class TeachersController < ApplicationController
         nil
       end
       
-      filters = {:school_id => @teacher.school_id}
-      filters.merge!(:allow_query => @allow_query) unless @allow_query.nil?
-      [:nature_id, :size_id, :industry_id, :province_id].each do |filter_key|
-        filter_value = self.instance_variable_get("@#{filter_key}")
-        filters.merge!(filter_key => filter_value) unless filter_value.blank?
-      end
-      
       page = params[:page]
       page = 1 unless page =~ /\d+/
-      Corporation.search(
+      Corporation.school_search(
         @keyword,
-        :page => page,
-        :per_page => Corporation_Page_Size,
-        :match_mode => Corporation::Search_Match_Mode,
-        :order => "@relevance DESC, updated_at DESC",
-        :field_weights => {},
-        :with => filters
+        @teacher.school_id,
+        page, 10,
+        :allow_query => @allow_query,
+        :nature_id => @nature_id,
+        :size_id => @size_id,
+        :industry_id => @industry_id,
+        :province_id => @province_id
       )
     end
   end

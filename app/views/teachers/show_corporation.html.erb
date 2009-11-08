@@ -8,7 +8,7 @@
 <h2>企业 <%= corp_name %> 的信息</h2>
 
 
-<div>
+<div style="margin: 5px 30px;">
 	<% form_tag "/teachers/#{@teacher.id}/#{@corporation.allow_query ? 'inhibit' : 'allow'}_corporation_query", :method => :post, :id => "adjust_allow_query_form" do %>
 		<input type="hidden" id="corporation_id" name="corporation_id" value="<%= @corporation.id %>" />
 	<% end %>

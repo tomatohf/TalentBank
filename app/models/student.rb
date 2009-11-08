@@ -8,6 +8,8 @@ class Student < ActiveRecord::Base
   
   has_many :resumes, :class_name => "Resume", :foreign_key => "student_id", :dependent => :destroy
   
+  has_many :blocked_corps, :class_name => "BlockedCorp", :foreign_key => "student_id", :dependent => :destroy
+  
   
   include Utils::Searchable
   
@@ -49,6 +51,14 @@ class Student < ActiveRecord::Base
     student.renew_resume_updated_at(student.updated_at)
   }
   
+  
+  
+  def self.setting_parts
+    [
+      ["edit", "修改密码"],
+  		["blocked_corps", "企业黑名单"]
+    ]
+  end
   
   
   def self.authenticate(abbr, number, pwd)

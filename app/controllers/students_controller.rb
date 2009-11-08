@@ -4,9 +4,13 @@ class StudentsController < ApplicationController
   
   before_filter :check_active, :only => [:update, :update_profile,
                                           :update_job_photo, :destroy_job_photo,
-                                          :add_skill, :remove_skill, :update_skills]
+                                          :add_skill, :remove_skill, :update_skills,
+                                          :create_blocked_corp, :destroy_blocked_corp]
   
   before_filter :check_student
+  
+  before_filter :check_corporation, :only => [:create_blocked_corp, :destroy_blocked_corp,
+                                              :show_corporation]
   
   
   def show
@@ -169,11 +173,79 @@ class StudentsController < ApplicationController
   end
   
   
+  def blocked_corps
+    @blocked_corps = BlockedCorp.find(
+      :all,
+      :conditions => ["student_id = ?", @student.id],
+      :include => [:corporation]
+    )
+  end
+  
+  def new_blocked_corp
+    @nature_id = params[:n] && params[:n].strip
+    @size_id = params[:s] && params[:s].strip
+    @industry_id = params[:i] && params[:i].strip
+    @province_id = params[:p] && params[:p].strip
+    
+    @keyword = params[:k] && params[:k].strip
+    
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @corporations = Corporation.school_search(
+      @keyword,
+      @student.school_id,
+      page, 20,
+      :nature_id => @nature_id,
+      :size_id => @size_id,
+      :industry_id => @industry_id,
+      :province_id => @province_id
+    )
+  end
+  
+  
+  def create_blocked_corp
+    blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
+    
+    if blocked_corp.save
+      flash[:success_msg] = "操作成功, 已将企业 #{@corporation.name} 添加到黑名单"
+    else
+      flash[:error_msg] = "操作失败, 再试一次吧"
+    end
+    
+    back = params[:back] && params[:back].strip
+    back = "blocked_corps" if back.blank?
+    jump_to("/students/#{@student.id}/#{back}")
+  end
+  
+  def destroy_blocked_corp
+    blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
+    blocked_corp.destroy
+    
+    flash[:success_msg] = "操作成功, 已将企业 #{@corporation.name} 从黑名单中移除"
+    
+    back = params[:back] && params[:back].strip
+    back = "blocked_corps" if back.blank?
+    jump_to("/students/#{@student.id}/#{back}")
+  end
+  
+  
+  def show_corporation
+    @profile = @corporation.profile || CorporationProfile.new
+    @blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
+  end
+  
+  
   private
   
   def check_student
     student_id = params[:id] && params[:id].strip
     jump_to("/errors/forbidden") unless (session[:account_id].to_s == student_id) && ((@student = Student.find(student_id)).school_id == School.get_school_info(@school.abbr)[0])
+  end
+  
+  
+  def check_corporation
+    @corporation = Corporation.find(params[:corporation_id])
+    jump_to("/errors/forbidden") unless @corporation.school_id == @student.school_id
   end
   
 end

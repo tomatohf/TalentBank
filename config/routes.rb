@@ -34,6 +34,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   
+  map.connect "/students/:id/corporations/:corporation_id", :controller => "students", :action => "show_corporation", :id => /\d+/, :corporation_id => /\d+/
   map.resources :students, :collection => {
     
   }, :member => {
@@ -48,7 +49,12 @@ ActionController::Routing::Routes.draw do |map|
     :update_skills => :post,
     
     :add_skill => :post,
-    :remove_skill => :post
+    :remove_skill => :post,
+    
+    :blocked_corps => :get,
+    :new_blocked_corp => :get,
+    :create_blocked_corp => :post,
+    :destroy_blocked_corp => :post
   } do |students|
     students.resources :edu_exps
     students.resources :student_exps

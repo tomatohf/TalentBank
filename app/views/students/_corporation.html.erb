@@ -1,0 +1,16 @@
+<%
+	corp_name = h(corporation.name)
+%>
+
+<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<td>
+		<a target="_blank" class="none" href="/students/<%= @student.id %>/corporations/<%= corporation.id %>">
+			<%= corp_name %></a>
+	</td>
+	
+	<td align="right">
+		<a class="none" href="#" onclick="create_blocked_corp(<%= corporation.id %>, '<%= a(corp_name) %>'); return false;">
+			<img src="/images/students/blocked_corp_icon.gif" border="0" style="margin-bottom: -2px;" />
+			添加到黑名单</a>
+	</td>
+</tr>

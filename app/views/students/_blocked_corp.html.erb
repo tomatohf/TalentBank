@@ -1,0 +1,18 @@
+<%
+	corporation = blocked_corp.corporation
+	
+	corp_name = h(corporation.name)
+%>
+
+<div class="blocked_corp">
+	
+	<a target="_blank" class="none" href="/students/<%= @student.id %>/corporations/<%= corporation.id %>">
+		<%= corp_name %></a>
+		
+	<span style="margin-left: 20px; font-size: 12px;">
+		<a title="从黑名单移除企业 <%= corp_name %>" class="none" href="#" onclick="destroy_blocked_corp(<%= corporation.id %>, '<%= a(corp_name) %>'); return false;">
+			<img src="/images/teachers/delete_icon.gif" border="0" alt="移除" />
+			移除</a>
+	</span>
+	
+</div>

@@ -1,0 +1,126 @@
+<%
+	corp_name = h(@corporation.name)
+	
+	talent_page_title("企业 #{corp_name} 的信息")
+%>
+
+
+<h2>企业 <%= corp_name %> 的信息</h2>
+
+
+<div style="margin: 5px 30px; font-size: 14px;">
+	<div class="align_r">
+		<% form_tag "/students/#{@student.id}/#{@blocked_corp.new_record? ? 'create' : 'destroy'}_blocked_corp", :method => :post, :id => "adjust_blocked_corp_form" do %>
+			<input type="hidden" id="back" name="back" value="corporations/<%= @corporation.id %>" />
+			<input type="hidden" id="corporation_id" name="corporation_id" value="<%= @corporation.id %>" />
+		<% end %>
+		
+		<a href="#" class="none" onclick="document.getElementById('adjust_blocked_corp_form').submit(); return false;">
+			<% if @blocked_corp.new_record? %>
+				添加到企业黑名单
+			<% else %>
+				从企业黑名单中移除
+			<% end %>
+		</a>
+	</div>
+
+	<div>
+		<table border="0" cellspacing="10" cellpadding="5">
+			<tr>
+				<td style="width: 100px;">
+					企业名称:
+				</td>
+
+				<td>
+					<%= corp_name %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					地址:
+				</td>
+
+				<td>
+					<%= h(@profile.address) %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					邮编:
+				</td>
+
+				<td>
+					<%= h(@profile.zip) %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					企业网站:
+				</td>
+
+				<td>
+					<%= h(@profile.website) %>
+				</td>
+			</tr>
+
+
+			<tr>
+				<td>
+					企业性质:
+				</td>
+
+				<td>
+					<% nature = @profile.nature_id && CorporationNature.find(@profile.nature_id) %>
+					<%= nature && nature[:name] %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					企业规模:
+				</td>
+
+				<td>
+					<% size = @profile.size_id && CorporationSize.find(@profile.size_id) %>
+					<%= size && size[:name] %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					所属行业:
+				</td>
+
+				<td>
+					<% industry = @profile.industry_id && CorporationIndustry.find(@profile.industry_id) %>
+					<%= industry && industry[:name] %>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					企业所在地:
+				</td>
+
+				<td>
+					<% province = @profile.province_id && Province.find(@profile.province_id) %>
+					<%= province && province[:name] %>
+				</td>
+			</tr>
+
+
+			<tr>
+				<td>
+					企业简介:
+				</td>
+
+				<td>
+					<%= simple_format(h(@profile.desc)) %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

@@ -288,6 +288,7 @@ a.none:hover {
 	font-size: 14px;
 	font-weight: bold;
 	text-decoration: none;
+	color: #333333;
 }
 
 
@@ -436,4 +437,23 @@ a.unselected_skill:hover {
 .corp_resume .job_photo {
 	border: 1px solid #999999;
 	padding: 1px;
+}
+
+
+.blocked_corps {
+	margin: 10px 30px;
+	width: 500px;
+}
+
+.blocked_corps_title {
+	font-size: 13px;
+	font-weight: bold;
+	border-bottom: 1px solid #DDDDDD;
+	margin-bottom: 6px;
+	padding: 5px;
+}
+
+.blocked_corp {
+	margin: 10px 20px;
+	font-size: 14px;
 }

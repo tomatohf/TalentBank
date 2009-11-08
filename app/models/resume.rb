@@ -59,6 +59,8 @@ class Resume < ActiveRecord::Base
     has student.edu_level_id, :as => :edu_level_id
     has student.graduation_year, :as => :graduation_year
     
+    has student.blocked_corps.corporation_id, :as => :blocked_corp_id
+    
     has domain_id, online, updated_at
     
     has exp_taggers.tag_id, :as => :exp_tag_id
@@ -116,7 +118,7 @@ class Resume < ActiveRecord::Base
   
   Resume_Page_Size = 20
   
-  def self.do_search(query, school_id = nil, page = 1, query_tags = nil, query_skills = nil)
+  def self.corp_search(query, corporation, page = 1, query_tags = nil, query_skills = nil)
     query_tags, query_skills = query.tags_and_skills unless query_tags && query_skills
     valid_skill_values = query_skills.collect do |skill_id, skill_value|
       Skill.find(skill_id)[:data].collect {|d| d[:value] }.select {|v| v >= skill_value }.collect do |v|
@@ -127,7 +129,7 @@ class Resume < ActiveRecord::Base
     filters = {
       :online => true
     }
-    filters.merge!(:school_id => school_id) unless school_id.nil?
+    filters.merge!(:school_id => corporation.school_id)
     [:college_id, :major_id, :edu_level_id, :graduation_year, :domain_id].each do |filter_key|
       filter_value = query.send(filter_key)
       filters.merge!(filter_key => filter_value) unless filter_value.nil?
@@ -144,6 +146,9 @@ class Resume < ActiveRecord::Base
       :with_all => {
         :exp_tag_id => query_tags,
         :skill_values => valid_skill_values
+      },
+      :without => {
+        :blocked_corp_id => corporation.id
       },
       :include => [
         {:student => :job_photo}
@@ -188,7 +193,8 @@ class Resume < ActiveRecord::Base
   
   
   def available?(corp_id)
-    self.online
+    # the resume is online and the corporation is NOT in the blacklist
+    self.online && BlockedCorp.get_record(self.student_id, corp_id).new_record?
   end
   
 end

@@ -1,0 +1,88 @@
+<% talent_page_title("企业黑名单 - 我的设置") %>
+
+
+<h2>我的设置 - 企业黑名单</h2>
+
+<%= render :partial => "setting_nav", :locals => {:current_link => "blocked_corps"} %>
+
+<div class="blocked_corps_title">
+	<a class="float_r none" href="/students/<%= @student.id %>/blocked_corps">
+		返回当前企业黑名单</a>
+		
+	添加企业到黑名单:
+</div>
+
+<div>
+	<% form_tag "", :method => :get do %>
+		<div>
+			<select name="n" id="nature_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @nature_id.blank? %>>不限企业性质</option>
+				<% CorporationNature.data.each do |nature| %>
+					<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @nature_id == nature[:id].to_s %>><%= nature[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="s" id="size_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @size_id.blank? %>>不限企业规模</option>
+				<% CorporationSize.data.each do |size| %>
+					<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @size_id == size[:id].to_s %>><%= size[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="i" id="industry_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @industry_id.blank? %>>不限企业所属行业</option>
+				<% CorporationIndustry.data.each do |industry| %>
+					<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @industry_id == industry[:id].to_s %>><%= industry[:name] %></option>
+				<% end %>
+			</select>
+
+			<select name="p" id="province_id" class="dropdown_list">
+				<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限企业所在地</option>
+				<% Province.data.each do |province| %>
+					<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
+				<% end %>
+			</select>
+		</div>
+
+		<div>
+			<label for="keyword">
+				关键字
+			</label>
+			<input type="text" id="keyword" name="k" class="text_field" size="20" value="<%= h(@keyword) %>" />
+
+			<input type="submit" value="查找企业" class="button" />
+		</div>
+	<% end %>
+</div>
+
+<div>
+	<% form_tag "/students/#{@student.id}/create_blocked_corp", :method => :post, :id => "create_blocked_corp_form" do %>
+		<input type="hidden" id="corporation_id" name="corporation_id" />
+	<% end %>
+	
+	<script language="JavaScript">
+		function create_blocked_corp(corp_id, corp_name) {
+			if(confirm("确定要将企业 " + corp_name + " 添加到黑名单么 ?")) {
+				document.getElementById("corporation_id").value = corp_id;
+				document.getElementById("create_blocked_corp_form").submit();
+			}
+		}
+	</script>
+	
+	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
+		<thead>
+			<tr>
+				<td>企业名称</td>
+				<td style="width: 120px;"></td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<%= render :partial => "corporation", :collection => @corporations %>
+		</tbody>
+	</table>
+
+	<div>
+		<%= paging_buttons(@corporations) %>
+	</div>
+</div>

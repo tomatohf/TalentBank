@@ -1,7 +1,9 @@
-<% talent_page_title("修改学生密码") %>
+<% talent_page_title("修改学生密码 - 我的设置") %>
 
 
-<h2>修改密码</h2>
+<h2>我的设置 - 修改密码</h2>
+
+<%= render :partial => "setting_nav", :locals => {:current_link => "edit"} %>
 
 <% if flash[:error_msg] %>
 	<p class="error_msg">
