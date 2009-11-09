@@ -155,9 +155,13 @@ class ApplicationController < ActionController::Base
   
   def jump_to(url)
     if request.xhr?
-      render :update do |page|
-        page.redirect_to url
-      end
+      # render :update do |page|
+      #   page.redirect_to url
+      # end
+      
+      render :layout => false, :inline => %Q!
+        <script type="text/javascript">window.location.href = "#{url}";</script>
+      !
     else
       redirect_to(url)
     end

@@ -123,11 +123,16 @@ function do_save_query(query_name) {
 		"/corporations/" + CORPORATION_ID + "/corp_saved_queries",
 		$("#query_form").serialize() + "&name=" + encodeURIComponent(query_name),
 		function(data) {
-			show_dialog(
-				data,
-				{ cancel: "确定" },
-				null
-			);
+			if(data != null && data.substr(0, 4) == "true") {
+				// success and do nothing
+			}
+			else {
+				show_dialog(
+					data,
+					{ cancel: "确定" },
+					null
+				);
+			}
 		},
 		"html"
 	);

@@ -25,7 +25,7 @@
 		<% if @taggers.size > 0 %>
 		
 		<% else %>
-			<a href="#" id="save_resume_link">
+			<a href="#" id="save_resume_link_<%= @resume.id %>">
 				收藏这份简历</a>
 		<% end %>
 	</div>
@@ -36,10 +36,20 @@
 	
 	
 	<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
 	<script language="JavaScript">
+		var CORPORATION_ID = <%= @corporation.id %>;
 		
+		$(document).ready(
+			function() {
+				$("a[id^='save_resume_link_']").click(
+					function() {
+						save_resume($(this).attr("id").substr("save_resume_link_".length));
+					}
+				);
+			}
+		);
 	</script>
-	<script src="/javascripts/corp_resumes/resume.js" type="text/javascript" language="JavaScript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
 	

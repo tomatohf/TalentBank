@@ -60,7 +60,7 @@ function remove_tag(tagger_id, tagger_link) {
 			},
 			complete: hide_tag_loading,
 			success: function(data, text_status) {
-				if(data != null && data.substr(0, 4)  == "true") {
+				if(data != null && data.substr(0, 4) == "true") {
 					$(tagger_link).remove();
 				}
 			}
@@ -110,7 +110,7 @@ function update_exp_order(exps_container, order) {
 			order: order.join(SEP)
 		},
 		function(data) {
-			if(data != null && data.substr(0, 4)  == "true") {
+			if(data != null && data.substr(0, 4) == "true") {
 				// success, and do nothing
 			}
 			else {

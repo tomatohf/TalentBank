@@ -22,11 +22,15 @@ class CorpSavedQueriesController < ApplicationController
     )
 
     if @saved_query.save
-      render :layout => false, :text => %Q!
-        <p class="success_msg">
-          操作成功, 查询条件已保存
-        </p>
-      !
+      # it seems NOT necessary and annoying
+      # 
+      # render :layout => false, :text => %Q!
+      #   <p class="success_msg">
+      #     操作成功, 查询条件已保存
+      #   </p>
+      # !
+      
+      return render(:layout => false, :text => "true")
     else
       render :layout => false, :inline => %Q!
     	  <p class="error_msg">
