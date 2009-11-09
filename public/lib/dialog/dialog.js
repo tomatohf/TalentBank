@@ -4,6 +4,10 @@
 
 var DIALOG = {
 	
+	appeared: function() {
+		return $("#dialog_window").is(":visible");
+	},
+	
 	disappear: function() {
 		$("#dialog_overlay").animate(
 			{

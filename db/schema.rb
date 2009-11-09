@@ -49,6 +49,24 @@ ActiveRecord::Schema.define(:version => 10) do
 
   add_index "corp_query_skills", ["skill_id", "query_id"], :name => "index_corp_query_skills_on_skill_id_and_query_id", :unique => true
 
+  create_table "corp_resume_taggers", :force => true do |t|
+    t.integer  "corp_id"
+    t.integer  "resume_id"
+    t.integer  "tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corp_resume_taggers", ["corp_id", "resume_id", "tag_id"], :name => "index_corp_resume_taggers_on_corp_id_and_resume_id_and_tag_id", :unique => true
+  add_index "corp_resume_taggers", ["corp_id", "tag_id", "created_at"], :name => "index_corp_resume_taggers_on_corp_id_and_tag_id_and_created_at"
+
+  create_table "corp_resume_tags", :force => true do |t|
+    t.string   "name",       :limit => 30
+    t.datetime "updated_at"
+  end
+
+  add_index "corp_resume_tags", ["name"], :name => "index_corp_resume_tags_on_name", :unique => true
+
   create_table "corp_saved_queries", :force => true do |t|
     t.integer  "corporation_id"
     t.string   "conditions"
