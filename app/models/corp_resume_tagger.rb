@@ -13,11 +13,15 @@ class CorpResumeTagger < ActiveRecord::Base
   
   
   def self.corp_resume_tags(corp_id, resume_id)
+    self.corp_resume_taggers(corp_id, resume_id).collect { |tagger| tagger.tag.name }
+  end
+  
+  def self.corp_resume_taggers(corp_id, resume_id)
     self.find(
       :all,
       :conditions => ["corp_id = ? and resume_id = ?", corp_id, resume_id],
       :include => [:tag]
-    ).collect { |tagger| tagger.tag.name }
+    )
   end
   
   
@@ -25,8 +29,10 @@ class CorpResumeTagger < ActiveRecord::Base
     self.find(
       :all,
       :conditions => ["corp_id = ?", corp_id],
-      :group => "tag_id"
-    )
+      :from => "corp_resume_taggers FORCE INDEX(index_corp_resume_taggers_on_corp_id_and_tag_id_and_created_at)",
+      :group => "tag_id",
+      :include => [:tag]
+    ).collect { |tagger| tagger.tag.name }
   end
   
 end

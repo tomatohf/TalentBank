@@ -464,28 +464,29 @@ a.corp_tag, a.corp_tag_selected {
 	float: left;
 	text-decoration: none;
 	
-	background-color: #EEFFEE;
-	border-bottom: 1px solid #AAFFAA;
-	border-right: 1px solid #AAFFAA;
+	border-bottom: 1px solid #808080;
+	border-right: 1px solid #808080;
 	
 	margin: 3px;
-	padding: 3px 3px 2px;
+	padding: 3px 3px 2px 4px;
 	
 	white-space: nowrap;
 }
 
 a.corp_tag {
-	color: #006600;
+	color: #1A1A1A;
+	background-color: #E6E6E6;
 }
 
 a.corp_tag_selected {
-	color: #BBBBBB;
+	color: #999999;
+	background-color: #F0F0F0;
 }
 
 a.corp_tag:hover {
-	background-color: #55FF55;
-	border-bottom: 1px solid #33FF33;
-	border-right: 1px solid #33FF33;
+	background-color: #808080;
+	border-bottom: 1px solid #A0A0A0;
+	border-right: 1px solid #A0A0A0;
 	
 	color: #FFFFFF;
 }

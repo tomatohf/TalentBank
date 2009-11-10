@@ -43,8 +43,6 @@
 			<% end %>
 		</select>
 	
-		&nbsp;&nbsp;&nbsp;
-	
 		<label for="major">专业:</label>
 		<select name="major" id="major" class="dropdown_list">
 			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限专业</option>
@@ -52,8 +50,6 @@
 				<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
 			<% end %>
 		</select>
-	
-		&nbsp;&nbsp;&nbsp;
 	
 		<label for="edu_level">教育水平:</label>
 		<select name="edu_level" id="edu_level" class="dropdown_list">
@@ -63,8 +59,6 @@
 				<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
 			<% end %>
 		</select>
-	
-		&nbsp;&nbsp;&nbsp;
 	
 		<label for="graduation_year">毕业时间:</label>
 		<select name="graduation_year" id="graduation_year" class="dropdown_list">
@@ -92,8 +86,6 @@
 				<option value="<%= category[:id] %>"<%= %Q! selected="selected"! if category[:id] == init_category_id %>><%= category[:name] %></option>
 			<% end %>
 		</select>
-		
-		&nbsp;&nbsp;&nbsp;
 		
 		<select name="domain" id="domain" class="dropdown_list">
 			<% domain_category_mapping[init_category_id].each do |domain| %>

@@ -9,8 +9,13 @@ class CorpResumeTag < ActiveRecord::Base
   # validates_uniqueness_of :name, :case_sensitive => true, :message => "名称 已经存在"
   
   
-  
   Belongs_To_Keys = [:name]
   include Utils::UniqueBelongs
+  
+  
+  def self.get_tags(names)
+    tags = self.find(:all, :conditions => ["name in (?)", names])
+    tags + (names - tags.collect(&:name)).collect { |tag_name| self.new(:name => tag_name) }
+  end
   
 end

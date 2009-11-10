@@ -22,14 +22,9 @@
 <% else %>
 
 	<div class="align_r" style="margin: 0px 50px 10px 0px;">
-		<input type="hidden" id="corp_resume_tags_<%= @resume.id %>" value="<%= @tags.join(" ") %>" />
-		
-		<% if @tags.size > 0 %>
-		
-		<% else %>
-			<a href="#" id="save_resume_link_<%= @resume.id %>">
-				收藏这份简历</a>
-		<% end %>
+		<span id="save_resume_field_<%= @resume.id %>">
+			<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => @resume.id, :tags => @tags} %>
+		</span>
 	</div>
 	
 	<div>
@@ -41,18 +36,6 @@
 	<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
 	<script language="JavaScript">
 		var CORPORATION_ID = <%= @corporation.id %>;
-		
-		$(document).ready(
-			function() {
-				$("a[id^='save_resume_link_']").click(
-					function() {
-						save_resume($(this).attr("id").substr("save_resume_link_".length));
-						
-						return false;
-					}
-				);
-			}
-		);
 	</script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>

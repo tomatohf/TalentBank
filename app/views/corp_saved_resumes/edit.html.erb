@@ -10,34 +10,23 @@
 </div>
 
 <div style="margin: 5px 5px 6px 10px;">
-	<input type="text" id="corp_resume_tags_input_<%= @resume_id %>" name="tags" class="text_field" size="50" />
+	<input type="text" id="corp_resume_tags_input_<%= @resume_id %>" value="<%= @current_tags.join(" ") %>" class="text_field" size="50" />
 </div>
 
 <div style="margin: 0px 10px;">
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td valign="top" style="width: 70px;">用过的标签:</td>
+			<td valign="top" style="width: 70px; color: #666666;">用过的标签:</td>
 
 			<td>
 				<div id="corp_tags_<%= @resume_id %>" style="line-height: 25px;">
-					<%= @corp_tags.join(" ") %>
+					<% @corp_tags.each do |tag| %>
+						<a href="#" class="corp_tag"><%= h(tag) %></a>
+					<% end %>
 					
-					<a href="#" class="corp_tag">科幻</a>
-					<a href="#" class="corp_tag_selected">程序员</a>
-					<a href="#" class="corp_tag_selected">项目丰富</a>
-					<a href="#" class="corp_tag_selected">美国</a>
-					<a href="#" class="corp_tag">星河战队</a>
-					<a href="#" class="corp_tag">项目丰富啊项目丰富啊项目丰富啊项目丰富啊项目丰富啊项目丰富啊</a>
-					<a href="#" class="corp_tag">战争</a>
-					<a href="#" class="corp_tag">动作</a>
-					<a href="#" class="corp_tag">电影</a>
-					<a href="#" class="corp_tag">1997</a>
-					<a href="#" class="corp_tag">Sci-Fi</a>
-					<a href="#" class="corp_tag">经典</a>
-					<a href="#" class="corp_tag">虫子</a>
-					<a href="#" class="corp_tag">狗狗</a>
-					<a href="#" class="corp_tag">47</a>
-					<a href="#" class="corp_tag">Hitman</a>
+					<% unless @corp_tags.size > 0 %>
+						<a href="#" class="corp_tag">未分类</a>
+					<% end %>
 				</div>
 			</td>
 		</tr>
