@@ -32,6 +32,7 @@ class CorpResumes < ActiveRecord::Migration
     end
     add_index :corp_resume_taggers, [:corp_id, :resume_id, :tag_id], :unique => true
     add_index :corp_resume_taggers, [:corp_id, :tag_id, :created_at]
+    add_index :corp_resume_taggers, [:corp_id, :created_at]
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO corp_resume_taggers (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM corp_resume_taggers WHERE id = 10000")

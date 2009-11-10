@@ -25,14 +25,15 @@ class CorpResumeTagger < ActiveRecord::Base
   end
   
   
-  def self.corp_tags(corp_id)
+  def self.corp_tags(corp_id, count = false)
     self.find(
       :all,
+      :select => %Q!corp_resume_taggers.*#{", count(resume_id) as count" if count}!,
       :conditions => ["corp_id = ?", corp_id],
-      :from => "corp_resume_taggers FORCE INDEX(index_corp_resume_taggers_on_corp_id_and_tag_id_and_created_at)",
+      :from => "corp_resume_taggers USE INDEX(index_corp_resume_taggers_on_corp_id_and_tag_id_and_created_at)",
       :group => "tag_id",
       :include => [:tag]
-    ).collect { |tagger| tagger.tag.name }
+    ).collect { |tagger| count ? [tagger.tag.name, tagger.count] : tagger.tag.name }
   end
   
 end

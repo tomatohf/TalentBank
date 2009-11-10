@@ -20,10 +20,16 @@ class CorpSavedResumesController < ApplicationController
   
   
   def index
-    @resumes = CorpResumeTagger.find(
-      :all,
-      :conditions => []
-    )
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    CorpResumeTagger.paginate(
+      :page => page,
+      :per_page => Resume::Resume_Page_Size,
+      :select => "corp_resume_taggers.resume_id, corp_resume_taggers.created_at",
+      :joins => "LEFT JOIN corp_resume_taggers taggers ON corp_resume_taggers.resume_id = taggers.resume_id AND corp_resume_taggers.corp_id = taggers.corp_id AND corp_resume_taggers.created_at < taggers.created_at",
+      :conditions => ["taggers.resume_id IS NULL and corp_resume_taggers.corp_id = ?", @corporation.id],
+      :order => "corp_resume_taggers.created_at DESC"
+    )    
   end
   
   
@@ -31,7 +37,7 @@ class CorpSavedResumesController < ApplicationController
     @current_tags = ((params[:current_tags] && params[:current_tags].strip) || "").split
     
     @resume_id = params[:id]
-    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id)
+    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id, true)
     
     render :layout => false
   end
