@@ -22,7 +22,9 @@
 <% else %>
 
 	<div class="align_r" style="margin: 0px 50px 10px 0px;">
-		<% if @taggers.size > 0 %>
+		<input type="hidden" id="corp_resume_tags_<%= @resume.id %>" value="<%= @tags.join(" ") %>" />
+		
+		<% if @tags.size > 0 %>
 		
 		<% else %>
 			<a href="#" id="save_resume_link_<%= @resume.id %>">
@@ -45,6 +47,8 @@
 				$("a[id^='save_resume_link_']").click(
 					function() {
 						save_resume($(this).attr("id").substr("save_resume_link_".length));
+						
+						return false;
 					}
 				);
 			}

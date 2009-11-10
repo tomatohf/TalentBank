@@ -457,3 +457,35 @@ a.unselected_skill:hover {
 	margin: 10px 20px;
 	font-size: 14px;
 }
+
+
+a.corp_tag, a.corp_tag_selected {
+	display: block
+	float: left;
+	text-decoration: none;
+	
+	background-color: #EEFFEE;
+	border-bottom: 1px solid #AAFFAA;
+	border-right: 1px solid #AAFFAA;
+	
+	margin: 3px;
+	padding: 3px 3px 2px;
+	
+	white-space: nowrap;
+}
+
+a.corp_tag {
+	color: #006600;
+}
+
+a.corp_tag_selected {
+	color: #BBBBBB;
+}
+
+a.corp_tag:hover {
+	background-color: #55FF55;
+	border-bottom: 1px solid #33FF33;
+	border-right: 1px solid #33FF33;
+	
+	color: #FFFFFF;
+}

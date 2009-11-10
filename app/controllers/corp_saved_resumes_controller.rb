@@ -25,7 +25,10 @@ class CorpSavedResumesController < ApplicationController
   
   
   def edit
-    render :text => "AAAAAAA"
+    @resume_id = params[:id]
+    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id)
+    
+    render :layout => false
   end
   
   def update

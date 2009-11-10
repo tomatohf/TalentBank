@@ -1,3 +1,5 @@
+优化 CorpResumeTagger.corp_tags 的性能, 以及 排序
+
 企业收藏简历, 添加标签
 
 简历的 修改/评注/评论 功能

@@ -72,11 +72,7 @@ class CorpResumesController < ApplicationController
       CorpViewedResume.record(@corporation.id, @resume.id)
       # ========== end ==========
       
-      @taggers = CorpResumeTagger.find(
-        :all,
-        :conditions => ["corp_id = ? and resume_id = ?", @corporation.id, @resume.id],
-        :include => [:tag]
-      )
+      @tags = CorpResumeTagger.corp_resume_tags(@corporation.id, @resume.id)
     end
   end
   

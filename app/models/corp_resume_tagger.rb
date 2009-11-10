@@ -11,4 +11,22 @@ class CorpResumeTagger < ActiveRecord::Base
   Belongs_To_Keys = [:corp_id, :resume_id, :tag_id]
   include Utils::UniqueBelongs
   
+  
+  def self.corp_resume_tags(corp_id, resume_id)
+    self.find(
+      :all,
+      :conditions => ["corp_id = ? and resume_id = ?", corp_id, resume_id],
+      :include => [:tag]
+    ).collect { |tagger| tagger.tag.name }
+  end
+  
+  
+  def self.corp_tags(corp_id)
+    self.find(
+      :all,
+      :conditions => ["corp_id = ?", corp_id],
+      :group => "tag_id"
+    )
+  end
+  
 end
