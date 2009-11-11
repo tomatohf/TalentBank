@@ -157,7 +157,7 @@
 		
 		
 		<div>
-			<%= render :partial => "resume", :collection => @resumes %>
+			<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
 		</div>
 		
 		<div>

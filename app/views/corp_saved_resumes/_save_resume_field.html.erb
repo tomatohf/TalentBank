@@ -1,7 +1,7 @@
-<input type="hidden" id="corp_resume_tags_<%= resume_id %>" value="<%= tags.join(" ") %>" />
+<input type="hidden" id="corp_resume_tags_<%= resume_id %>" value="<%= h(tags.join(" ")) %>" />
 <% if tags.size > 0 %>
 	已收藏至:
-	<%= tags.join(" ") %>
+	<%= h(tags.join(" ")) %>
 	<a href="#" id="save_resume_link_<%= resume_id %>">修改</a>
 	<a href="#">删除</a>
 <% else %>

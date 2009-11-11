@@ -25,6 +25,8 @@ class CorpResumesController < ApplicationController
       page = params[:page]
       page = 1 unless page =~ /\d+/
       @resumes = Resume.corp_search(@query, @corporation, page, @query_tags, @query_skills)
+      
+      @resume_tags = CorpResumeTagger.corp_resume_tags(@corporation.id, @resumes)
     end
   end
   
@@ -72,7 +74,7 @@ class CorpResumesController < ApplicationController
       CorpViewedResume.record(@corporation.id, @resume.id)
       # ========== end ==========
       
-      @tags = CorpResumeTagger.corp_resume_tags(@corporation.id, @resume.id)
+      @tags = CorpResumeTagger.corp_resume_tags(@corporation.id, @resume.id)[@resume.id] || []
     end
   end
   

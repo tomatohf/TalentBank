@@ -1,6 +1,6 @@
 <div class="horizontal_nav">
 	<% Resume.edit_parts.each do |part| %>
-		<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/<%= part[0] %>"<%= %Q!class="selected_link"! if part[0] == current_link %>>
+		<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == current_link %>>
 			<%= part[1] %></a>
 	<% end %>
 	<a target="_blank" href="/students/<%= @student.id %>/resumes/<%= @resume.id %>">预览简历</a>

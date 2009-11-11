@@ -11,6 +11,8 @@
 	photo = student.job_photo
 	photo_w = JobPhoto::Normal_W/2
 	photo_h = JobPhoto::Normal_H/2
+	
+	tags = ((resume_tags || {})[resume.id]) || []
 %>
 
 <div class="corp_resume">
@@ -46,6 +48,13 @@
 						,
 						求职方向:
 						<%= domain[:name] %>
+					</div>
+					
+					<div>
+						<% if tags.size > 0 %>
+							已收藏至:
+							<%= h(tags.join(" ")) %>
+						<% end %>
 					</div>
 				</div>
 			</td>

@@ -10,6 +10,46 @@
 	</p>
 <% end %>
 
-<div>
+<div class="float_r" style="width: 220px;">
+	<div style="font-size: 14px;">
+		标签 (<%= @corp_tags.size %>)
+	</div>
+
+	<div class="corp_tags">
+		<div>
+			<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes"<%= %Q! class="selected_link"! if @tag_name.blank? %>>
+				全部</a>
+			(<%= @total_count %>)
+		</div>
+
+		<% @corp_tags.each do |tag, count| %>
+			<%
+				selected = @tag_name && (@tag_name == tag)
+				tag = h(tag)
+			%>
+			<div>
+				<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes?tag=<%= tag %>"<%= %Q! class="selected_link"! if selected %>>
+					<%= tag %></a>
+				(<%= count %>)
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<div style="margin-right: 250px;">
+	<div>
+		<%=
+			render(
+				:partial => "/corp_resumes/resume",
+				:collection => @resumes,
+				:locals => {
+					:resume_tags => @resume_tags
+				}
+			)
+		%>
+	</div>
 	
+	<div>
+		<%= @taggers && paging_buttons(@taggers) %>
+	</div>
 </div>

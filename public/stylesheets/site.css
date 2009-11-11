@@ -490,3 +490,14 @@ a.corp_tag:hover {
 	
 	color: #FFFFFF;
 }
+
+.corp_tags {
+	margin-top: 10px;
+}
+
+.corp_tags a.selected_link {
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333333;
+}

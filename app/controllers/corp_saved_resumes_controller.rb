@@ -22,14 +22,46 @@ class CorpSavedResumesController < ApplicationController
   def index
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    CorpResumeTagger.paginate(
-      :page => page,
-      :per_page => Resume::Resume_Page_Size,
-      :select => "corp_resume_taggers.resume_id, corp_resume_taggers.created_at",
-      :joins => "LEFT JOIN corp_resume_taggers taggers ON corp_resume_taggers.resume_id = taggers.resume_id AND corp_resume_taggers.corp_id = taggers.corp_id AND corp_resume_taggers.created_at < taggers.created_at",
-      :conditions => ["taggers.resume_id IS NULL and corp_resume_taggers.corp_id = ?", @corporation.id],
-      :order => "corp_resume_taggers.created_at DESC"
-    )    
+    
+    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id, true)
+    @total_count = CorpResumeTagger.corp_saved_count(@corporation.id)
+    
+    @tag_name = params[:tag] && params[:tag].strip
+    @taggers = if @tag_name.blank?
+      CorpResumeTagger.paginate(
+        :page => page,
+        :per_page => Resume::Resume_Page_Size,
+        :total_entries => @total_count,
+        :select => "corp_resume_taggers.resume_id, corp_resume_taggers.created_at",
+        :joins => "LEFT JOIN corp_resume_taggers taggers_1 ON corp_resume_taggers.resume_id = taggers_1.resume_id AND corp_resume_taggers.corp_id = taggers_1.corp_id AND corp_resume_taggers.created_at < taggers_1.created_at " +
+                  "LEFT JOIN corp_resume_taggers taggers_2 ON corp_resume_taggers.resume_id = taggers_2.resume_id AND corp_resume_taggers.corp_id = taggers_2.corp_id AND corp_resume_taggers.tag_id < taggers_2.tag_id",
+        :conditions => ["taggers_1.resume_id IS NULL and taggers_2.tag_id IS NULL and corp_resume_taggers.corp_id = ?", @corporation.id],
+        :order => "corp_resume_taggers.created_at DESC"
+      )
+    else
+      tag = CorpResumeTag.get_record(@tag_name)
+
+      CorpResumeTagger.paginate(
+        :page => page,
+        :per_page => Resume::Resume_Page_Size,
+        :total_entries => (tag_info = @corp_tags.detect { |tag_info| tag_info[0] == @tag_name }) && tag_info[1],
+        :conditions => ["corp_id = ? and tag_id = ?", @corporation.id, tag.id],
+        :order => "created_at DESC"
+      ) unless tag.new_record?
+    end
+    
+    if @taggers && @taggers.size > 0
+      resume_ids = @taggers.collect { |tagger| tagger.resume_id }
+      found_resumes = Resume.find(
+        :all,
+        :conditions => ["id in (?)", resume_ids],
+        :include => [
+          {:student => :job_photo}
+        ]
+      )
+      @resumes = resume_ids.collect { |resume_id| found_resumes.detect { |resume| resume.id == resume_id } }
+      @resume_tags = CorpResumeTagger.corp_resume_tags(@corporation.id, resume_ids)
+    end
   end
   
   
@@ -37,7 +69,7 @@ class CorpSavedResumesController < ApplicationController
     @current_tags = ((params[:current_tags] && params[:current_tags].strip) || "").split
     
     @resume_id = params[:id]
-    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id, true)
+    @corp_tags = CorpResumeTagger.corp_tags(@corporation.id, false)
     
     render :layout => false
   end

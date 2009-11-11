@@ -12,16 +12,19 @@ class CorpResumeTagger < ActiveRecord::Base
   include Utils::UniqueBelongs
   
   
-  def self.corp_resume_tags(corp_id, resume_id)
-    self.corp_resume_taggers(corp_id, resume_id).collect { |tagger| tagger.tag.name }
-  end
-  
   def self.corp_resume_taggers(corp_id, resume_id)
     self.find(
       :all,
-      :conditions => ["corp_id = ? and resume_id = ?", corp_id, resume_id],
+      :conditions => ["corp_id = ? and resume_id in (?)", corp_id, [resume_id].flatten],
       :include => [:tag]
     )
+  end
+  
+  def self.corp_resume_tags(corp_id, resume_id)
+    self.corp_resume_taggers(corp_id, resume_id).group_by(&:resume_id).inject({}) do |resume_tags, (resume_id, taggers)|
+      resume_tags[resume_id] = taggers.collect { |tagger| tagger.tag.name }
+      resume_tags
+    end
   end
   
   
@@ -34,6 +37,15 @@ class CorpResumeTagger < ActiveRecord::Base
       :group => "tag_id",
       :include => [:tag]
     ).collect { |tagger| count ? [tagger.tag.name, tagger.count] : tagger.tag.name }
+  end
+  
+  
+  def self.corp_saved_count(corp_id)
+    self.count(
+      :resume_id,
+      :conditions => ["corp_id = ?", corp_id],
+      :distinct => true
+    )
   end
   
 end

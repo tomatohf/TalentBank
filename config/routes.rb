@@ -93,7 +93,6 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   
-  map.connect "/corporations/:corporation_id/corp_saved_resumes/p/:page", :controller => "corp_saved_resumes", :action => "index", :corporation_id => /\d+/, :page => /\d+/
   map.resources :corporations, :collection => {
     
   }, :member => {
