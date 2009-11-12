@@ -1,7 +1,7 @@
 <% talent_page_title("收藏的简历") %>
 
 
-<h2>收藏的简历</h2>
+<h2>收藏的简历<%= %Q! - #{@tag_name}! unless @tag_name.blank? %></h2>
 
 
 <% if flash[:success_msg] %>

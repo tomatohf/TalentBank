@@ -64,8 +64,7 @@ function corp_tag_link_handler(event) {
 	if (current_tags.length == new_tags.length) {
 		new_tags.push(tag);
 	}
-	set_current_tags(resume_id, new_tags, true)
-	synchronize_tags_and_input(resume_id);
+	set_current_tags(resume_id, new_tags, true);
 	
 	return false;
 }
@@ -78,12 +77,24 @@ function setup_corp_tag_input(resume_id) {
 			resume_id: resume_id
 		},
 		corp_tag_input_handler
+	)
+	.siblings("a").unbind("click").bind(
+		"click",
+		{
+			resume_id: resume_id
+		},
+		clear_corp_tag_input_handler
 	);
 	
 	synchronize_tags_and_input(resume_id);
 }
 function corp_tag_input_handler(event) {
 	synchronize_tags_and_input(event.data.resume_id);
+}
+function clear_corp_tag_input_handler(event) {
+	set_current_tags(event.data.resume_id, "", false);
+	
+	return false;
 }
 
 
@@ -106,6 +117,8 @@ function set_current_tags(resume_id, tags, as_array) {
 		tags = tags.join(" ");
 	}
 	$("#corp_resume_tags_input_" + resume_id).val(tags);
+	
+	synchronize_tags_and_input(resume_id);
 }
 
 
@@ -175,6 +188,13 @@ function do_save_resume(resume_id, tags) {
 }
 
 
+function remove_saved_resume(resume_id) {
+	if(confirm("确定要从收藏中移除这份简历么 ?")) {
+		do_save_resume(resume_id, "");
+	}
+}
+
+
 function show_save_resume_dialog(content, button_text, resume_id, ok_event) {
 	DIALOG.appear(
 		{
@@ -196,9 +216,16 @@ function show_save_resume_dialog(content, button_text, resume_id, ok_event) {
 
 function setup_save_resume_links() {
 	$("a[id^='save_resume_link_']").unbind("click").click(save_resume_link_handler);
+	
+	$("a[id^='remove_saved_resume_link_']").unbind("click").click(remove_saved_resume_link_handler);
 }
 function save_resume_link_handler() {
 	save_resume($(this).attr("id").substr("save_resume_link_".length));
+	
+	return false;
+}
+function remove_saved_resume_link_handler() {
+	remove_saved_resume($(this).attr("id").substr("remove_saved_resume_link_".length));
 	
 	return false;
 }
