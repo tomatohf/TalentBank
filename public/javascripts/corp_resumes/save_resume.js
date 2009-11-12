@@ -25,7 +25,7 @@ function save_resume_dialog_content(container, resume_id) {
 			url: "/corporations/" + CORPORATION_ID + "/corp_saved_resumes/" + resume_id + "/edit",
 			dataType: "html",
 			data: {
-				current_tags: $("#corp_resume_tags_" + resume_id).val()
+				current_tags: $("#corp_resume_tags_" + resume_id).val() || ""
 			},
 			error: function() {
 				show_save_resume_dialog(
@@ -47,32 +47,43 @@ function save_resume_dialog_content(container, resume_id) {
 
 
 function setup_corp_tag_links(resume_id) {
-	corp_tag_link_elements(resume_id).click(
-		function() {
-			var tag = $(this).text();
-			
-			var current_tags = get_current_tags(resume_id, true);
-			var new_tags = array_delete(current_tags, tag);
-			if (current_tags.length == new_tags.length) {
-				new_tags.push(tag);
-			}
-			set_current_tags(resume_id, new_tags, true)
-			synchronize_tags_and_input(resume_id);
-			
-			return false;
-		}
+	corp_tag_link_elements(resume_id).unbind("click").bind(
+		"click",
+		{
+			resume_id: resume_id
+		},
+		corp_tag_link_handler
 	);
+}
+function corp_tag_link_handler(event) {
+	var resume_id = event.data.resume_id
+	var tag = $(this).text();
+	
+	var current_tags = get_current_tags(resume_id, true);
+	var new_tags = array_delete(current_tags, tag);
+	if (current_tags.length == new_tags.length) {
+		new_tags.push(tag);
+	}
+	set_current_tags(resume_id, new_tags, true)
+	synchronize_tags_and_input(resume_id);
+	
+	return false;
 }
 
 
-function setup_corp_tag_input(resume_id, tags) {
-	$("#corp_resume_tags_input_" + resume_id).keyup(
-		function() {
-			synchronize_tags_and_input(resume_id);
-		}
+function setup_corp_tag_input(resume_id) {
+	$("#corp_resume_tags_input_" + resume_id).unbind("keyup").bind(
+		"keyup",
+		{
+			resume_id: resume_id
+		},
+		corp_tag_input_handler
 	);
 	
 	synchronize_tags_and_input(resume_id);
+}
+function corp_tag_input_handler(event) {
+	synchronize_tags_and_input(event.data.resume_id);
 }
 
 
@@ -82,7 +93,7 @@ function corp_tag_link_elements(resume_id) {
 
 
 function get_current_tags(resume_id, as_array) {
-	var tags = $("#corp_resume_tags_input_" + resume_id).val();
+	var tags = $("#corp_resume_tags_input_" + resume_id).val() || "";
 	if(as_array) {
 		tags = array_delete(tags.split(" "), "");
 	}
@@ -184,13 +195,12 @@ function show_save_resume_dialog(content, button_text, resume_id, ok_event) {
 
 
 function setup_save_resume_links() {
-	$("a[id^='save_resume_link_']").click(
-		function() {
-			save_resume($(this).attr("id").substr("save_resume_link_".length));
-			
-			return false;
-		}
-	);
+	$("a[id^='save_resume_link_']").unbind("click").click(save_resume_link_handler);
+}
+function save_resume_link_handler() {
+	save_resume($(this).attr("id").substr("save_resume_link_".length));
+	
+	return false;
 }
 
 

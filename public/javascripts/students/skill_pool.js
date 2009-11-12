@@ -62,7 +62,7 @@ function remove_skill(skill_id) {
 
 function handle_skill_input() {
 	var skill_input_rows = $("tr[id^='skill_row_']");
-	skill_input_rows.hover(
+	skill_input_rows.unbind("mouseenter mouseleave").hover(
 		function() {
 			$(this).find("a.none").show();
 		},
@@ -71,7 +71,7 @@ function handle_skill_input() {
 		}
 	);
 	
-	skill_input_rows.find("input,select,textarea").change(
+	skill_input_rows.find("input,select,textarea").unbind("change").change(
 		function() {
 			var skill_row_id = $(this).parent().parent().attr("id");
 			var skill_id = skill_row_id.substr("skill_row_".length);

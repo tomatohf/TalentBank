@@ -117,7 +117,8 @@ var DIALOG = {
 		if(setting.button_text.ok && setting.button_text.ok != "") {
 			ok_btn
 				.val(setting.button_text.ok)
-				.one(
+				.unbind("click")
+				.bind(
 					"click",
 					function(e) {
 						if(setting.ok_event(setting.data)) {
@@ -134,7 +135,8 @@ var DIALOG = {
 		if(setting.button_text.cancel && setting.button_text.cancel != "") {
 			cancel_btn
 				.val(setting.button_text.cancel)
-				.one(
+				.unbind("click")
+				.bind(
 					"click",
 					function(e) {
 						setting.cancel_event(setting.data);
@@ -148,7 +150,7 @@ var DIALOG = {
 		var close_link = dialog.find("a.dialog_close");
 		if(setting.close) {
 			close_link.show();
-			close_link.one("click", DIALOG.disappear);
+			close_link.unbind("click").bind("click", DIALOG.disappear);
 		}
 		else {
 			close_link.hide();

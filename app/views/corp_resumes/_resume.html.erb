@@ -51,10 +51,9 @@
 					</div>
 					
 					<div>
-						<% if tags.size > 0 %>
-							已收藏至:
-							<%= h(tags.join(" ")) %>
-						<% end %>
+						<span id="save_resume_field_<%= resume.id %>">
+							<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => resume.id, :tags => tags} %>
+						</span>
 					</div>
 				</div>
 			</td>

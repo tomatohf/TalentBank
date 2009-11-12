@@ -40,7 +40,7 @@ function hide_query_loading() {
 
 
 function setup_dropdown_menus() {
-	$(".operation_link").click(
+	$(".operation_link").unbind("click").click(
 		function() {
 			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
 

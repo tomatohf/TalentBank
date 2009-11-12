@@ -27,7 +27,7 @@
 	
 	<% form_tag "/students/#{@student.id}/update_skills", :method => :post, :id => "update_skill_form" do %>
 
-		<table border="0" cellspacing="10" cellpadding="5" style="font-size: 13px;">
+		<table border="0" cellspacing="10" cellpadding="5" class="main_part_w" style="font-size: 14px;">
 			<tbody id="skill_rows">
 				<%= render :partial => "student_skill", :collection => @student_skills %>
 
