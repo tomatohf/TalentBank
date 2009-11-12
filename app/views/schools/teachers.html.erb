@@ -18,6 +18,7 @@
 <div>
 	<% form_tag "/schools/#{@school_id}/destroy_teacher", :method => :post, :id => "del_teacher_form" do %>
 		<input type="hidden" id="del_teacher_id" name="teacher_id" />
+		<input type="hidden" id="page" name="page" value="<%= @page %>" />
 	<% end %>
 	<script language="JavaScript">
 		function del_teacher(teacher_id, teacher_uid) {
@@ -31,6 +32,7 @@
 	<% form_tag "/schools/#{@school_id}/adjust_teacher_admin", :method => :post, :id => "adjust_admin_form" do %>
 		<input type="hidden" id="adjust_teacher_id" name="teacher_id" />
 		<input type="hidden" id="teacher_admin" name="teacher_admin" />
+		<input type="hidden" id="page" name="page" value="<%= @page %>" />
 	<% end %>
 	<script language="JavaScript">
 		function adjust_admin(teacher_id, teacher_uid, admin) {

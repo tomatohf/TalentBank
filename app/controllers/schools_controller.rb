@@ -44,10 +44,10 @@ class SchoolsController < ApplicationController
   
   
   def teachers
-    page = params[:page]
-    page = 1 unless page =~ /\d+/
+    @page = params[:page]
+    @page = 1 unless @page =~ /\d+/
     @teachers = Teacher.paginate(
-      :page => page,
+      :page => @page,
       :per_page => Teacher_Page_Size,
       :conditions => ["school_id = ?", @school_id],
       :order => "created_at DESC"
@@ -77,6 +77,7 @@ class SchoolsController < ApplicationController
   
   def destroy_teacher
     teacher_id = params[:teacher_id] && params[:teacher_id].strip
+    page = params[:page]
     
     teacher = Teacher.find(teacher_id)
     if teacher.school_id.to_s == @school_id
@@ -84,13 +85,14 @@ class SchoolsController < ApplicationController
       flash[:success_msg] = "操作成功, 已删除老师 #{teacher.uid}"
     end
     
-    jump_to("/schools/#{@school_id}/teachers")
+    jump_to("/schools/#{@school_id}/teachers/#{page}")
   end
   
   
   def adjust_teacher_admin
     teacher_id = params[:teacher_id] && params[:teacher_id].strip
     teacher_admin = (params[:teacher_admin] == "true")
+    page = params[:page]
     
     teacher = Teacher.find(teacher_id)
     teacher.admin = teacher_admin
@@ -99,7 +101,7 @@ class SchoolsController < ApplicationController
       flash[:success_msg] = "操作成功, 已调整老师 #{teacher.uid} 的管理权限"
     end
     
-    jump_to("/schools/#{@school_id}/teachers")
+    jump_to("/schools/#{@school_id}/teachers/#{page}")
   end
   
   

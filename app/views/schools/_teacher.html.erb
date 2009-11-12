@@ -24,10 +24,10 @@
 	<td align="right">
 		<a href="#" class="none" onclick="adjust_admin(<%= teacher.id %>, '<%= a(teacher_uid) %>', <%= !teacher.admin %>); return false;">
 			<% if teacher.admin %>
-				<img src="/images/teachers/admin_remove_icon.gif" border="0" alt="取消管理权限" />
+				<img src="/images/teachers/admin_remove_icon.gif" border="0" alt="取消管理权限" style="margin-bottom: -2px;" />
 				取消管理权限
 			<% else %>
-				<img src="/images/teachers/admin_add_icon.gif" border="0" alt="添加管理权限" />
+				<img src="/images/teachers/admin_add_icon.gif" border="0" alt="添加管理权限" style="margin-bottom: -2px;" />
 				添加管理权限
 			<% end %>
 		</a>
