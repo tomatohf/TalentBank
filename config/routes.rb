@@ -109,7 +109,10 @@ ActionController::Routing::Routes.draw do |map|
       :create_query => :post
     }
     
-    corporations.resources :corp_saved_resumes
+    corporations.resources :corp_saved_resumes, :collection => {
+      :update_tag => :post,
+      :destroy_tag => :post
+    }
   end
   
   

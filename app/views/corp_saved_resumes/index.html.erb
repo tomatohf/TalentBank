@@ -11,11 +11,19 @@
 <% end %>
 
 <div class="float_r" style="width: 220px;">
-	<div style="font-size: 14px;">
+	<div style="font-size: 14px; background-color: #EAEAEA; padding:5px;">
 		标签 (<%= @corp_tags.size %>)
 	</div>
 
 	<div class="corp_tags">
+		<% form_tag "/corporations/#{@corporation.id}/corp_saved_resumes/destroy_tag", :method => :post, :id => "destroy_tag_form" do %>
+			<input type="hidden" id="destroy_tag_name" name="destroy_tag_name" />
+		<% end %>
+		<% form_tag "/corporations/#{@corporation.id}/corp_saved_resumes/update_tag", :method => :post, :id => "update_tag_form" do %>
+			<input type="hidden" id="old_tag_name" name="old_tag_name" />
+			<input type="hidden" id="new_tag_name" name="new_tag_name" />
+		<% end %>
+		
 		<div>
 			<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes"<%= %Q! class="selected_link"! if @tag_name.blank? %>>
 				全部</a>
@@ -28,9 +36,13 @@
 				tag = h(tag)
 			%>
 			<div>
-				<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes?tag=<%= tag %>"<%= %Q! class="selected_link"! if selected %>>
-					<%= tag %></a>
+				<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes?tag=<%= tag %>" class="corp_tag_list_link<%= " selected_link" if selected %>"><%= tag %></a>
 				(<%= count %>)
+				
+				<a href="#" class="update_tag_link" title="修改">
+					<img src="/images/students/edit_icon.gif" border="0" alt="修改" style="margin: 0px 5px -2px;" /></a>
+				<a href="#" class="destroy_tag_link" title="删除收藏">
+					<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" /></a>
 			</div>
 		<% end %>
 	</div>
@@ -49,6 +61,13 @@
 		%>
 	</div>
 	
+	<% if @resumes.blank? %>
+		<br />
+		<div class="info_with_icon" style="margin-left: 50px;">
+			没有找到相对应的收藏的简历
+		</div>
+	<% end %>
+	
 	<div>
 		<%= @taggers && paging_buttons(@taggers) %>
 	</div>
@@ -58,6 +77,8 @@
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var CORPORATION_ID = <%= @corporation.id %>;
+	
+	var required_mark = '<%= required_mark(false).strip %>';
 </script>
 <script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />

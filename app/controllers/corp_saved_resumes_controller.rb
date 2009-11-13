@@ -5,7 +5,7 @@ class CorpSavedResumesController < ApplicationController
   
   before_filter :check_login_for_corporation
   
-  before_filter :check_active, :only => [:update]
+  before_filter :check_active, :only => [:update, :update_tag, :destroy_tag]
   
   before_filter :check_corporation
   
@@ -96,6 +96,42 @@ class CorpSavedResumesController < ApplicationController
     end
     
     render :layout => false, :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => @resume.id, :tags => tags}
+  end
+  
+  
+  def update_tag
+    old_tag_name = params[:old_tag_name] && params[:old_tag_name].strip
+    new_tag_name = params[:new_tag_name] && params[:new_tag_name].strip
+    
+    unless new_tag_name == old_tag_name
+      unless old_tag_name.blank? || (old_tag = CorpResumeTag.get_record(old_tag_name)).new_record?
+        unless new_tag_name.blank?
+          new_tag = CorpResumeTag.get_record(new_tag_name)
+          if !new_tag.new_record? || new_tag.save
+            CorpResumeTagger.update_corp_tag(@corporation.id, old_tag.id, new_tag.id)
+
+            flash[:success_msg] = "操作成功, 已将收藏标签 #{old_tag.name} 改名为 #{new_tag.name}"
+
+            return jump_to("/corporations/#{@corporation.id}/corp_saved_resumes?tag=#{new_tag.name}")
+          end
+        end
+      end
+    end
+    
+    jump_to("/corporations/#{@corporation.id}/corp_saved_resumes")
+  end
+  
+  
+  def destroy_tag
+    tag_name = params[:destroy_tag_name] && params[:destroy_tag_name].strip
+    
+    unless tag_name.blank? || (tag = CorpResumeTag.get_record(tag_name)).new_record?
+      CorpResumeTagger.remove_corp_tag(@corporation.id, tag.id)
+      
+      flash[:success_msg] = "操作成功, 已移除所有收藏到标签 #{tag.name} 的简历"
+    end
+    
+    jump_to("/corporations/#{@corporation.id}/corp_saved_resumes")
   end
   
   

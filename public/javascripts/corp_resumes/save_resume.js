@@ -234,5 +234,80 @@ function remove_saved_resume_link_handler() {
 $(document).ready(
 	function() {
 		setup_save_resume_links();
+		
+		
+		setup_update_tag_links();
+		setup_destroy_tag_links();
 	}
 );
+
+
+function setup_update_tag_links() {
+	$("a.update_tag_link").unbind("click").click(
+		function() {
+			update_tag($.trim($(this).siblings("a.corp_tag_list_link").text()));
+			
+			return false;
+		}
+	);
+}
+
+function setup_destroy_tag_links() {
+	$("a.destroy_tag_link").unbind("click").click(
+		function() {
+			var tag_name = $.trim($(this).siblings("a.corp_tag_list_link").text());
+			
+			if(confirm("确定要移除*所有*收藏到标签 " + tag_name + " 的简历么 ?")) {
+				$("#destroy_tag_name").val(tag_name);
+				$("#destroy_tag_form").submit();
+			}
+			
+			return false;
+		}
+	);
+}
+
+function show_update_tag_dialog(content, button_text, ok_event) {
+	DIALOG.appear(
+		{
+			title: "修改标签名称",
+			content: content,
+			button_text: button_text,
+			width: 400,
+			margin_top: 100,
+			fixed: false,
+			data: {},
+			modal: false,
+			ok_event: ok_event
+		}
+	);
+}
+
+function update_tag(old_tag_name) {
+	var content = 	'<label for="update_tag_field" style="margin-right: 10px;">' + 
+						required_mark + ' 新标签名称:' +
+					'</label>' +
+					'<input type="text" id="update_tag_field" name="update_tag_field" class="text_field" size="30" value="' + 
+						old_tag_name + '" />' +
+					'';
+					
+	show_update_tag_dialog(
+		content,
+		{ ok: "保存", cancel: "取消" },
+		function(data) {
+			var new_tag_name = $("#update_tag_field").val();
+			
+			if(new_tag_name != null && new_tag_name != "" && new_tag_name != old_tag_name) {
+				do_update_tag(old_tag_name, new_tag_name);
+			}
+			
+			return true;
+		}
+	);
+}
+
+function do_update_tag(old_tag_name, new_tag_name) {
+	$("#old_tag_name").val(old_tag_name);
+	$("#new_tag_name").val(new_tag_name);
+	$("#update_tag_form").submit();
+}

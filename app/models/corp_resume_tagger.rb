@@ -48,4 +48,35 @@ class CorpResumeTagger < ActiveRecord::Base
     )
   end
   
+  
+  def self.remove_corp_tag(corp_id, tag_id)
+    # delete_all is used here for performance
+    # and so note that it would not trigger Active Record callbacks
+    self.delete_all(
+      [
+        "corp_id = ? and tag_id = ?",
+        corp_id,
+        tag_id
+      ]
+    )
+  end
+  
+  
+  def self.update_corp_tag(corp_id, old_tag_id, new_tag_id)
+    # update_all is used here for performance
+    # and so note that it would not trigger Active Record callbacks
+    self.update_all(
+      [
+        "tag_id = ?, updated_at = ?",
+        new_tag_id,
+        Time.now
+      ],
+      [
+        "corp_id = ? and tag_id = ?",
+        corp_id,
+        old_tag_id
+      ]
+    )
+  end
+  
 end
