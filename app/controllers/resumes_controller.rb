@@ -175,9 +175,11 @@ class ResumesController < ApplicationController
         filename = URI.encode(filename) if (request.env["HTTP_USER_AGENT"] || "") =~ /MSIE/i
         
         send_data(
-          ResumePdf.generate(
+          PdfExport.generate(
             @resume,
             :styles => {
+              :host => request.host_with_port,
+              
               :Creator => @school.logo_title,
               :Title => "#{@student.name}_#{domain}_中文简历",
               :Author => @student.name
@@ -185,7 +187,8 @@ class ResumesController < ApplicationController
           ),
           :filename => filename,
           :type => :pdf,
-          :disposition => "attachment"
+          #:disposition => "attachment"
+          :disposition => "inline"
         )
       }
     end
