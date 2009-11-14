@@ -25,11 +25,11 @@ module SkillValueTypes
     
     
   end
-  
 
-  Dir.glob("#{RAILS_ROOT}/lib/skill_value_types/*.rb").each do |file|
-    # require_dependency "skill_value_types/#{Pathname.new(file).basename.to_s[0..-4]}" unless file == __FILE__
-    require_dependency file[0..-4] unless file == __FILE__
-  end
+end
 
+
+Dir.glob("#{RAILS_ROOT}/lib/skill_value_types/*.rb").each do |file|
+  # require_dependency "skill_value_types/#{Pathname.new(file).basename.to_s[0..-4]}" unless file == __FILE__
+  require_dependency file[0..-4] unless file == __FILE__
 end

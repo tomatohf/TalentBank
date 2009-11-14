@@ -7,6 +7,12 @@
 
 <h2>预览 <%= domain %> 的简历</h2>
 
+<div class="align_r" style="margin: 0px 50px 10px 0px; font-size: 14px;">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>.pdf">
+		<img src="/images/students/pdf_icon.png" border="0" alt="PDF" style="margin-bottom: -2px;" />
+		导出为 PDF</a>
+</div>
+
 <div>
 	<%= render :partial => "resume", :object => @resume, :locals => {:protective => false} %>
 </div>

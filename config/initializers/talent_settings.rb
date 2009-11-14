@@ -73,6 +73,9 @@ require_dependency "skill_value_types/base"
 
 require_dependency "thinking_sphinx/daily_delta"
 
+require_dependency "resume_pdf/base"
+Mime::Type.register "application/pdf", :pdf
+
 ##################################################
 ### END
 ##################################################

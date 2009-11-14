@@ -163,6 +163,32 @@ class ResumesController < ApplicationController
   
   def show
     @resume.student = @student
+    
+    respond_to do |format|
+      format.html {
+        
+      }
+      
+      format.pdf {
+        domain = ResumeDomain.find(@resume.domain_id)[:name]
+        filename = "#{@student.name}_#{domain}_中文简历.pdf"
+        filename = URI.encode(filename) if (request.env["HTTP_USER_AGENT"] || "") =~ /MSIE/i
+        
+        send_data(
+          ResumePdf.generate(
+            @resume,
+            :styles => {
+              :Creator => @school.logo_title,
+              :Title => "#{@student.name}_#{domain}_中文简历",
+              :Author => @student.name
+            }
+          ),
+          :filename => filename,
+          :type => :pdf,
+          :disposition => "attachment"
+        )
+      }
+    end
   end
   
   
