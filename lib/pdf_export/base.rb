@@ -37,8 +37,8 @@ module PdfExport
         
         :fonts => {
           :zh => {
-            :normal => "#{RAILS_ROOT}/lib/pdf_export/Arial Unicode.ttf",
-            :bold   => "#{RAILS_ROOT}/lib/pdf_export/Arial Unicode.ttf"
+            :normal => "#{RAILS_ROOT}/lib/pdf_export/simsun.ttf",
+            :bold   => "#{RAILS_ROOT}/lib/pdf_export/simhei.ttf"
           }
         }
       }

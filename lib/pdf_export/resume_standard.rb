@@ -114,8 +114,7 @@ module PdfExport
         [
           [
             "#{@styles[:indents_single]}电话: #{profile[:phone]}",
-            "#{@styles[:indents_single]*4}电子邮件: ",
-            "#{profile[:email]}"
+            "#{@styles[:indents_single]*4}电子邮件: #{profile[:email]}"
           ]
         ],
         :vertical_padding => @styles[:vertical_pad],
@@ -125,8 +124,7 @@ module PdfExport
         },
         :font_configs => {
           0 => {:font => :zh, :font_style => :normal},
-          1 => {:font => :zh, :font_style => :bold},
-          2 => {:font => :zh, :font_style => :bold}
+          1 => {:font => :zh, :font_style => :normal}
         }
       )
       
