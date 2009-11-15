@@ -1,6 +1,6 @@
 require "open-uri"
 require "prawn"
-require "prawn/table"
+require "prawn/layout"
 
 module PdfExport
   
@@ -55,6 +55,9 @@ module PdfExport
           :Creator => @styles[:Creator],
           :Title => @styles[:Title],
           :Author => @styles[:Author]
+        },
+        :text_options => {
+          :wrap => :character
         }
       )
       doc.font_families.update(@styles[:fonts])
@@ -108,7 +111,7 @@ module PdfExport
      border_width = config_map[:border_width] || 0
      vertical_padding = config_map[:vertical_padding]
      cell = Prawn::Table::Cell.new(:point => point,:document => doc,:width => config_map[:width],:height => config_map[:height],:text => text_str,:vertical_padding => vertical_padding,:border_width => border_width)
-     cell.background_color=config_map[:bg_color]||"C0C0C0" if config_map[:if_bg]
+     cell.background_color = config_map[:bg_color] || "EEEEEE" if config_map[:if_bg]
      cell.align = config_map[:align] if config_map[:align]
      block.call(cell) if block_given?
      cell.draw
