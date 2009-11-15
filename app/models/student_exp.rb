@@ -32,6 +32,7 @@ class StudentExp < ActiveRecord::Base
     Resume.find(
       :all,
       :conditions => ["student_exps.id = ?", self.id],
+      :readonly => false,
       :joins => "INNER JOIN resume_exp_sections ON resume_exp_sections.resume_id = resumes.id " +
                 "INNER JOIN resume_student_exps ON resume_student_exps.section_id = resume_exp_sections.id " +
                 "INNER JOIN student_exps ON student_exps.id = resume_student_exps.exp_id"
