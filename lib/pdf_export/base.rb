@@ -106,47 +106,6 @@ module PdfExport
       doc.cursor
     end
     
-    
-    ##########
-    
-    # custom method for adding table which is composed by cells
-    # notice : content_list is a two dimensions array
-    def add_table(doc, content_list, config_map = {})
-      content_list.each do |line|
-        next_left = config_map[:left_position] || 0
-        temcursor = config_map[:top_position] || get_cursor(doc)
-        line.each_index do |i|
-          content = line[i]
-          vertical_padding = config_map[:vertical_padding] || (config_map[:vertical_paddings] && config_map[:vertical_paddings][i])
-          add_cell(doc, [next_left,temcursor],content,
-                    {:width => (config_map[:width] || (config_map[:widths] && config_map[:widths][i])), :height => (config_map[:height] || (config_map[:heights] && config_map[:heights][i])),
-                    :if_bg => config_map[:if_bg], :vertical_padding => vertical_padding,
-                    :font => (config_map[:font_config] && config_map[:font_config][:font]) || (config_map[:font_configs] && config_map[:font_configs][i] && config_map[:font_configs][i][:font]),
-                    :font_size => (config_map[:font_config] && config_map[:font_config][:font_size]) || (config_map[:font_configs] && config_map[:font_configs][i] && config_map[:font_configs][i][:font_size]),
-                    :font_style => (config_map[:font_config] && config_map[:font_config][:font_style]) || (config_map[:font_configs] && config_map[:font_configs][i] && config_map[:font_configs][i][:font_style])}) do |cell|
-            next_left += cell.width
-            if(config_map[:align] || (config_map[:aligns] && config_map[:aligns][i]))
-              cell.align = config_map[:align] || (config_map[:aligns] && config_map[:aligns][i])
-            end
-          end
-        end
-      end
-    end
-    
-    # if set width and height to nil they will be automatically expanded,
-    # but remember dont set to 0
-    def add_cell(doc, point, text_str, config_map ={}, &block)
-     doc.font config_map[:font],:style => config_map[:font_style]  if config_map[:font]
-     doc.font_size config_map[:font_size] if config_map[:font_size]
-     border_width = config_map[:border_width] || 0
-     vertical_padding = config_map[:vertical_padding]
-     cell = Prawn::Table::Cell.new(:point => point,:document => doc,:width => config_map[:width],:height => config_map[:height],:text => text_str,:vertical_padding => vertical_padding,:border_width => border_width)
-     cell.background_color = config_map[:bg_color] || "EEEEEE" if config_map[:if_bg]
-     cell.align = config_map[:align] if config_map[:align]
-     block.call(cell) if block_given?
-     cell.draw
-    end
-    
   end
   
   

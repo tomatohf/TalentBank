@@ -55,7 +55,7 @@ module PdfExport
           :photo_left_margin => 6.mm,
           
           :font_size_name => 18,
-          :font_size_title => 11,
+          :font_size_title => 12,
           
           :profile_space => " " * 3,
           
@@ -68,17 +68,8 @@ module PdfExport
           :content_right_margin => 2.mm,
           :content_line_height => 1.mm,
           
-          :period_column_width => 3.6.cm,
-          
-          ##########
-          
-          :begin_left => 0,
-          :total_width => 520,
-          :total_height => 760,
-          :font_size_sub_title => 11,
-          :height_sub_title => 17,
-          :vertical_pad => 2,
-          :indents_single => " "
+          :exp_period_width => 4.cm,
+          :exp_content_indent => 4.cm
         }
       )
     end
@@ -115,14 +106,35 @@ module PdfExport
     end
     
     
+    def draw_exp_table(doc, contents = [], options = {})
+      doc.table(
+        contents,
+        {
+          :font_size => @styles[:font_size_content],
+          :font_style => :normal,
+          :vertical_padding => @styles[:content_line_height]/2,
+          :horizontal_padding => 0,
+          :border_width => 0,
+          :width => doc.bounds.width,
+          :column_widths => {0 => @styles[:exp_period_width]}
+        }.merge(options)
+      ) if contents.size > 0
+    end
+    
+    
+    def draw_list_content(doc, content, icon = "")
+      (content_lines = lines(content)).each_index do |i|
+        doc.move_down(@styles[:content_line_height]) if i > 0
+        zh_text(doc, "#{icon}#{content_lines[i].strip}")
+      end
+    end
+    
+    
     def draw_list_section(doc, title, content)
       draw_section_title(doc, title)
       
       draw_section_content(doc, @styles[:content_padding_v]) do |doc|
-        (content_lines = lines(content)).each_index do |i|
-          doc.move_down(@styles[:content_line_height]) if i > 0
-          zh_text(doc, content_lines[i].strip)
-        end
+        draw_list_content(doc, content)
       end
     end
     
@@ -221,25 +233,20 @@ module PdfExport
     def draw_edu_exps(doc, edu_exps)
       draw_section_title(doc, "教育经历")
       
-      padding_v = @styles[:content_padding_v] - @styles[:content_line_height]
+      padding_v = @styles[:content_padding_v] - @styles[:content_line_height]/2
       padding_v = 0 if padding_v < 0
       draw_section_content(doc, padding_v) do |doc|
-        doc.table(
+        draw_exp_table(
+          doc,
           edu_exps.collect { |edu_exp|
             [
-              "#{edu_exp.period}",
-              "#{edu_exp.university}",
-              "#{edu_exp.college}",
-              "#{edu_exp.major}",
-              "#{edu_exp.edu_type}"
+              edu_exp.period,
+              edu_exp.university,
+              edu_exp.college,
+              edu_exp.major,
+              edu_exp.edu_type
             ]
-          },
-          :font_size => @styles[:font_size_content],
-          :font_style => :normal,
-          :vertical_padding => @styles[:content_line_height]/2,
-          :border_width => 0,
-          :width => doc.bounds.width,
-          :column_widths => {0 => @styles[:period_column_width]}
+          }
         )
       end
     end
@@ -260,18 +267,7 @@ module PdfExport
 				end
 				
 				
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "#{@styles[:indents_single]}#{exp_section[:title]}",
-          :width => @styles[:total_width],
-          :height => @styles[:height_sub_title],
-          :vertical_padding => @styles[:vertical_pad],
-          :if_bg => true,
-          :font => :zh,
-          :font_size => @styles[:font_size_sub_title],
-          :font_sytle => :bold
-        )
+        draw_section_title(doc, exp_section.title)
         
 
         order.each do |o|
@@ -287,61 +283,32 @@ module PdfExport
 					end
 					
           if exp
-            add_table(
-              doc,
-              [
+            padding_v = @styles[:content_padding_v] - @styles[:content_line_height]/2
+            padding_v = 0 if padding_v < 0
+            draw_section_content(doc, padding_v) do |doc|
+              draw_exp_table(
+                doc,
                 [
-                  "#{@styles[:indents_single]*3}#{exp.period}",
-                  "#{exp.title}",
-                  "#{exp.sub_title}"
-                ]
-              ],
-              :vertical_padding => 4,
-              :left_position => @styles[:begin_left],
-              :height => 20,
-              :widths => {0 => 110, 1 => 310, 2 => 100},
-              :aligns =>{0 => :left, 1 => :left, 2 => :right},
-              :font_config => {:font => :zh , :font_size => @styles[:font_size_content]},
-              :font_configs => {
-                0 => {:font_style => :normal},
-                1 => {:font_style => :bold},
-                2 => {:font_style => :bold}
-              }
-            )
+                  [
+                    exp.period,
+                    exp.title,
+                    exp.sub_title
+                  ]
+                ],
+                :align => {2 => :right}
+              )
+            end
             
-            add_table(
-              doc,
-              lines(exp.content).collect { |line|
-                [
-                  "#{@styles[:indents_single]*20}",
-                  "●    ",
-                  "#{line.strip}"
-                ]
-              },
-              :left_position => @styles[:begin_left],
-              :font_config => {:font => :zh},
-              :font_configs => {
-                0 => {:font_size => @styles[:font_size_content]},
-                1 => {:font_size => 3},
-                2 => {:font_size => @styles[:font_size_content]}
-              },
-              :vertical_paddings => {
-                0 => @styles[:vertical_pad],
-                1 => 7,
-                2 => @styles[:vertical_pad]
-              }
-            )
+            doc.bounding_box(
+              [@styles[:exp_content_indent], get_cursor(doc)],
+              :width => doc.bounds.width
+            ) do
+              draw_list_content(doc, exp.content, "• ")
+            end
           end
         end
         
-        
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "",
-          :width => @styles[:total_width],
-          :height => 4
-        )
+        doc.move_down(@styles[:content_padding_v])
       end
     end
     
