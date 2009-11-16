@@ -106,6 +106,11 @@ module PdfExport
       doc.cursor
     end
     
+    
+    def move_down(doc, n)
+      doc.move_down(n)
+    end
+    
   end
   
   

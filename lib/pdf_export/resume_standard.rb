@@ -24,7 +24,16 @@ module PdfExport
 				]
 			)
 			exp_sections = resume.exp_sections
-			draw_resume_exps(doc, exp_sections) if exp_sections.size > 0
+			draw_exps(doc, exp_sections) if exp_sections.size > 0
+			
+			
+			student_skills = StudentSkill.find(
+				:all,
+				:joins => "INNER JOIN resume_skills ON resume_skills.student_skill_id = student_skills.id",
+				:conditions => ["resume_skills.resume_id = ?", resume.id]
+			)
+			resume_list_skills = resume.list_skills
+			draw_skills(doc, student_skills, resume_list_skills) if student_skills.size + resume_list_skills.size > 0
 			
 			
 			award = resume.award && resume.award.content
@@ -93,16 +102,23 @@ module PdfExport
     
     
     def draw_section_content(doc, padding_v = 0, &block)
-      doc.move_down(padding_v)
+      move_down(doc, padding_v)
       
-      doc.bounding_box(
-        [@styles[:content_indent], get_cursor(doc)],
-        :width => doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin]
+      # doc.bounding_box(
+      #   [@styles[:content_indent], get_cursor(doc)],
+      #   :width => doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin]
+      # ) do
+      # 
+      # use span method here to keep content at correct place at next page
+      # 
+      doc.span(
+        doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin],
+        :position => @styles[:content_indent]
       ) do
         block.call(doc) if block_given?
       end
       
-      doc.move_down(padding_v)
+      move_down(doc, padding_v)
     end
     
     
@@ -112,7 +128,7 @@ module PdfExport
         {
           :font_size => @styles[:font_size_content],
           :font_style => :normal,
-          :vertical_padding => @styles[:content_line_height]/2,
+          :vertical_padding => get_table_padding_v,
           :horizontal_padding => 0,
           :border_width => 0,
           :width => doc.bounds.width,
@@ -124,7 +140,7 @@ module PdfExport
     
     def draw_list_content(doc, content, icon = "")
       (content_lines = lines(content)).each_index do |i|
-        doc.move_down(@styles[:content_line_height]) if i > 0
+        move_down(doc, @styles[:content_line_height]) if i > 0
         zh_text(doc, "#{icon}#{content_lines[i].strip}")
       end
     end
@@ -163,7 +179,7 @@ module PdfExport
     end
     
     def draw_profile(doc, profile)
-      doc.move_down(@styles[:content_padding_v])
+      move_down(doc, @styles[:content_padding_v])
       
       zh_text(
         doc,
@@ -180,11 +196,11 @@ module PdfExport
       optional_profiles << %Q!地址: #{profile.address}! unless profile.address.blank?
       optional_profiles << %Q!邮编: #{profile.zip}! unless profile.zip.blank?
       if optional_profiles.size > 0
-        doc.move_down(@styles[:content_line_height])
+        move_down(doc, @styles[:content_line_height])
         zh_text(doc, optional_profiles.join(@styles[:profile_space]))
       end
       
-      doc.move_down(@styles[:content_padding_v])
+      move_down(doc, @styles[:content_padding_v])
     end
     
     def draw_job_intention(doc, job_intention)
@@ -225,7 +241,7 @@ module PdfExport
       if photo_drawn
         cursor_height = page.height - get_cursor(doc)
         photo_with_margin_height = photo_drawn.scaled_height + @styles[:content_padding_v]
-        doc.move_down(photo_with_margin_height - cursor_height) if photo_with_margin_height > cursor_height
+        move_down(doc, photo_with_margin_height - cursor_height) if photo_with_margin_height > cursor_height
       end
     end
     
@@ -233,9 +249,7 @@ module PdfExport
     def draw_edu_exps(doc, edu_exps)
       draw_section_title(doc, "教育经历")
       
-      padding_v = @styles[:content_padding_v] - @styles[:content_line_height]/2
-      padding_v = 0 if padding_v < 0
-      draw_section_content(doc, padding_v) do |doc|
+      draw_section_content(doc, get_padding_v_for_table_content) do |doc|
         draw_exp_table(
           doc,
           edu_exps.collect { |edu_exp|
@@ -252,7 +266,7 @@ module PdfExport
     end
     
     
-    def draw_resume_exps(doc, exp_sections)
+    def draw_exps(doc, exp_sections)
       exp_sections.each do |exp_section|
         order = exp_section.get_exp_order
 
@@ -283,9 +297,7 @@ module PdfExport
 					end
 					
           if exp
-            padding_v = @styles[:content_padding_v] - @styles[:content_line_height]/2
-            padding_v = 0 if padding_v < 0
-            draw_section_content(doc, padding_v) do |doc|
+            draw_section_content(doc, get_padding_v_for_table_content) do |doc|
               draw_exp_table(
                 doc,
                 [
@@ -299,16 +311,52 @@ module PdfExport
               )
             end
             
-            doc.bounding_box(
-              [@styles[:exp_content_indent], get_cursor(doc)],
-              :width => doc.bounds.width
+            # doc.bounding_box(
+            #   [@styles[:exp_content_indent], get_cursor(doc)],
+            #   :width => doc.bounds.width
+            # ) do
+            # 
+            # use span method here to keep content at correct place at next page
+            # 
+            doc.span(
+              doc.bounds.width,
+              :position => @styles[:exp_content_indent]
             ) do
               draw_list_content(doc, exp.content, "• ")
             end
           end
         end
         
-        doc.move_down(@styles[:content_padding_v])
+        move_down(doc, @styles[:content_padding_v])
+      end
+    end
+    
+    
+    def draw_skills(doc, student_skills, resume_list_skills)
+      draw_section_title(doc, "技能和证书")
+      
+      draw_section_content(doc, get_padding_v_for_table_content) do |doc|
+        doc.table(
+          student_skills.collect { |student_skill|
+            skill = Skill.find(student_skill.skill_id)
+            [
+              skill[:name],
+              SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value)
+            ]
+          } + resume_list_skills.collect { |resume_list_skill|
+            [
+              resume_list_skill.name,
+              resume_list_skill.level
+            ]
+          },
+          :font_size => @styles[:font_size_content],
+          :font_style => :normal,
+          :vertical_padding => get_table_padding_v,
+          :horizontal_padding => 0,
+          :border_width => 0,
+          :width => doc.bounds.width,
+          :align => {1 => :right}
+        )
       end
     end
     
@@ -327,6 +375,17 @@ module PdfExport
       list_sections.each do |list_section|
         draw_list_section(doc, list_section.title, list_section.content) unless list_section.title.blank? || list_section.content.blank?
       end
+    end
+    
+    
+    def get_table_padding_v
+      @styles[:content_line_height]/2
+    end
+    
+    def get_padding_v_for_table_content
+      padding_v = @styles[:content_padding_v] - @styles[:content_line_height]/2
+      padding_v = 0 if padding_v < 0
+      padding_v
     end
     
   end
