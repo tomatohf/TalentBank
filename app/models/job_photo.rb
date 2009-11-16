@@ -19,6 +19,11 @@ class JobPhoto < ActiveRecord::Base
       :normal => {
         :processors => [:jcropper],
         :geometry => "#{Normal_W}x#{Normal_H}#"
+      },
+      :cropped => {
+        :processors => [:jcropper],
+        :geometry => "",  # only crop without resize
+        :format => :jpg   # PDF lib prawn only support JPG and PNG currently
       }
     },
     :path => ":rails_root/public/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",

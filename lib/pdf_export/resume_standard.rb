@@ -7,26 +7,7 @@ module PdfExport
       return doc if resume.nil?
       
       
-      photo = JobPhoto.get_record(resume.student_id).image.url(:normal)
-      draw_photo(doc, photo) unless photo.blank?
-      
-      draw_name(doc, resume.student.name)
-      
-      profile = StudentProfile.get_record(resume.student_id)
-      draw_profile(
-        doc,
-        {
-          :phone => profile.phone,
-          :email => profile.email,
-          
-          :address => profile.address,
-          :zip => profile.zip,
-          :gender => profile.gender,
-          :political_status => profile.political_status_id && PoliticalStatus.find(profile.political_status_id)[:name],
-        }
-      )
-      
-      draw_job_intention(doc, resume.job_intention && resume.job_intention.content, photo.blank?)
+      draw_basic_info(doc, resume)
       
       
       edu_exps = EduExp.find(:all, :conditions => ["student_id = ?", resume.student_id])
@@ -70,14 +51,30 @@ module PdfExport
           
           :Subject => "简历",
           
+          :photo_width => 2.5.cm,
+          :photo_left_margin => 6.mm,
+          
+          :font_size_name => 18,
+          :font_size_title => 11,
+          
+          :profile_space => " " * 3,
+          :profile_line_height => 1.mm,
+          
+          :title_bg_color => "EEEEEE",
+          :title_padding_h => 2.mm,
+          :title_padding_v => 1.mm,
+          
+          :content_indent => 6.mm,
+          :content_padding_v => 2.mm,
+          :content_right_margin => 2.mm,
+          
+          ##########
+          
           :begin_left => 0,
-          :begin_bottom => 769,
           :total_width => 520,
           :total_height => 760,
-          :font_size_title => 18,
           :font_size_sub_title => 11,
           :height_sub_title => 17,
-          :font_size_content => 10,
           :vertical_pad => 2,
           :indents_single => " "
         }
@@ -85,107 +82,134 @@ module PdfExport
     end
     
     
+    def draw_section_title(doc, text)
+      doc.font(:zh)
+      
+      cell = Prawn::Table::Cell.new(
+        :point => [0, get_cursor(doc)],
+        :document => doc,
+        :text => text,
+        :width => doc.bounds.width,
+        :horizontal_padding => @styles[:title_padding_h],
+        :vertical_padding => @styles[:title_padding_v],
+        :border_width => 0,
+        :font_size => @styles[:font_size_title],
+        :font_style => :normal
+      )
+      cell.background_color = @styles[:title_bg_color]
+      cell.draw()
+    end
+    
+    
+    def draw_section_content(doc, &block)
+      doc.move_down(@styles[:content_padding_v])
+      
+      doc.bounding_box(
+        [@styles[:content_indent], get_cursor(doc)],
+        :width => doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin]
+      ) do
+        block.call(doc) if block_given?
+      end
+      
+      doc.move_down(@styles[:content_padding_v])
+    end
+    
+    
     def draw_photo(doc, photo)
-      doc.image(
+      page = doc.bounds
+      
+      safe_image(
+        doc,
         open("http://#{@styles[:host]}#{photo}"),
-        :at => [460, @styles[:begin_bottom]],
-        :width => 60,
-        :height => 80
+        :at => [
+          page.width - @styles[:photo_width] - @styles[:title_padding_h],
+          page.height
+        ],
+        :width => @styles[:photo_width]
       )
     end
     
     def draw_name(doc, name)
-      add_cell(
+      zh_text(
         doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
         name,
-        :width => 400,
-        :if_bg => false,
-        :vertical_padding => @styles[:vertical_pad],
-        :font => :zh,
-        :font_size => @styles[:font_size_title],
-        :font_style => :bold
+        :size => @styles[:font_size_name],
+        :style => :bold
       )
     end
     
     def draw_profile(doc, profile)
-      add_table(
+      doc.move_down(@styles[:content_padding_v])
+      
+      zh_text(
         doc,
         [
-          [
-            "#{@styles[:indents_single]}电话: #{profile[:phone]}",
-            "#{@styles[:indents_single]*4}电子邮件: #{profile[:email]}"
-          ]
-        ],
-        :vertical_padding => @styles[:vertical_pad],
-        :left_position => @styles[:begin_left],
-        :font_config => {
-          :font_size => @styles[:font_size_content]
-        },
-        :font_configs => {
-          0 => {:font => :zh, :font_style => :normal},
-          1 => {:font => :zh, :font_style => :normal}
-        }
+          "电话: #{profile.phone}",
+          "电子邮件: #{profile.email}"
+        ].join(@styles[:profile_space])
       )
       
       
-      line3 = "#{@styles[:indents_single]}"
-      ifblock = false
-      unless profile[:gender].nil?
-        line3 += "性别: #{profile[:gender] ? '男' : '女'}"
-        ifblock = true;
+      optional_profiles = []
+      optional_profiles << %Q!性别: #{profile.gender ? "男" : "女"}! unless profile.gender.nil?
+      optional_profiles << %Q!政治面貌: #{PoliticalStatus.find(profile.political_status_id)[:name]}! unless profile.political_status_id.nil?
+      optional_profiles << %Q!地址: #{profile.address}! unless profile.address.blank?
+      optional_profiles << %Q!邮编: #{profile.zip}! unless profile.zip.blank?
+      if optional_profiles.size > 0
+        doc.move_down(@styles[:profile_line_height])
+        zh_text(doc, optional_profiles.join(@styles[:profile_space]))
       end
-      unless profile[:political_status].blank?
-        line3 += "#{@styles[:indents_single]*4}" if ifblock
-        line3 += "政治面貌: #{profile[:political_status]}"
-        ifblock = true unless ifblock
-      end
-      unless profile[:address].blank?
-        line3 += "#{@styles[:indents_single]*4}" if ifblock
-        line3 += "地址: #{profile[:address]}"
-        ifblock = true unless ifblock
-      end
-      unless profile[:zip].blank?
-        line3 += "#{@styles[:indents_single]*4}" if ifblock
-        line3 += "邮编: #{profile[:zip]}"
-        ifblock = true unless ifblock
-      end
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
-        line3,
-        :vertical_padding => @styles[:vertical_pad],
-        :font => :zh,
-        :font_size => @styles[:font_size_content]
-      )
+      
+      doc.move_down(@styles[:content_padding_v])
     end
     
-    def draw_job_intention(doc, job_intention, no_photo)
-      tem_width = 448
-      tem_width = @styles[:total_width] if no_photo
-      if job_intention.blank?
-        add_cell(doc, [@styles[:begin_left],get_y_cursor(doc)],"  ",{:width => tem_width, :height => @styles[:height_sub_title], :vertical_padding => @styles[:vertical_pad], :font => :zh, :font_size => @styles[:font_size_sub_title], :font_sytle => :bold})
-        add_cell(doc, [@styles[:begin_left],get_y_cursor(doc)],"#{@styles[:indents_single]*3}",{:height => 20, :vertical_padding => @styles[:vertical_pad], :font => :zh, :font_size => @styles[:font_size_content],:test => "test"})
-      else
-        add_cell(doc, [@styles[:begin_left],get_y_cursor(doc)],"#{@styles[:indents_single]}求职意向: ",{:width => tem_width, :vertical_padding => @styles[:vertical_pad], :height => @styles[:height_sub_title], :if_bg => true,:font => :zh, :font_size => @styles[:font_size_sub_title], :font_sytle => :bold})
-        add_cell(doc, [@styles[:begin_left],get_y_cursor(doc)],"#{@styles[:indents_single]*3}#{job_intention}",{:height => 20, :vertical_padding => 4, :font => :zh, :font_size => @styles[:font_size_content]})
+    def draw_job_intention(doc, job_intention)
+      draw_section_title(doc, "求职意向")
+      draw_section_content(doc) do |doc|
+        zh_text(doc, job_intention)
+      end
+    end
+    
+    
+    def draw_basic_info(doc, resume)
+      photo = JobPhoto.get_record(resume.student_id).image.url(:cropped)
+      photo_drawn = !photo.blank? && draw_photo(doc, photo)
+      
+      page = doc.bounds
+      info_width = page.width - @styles[:title_padding_h] - (photo_drawn ? (@styles[:photo_left_margin] + @styles[:photo_width]) : 0)
+
+      doc.bounding_box(
+        [@styles[:title_padding_h], get_cursor(doc)],
+        :width => info_width - @styles[:title_padding_h]
+      ) do
+        draw_name(doc, resume.student.name)
+        draw_profile(doc, StudentProfile.get_record(resume.student_id))
+      end
+      
+      job_intention = resume.job_intention && resume.job_intention.content
+      unless job_intention.blank?
+        doc.bounding_box(
+          [0, get_cursor(doc)],
+          :width => info_width
+        ) do
+          draw_job_intention(doc, job_intention)
+        end
+      end
+      
+      
+      if photo_drawn
+        cursor_height = page.height - get_cursor(doc)
+        photo_with_margin_height = photo_drawn.scaled_height + @styles[:content_padding_v]
+        doc.move_down(photo_with_margin_height - cursor_height) if photo_with_margin_height > cursor_height
       end
     end
     
     
     def draw_edu_exps(doc, edu_exps)
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
-        "#{@styles[:indents_single]}教育经历",
-        :width => @styles[:total_width],
-        :height => @styles[:height_sub_title],
-        :vertical_padding => @styles[:vertical_pad],
-        :if_bg => true,
-        :font => :zh,
-        :font_size => @styles[:font_size_sub_title],
-        :font_sytle => :bold
-      )
+      draw_section_title(doc, "教育经历")
+      #draw_section_content(doc) do |doc|
+      #  zh_text(doc, job_intention)
+      #end
 
       add_table(
         doc,
@@ -230,7 +254,7 @@ module PdfExport
 				
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "#{@styles[:indents_single]}#{exp_section[:title]}",
           :width => @styles[:total_width],
           :height => @styles[:height_sub_title],
@@ -305,7 +329,7 @@ module PdfExport
         
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "",
           :width => @styles[:total_width],
           :height => 4
@@ -317,7 +341,7 @@ module PdfExport
     def draw_award(doc, award)
       add_cell(
         doc,
-        [@styles[:begin_left], get_y_cursor(doc)], "#{@styles[:indents_single]}荣誉和奖励",
+        [@styles[:begin_left], get_cursor(doc)], "#{@styles[:indents_single]}荣誉和奖励",
         :width => @styles[:total_width],
         :height => @styles[:height_sub_title],
         :vertical_padding => @styles[:vertical_pad],
@@ -329,7 +353,7 @@ module PdfExport
       lines(award).each do |line|
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "#{@styles[:indents_single]*3}#{line.strip}",
           :font => :zh,
           :vertical_padding => @styles[:vertical_pad],
@@ -339,7 +363,7 @@ module PdfExport
       
       add_cell(
         doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
+        [@styles[:begin_left], get_cursor(doc)],
         "",
         :width => @styles[:total_width],
         :height => 4
@@ -350,7 +374,7 @@ module PdfExport
     def draw_hobby(doc, hobby)
       add_cell(
         doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
+        [@styles[:begin_left], get_cursor(doc)],
         "#{@styles[:indents_single]}特长和爱好",
         :width => @styles[:total_width],
         :height => @styles[:height_sub_title],
@@ -364,7 +388,7 @@ module PdfExport
       lines(hobby).each do |line|
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "#{@styles[:indents_single]*3}#{line.strip}",
           :vertical_padding => @styles[:vertical_pad],
           :font => :zh,
@@ -374,7 +398,7 @@ module PdfExport
       
       add_cell(
         doc,
-        [@styles[:begin_left], get_y_cursor(doc)],
+        [@styles[:begin_left], get_cursor(doc)],
         "",
         :width => @styles[:total_width],
         :height => 4
@@ -386,7 +410,7 @@ module PdfExport
       list_sections.each do |list_section|
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "#{@styles[:indents_single]}#{list_section.title}",
           :width => @styles[:total_width],
           :height => @styles[:height_sub_title],
@@ -400,7 +424,7 @@ module PdfExport
         lines(list_section.content).each do |line|
           add_cell(
             doc,
-            [@styles[:begin_left], get_y_cursor(doc)],
+            [@styles[:begin_left], get_cursor(doc)],
             "#{@styles[:indents_single]*3}#{line.strip}",
             :vertical_padding => @styles[:vertical_pad],
             :font => :zh,
@@ -410,7 +434,7 @@ module PdfExport
         
         add_cell(
           doc,
-          [@styles[:begin_left], get_y_cursor(doc)],
+          [@styles[:begin_left], get_cursor(doc)],
           "",
           :width => @styles[:total_width],
           :height => 4

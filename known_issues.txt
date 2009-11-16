@@ -1,7 +1,7 @@
 导出简历为 PDF
 	- metadata, :info, 无法显示中文 ...
-	- 简历姓名的对齐问题
 	- 技能和证书章节的实现
+	- title/content padding_v 的上下不一样
 
 
 简历的 修改/评注/评论 功能

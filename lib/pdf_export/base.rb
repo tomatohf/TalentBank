@@ -1,6 +1,7 @@
 require "open-uri"
 require "prawn"
 require "prawn/layout"
+require "prawn/measurement_extensions"
 
 module PdfExport
   
@@ -40,7 +41,9 @@ module PdfExport
             :normal => "#{RAILS_ROOT}/lib/pdf_export/simsun.ttf",
             :bold   => "#{RAILS_ROOT}/lib/pdf_export/simhei.ttf"
           }
-        }
+        },
+        
+        :font_size_content => 10
       }
     end
     
@@ -72,19 +75,43 @@ module PdfExport
     end
     
     
+    def safe_image(doc, image, options)
+      begin
+        doc.image(image, options)
+      rescue StandardError
+        false
+      end
+    end
+    
+    
+    def zh_text(doc, text, options = {})
+      doc.font(:zh)
+      doc.text(
+        text,
+        {
+          :size => @styles[:font_size_content],
+          :style => :normal
+        }.merge(options)
+      )
+    end
+    
+    
     # get current y axis position,
     # it's recommended to get doc.cursor by this method to control paganition
-    def get_y_cursor(doc)
+    def get_cursor(doc)
       doc.start_new_page if doc.cursor < 0
       doc.cursor
     end
+    
+    
+    ##########
     
     # custom method for adding table which is composed by cells
     # notice : content_list is a two dimensions array
     def add_table(doc, content_list, config_map = {})
       content_list.each do |line|
         next_left = config_map[:left_position] || 0
-        temcursor = config_map[:top_position] || get_y_cursor(doc)
+        temcursor = config_map[:top_position] || get_cursor(doc)
         line.each_index do |i|
           content = line[i]
           vertical_padding = config_map[:vertical_padding] || (config_map[:vertical_paddings] && config_map[:vertical_paddings][i])
