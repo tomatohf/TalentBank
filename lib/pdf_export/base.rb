@@ -2,6 +2,7 @@ require "open-uri"
 require "prawn"
 require "prawn/layout"
 require "prawn/measurement_extensions"
+require "prawn/format"
 
 module PdfExport
   
@@ -72,6 +73,13 @@ module PdfExport
     
     
     ########## util methods ##########
+    
+    HTML_ESCAPE = { '&' => '&amp;', '>' => '&gt;', '<' => '&lt;', '"' => '&quot;' }
+    def html_escape(s)
+      s.to_s.gsub(/[&"><]/) { |special| HTML_ESCAPE[special] }
+    end
+    alias h html_escape
+    
     
     def lines(text, remove_empty = true)
       Utils.lines(text, remove_empty)

@@ -303,8 +303,8 @@ module PdfExport
                 [
                   [
                     exp.period,
-                    exp.title,
-                    exp.sub_title
+                    "<b>#{exp.title}</b>",
+                    "<b>#{h(exp.sub_title)}</b>"
                   ]
                 ],
                 :align => {2 => :right}
@@ -322,7 +322,7 @@ module PdfExport
               doc.bounds.width,
               :position => @styles[:exp_content_indent]
             ) do
-              draw_list_content(doc, exp.content, "• ")
+              draw_list_content(doc, exp.content, "&bull; ")
             end
           end
         end
