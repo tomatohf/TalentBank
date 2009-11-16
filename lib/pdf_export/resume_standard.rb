@@ -58,7 +58,6 @@ module PdfExport
           :font_size_title => 11,
           
           :profile_space => " " * 3,
-          :profile_line_height => 1.mm,
           
           :title_bg_color => "EEEEEE",
           :title_padding_h => 2.mm,
@@ -67,6 +66,9 @@ module PdfExport
           :content_indent => 6.mm,
           :content_padding_v => 2.mm,
           :content_right_margin => 2.mm,
+          :content_line_height => 1.mm,
+          
+          :period_column_width => 3.6.cm,
           
           ##########
           
@@ -83,8 +85,6 @@ module PdfExport
     
     
     def draw_section_title(doc, text)
-      doc.font(:zh)
-      
       cell = Prawn::Table::Cell.new(
         :point => [0, get_cursor(doc)],
         :document => doc,
@@ -101,8 +101,8 @@ module PdfExport
     end
     
     
-    def draw_section_content(doc, &block)
-      doc.move_down(@styles[:content_padding_v])
+    def draw_section_content(doc, padding_v = 0, &block)
+      doc.move_down(padding_v)
       
       doc.bounding_box(
         [@styles[:content_indent], get_cursor(doc)],
@@ -111,7 +111,19 @@ module PdfExport
         block.call(doc) if block_given?
       end
       
-      doc.move_down(@styles[:content_padding_v])
+      doc.move_down(padding_v)
+    end
+    
+    
+    def draw_list_section(doc, title, content)
+      draw_section_title(doc, title)
+      
+      draw_section_content(doc, @styles[:content_padding_v]) do |doc|
+        (content_lines = lines(content)).each_index do |i|
+          doc.move_down(@styles[:content_line_height]) if i > 0
+          zh_text(doc, content_lines[i].strip)
+        end
+      end
     end
     
     
@@ -156,7 +168,7 @@ module PdfExport
       optional_profiles << %Q!地址: #{profile.address}! unless profile.address.blank?
       optional_profiles << %Q!邮编: #{profile.zip}! unless profile.zip.blank?
       if optional_profiles.size > 0
-        doc.move_down(@styles[:profile_line_height])
+        doc.move_down(@styles[:content_line_height])
         zh_text(doc, optional_profiles.join(@styles[:profile_space]))
       end
       
@@ -165,7 +177,8 @@ module PdfExport
     
     def draw_job_intention(doc, job_intention)
       draw_section_title(doc, "求职意向")
-      draw_section_content(doc) do |doc|
+      
+      draw_section_content(doc, @styles[:content_padding_v]) do |doc|
         zh_text(doc, job_intention)
       end
     end
@@ -207,33 +220,28 @@ module PdfExport
     
     def draw_edu_exps(doc, edu_exps)
       draw_section_title(doc, "教育经历")
-      #draw_section_content(doc) do |doc|
-      #  zh_text(doc, job_intention)
-      #end
-
-      add_table(
-        doc,
-        edu_exps.collect { |edu_exp|
-          [
-            "#{@styles[:indents_single]*3}#{edu_exp.period}","#{edu_exp.university}",
-            "#{edu_exp.college}",
-            "#{edu_exp.major}",
-            "#{edu_exp.edu_type}"
-          ]
-        },
-        :vertical_padding => 4,
-        :left_position => @styles[:begin_left],
-        :height => 20,
-        :widths => {0 => 100,1 => 140,2 => 110,3 => 110, 4 => 60},
-        :font_config => {:font => :zh , :font_size => @styles[:font_size_content]},
-        :font_configs => {
-          0 => {:font_style => :normal},
-          1 => {:font_style => :bold},
-          2 => {:font_style => :bold},
-          3 => {:font_style => :bold},
-          4 => {:font_style => :bold}
-        }
-      )
+      
+      padding_v = @styles[:content_padding_v] - @styles[:content_line_height]
+      padding_v = 0 if padding_v < 0
+      draw_section_content(doc, padding_v) do |doc|
+        doc.table(
+          edu_exps.collect { |edu_exp|
+            [
+              "#{edu_exp.period}",
+              "#{edu_exp.university}",
+              "#{edu_exp.college}",
+              "#{edu_exp.major}",
+              "#{edu_exp.edu_type}"
+            ]
+          },
+          :font_size => @styles[:font_size_content],
+          :font_style => :normal,
+          :vertical_padding => @styles[:content_line_height]/2,
+          :border_width => 0,
+          :width => doc.bounds.width,
+          :column_widths => {0 => @styles[:period_column_width]}
+        )
+      end
     end
     
     
@@ -339,106 +347,18 @@ module PdfExport
     
     
     def draw_award(doc, award)
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_cursor(doc)], "#{@styles[:indents_single]}荣誉和奖励",
-        :width => @styles[:total_width],
-        :height => @styles[:height_sub_title],
-        :vertical_padding => @styles[:vertical_pad],
-        :if_bg => true, :font => :zh,
-        :font_size => @styles[:font_size_sub_title],
-        :font_sytle => :bold
-      )
-      
-      lines(award).each do |line|
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "#{@styles[:indents_single]*3}#{line.strip}",
-          :font => :zh,
-          :vertical_padding => @styles[:vertical_pad],
-          :font_size => @styles[:font_size_content]
-        )
-      end
-      
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_cursor(doc)],
-        "",
-        :width => @styles[:total_width],
-        :height => 4
-      )
+      draw_list_section(doc, "荣誉和奖励", award)
     end
     
     
     def draw_hobby(doc, hobby)
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_cursor(doc)],
-        "#{@styles[:indents_single]}特长和爱好",
-        :width => @styles[:total_width],
-        :height => @styles[:height_sub_title],
-        :vertical_padding => @styles[:vertical_pad],
-        :if_bg => true ,
-        :font => :zh,
-        :font_size => @styles[:font_size_sub_title],
-        :font_sytle => :bold
-      )
-      
-      lines(hobby).each do |line|
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "#{@styles[:indents_single]*3}#{line.strip}",
-          :vertical_padding => @styles[:vertical_pad],
-          :font => :zh,
-          :font_size => @styles[:font_size_content]
-        )
-      end
-      
-      add_cell(
-        doc,
-        [@styles[:begin_left], get_cursor(doc)],
-        "",
-        :width => @styles[:total_width],
-        :height => 4
-      )
+      draw_list_section(doc, "特长和爱好", hobby)
     end
     
     
     def draw_list_sections(doc, list_sections)
       list_sections.each do |list_section|
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "#{@styles[:indents_single]}#{list_section.title}",
-          :width => @styles[:total_width],
-          :height => @styles[:height_sub_title],
-          :vertical_padding => @styles[:vertical_pad],
-          :if_bg => true,
-          :font => :zh,
-          :font_size => @styles[:font_size_sub_title],
-          :font_sytle => :bold
-        )
-        
-        lines(list_section.content).each do |line|
-          add_cell(
-            doc,
-            [@styles[:begin_left], get_cursor(doc)],
-            "#{@styles[:indents_single]*3}#{line.strip}",
-            :vertical_padding => @styles[:vertical_pad],
-            :font => :zh,
-            :font_size => @styles[:font_size_content]
-          )
-        end
-        
-        add_cell(
-          doc,
-          [@styles[:begin_left], get_cursor(doc)],
-          "",
-          :width => @styles[:total_width],
-          :height => 4
-        )
+        draw_list_section(doc, list_section.title, list_section.content) unless list_section.title.blank? || list_section.content.blank?
       end
     end
     

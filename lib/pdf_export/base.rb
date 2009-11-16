@@ -63,7 +63,10 @@ module PdfExport
           :wrap => :character
         }
       )
+      
       doc.font_families.update(@styles[:fonts])
+      doc.font(:zh, :size => @styles[:font_size_content])
+      
       doc
     end
     
