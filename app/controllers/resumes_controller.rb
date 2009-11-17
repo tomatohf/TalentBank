@@ -187,8 +187,7 @@ class ResumesController < ApplicationController
           ),
           :filename => filename,
           :type => :pdf,
-          #:disposition => "attachment"
-          :disposition => "inline"
+          :disposition => "attachment"
         )
       }
     end

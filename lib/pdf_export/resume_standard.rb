@@ -64,13 +64,14 @@ module PdfExport
           :photo_left_margin => 6.mm,
           
           :font_size_name => 18,
-          :font_size_title => 12,
+          :font_size_title => 11,
           
           :profile_space => " " * 3,
           
           :title_bg_color => "EEEEEE",
           :title_padding_h => 2.mm,
-          :title_padding_v => 1.mm,
+          :title_padding_v => 0.5.mm,
+          :title_extra_padding_bottom => 0.5.mm,
           
           :content_indent => 6.mm,
           :content_padding_v => 2.mm,
@@ -79,86 +80,86 @@ module PdfExport
           
           :exp_period_width => 4.cm,
           :exp_content_indent => 3.3.cm,
+          :exp_content_bullet_width => 4.mm,
           :exp_title_extra_padding => 1.mm
         }
       )
     end
     
     
-    def draw_section_title(doc, text)
+    def draw_section_title(doc, text, options = {})
       cell = Prawn::Table::Cell.new(
-        :point => [0, get_cursor(doc)],
-        :document => doc,
-        :text => text,
-        :width => doc.bounds.width,
-        :horizontal_padding => @styles[:title_padding_h],
-        :vertical_padding => @styles[:title_padding_v],
-        :border_width => 0,
-        :font_size => @styles[:font_size_title],
-        :font_style => :normal
+        {
+          :point => [0, get_cursor(doc)],
+          :document => doc,
+          :text => text,
+          :width => doc.bounds.width,
+          :horizontal_padding => @styles[:title_padding_h],
+          :vertical_padding => @styles[:title_padding_v],
+          :border_width => 0,
+          :font_size => @styles[:font_size_title],
+          :font_style => :bold
+        }.merge(options)
       )
+      cell.height = cell.text_area_height + @styles[:title_padding_v] * 2 + @styles[:title_extra_padding_bottom]
       cell.background_color = @styles[:title_bg_color]
       cell.draw()
     end
     
     
-    def draw_section_content(doc, padding_v, use_table = {})
+    def draw_section_content(doc, padding_v, options = {})
       move_down(doc, padding_v)
       
-      if use_table
-        draw_section_content_table(
-          doc,
-          yield,
-          use_table
-        ) if block_given?
-      else
-        doc.span(
-          doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin],
-          :position => @styles[:content_indent]
-        ) do
-          yield(doc) if block_given?
-        end
-      end
+      draw_section_content_table(
+        doc,
+        options.delete(:contents),
+        options
+      )
       
       move_down(doc, padding_v)
     end
     
     
-    def draw_section_content_table(doc, contents, options)
+    def draw_section_content_table(doc, contents, options = {})
       margin_left = options.delete(:margin_left) || @styles[:content_indent]
       margin_right = options.delete(:margin_right) || @styles[:content_right_margin]
       
+      column_widths = {
+        0 => margin_left,
+        (contents.first.size + 1) => margin_right
+      }
+      (options.delete(:column_widths) || {}).each do |key, value|
+        column_widths[key+1] = value
+      end
+      
+      aligns = {}
+      (options.delete(:align) || {}).each do |key, value|
+        aligns[key+1] = value
+      end
+      
       doc.table(
-        contents.collect { |row| [row, ""].flatten },
+        contents.collect { |row| ["", row, ""].flatten },
         {
-          :position => margin_left,
           :font_size => @styles[:font_size_content],
           :vertical_padding => get_table_padding_v,
           :horizontal_padding => 0,
           :border_width => 0,
-          :width => doc.bounds.width - margin_left,
-          :column_widths => {
-            (contents.first.size + 1) => margin_right
-          }.merge(options.delete(:column_widths) || {})
+          :width => doc.bounds.width,
+          :column_widths => column_widths,
+          :align => aligns
         }.merge(options)
       )
-    end
-    
-    
-    def draw_list_content(doc, content, icon = "")
-      (content_lines = lines(content)).each_index do |i|
-        move_down(doc, @styles[:content_line_height]) if i > 0
-        zh_text(doc, "#{icon}#{content_lines[i].strip}")
-      end
     end
     
     
     def draw_list_section(doc, title, content)
       draw_section_title(doc, title)
       
-      draw_section_content(doc, @styles[:content_padding_v], false) do |doc|
-        draw_list_content(doc, content)
-      end
+      draw_section_content(
+        doc,
+        get_padding_v_for_table_content,
+        :contents => lines(content).collect { |line| [line.strip] }
+      )
     end
     
     
@@ -176,24 +177,36 @@ module PdfExport
       )
     end
     
-    def draw_name(doc, name)
-      zh_text(
-        doc,
-        name,
-        :size => @styles[:font_size_name],
-        :style => :bold
-      )
+    def draw_name(doc, name, options = {})
+      # ignore :margin_right,
+      # since there would be no such long name ...
+      
+      doc.indent(options[:margin_left]) do
+        zh_text(
+          doc,
+          name,
+          :size => @styles[:font_size_name],
+          :style => :bold
+        )
+      end
     end
     
-    def draw_profile(doc, profile)
+    def draw_profile(doc, profile, options = {})
       move_down(doc, @styles[:content_padding_v])
       
-      zh_text(
+      draw_section_content_table(
         doc,
         [
-          "电话: #{profile.phone}",
-          "电子邮件: #{profile.email}"
-        ].join(@styles[:profile_space])
+          [
+            [
+              "电话: #{profile.phone}",
+              "电子邮件: #{profile.email}"
+            ].join(@styles[:profile_space])
+          ]
+        ],
+        {
+          :vertical_padding => 0
+        }.merge(options)
       )
       
       
@@ -204,18 +217,32 @@ module PdfExport
       optional_profiles << %Q!邮编: #{profile.zip}! unless profile.zip.blank?
       if optional_profiles.size > 0
         move_down(doc, @styles[:content_line_height])
-        zh_text(doc, optional_profiles.join(@styles[:profile_space]))
+        
+        draw_section_content_table(
+          doc,
+          [
+            [
+              optional_profiles.join(@styles[:profile_space])
+            ]
+          ],
+          {
+            :vertical_padding => 0
+          }.merge(options)
+        )
       end
       
       move_down(doc, @styles[:content_padding_v])
     end
     
-    def draw_job_intention(doc, job_intention)
-      draw_section_title(doc, "求职意向")
+    def draw_job_intention(doc, job_intention, margin_right)
+      draw_section_title(doc, "求职意向", :width => doc.bounds.width - margin_right)
       
-      draw_section_content(doc, @styles[:content_padding_v], false) do |doc|
-        zh_text(doc, job_intention)
-      end
+      draw_section_content(
+        doc,
+        @styles[:content_padding_v],
+        :margin_right => @styles[:content_right_margin] + margin_right,
+        :contents => [[job_intention]]
+      )
     end
     
     
@@ -223,30 +250,30 @@ module PdfExport
       photo = JobPhoto.get_record(resume.student_id).image.url(:cropped)
       photo_drawn = !photo.blank? && draw_photo(doc, photo)
       
-      page = doc.bounds
-      info_width = page.width - @styles[:title_padding_h] - (photo_drawn ? (@styles[:photo_left_margin] + @styles[:photo_width]) : 0)
-
-      doc.bounding_box(
-        [@styles[:title_padding_h], get_cursor(doc)],
-        :width => info_width - @styles[:title_padding_h]
-      ) do
-        draw_name(doc, resume.student.name)
-        draw_profile(doc, StudentProfile.get_record(resume.student_id))
-      end
+      margin_right = @styles[:title_padding_h] + (photo_drawn ? (@styles[:photo_left_margin] + @styles[:photo_width]) : 0)
+      draw_name(
+        doc,
+        resume.student.name,
+        :margin_left => @styles[:title_padding_h],
+        :margin_right => margin_right
+      )
+      draw_profile(
+        doc,
+        StudentProfile.get_record(resume.student_id),
+        :margin_left => @styles[:title_padding_h],
+        :margin_right => margin_right
+      )
       
       job_intention = resume.job_intention && resume.job_intention.content
-      unless job_intention.blank?
-        doc.bounding_box(
-          [0, get_cursor(doc)],
-          :width => info_width
-        ) do
-          draw_job_intention(doc, job_intention)
-        end
-      end
+      draw_job_intention(
+        doc,
+        job_intention,
+        photo_drawn ? (@styles[:photo_left_margin] + @styles[:photo_width] + @styles[:title_padding_h]) : 0
+      ) unless job_intention.blank?
       
       
       if photo_drawn
-        cursor_height = page.height - get_cursor(doc)
+        cursor_height = doc.bounds.height - get_cursor(doc)
         photo_with_margin_height = photo_drawn.scaled_height + @styles[:content_padding_v]
         move_down(doc, photo_with_margin_height - cursor_height) if photo_with_margin_height > cursor_height
       end
@@ -259,9 +286,8 @@ module PdfExport
       draw_section_content(
         doc,
         get_padding_v_for_table_content,
-        :column_widths => {0 => @styles[:exp_period_width]}
-      ) do
-        edu_exps.collect { |edu_exp|
+        :column_widths => {0 => @styles[:exp_period_width]},
+        :contents => edu_exps.collect { |edu_exp|
           [
             edu_exp.period,
             edu_exp.university,
@@ -270,7 +296,7 @@ module PdfExport
             edu_exp.edu_type
           ]
         }
-      end
+      )
     end
     
     
@@ -310,28 +336,29 @@ module PdfExport
               doc,
               0,
               :column_widths => {0 => @styles[:exp_period_width]},
-              :align => {2 => :right}
-            ) do
-              [
+              :align => {2 => :right},
+              :contents => [
                 [
                   exp.period,
-                  "<b>#{exp.title}</b>",
+                  "<b>#{h(exp.title)}</b>",
                   "<b>#{h(exp.sub_title)}</b>"
                 ]
               ]
-            end
+            )
             
             move_down(doc, @styles[:exp_title_extra_padding])
               
             draw_section_content(
               doc,
               0,
-              :column_widths => {0 => @styles[:exp_content_indent]}
-            ) do
-              lines(exp.content).collect { |line|
-                ["", "&bull; #{line.strip}"]
+              :column_widths => {
+                0 => @styles[:exp_content_indent],
+                1 => @styles[:exp_content_bullet_width]
+              },
+              :contents => lines(exp.content).collect { |line|
+                ["", "•", line.strip]
               }
-            end
+            )
             
             move_down(doc, @styles[:exp_title_extra_padding])
           end
@@ -348,9 +375,8 @@ module PdfExport
       draw_section_content(
         doc,
         get_padding_v_for_table_content,
-        :align => {1 => :right}
-      ) do
-        student_skills.collect { |student_skill|
+        :align => {1 => :right},
+        :contents => student_skills.collect { |student_skill|
           skill = Skill.find(student_skill.skill_id)
           [
             skill[:name],
@@ -362,7 +388,7 @@ module PdfExport
             resume_list_skill.level
           ]
         }
-      end
+      )
     end
     
     

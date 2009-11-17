@@ -44,7 +44,7 @@ module PdfExport
           }
         },
         
-        :font_size_content => 10
+        :font_size_content => 9.5
       }
     end
     
@@ -101,7 +101,8 @@ module PdfExport
         text,
         {
           :size => @styles[:font_size_content],
-          :style => :normal
+          :style => :normal,
+          :wrap => :character
         }.merge(options)
       )
     end
