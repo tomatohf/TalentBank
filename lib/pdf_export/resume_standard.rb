@@ -78,7 +78,8 @@ module PdfExport
           :content_line_height => 1.mm,
           
           :exp_period_width => 4.cm,
-          :exp_content_indent => 4.cm
+          :exp_content_indent => 3.3.cm,
+          :exp_title_extra_padding => 1.mm
         }
       )
     end
@@ -101,40 +102,46 @@ module PdfExport
     end
     
     
-    def draw_section_content(doc, padding_v = 0, &block)
+    def draw_section_content(doc, padding_v, use_table = {})
       move_down(doc, padding_v)
       
-      # doc.bounding_box(
-      #   [@styles[:content_indent], get_cursor(doc)],
-      #   :width => doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin]
-      # ) do
-      # 
-      # use span method here to keep content at correct place at next page
-      # 
-      doc.span(
-        doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin],
-        :position => @styles[:content_indent]
-      ) do
-        block.call(doc) if block_given?
+      if use_table
+        draw_section_content_table(
+          doc,
+          yield,
+          use_table
+        ) if block_given?
+      else
+        doc.span(
+          doc.bounds.width - @styles[:content_indent] - @styles[:content_right_margin],
+          :position => @styles[:content_indent]
+        ) do
+          yield(doc) if block_given?
+        end
       end
       
       move_down(doc, padding_v)
     end
     
     
-    def draw_exp_table(doc, contents = [], options = {})
+    def draw_section_content_table(doc, contents, options)
+      margin_left = options.delete(:margin_left) || @styles[:content_indent]
+      margin_right = options.delete(:margin_right) || @styles[:content_right_margin]
+      
       doc.table(
-        contents,
+        contents.collect { |row| [row, ""].flatten },
         {
+          :position => margin_left,
           :font_size => @styles[:font_size_content],
-          :font_style => :normal,
           :vertical_padding => get_table_padding_v,
           :horizontal_padding => 0,
           :border_width => 0,
-          :width => doc.bounds.width,
-          :column_widths => {0 => @styles[:exp_period_width]}
+          :width => doc.bounds.width - margin_left,
+          :column_widths => {
+            (contents.first.size + 1) => margin_right
+          }.merge(options.delete(:column_widths) || {})
         }.merge(options)
-      ) if contents.size > 0
+      )
     end
     
     
@@ -149,7 +156,7 @@ module PdfExport
     def draw_list_section(doc, title, content)
       draw_section_title(doc, title)
       
-      draw_section_content(doc, @styles[:content_padding_v]) do |doc|
+      draw_section_content(doc, @styles[:content_padding_v], false) do |doc|
         draw_list_content(doc, content)
       end
     end
@@ -206,7 +213,7 @@ module PdfExport
     def draw_job_intention(doc, job_intention)
       draw_section_title(doc, "求职意向")
       
-      draw_section_content(doc, @styles[:content_padding_v]) do |doc|
+      draw_section_content(doc, @styles[:content_padding_v], false) do |doc|
         zh_text(doc, job_intention)
       end
     end
@@ -249,19 +256,20 @@ module PdfExport
     def draw_edu_exps(doc, edu_exps)
       draw_section_title(doc, "教育经历")
       
-      draw_section_content(doc, get_padding_v_for_table_content) do |doc|
-        draw_exp_table(
-          doc,
-          edu_exps.collect { |edu_exp|
-            [
-              edu_exp.period,
-              edu_exp.university,
-              edu_exp.college,
-              edu_exp.major,
-              edu_exp.edu_type
-            ]
-          }
-        )
+      draw_section_content(
+        doc,
+        get_padding_v_for_table_content,
+        :column_widths => {0 => @styles[:exp_period_width]}
+      ) do
+        edu_exps.collect { |edu_exp|
+          [
+            edu_exp.period,
+            edu_exp.university,
+            edu_exp.college,
+            edu_exp.major,
+            edu_exp.edu_type
+          ]
+        }
       end
     end
     
@@ -283,7 +291,8 @@ module PdfExport
 				
         draw_section_title(doc, exp_section.title)
         
-
+        move_down(doc, get_padding_v_for_table_content)
+        
         order.each do |o|
           exp_id = o[1].to_i
 					exp = case o[0].to_i
@@ -297,37 +306,38 @@ module PdfExport
 					end
 					
           if exp
-            draw_section_content(doc, get_padding_v_for_table_content) do |doc|
-              draw_exp_table(
-                doc,
+            draw_section_content(
+              doc,
+              0,
+              :column_widths => {0 => @styles[:exp_period_width]},
+              :align => {2 => :right}
+            ) do
+              [
                 [
-                  [
-                    exp.period,
-                    "<b>#{exp.title}</b>",
-                    "<b>#{h(exp.sub_title)}</b>"
-                  ]
-                ],
-                :align => {2 => :right}
-              )
+                  exp.period,
+                  "<b>#{exp.title}</b>",
+                  "<b>#{h(exp.sub_title)}</b>"
+                ]
+              ]
             end
             
-            # doc.bounding_box(
-            #   [@styles[:exp_content_indent], get_cursor(doc)],
-            #   :width => doc.bounds.width
-            # ) do
-            # 
-            # use span method here to keep content at correct place at next page
-            # 
-            doc.span(
-              doc.bounds.width,
-              :position => @styles[:exp_content_indent]
+            move_down(doc, @styles[:exp_title_extra_padding])
+              
+            draw_section_content(
+              doc,
+              0,
+              :column_widths => {0 => @styles[:exp_content_indent]}
             ) do
-              draw_list_content(doc, exp.content, "&bull; ")
+              lines(exp.content).collect { |line|
+                ["", "&bull; #{line.strip}"]
+              }
             end
+            
+            move_down(doc, @styles[:exp_title_extra_padding])
           end
         end
         
-        move_down(doc, @styles[:content_padding_v])
+        move_down(doc, get_padding_v_for_table_content)
       end
     end
     
@@ -335,28 +345,23 @@ module PdfExport
     def draw_skills(doc, student_skills, resume_list_skills)
       draw_section_title(doc, "技能和证书")
       
-      draw_section_content(doc, get_padding_v_for_table_content) do |doc|
-        doc.table(
-          student_skills.collect { |student_skill|
-            skill = Skill.find(student_skill.skill_id)
-            [
-              skill[:name],
-              SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value)
-            ]
-          } + resume_list_skills.collect { |resume_list_skill|
-            [
-              resume_list_skill.name,
-              resume_list_skill.level
-            ]
-          },
-          :font_size => @styles[:font_size_content],
-          :font_style => :normal,
-          :vertical_padding => get_table_padding_v,
-          :horizontal_padding => 0,
-          :border_width => 0,
-          :width => doc.bounds.width,
-          :align => {1 => :right}
-        )
+      draw_section_content(
+        doc,
+        get_padding_v_for_table_content,
+        :align => {1 => :right}
+      ) do
+        student_skills.collect { |student_skill|
+          skill = Skill.find(student_skill.skill_id)
+          [
+            skill[:name],
+            SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value)
+          ]
+        } + resume_list_skills.collect { |resume_list_skill|
+          [
+            resume_list_skill.name,
+            resume_list_skill.level
+          ]
+        }
       end
     end
     
