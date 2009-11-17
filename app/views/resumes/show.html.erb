@@ -8,7 +8,7 @@
 <h2>预览 <%= domain %> 的简历</h2>
 
 <div class="align_r" style="margin: 0px 50px 10px 0px; font-size: 14px;">
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>.pdf">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>.pdf?token=<%= Time.now.to_i %>">
 		<img src="/images/students/pdf_icon.png" border="0" alt="PDF" style="margin-bottom: -2px;" />
 		导出为 PDF</a>
 </div>

@@ -180,9 +180,9 @@ class ResumesController < ApplicationController
             :styles => {
               :host => request.host_with_port,
               
-              :Creator => @school.logo_title,
-              :Title => "#{@student.name}_#{domain}_中文简历",
-              :Author => @student.name
+              # :Creator => @school.logo_title,
+              # :Title => "#{@student.name}_#{domain}_中文简历",
+              # :Author => @student.name
             }
           ),
           :filename => filename,

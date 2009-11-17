@@ -30,12 +30,12 @@ module PdfExport
         :page_layout => :portrait,
         # :margin => [], # can use css-style value as array
         
-        :Producer => "乔布堂",
+        :Producer => "Talent Bank (qiaobutang.com)" || "乔布堂",
         :CreationDate => Time.now,
         
-        :Creator => "乔布堂 人才库",
-        :Title => "",
-        :Author => "乔布堂",
+        :Creator => "Talent Bank (qiaobutang.com)" || "乔布堂 人才库",
+        :Title => "Talent Bank (qiaobutang.com)" || "",
+        :Author => "Talent Bank (qiaobutang.com)" || "乔布堂",
         
         :fonts => {
           :zh => {

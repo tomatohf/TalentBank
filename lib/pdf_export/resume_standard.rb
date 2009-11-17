@@ -58,7 +58,7 @@ module PdfExport
         {
           :host => "",
           
-          :Subject => "简历",
+          :Subject => "Talent Bank (qiaobutang.com)" || "简历",
           
           :photo_width => 2.5.cm,
           :photo_left_margin => 6.mm,
@@ -136,6 +136,7 @@ module PdfExport
       (options.delete(:align) || {}).each do |key, value|
         aligns[key+1] = value
       end
+      options[:align] = aligns unless aligns.empty?
       
       doc.table(
         contents.collect { |row| ["", row, ""].flatten },
@@ -145,8 +146,7 @@ module PdfExport
           :horizontal_padding => 0,
           :border_width => 0,
           :width => doc.bounds.width,
-          :column_widths => column_widths,
-          :align => aligns
+          :column_widths => column_widths
         }.merge(options)
       )
     end
@@ -287,6 +287,7 @@ module PdfExport
         doc,
         get_padding_v_for_table_content,
         :column_widths => {0 => @styles[:exp_period_width]},
+        :align => {0 => :left},
         :contents => edu_exps.collect { |edu_exp|
           [
             edu_exp.period,
@@ -336,7 +337,7 @@ module PdfExport
               doc,
               0,
               :column_widths => {0 => @styles[:exp_period_width]},
-              :align => {2 => :right},
+              :align => {0 => :left, 2 => :right},
               :contents => [
                 [
                   exp.period,
@@ -375,7 +376,7 @@ module PdfExport
       draw_section_content(
         doc,
         get_padding_v_for_table_content,
-        :align => {1 => :right},
+        :align => {0 => :left, 1 => :right},
         :contents => student_skills.collect { |student_skill|
           skill = Skill.find(student_skill.skill_id)
           [
