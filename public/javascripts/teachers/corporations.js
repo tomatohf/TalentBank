@@ -1,10 +1,10 @@
 function allow_corporation_query(corp_id) {
-	url = "/teachers/" + TEACHER_ID + "/allow_corporation_query";
+	var url = "/teachers/" + TEACHER_ID + "/allow_corporation_query";
 	adjust_corporation_query(url, corp_id);
 }
 
 function inhibit_corporation_query(corp_id) {
-	url = "/teachers/" + TEACHER_ID + "/inhibit_corporation_query";
+	var url = "/teachers/" + TEACHER_ID + "/inhibit_corporation_query";
 	adjust_corporation_query(url, corp_id);
 }
 

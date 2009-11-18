@@ -11,7 +11,8 @@ ActionController::Routing::Routes.draw do |map|
     
     :destroy_teacher => :post,
     
-    :adjust_teacher_admin => :post
+    :allow_teacher_admin => :post,
+    :inhibit_teacher_admin => :post
   }
   
   

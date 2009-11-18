@@ -1,7 +1,9 @@
-<% talent_page_title("老师列表") %>
+<% talent_page_title("查询老师") %>
+
+<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
 
 
-<h2>老师列表</h2>
+<h2>查询老师</h2>
 
 
 <% if flash[:success_msg] %>
@@ -16,42 +18,18 @@
 </div>
 
 <div>
-	<% form_tag "/schools/#{@school_id}/destroy_teacher", :method => :post, :id => "del_teacher_form" do %>
-		<input type="hidden" id="del_teacher_id" name="teacher_id" />
-		<input type="hidden" id="page" name="page" value="<%= @page %>" />
-	<% end %>
-	<script language="JavaScript">
-		function del_teacher(teacher_id, teacher_uid) {
-			if(confirm("确定要删除老师 " + teacher_uid + " 么 ?")) {
-				document.getElementById("del_teacher_id").value = teacher_id;
-				document.getElementById("del_teacher_form").submit();
-			}
-		}
-	</script>
-	
-	<% form_tag "/schools/#{@school_id}/adjust_teacher_admin", :method => :post, :id => "adjust_admin_form" do %>
-		<input type="hidden" id="adjust_teacher_id" name="teacher_id" />
-		<input type="hidden" id="teacher_admin" name="teacher_admin" />
-		<input type="hidden" id="page" name="page" value="<%= @page %>" />
-	<% end %>
-	<script language="JavaScript">
-		function adjust_admin(teacher_id, teacher_uid, admin) {
-			if(confirm("确定要调整老师 " + teacher_uid + " 的管理权限么 ?")) {
-				document.getElementById("adjust_teacher_id").value = teacher_id;
-				document.getElementById("teacher_admin").value = admin.toString();
-				document.getElementById("adjust_admin_form").submit();
-			}
-		}
-	</script>
-	
-	<table border="0" cellspacing="0" cellpadding="8" class="main_part_w">
+	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
 		<thead>
 			<tr>
 				<td>用户名</td>
 				<td>名称</td>
-				<td style="width: 60px;">管理权限</td>
-				<td style="width: 50px;"></td>
-				<td style="width: 100px;"></td>
+				<td align="center" style="width: 100px;">
+					管理企业
+					<img src="/images/loading_icon.gif" id="admin_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
+				</td>
+				<td align="center" style="width: 50px;">
+					<img src="/images/loading_icon.gif" id="destroy_loading" border="0" title="操作中" alt="操作中" style="visibility: hidden" />
+				</td>
 			</tr>
 		</thead>
 		
@@ -64,3 +42,10 @@
 		<%= paging_buttons(@teachers) %>
 	</div>
 </div>
+
+
+<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var	SCHOOL_ID = <%= @school_id %>;
+</script>
+<script src="/javascripts/schools/teachers.js" type="text/javascript" language="JavaScript"></script>
