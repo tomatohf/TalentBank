@@ -11,61 +11,108 @@
 	    <%= flash[:success_msg] %>
 	</p>
 <% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
 
 <% if @available_domains.size > 0 %>
 	<div>
-		<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
-			<%
-				domain_category_mapping = @available_domains.group_by do |domain|
-					domain[:category_id]
-				end
-				
-				categories = domain_category_mapping.keys.sort.collect do |category_id|
-					ResumeDomainCategory.find(category_id)
-				end
-			%>
+		<% form_tag "", :method => :post, :id => "copy_resume_form" do %>
+			<input type="hidden" id="copy_to_domain_id" name="domain_id" />
+		<% end %>
+		
+		<%
+			domain_category_mapping = @available_domains.group_by do |domain|
+				domain[:category_id]
+			end
 			
-			<script language="JavaScript">
-				var DOMAINS = {};
-				<% categories.each do |category| %>
-					DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
-				<% end %>
+			categories = domain_category_mapping.keys.sort.collect do |category_id|
+				ResumeDomainCategory.find(category_id)
+			end
+		%>
+		
+		<script language="JavaScript">
+			var DOMAINS = {};
+			<% categories.each do |category| %>
+				DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+			<% end %>
 
-				function fill_domains(category_id) {
-					$("#domain_id").html("");
+			function fill_domains(category_id) {
+				$("#domain_id").html("");
 
-					var domain_objs = DOMAINS["c_" + category_id];
-					if(domain_objs != null && domain_objs.length > 0) {
-						var options = $.map(
-							domain_objs,
-							function(domain_obj, i) {
-								return "<option value='" + domain_obj.id + "'>" + domain_obj.name + "</option>";
-							}
-						);
+				var domain_objs = DOMAINS["c_" + category_id];
+				if(domain_objs != null && domain_objs.length > 0) {
+					var options = $.map(
+						domain_objs,
+						function(domain_obj, i) {
+							return "<option value='" + domain_obj.id + "'>" + domain_obj.name + "</option>";
+						}
+					);
 
-						$("#domain_id").append(options.join(""));
-					}
+					$("#domain_id").append(options.join(""));
 				}
-			</script>
-
-			<select id="domain_category" class="dropdown_list">
-				<% categories.each do |category| %>
-					<option value="<%= category[:id] %>"><%= category[:name] %></option>
-				<% end %>
-			</select>
+			}
 			
-			&nbsp;&nbsp;&nbsp;
 			
-			<select name="domain_id" id="domain_id" class="dropdown_list">
-				<% domain_category_mapping[categories[0][:id]].each do |domain| %>
-					<option value="<%= domain[:id] %>"><%= domain[:name] %></option>
-				<% end %>
-			</select>
-			
-			&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;
-			
-			<%= submit_tag "添加简历", :class => "button", :disabled => !@account_active %>
+			function copy_resume(resume_id, from_domain_name) {
+				var domain_select = $("select#domain_id");
+				var to_domain_id = domain_select.val();
+				var to_domain_name = $.trim(domain_select.text());
+				if(confirm("确定要将 " + from_domain_name + " 的简历内容复制到 " + to_domain_name + " 的简历么 ?")) {
+					$("#copy_to_domain_id").val(to_domain_id);
+					$("#copy_resume_form")
+						.attr("action", "/students/<%= @student.id %>/resumes/" + resume_id + "/copy")
+						.submit();
+				}
+			}
+		</script>
+		
+		<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
+			<table border="0" cellspacing="5" cellpadding="0" style="font-size: 14px;">
+				<tr>
+					<td style="padding: 0px 10px;">
+						<select id="domain_category" class="dropdown_list" style="font-size: 14px;">
+							<% categories.each do |category| %>
+								<option value="<%= category[:id] %>"><%= category[:name] %></option>
+							<% end %>
+						</select>
+					</td>
+					
+					<td>
+						<select name="domain_id" id="domain_id" class="dropdown_list" style="font-size: 14px;">
+							<% domain_category_mapping[categories[0][:id]].each do |domain| %>
+								<option value="<%= domain[:id] %>"><%= domain[:name] %></option>
+							<% end %>
+						</select>
+					</td>
+					
+					<td style="padding: 0px 20px;">
+						<%= submit_tag "添加新简历", :class => "button", :disabled => !@account_active %>
+					</td>
+					
+					<td>
+						<img src="/images/students/copy_icon.gif" border="0" alt="复制" />
+					</td>
+					
+					<td>
+						<a href="#" class="none edit_link">或从已有简历复制</a>
+							
+						<div class="dropdown_menu" style="font-size: 12px;">
+							<ul class="dropdown_sub_menu">
+								<% @resumes.each do |resume| %>
+									<% domain = ResumeDomain.find(resume.domain_id)[:name] %>
+									<li>
+										<a href="#" onclick="copy_resume(<%= resume.id %>, '<%= a(domain) %>'); return false;">
+											<%= domain %></a>
+									</li>
+								<% end %>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			</table>
 		<% end %>
 	</div>
 <% end %>

@@ -73,7 +73,9 @@ ActionController::Routing::Routes.draw do |map|
       :update_awards => :post,
       
       :add_exp_tag => :post,
-      :remove_exp_tag => :post
+      :remove_exp_tag => :post,
+      
+      :copy => :post
     } do |resumes|
       resumes.resources :resume_list_sections
       

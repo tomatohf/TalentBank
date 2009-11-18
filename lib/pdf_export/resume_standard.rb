@@ -305,14 +305,14 @@ module PdfExport
       exp_sections.each do |exp_section|
         order = exp_section.get_exp_order
 
-				exps = {}
-				exp_section.exps.each do |exp|
+				exps = exp_section.exps.inject({}) do |exps, exp|
 					exps[exp.id] = exp
+					exps
 				end
 
-				resume_student_exps = {}
-				exp_section.resume_student_exps.each do |resume_student_exp|
-					resume_student_exps[resume_student_exp.id] = resume_student_exp
+				resume_student_exps = exp_section.resume_student_exps.inject({}) do |exps, exp|
+					exps[exp.id] = exp
+					exps
 				end
 				
 				

@@ -115,6 +115,10 @@ class Resume < ActiveRecord::Base
     self.preload_associations(resumes, includes)
   end
   
+  def load_contents(includes)
+    self.class.load_contents(self, includes)
+  end
+  
   
   Resume_Page_Size = 20
   
@@ -195,6 +199,118 @@ class Resume < ActiveRecord::Base
   def available?(corp_id)
     # the resume is online and the corporation is NOT in the blacklist
     self.online && BlockedCorp.get_record(self.student_id, corp_id).new_record?
+  end
+  
+  
+  def copy_to(to_resume)
+    begin
+      ActiveRecord::Base.transaction do
+        to_resume.save! if to_resume.new_record?
+
+        # copy resume contents
+        
+        # copy job_intention
+        ResumeJobIntention.new(
+          :resume_id => to_resume.id,
+          :content => self.job_intention.content
+        ).save! if self.job_intention
+        
+        # copy hobby
+        ResumeHobby.new(
+          :resume_id => to_resume.id,
+          :content => self.hobby.content
+        ).save! if self.hobby
+        
+        # copy award
+        ResumeAward.new(
+          :resume_id => to_resume.id,
+          :content => self.award.content
+        ).save! if self.award
+        
+        # copy exps
+        self.load_contents(:exp_sections => [:resume_student_exps, :exps])
+        self.exp_sections.each do |exp_section|
+          new_section = ResumeExpSection.new(
+            :resume_id => to_resume.id,
+            :title => exp_section.title
+          )
+          new_section.save!
+          
+          order = exp_section.get_exp_order
+
+					exps = exp_section.exps.inject({}) do |exps, exp|
+						exps[exp.id] = exp
+						exps
+					end
+
+					resume_student_exps = exp_section.resume_student_exps.inject({}) do |exps, exp|
+						exps[exp.id] = exp
+						exps
+					end
+					
+          order.each do |o|
+						exp_id = o[1].to_i
+						exp_type = o[0].to_i
+            exp = case exp_type
+							when ResumeExpSection::Student_Exp
+								resume_student_exp = resume_student_exps[exp_id]
+								ResumeStudentExp.new(
+								  :section_id => new_section.id,
+								  :exp_id => resume_student_exp.exp_id
+								) if resume_student_exp
+							when ResumeExpSection::Resume_Exp
+								resume_exp = exps[exp_id]
+								ResumeExp.new(
+								  :section_id => new_section.id,
+								  :period => resume_exp.period,
+								  :title => resume_exp.title,
+								  :sub_title => resume_exp.sub_title,
+								  :content => resume_exp.content
+								) if resume_exp
+							else
+								nil
+						end
+						
+						if exp
+  						exp.save!
+  						new_section.add_exp_order(exp_type, exp.id)
+						end
+					end
+					
+					new_section.save!
+        end
+        
+        # copy resume skills
+        self.skills.each do |skill|
+				  ResumeSkill.new(
+				    :resume_id => to_resume.id,
+				    :student_skill_id => skill.student_skill_id
+				  ).save!
+			  end
+			  
+			  # copy resume list skills
+        self.list_skills.each do |list_skill|
+				  ResumeListSkill.new(
+				    :resume_id => to_resume.id,
+				    :name => list_skill.name,
+				    :level => list_skill.level
+				  ).save!
+			  end
+			  
+			  # copy list sections
+			  self.list_sections.each do |list_section|
+			    ResumeListSection.new(
+				    :resume_id => to_resume.id,
+				    :title => list_section.title,
+				    :content => list_section.content
+				  ).save!
+		    end
+      end
+
+      true
+    rescue
+      false
+    end
   end
   
 end

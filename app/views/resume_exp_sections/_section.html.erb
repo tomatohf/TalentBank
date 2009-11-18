@@ -1,14 +1,14 @@
 <%
 	order = section.get_exp_order
 	
-	exps = {}
-	section.exps.each do |exp|
+	exps = section.exps.inject({}) do |exps, exp|
 		exps[exp.id] = exp
+		exps
 	end
-	
-	resume_student_exps = {}
-	section.resume_student_exps.each do |resume_student_exp|
-		resume_student_exps[resume_student_exp.id] = resume_student_exp
+
+	resume_student_exps = section.resume_student_exps.inject({}) do |exps, exp|
+		exps[exp.id] = exp
+		exps
 	end
 %>
 

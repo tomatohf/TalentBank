@@ -42,6 +42,31 @@ class ResumesController < ApplicationController
         if resume.save
           flash[:success_msg] = "操作成功, 已添加 #{ResumeDomain.find(resume.domain_id)[:name]} 的简历"
           # return jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
+        else
+          flash[:error_msg] = "操作失败, 再试一次吧"
+        end
+      end
+    end
+    
+    jump_to("/students/#{@student.id}/resumes")
+  end
+  
+  
+  def copy
+    domain_id = params[:domain_id] && params[:domain_id].strip
+    
+    unless domain_id.blank?
+      if @school.resume_domains.include?(domain_id.to_i)
+        new_resume = Resume.new(
+          :student_id => @student.id,
+          :domain_id => domain_id
+        )
+
+        if @resume.copy_to(new_resume)
+          flash[:success_msg] = "操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历内容" +
+                                "复制到 #{ResumeDomain.find(new_resume.domain_id)[:name]} 的简历"
+        else
+          flash[:error_msg] = "操作失败, 再试一次吧"
         end
       end
     end
