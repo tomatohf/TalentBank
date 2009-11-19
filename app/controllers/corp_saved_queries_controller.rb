@@ -64,7 +64,7 @@ class CorpSavedQueriesController < ApplicationController
     if @saved_query.save
       saved_query_time = ApplicationController.helpers.format_datetime(@saved_query.created_at)
       flash[:success_msg] = "操作成功, 保存于 #{saved_query_time} 的查询的名称已更新"
-      return jump_to("/corporations/#{@corporation.id}/corp_saved_queries")
+      return jump_to("/corporations/#{@corporation.id}/saved_queries")
     end
     
     render :action => "edit"
@@ -77,7 +77,7 @@ class CorpSavedQueriesController < ApplicationController
     saved_query_time = ApplicationController.helpers.format_datetime(@saved_query.created_at)
     flash[:success_msg] = "操作成功, 已删除保存于 #{saved_query_time} 的查询"
   
-    jump_to("/corporations/#{@corporation.id}/corp_saved_queries")
+    jump_to("/corporations/#{@corporation.id}/saved_queries")
   end
   
   

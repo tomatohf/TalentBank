@@ -102,11 +102,11 @@ class Resume < ActiveRecord::Base
   def self.edit_parts
     [
       ["edit_job_intention", "求职意向"],
-  		["resume_exp_sections", "相关经历"],
+  		["exp_sections", "相关经历"],
   		["resume_skills", "技能和证书"],
   		["edit_awards", "荣誉和奖励"],
   		["edit_hobbies", "特长和爱好"],
-  		["resume_list_sections", "附加信息"]
+  		["list_sections", "附加信息"]
     ]
   end
   
@@ -238,14 +238,14 @@ class Resume < ActiveRecord::Base
           
           order = exp_section.get_exp_order
 
-					exps = exp_section.exps.inject({}) do |exps, exp|
-						exps[exp.id] = exp
-						exps
+					exps = exp_section.exps.inject({}) do |hash, exp|
+						hash[exp.id] = exp
+						hash
 					end
 
-					resume_student_exps = exp_section.resume_student_exps.inject({}) do |exps, exp|
-						exps[exp.id] = exp
-						exps
+					resume_student_exps = exp_section.resume_student_exps.inject({}) do |hash, exp|
+						hash[exp.id] = exp
+						hash
 					end
 					
           order.each do |o|

@@ -4,7 +4,7 @@
 
 <h2>编辑 <%= domain %> 的简历</h2>
 
-<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "resume_list_sections"} %>
+<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "list_sections"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -13,7 +13,7 @@
 <% end %>
 
 <div>
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections/new">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/list_sections/new">
 		添加附加信息</a>
 </div>
 
@@ -24,7 +24,7 @@
 		function del_section(section_id, section_title) {
 			if(confirm("确定要删除附加信息 " + section_title + " 么 ?")) {
 				var del_form = document.getElementById("del_section_form");
-				del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_list_sections/" + section_id;
+				del_form.action = "/students/<%= @student.id %>/resumes/<%= @resume.id %>/list_sections/" + section_id;
 				del_form.submit();
 			}
 		}

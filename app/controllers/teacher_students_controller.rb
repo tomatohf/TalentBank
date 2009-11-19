@@ -1,4 +1,4 @@
-class TeachStudentsController < ApplicationController
+class TeacherStudentsController < ApplicationController
   
   layout "teachers"
   

@@ -63,7 +63,7 @@ class CorpResumesController < ApplicationController
     # ========== end ==========
     
     
-    return jump_to("/corporations/#{@corporation.id}/corp_resumes?q=#{conditions}")
+    return jump_to("/corporations/#{@corporation.id}/resumes?q=#{conditions}")
   end
   
   

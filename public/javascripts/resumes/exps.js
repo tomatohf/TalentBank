@@ -1,7 +1,7 @@
 function del_section(section_id, section_title) {
 	if(confirm("确定要删除经历块 " + section_title + " 么 ? 该经历块中所有的经历都将被删除 !")) {
 		var section_del_form = document.getElementById("del_section_form");
-		section_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id;
+		section_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/exp_sections/" + section_id;
 		section_del_form.submit();
 	}
 }
@@ -9,7 +9,7 @@ function del_section(section_id, section_title) {
 function del_exp(section_id, exp_id, exp_period) {
 	if(confirm("确定要删除 " + exp_period + " 的经历么 ?")) {
 		var exp_del_form = document.getElementById("del_exp_form");
-		exp_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/resume_exps/" + exp_id;
+		exp_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/exp_sections/" + section_id + "/exps/" + exp_id;
 		exp_del_form.submit();
 	}
 }
@@ -19,7 +19,7 @@ function del_resume_student_exp(section_id, resume_student_exp_id, exp_period) {
 		document.getElementById("resume_student_exp_id").value = resume_student_exp_id;
 		
 		var resume_student_exp_del_form = document.getElementById("del_resume_student_exp_form");
-		resume_student_exp_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/destroy_resume_student_exp";
+		resume_student_exp_del_form.action = "/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/exp_sections/" + section_id + "/destroy_resume_student_exp";
 		resume_student_exp_del_form.submit();
 	}
 }
@@ -105,7 +105,7 @@ function update_exp_order(exps_container, order) {
 	section_id = exps_container.attr("id").substr("resume_exp_section_".length);
 
 	$.post(
-		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/resume_exp_sections/" + section_id + "/update_exp_order",
+		"/students/" + STUDENT_ID + "/resumes/" + RESUME_ID + "/exp_sections/" + section_id + "/update_exp_order",
 		{
 			order: order.join(SEP)
 		},

@@ -54,7 +54,7 @@ function show_tags(domain_id) {
 
 function add_skill(skill_id) {
 	$.post(
-		"/corporations/" + CORPORATION_ID + "/corp_resumes/add_skill",
+		"/corporations/" + CORPORATION_ID + "/resumes/add_skill",
 		{
 			skill_id: skill_id
 		},
@@ -120,7 +120,7 @@ function save_query() {
 
 function do_save_query(query_name) {
 	$.post(
-		"/corporations/" + CORPORATION_ID + "/corp_saved_queries",
+		"/corporations/" + CORPORATION_ID + "/saved_queries",
 		$("#query_form").serialize() + "&name=" + encodeURIComponent(query_name),
 		function(data) {
 			if(data != null && data.substr(0, 4) == "true") {

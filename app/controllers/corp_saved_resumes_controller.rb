@@ -112,13 +112,13 @@ class CorpSavedResumesController < ApplicationController
 
             flash[:success_msg] = "操作成功, 已将收藏标签 #{old_tag.name} 改名为 #{new_tag.name}"
 
-            return jump_to("/corporations/#{@corporation.id}/corp_saved_resumes?tag=#{new_tag.name}")
+            return jump_to("/corporations/#{@corporation.id}/saved_resumes?tag=#{new_tag.name}")
           end
         end
       end
     end
     
-    jump_to("/corporations/#{@corporation.id}/corp_saved_resumes")
+    jump_to("/corporations/#{@corporation.id}/saved_resumes")
   end
   
   
@@ -131,7 +131,7 @@ class CorpSavedResumesController < ApplicationController
       flash[:success_msg] = "操作成功, 已移除所有收藏到标签 #{tag.name} 的简历"
     end
     
-    jump_to("/corporations/#{@corporation.id}/corp_saved_resumes")
+    jump_to("/corporations/#{@corporation.id}/saved_resumes")
   end
   
   

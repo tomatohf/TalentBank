@@ -13,7 +13,7 @@
 <div>
 	<% form_tag "", :method => :delete, :id => "del_saved_query_form" do %>
 	<% end %>
-	<% form_tag "/corporations/#{@corporation.id}/corp_resumes/create_query", :method => :post, :id => "exe_saved_query_form" do %>
+	<% form_tag "/corporations/#{@corporation.id}/resumes/create_query", :method => :post, :id => "exe_saved_query_form" do %>
 		<input type="hidden" id="saved_query_conditions" name="q" />
 		<input type="hidden" id="saved_query_keyword" name="keyword_input" />
 	<% end %>
@@ -21,7 +21,7 @@
 		function del_saved_query(saved_query_id, saved_query_name) {
 			if(confirm("确定要删除查询 " + saved_query_name + " 么 ?")) {
 				var del_form = document.getElementById("del_saved_query_form");
-				del_form.action = "/corporations/<%= @corporation.id %>/corp_saved_queries/" + saved_query_id;
+				del_form.action = "/corporations/<%= @corporation.id %>/saved_queries/" + saved_query_id;
 				del_form.submit();
 			}
 		}

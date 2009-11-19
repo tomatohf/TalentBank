@@ -31,7 +31,7 @@ class StudentExpsController < ApplicationController
     
     if @exp.save
       flash[:success_msg] = "操作成功, 已添加 #{@exp.period} 的经历"
-      return jump_to("/students/#{@student.id}/student_exps")
+      return jump_to("/students/#{@student.id}/exps")
     end
     
     render :action => "new"
@@ -50,7 +50,7 @@ class StudentExpsController < ApplicationController
     
     if @exp.save
       flash[:success_msg] = "操作成功, #{@exp.period} 的经历已更新"
-      return jump_to("/students/#{@student.id}/student_exps")
+      return jump_to("/students/#{@student.id}/exps")
     end
     
     render :action => "edit"
@@ -62,7 +62,7 @@ class StudentExpsController < ApplicationController
     
     flash[:success_msg] = "操作成功, 已删除 #{@exp.period} 的经历"
   
-    jump_to("/students/#{@student.id}/student_exps")
+    jump_to("/students/#{@student.id}/exps")
   end
   
   

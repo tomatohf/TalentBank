@@ -14,7 +14,7 @@
 	</p>
 <% end %>
 
-<% form_tag "/corporations/#{@corporation.id}/corp_saved_queries/#{@saved_query.id}", :method => :put do %>
+<% form_tag "/corporations/#{@corporation.id}/saved_queries/#{@saved_query.id}", :method => :put do %>
 
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
 		<tr>
@@ -59,7 +59,7 @@
 			<td>
 				<%= submit_tag "修改", :class => "button", :disabled => !@account_active %>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="/corporations/<%= @corporation.id %>/corp_saved_queries">
+				<a href="/corporations/<%= @corporation.id %>/saved_queries">
 					返回已保存的查询列表</a>
 			</td>
 		</tr>

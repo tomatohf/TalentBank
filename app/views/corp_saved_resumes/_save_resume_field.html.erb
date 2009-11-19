@@ -3,7 +3,7 @@
 	已收藏至:
 	<% tags.each do |tag| %>
 		<% tag = h(tag) %>
-		<a target="_blank" class="none" href="/corporations/<%= @corporation.id %>/corp_saved_resumes?tag=<%= tag %>">
+		<a target="_blank" class="none" href="/corporations/<%= @corporation.id %>/saved_resumes?tag=<%= tag %>">
 			<%= tag %></a>
 	<% end %>
 	<a href="#" id="save_resume_link_<%= resume_id %>" title="修改">

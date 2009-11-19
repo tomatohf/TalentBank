@@ -16,16 +16,16 @@
 	</div>
 
 	<div class="corp_tags">
-		<% form_tag "/corporations/#{@corporation.id}/corp_saved_resumes/destroy_tag", :method => :post, :id => "destroy_tag_form" do %>
+		<% form_tag "/corporations/#{@corporation.id}/saved_resumes/destroy_tag", :method => :post, :id => "destroy_tag_form" do %>
 			<input type="hidden" id="destroy_tag_name" name="destroy_tag_name" />
 		<% end %>
-		<% form_tag "/corporations/#{@corporation.id}/corp_saved_resumes/update_tag", :method => :post, :id => "update_tag_form" do %>
+		<% form_tag "/corporations/#{@corporation.id}/saved_resumes/update_tag", :method => :post, :id => "update_tag_form" do %>
 			<input type="hidden" id="old_tag_name" name="old_tag_name" />
 			<input type="hidden" id="new_tag_name" name="new_tag_name" />
 		<% end %>
 		
 		<div>
-			<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes"<%= %Q! class="selected_link"! if @tag_name.blank? %>>
+			<a href="/corporations/<%= @corporation.id %>/saved_resumes"<%= %Q! class="selected_link"! if @tag_name.blank? %>>
 				全部</a>
 			(<%= @total_count %>)
 		</div>
@@ -36,7 +36,7 @@
 				tag = h(tag)
 			%>
 			<div>
-				<a href="/corporations/<%= @corporation.id %>/corp_saved_resumes?tag=<%= tag %>" class="corp_tag_list_link<%= " selected_link" if selected %>"><%= tag %></a>
+				<a href="/corporations/<%= @corporation.id %>/saved_resumes?tag=<%= tag %>" class="corp_tag_list_link<%= " selected_link" if selected %>"><%= tag %></a>
 				(<%= count %>)
 				
 				<a href="#" class="update_tag_link" title="修改">

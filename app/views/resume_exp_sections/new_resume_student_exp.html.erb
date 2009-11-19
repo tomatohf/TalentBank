@@ -11,12 +11,12 @@
 <% end %>
 
 <div class="align_r">
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections">
 		返回经历列表</a>
 </div>
 
 <div>
-	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections/#{@section.id}/create_resume_student_exp", :method => :post, :id => "add_exp_form" do %>
+	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/exp_sections/#{@section.id}/create_resume_student_exp", :method => :post, :id => "add_exp_form" do %>
 		<input type="hidden" id="student_exp_id" name="student_exp_id" />
 	<% end %>
 	<script language="JavaScript">

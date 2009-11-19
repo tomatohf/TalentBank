@@ -1,4 +1,4 @@
-class ViewedResumeStatisticsController < ApplicationController
+class TeacherStatisticsController < ApplicationController
   
   layout "teachers"
   

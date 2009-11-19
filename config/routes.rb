@@ -33,13 +33,11 @@ ActionController::Routing::Routes.draw do |map|
     :allow_corporation_query => :post,
     :inhibit_corporation_query => :post
   } do |teachers|
-    teachers.resources :teach_students, :member => {
+    teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get
     }
     
-    teachers.resources :viewed_resume_statistics
-    
-    teachers.resources :query_statistics
+    teachers.resources :teacher_statistics, :as => :statistics
   end
   
   
@@ -66,7 +64,7 @@ ActionController::Routing::Routes.draw do |map|
     :destroy_blocked_corp => :post
   } do |students|
     students.resources :edu_exps
-    students.resources :student_exps
+    students.resources :student_exps, :as => :exps
     
     students.resources :resumes, :member => {
       :edit_job_intention => :get,
@@ -86,9 +84,9 @@ ActionController::Routing::Routes.draw do |map|
       
       :copy => :post
     } do |resumes|
-      resumes.resources :resume_list_sections
+      resumes.resources :resume_list_sections, :as => :list_sections
       
-      resumes.resources :resume_exp_sections, :member => {
+      resumes.resources :resume_exp_sections, :as => :exp_sections, :member => {
         :new_resume_student_exp => :get,
         :create_resume_student_exp => :post,
         
@@ -96,7 +94,7 @@ ActionController::Routing::Routes.draw do |map|
         
         :update_exp_order => :post
       } do |resume_exp_sections|
-        resume_exp_sections.resources :resume_exps
+        resume_exp_sections.resources :resume_exps, :as => :exps
       end
       
       resumes.resources :resume_skills
@@ -113,14 +111,14 @@ ActionController::Routing::Routes.draw do |map|
     :edit_profile => :get,
     :update_profile => :post
   } do |corporations|
-    corporations.resources :corp_saved_queries
+    corporations.resources :corp_saved_queries, :as => :saved_queries
     
-    corporations.resources :corp_resumes, :collection => {
+    corporations.resources :corp_resumes, :as => :resumes, :collection => {
       :add_skill => :post,
       :create_query => :post
     }
     
-    corporations.resources :corp_saved_resumes, :collection => {
+    corporations.resources :corp_saved_resumes, :as => :saved_resumes, :collection => {
       :update_tag => :post,
       :destroy_tag => :post
     }

@@ -15,7 +15,7 @@
 	</p>
 <% end %>
 
-<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections/#{@section.id}/resume_exps", :method => :post do %>
+<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/exp_sections/#{@section.id}/exps", :method => :post do %>
 
 	<%= render :partial => "exp_form", :locals => {:submit_label => "添加"} %>
 	

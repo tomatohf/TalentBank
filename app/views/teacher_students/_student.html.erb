@@ -22,7 +22,7 @@
 					<% resumes.each do |resume| %>
 						<% domain = ResumeDomain.find(resume.domain_id) %>
 						<li>
-							<a target="_blank" href="/teachers/<%= @teacher.id %>/teach_students/<%= resume.id %>/resume">
+							<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
 								<%= domain[:name] %></a>
 						</li>
 					<% end %>

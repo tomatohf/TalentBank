@@ -39,7 +39,7 @@ class ResumeExpsController < ApplicationController
       end
 
       flash[:success_msg] = "操作成功, 已添加 #{@section.title} 中 #{@exp.period} 的经历"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
     rescue
       flash.now[:error_msg] = "操作失败, 再试一次吧"
     end
@@ -62,7 +62,7 @@ class ResumeExpsController < ApplicationController
       @resume.renew_updated_at(@exp.updated_at)
       
       flash[:success_msg] = "操作成功, #{@section.title} 中 #{@exp.period} 的经历已更新"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
     end
     
     render :action => "edit"
@@ -85,7 +85,7 @@ class ResumeExpsController < ApplicationController
       flash[:error_msg] = "操作失败, 再试一次吧"
     end
   
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
   end
   
   

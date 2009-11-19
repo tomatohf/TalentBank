@@ -22,7 +22,7 @@
 			<td align="center" valign="top" style="width: <%= photo_w + 6 %>px;">
 				<div style="width: <%= photo_w %>px; height: <%= photo_h %>px;">
 					<% if photo %>
-						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/corp_resumes/<%= resume.id %>">
+						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/resumes/<%= resume.id %>">
 							<img class="job_photo" src="<%= photo.image.url(:normal) %>" alt="<%= student_name %>" border="0" width="<%= photo_w %>" height="<%= photo_h %>" /></a>
 					<% end %>
 				</div>
@@ -31,7 +31,7 @@
 			<td valign="top">
 				<div style="margin-left: 15px;">
 					<div style="font-size: 14px;">
-						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/corp_resumes/<%= resume.id %>" class="none">
+						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/resumes/<%= resume.id %>" class="none">
 							<%= student_name %></a>
 					</div>
 					

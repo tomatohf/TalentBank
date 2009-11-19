@@ -6,7 +6,7 @@
 
 <h2>编辑 <%= domain %> 的简历</h2>
 
-<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "resume_exp_sections"} %>
+<%= render :partial => "/resumes/edit_resume_nav", :locals => {:current_link => "exp_sections"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -20,7 +20,7 @@
 <% end %>
 
 <div>
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/new">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/new">
 		添加经历块</a>
 </div>
 

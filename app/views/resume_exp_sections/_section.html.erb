@@ -1,14 +1,14 @@
 <%
 	order = section.get_exp_order
 	
-	exps = section.exps.inject({}) do |exps, exp|
-		exps[exp.id] = exp
-		exps
+	exps = section.exps.inject({}) do |hash, exp|
+		hash[exp.id] = exp
+		hash
 	end
 
-	resume_student_exps = section.resume_student_exps.inject({}) do |exps, exp|
-		exps[exp.id] = exp
-		exps
+	resume_student_exps = section.resume_student_exps.inject({}) do |hash, exp|
+		hash[exp.id] = exp
+		hash
 	end
 %>
 
@@ -22,19 +22,19 @@
 				</td>
 				
 				<td style="width: 80px;">
-					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new" title="添加经历" class="none add_exp_link">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/<%= section.id %>/exps/new" title="添加经历" class="none add_exp_link">
 						<img src="/images/students/add_icon.png" border="0" alt="添加经历" />
 						添加经历</a>
 						
 					<div class="dropdown_menu" style="font-size: 12px;">
 						<ul class="dropdown_sub_menu">
 							<li>
-								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/new_resume_student_exp">
+								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/<%= section.id %>/new_resume_student_exp">
 									从经历库选择</a>
 							</li>
 
 							<li>
-								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/new">
+								<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/<%= section.id %>/exps/new">
 									填写新的经历</a>
 							</li>
 						</ul>
@@ -48,7 +48,7 @@
 				</td>
 				
 				<td style="width: 50px;">
-					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/edit" title="编辑" class="none">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/<%= section.id %>/edit" title="编辑" class="none">
 						<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
 						编辑</a>
 				</td>
@@ -96,7 +96,7 @@
 												<img src="/images/students/edit_icon.gif" border="0" alt="编辑经历库" />
 												编辑经历库</a>
 										<% else %>
-											<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_exp_sections/<%= section.id %>/resume_exps/<%= exp.id %>/edit" title="编辑" class="none">
+											<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/<%= section.id %>/exps/<%= exp.id %>/edit" title="编辑" class="none">
 												<img src="/images/students/edit_icon.gif" border="0" alt="编辑" />
 												编辑</a>
 										<% end %>

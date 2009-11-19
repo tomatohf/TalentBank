@@ -45,7 +45,7 @@ class ResumeExpSectionsController < ApplicationController
       @resume.renew_updated_at(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 已添加经历块 #{@section.title}"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
     end
     
     render :action => "new"
@@ -63,7 +63,7 @@ class ResumeExpSectionsController < ApplicationController
       @resume.renew_updated_at(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 经历块 #{@section.title} 已更新"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
     end
     
     render :action => "edit"
@@ -77,7 +77,7 @@ class ResumeExpSectionsController < ApplicationController
     
     flash[:success_msg] = "操作成功, 已删除经历块 #{@section.title}"
   
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
   end
   
   
@@ -115,7 +115,7 @@ class ResumeExpSectionsController < ApplicationController
       end
     end
     
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
   end
   
   
@@ -139,7 +139,7 @@ class ResumeExpSectionsController < ApplicationController
       end
     end
     
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_exp_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
   end
   
   

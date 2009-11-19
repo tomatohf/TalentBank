@@ -33,7 +33,7 @@ class ResumeListSectionsController < ApplicationController
       @resume.renew_updated_at(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 已添加附加信息 #{@section.title}"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/list_sections")
     end
     
     render :action => "new"
@@ -52,7 +52,7 @@ class ResumeListSectionsController < ApplicationController
       @resume.renew_updated_at(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 附加信息 #{@section.title} 已更新"
-      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+      return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/list_sections")
     end
     
     render :action => "edit"
@@ -66,7 +66,7 @@ class ResumeListSectionsController < ApplicationController
     
     flash[:success_msg] = "操作成功, 已删除附加信息 #{@section.title}"
   
-    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/resume_list_sections")
+    jump_to("/students/#{@student.id}/resumes/#{@resume.id}/list_sections")
   end
   
   

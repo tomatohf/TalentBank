@@ -22,7 +22,7 @@ function save_resume_dialog_content(container, resume_id) {
 	$.ajax(
 		{
 			type: "GET",
-			url: "/corporations/" + CORPORATION_ID + "/corp_saved_resumes/" + resume_id + "/edit",
+			url: "/corporations/" + CORPORATION_ID + "/saved_resumes/" + resume_id + "/edit",
 			dataType: "html",
 			data: {
 				current_tags: $("#corp_resume_tags_" + resume_id).val() || ""
@@ -165,7 +165,7 @@ function do_save_resume(resume_id, tags) {
 	$.ajax(
 		{
 			type: "POST",
-			url: "/corporations/" + CORPORATION_ID + "/corp_saved_resumes/" + resume_id,
+			url: "/corporations/" + CORPORATION_ID + "/saved_resumes/" + resume_id,
 			dataType: "html",
 			data: {
 				_method: "put", // simulate HTTP put request in rails
