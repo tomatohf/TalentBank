@@ -1,10 +1,12 @@
 <tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 	<td>
-		<%= h(corporation.uid) %>
+		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+			<%= h(corporation.uid) %></a>
 	</td>
 	
 	<td>
-		<%= h(corporation.name) %>
+		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+			<%= h(corporation.name) %></a>
 	</td>
 	
 	<td align="center">
@@ -12,8 +14,6 @@
 	</td>
 	
 	<td align="right">
-		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-			<img src="/images/teachers/corporation_icon.gif" border="0" />
-			查看企业信息</a>
+		
 	</td>
 </tr>

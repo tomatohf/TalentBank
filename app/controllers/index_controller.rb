@@ -49,7 +49,7 @@ class IndexController < ApplicationController
   
   def school
     
-    is_teacher = params[:id] && params[:id] != ""
+    is_teacher = !params[:id].blank?
     @user_type = is_teacher ? "teacher" : "school"
     @uid = cookies[:loginid] if cookies[:logintype] == (is_teacher ? "teachers" : "schools")
 
