@@ -40,6 +40,18 @@
 					</div>
 				<% end %>
 				
+				<% if @teacher.statistic %>
+					<div>
+						<a href="/teachers/<%= @teacher.id %>/viewed_resume_statistics">
+							简历查看统计</a>
+					</div>
+					
+					<div>
+						<a href="/teachers/<%= @teacher.id %>/query_statistics">
+							企业查询统计</a>
+					</div>
+				<% end %>
+				
 				<div>
 					<a href="/index/logout">
 						退出系统</a>

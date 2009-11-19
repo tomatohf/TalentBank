@@ -6,7 +6,8 @@ class SchoolsController < ApplicationController
   before_filter :check_login_for_school
   
   before_filter :check_active, :only => [:update, :create_teacher, :destroy_teacher,
-                                          :allow_teacher_admin, :inhibit_teacher_admin]
+                                          :allow_teacher_admin, :inhibit_teacher_admin,
+                                          :allow_teacher_statistic, :inhibit_teacher_statistic]
   
   before_filter :check_school
   
@@ -96,6 +97,15 @@ class SchoolsController < ApplicationController
     
   def inhibit_teacher_admin
     adjust_teacher(:admin, false)
+  end
+  
+  
+  def allow_teacher_statistic
+    adjust_teacher(:statistic, true)
+  end
+    
+  def inhibit_teacher_statistic
+    adjust_teacher(:statistic, false)
   end
   
   

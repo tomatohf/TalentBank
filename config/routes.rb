@@ -12,7 +12,10 @@ ActionController::Routing::Routes.draw do |map|
     :destroy_teacher => :post,
     
     :allow_teacher_admin => :post,
-    :inhibit_teacher_admin => :post
+    :inhibit_teacher_admin => :post,
+    
+    :allow_teacher_statistic => :post,
+    :inhibit_teacher_statistic => :post
   }
   
   
@@ -26,12 +29,17 @@ ActionController::Routing::Routes.draw do |map|
     :corporations => :get,
     :new_corporation => :get,
     :create_corporation => :post,
+    
     :allow_corporation_query => :post,
     :inhibit_corporation_query => :post
   } do |teachers|
     teachers.resources :teach_students, :member => {
       :resume => :get
     }
+    
+    teachers.resources :viewed_resume_statistics
+    
+    teachers.resources :query_statistics
   end
   
   

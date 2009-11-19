@@ -28,18 +28,19 @@ function del_teacher(teacher_id, uid) {
 	}
 }
 
-function allow_teacher_admin(teacher_id) {
-	var url = "/schools/" + SCHOOL_ID + "/allow_teacher_admin";
-	adjust_teacher_admin(url, teacher_id);
+
+function allow_teacher(teacher_id, allow_what) {
+	var url = "/schools/" + SCHOOL_ID + "/allow_teacher_" + allow_what;
+	adjust_teacher(url, teacher_id, allow_what);
 }
 
-function inhibit_teacher_admin(teacher_id) {
-	var url = "/schools/" + SCHOOL_ID + "/inhibit_teacher_admin";
-	adjust_teacher_admin(url, teacher_id);
+function inhibit_teacher(teacher_id, inhibit_what) {
+	var url = "/schools/" + SCHOOL_ID + "/inhibit_teacher_" + inhibit_what;
+	adjust_teacher(url, teacher_id, inhibit_what);
 }
 
-function adjust_teacher_admin(url, teacher_id) {
-	show_loading("admin");
+function adjust_teacher(url, teacher_id, adjust_what) {
+	show_loading(adjust_what);
 	
 	$.ajax(
 		{
@@ -50,10 +51,10 @@ function adjust_teacher_admin(url, teacher_id) {
 				teacher_id: teacher_id
 			},
 			complete: function() {
-				hide_loading("admin");
+				hide_loading(adjust_what);
 			},
 			success: function(data, text_status) {
-				$("#admin_field_" + teacher_id).replaceWith(data);
+				$("#" + adjust_what + "_field_" + teacher_id).replaceWith(data);
 				
 				setup_dropdown_menus();
 			}

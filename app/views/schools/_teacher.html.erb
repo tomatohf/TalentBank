@@ -13,6 +13,10 @@
 		<%= render :partial => "admin_field", :locals => {:teacher => teacher} %>
 	</td>
 	
+	<td>
+		<%= render :partial => "statistic_field", :locals => {:teacher => teacher} %>
+	</td>
+	
 	<td align="right">
 		<a href="#" title="删除" class="none" onclick="del_teacher(<%= teacher.id %>, '<%= a(uid) %>'); return false;">
 			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
