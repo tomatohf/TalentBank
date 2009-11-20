@@ -80,7 +80,7 @@
 
 			<% unless query.keyword.blank? %>
 				<span>
-					关键字:
+					关键词:
 					<%= h(query.keyword) %>
 				</span>
 			<% end %>
@@ -91,9 +91,8 @@
 		<% if tags.size > 0 %>
 			<div>
 				经历标签:
-				&nbsp;&nbsp;&nbsp;
 				<% tags.each do |tag_id| %>
-					<span>
+					<span style="margin-left: 10px;">
 						<%= ResumeExpTag.find(query.domain_id, tag_id)[:name] %>
 					</span>
 				<% end %>
@@ -103,9 +102,8 @@
 		<% if skills.size > 0 %>
 			<div>
 				技能和证书:
-				&nbsp;&nbsp;&nbsp;
 				<% skills.each do |skill| %>
-					<span>
+					<span style="margin-left: 10px;">
 						<%
 							skill_id, value = [skill[0].to_i, skill[1].to_i]
 							skill = Skill.find(skill_id)

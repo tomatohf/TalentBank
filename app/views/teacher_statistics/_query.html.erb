@@ -1,0 +1,109 @@
+<%
+	tags, skills = query.tags_and_skills
+	has_tags_or_skills = (tags.size + skills.size) > 0
+%>
+
+<tr<%= %Q! class="odd"! if query_counter.odd? %>>
+	<td>
+		<% if has_tags_or_skills %>
+			<a href="#" title="展开/收起 查询详情" onclick="toggle_query_detail(<%= query.id %>); return false;">
+				<img src="/images/corporations/expand_icon.gif" id="query_detail_icon_<%= query.id %>" border="0" alt="展开/收起 查询详情" /></a>
+		<% end %>
+	</td>
+	
+	<td class="datetime">
+		<a href="#" title="" target="_blank" class="none">
+			<%= format_datetime(query.updated_at) %></a>
+	</td>
+	
+	<td>
+		<a href="#" title="" target="_blank" class="none">
+			<%= h(query.corporation.name) %></a>
+	</td>
+	
+	<td>
+		<% if query.college_id.blank? %>
+			<span class="info">不限学院</span>
+		<% else %>
+			<% college = College.find(@school.abbr, query.college_id) %>
+			<%= college && college[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if query.college_id.blank? || query.major_id.blank? %>
+			<span class="info">不限专业</span>
+		<% else %>
+			<% major = Major.find(query.college_id, query.major_id) %>
+			<%= major && major[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if query.edu_level_id.blank? %>
+			<span class="info">不限</span>
+		<% else %>
+			<% edu_level = EduLevel.find(query.edu_level_id) %>
+			<%= edu_level && edu_level[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if query.graduation_year.blank? %>
+			<span class="info">不限</span>
+		<% else %>
+			<%= query.graduation_year %> 年
+		<% end %>
+	</td>
+	
+	<td>
+		<%=
+			domain = ResumeDomain.find(query.domain_id)
+			domain && domain[:name]
+		%>
+	</td>
+	
+	<td>
+		<% keyword = h(query.keyword) %>
+		<div title="<%= keyword %>">
+			<%= truncate(keyword, 15) %>
+		</div>
+	</td>
+</tr>
+
+
+<% if has_tags_or_skills %>
+	<tr id="query_detail_<%= query.id %>" style="display: none;">
+		<td></td>
+	
+		<td colspan="8">
+			<% if tags.size > 0 %>
+				<div>
+					经历标签:
+					<% tags.each do |tag_id| %>
+						<span style="margin-left: 10px;">
+							<%= ResumeExpTag.find(query.domain_id, tag_id)[:name] %>
+						</span>
+					<% end %>
+				</div>
+			<% end %>
+		
+			<% if skills.size > 0 %>
+				<div>
+					技能和证书:
+					<% skills.each do |skill| %>
+						<span style="margin-left: 10px;">
+							<%
+								skill_id, value = [skill[0].to_i, skill[1].to_i]
+								skill = Skill.find(skill_id)
+							%>
+							<%= skill[:name] %>
+							:
+							<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], value) %>
+						</span>
+					<% end %>
+				</div>
+			<% end %>
+		</td>
+	</tr>
+<% end %>

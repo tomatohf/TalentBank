@@ -507,3 +507,29 @@ a.corp_tag:hover {
 	text-decoration: none;
 	color: #333333;
 }
+
+
+.grid {
+	border-collapse: collapse;
+}
+
+.grid thead td {
+	background: #E5E5E5 none repeat scroll 0 0;
+	border: 1px solid #BBBBBB;
+	padding: 5px;
+	text-align: center;
+}
+
+.grid tbody td {
+	background: #F9F9F9 none repeat scroll 0 0;
+	border: 1px solid #DDDDDD;
+	padding: 5px;
+}
+
+.grid tbody tr.odd td {
+	background-color: #FFFFFF;
+}
+
+.grid tbody td.datetime {
+	font-size: 10px;
+}

@@ -1,11 +1,14 @@
 class TeacherStatisticsController < ApplicationController
   
+  Queries_Page_Size = 100
+  
+  
   layout "teachers"
   
   
   before_filter :check_login_for_teacher
   
-  before_filter :check_active, :only => []
+  # before_filter :check_active, :only => []
   
   before_filter :check_teacher
   
@@ -14,6 +17,30 @@ class TeacherStatisticsController < ApplicationController
   
   def index
     
+  end
+  
+  
+  def queries
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @corp_queries = CorpQuery.paginate(
+      :page => page,
+      :per_page => Queries_Page_Size,
+      :order => "id DESC",
+      :include => [:corporation]
+    )
+  end
+  
+  
+  def resumes
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @viewed_resumes = CorpViewedResume.paginate(
+      :page => page,
+      :per_page => Queries_Page_Size,
+      :order => "id DESC",
+      :include => [:corporation, {:resume => [:student]}]
+    )
   end
   
   

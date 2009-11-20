@@ -1,0 +1,69 @@
+<%
+	corporation = viewed_resume.corporation
+	resume = viewed_resume.resume
+	student = resume.student
+%>
+
+<tr<%= %Q! class="odd"! if viewed_resume_counter.odd? %>>
+	<td class="datetime">
+		<a href="#" title="" target="_blank" class="none">
+			<%= format_datetime(viewed_resume.updated_at) %></a>
+	</td>
+	
+	<td>
+		<a href="#" title="" target="_blank" class="none">
+			<%= h(corporation.name) %></a>
+	</td>
+	
+	<td>
+		<a href="#" title="" target="_blank" class="none">
+			<%= h(student.name) %></a>
+	</td>
+	
+	<td>
+		<%=
+			domain = ResumeDomain.find(resume.domain_id)
+			domain && domain[:name]
+		%>
+	</td>
+	
+	<td>
+		<% if student.college_id.blank? %>
+			<span class="info">不限学院</span>
+		<% else %>
+			<% college = College.find(@school.abbr, student.college_id) %>
+			<%= college && college[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if student.college_id.blank? || student.major_id.blank? %>
+			<span class="info">不限专业</span>
+		<% else %>
+			<% major = Major.find(student.college_id, student.major_id) %>
+			<%= major && major[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if student.edu_level_id.blank? %>
+			<span class="info">不限</span>
+		<% else %>
+			<% edu_level = EduLevel.find(student.edu_level_id) %>
+			<%= edu_level && edu_level[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
+		<% if student.graduation_year.blank? %>
+			<span class="info">不限</span>
+		<% else %>
+			<%= student.graduation_year %> 年
+		<% end %>
+	</td>
+	
+	<td>
+		<a title="查看这份简历" target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume" class="none">
+			<img src="/images/students/preview_resume_icon.gif" border="0" alt="查看简历" /></a>
+	</td>
+</tr>

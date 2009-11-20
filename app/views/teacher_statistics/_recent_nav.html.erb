@@ -1,0 +1,11 @@
+<div class="horizontal_nav">
+	<%
+		[
+			["queries", "企业搜索操作"],
+			["resumes", "企业查看简历"]
+		].each do |part|
+	%>
+		<a href="/teachers/<%= @teacher.id %>/statistics/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == action_name %>>
+			<%= part[1] %></a>
+	<% end %>
+</div>

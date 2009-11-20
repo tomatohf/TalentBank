@@ -37,7 +37,10 @@ ActionController::Routing::Routes.draw do |map|
       :resume => :get
     }
     
-    teachers.resources :teacher_statistics, :as => :statistics
+    teachers.resources :teacher_statistics, :as => :statistics, :collection => {
+      :queries => :any,
+      :resumes => :any
+    }
   end
   
   
