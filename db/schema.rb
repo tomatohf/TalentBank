@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(:version => 11) do
     t.datetime "updated_at"
   end
 
+  add_index "corp_queries", ["updated_at"], :name => "index_corp_queries_on_updated_at"
+
   create_table "corp_query_exp_tags", :force => true do |t|
     t.integer  "query_id"
     t.integer  "tag_id"
@@ -83,6 +85,8 @@ ActiveRecord::Schema.define(:version => 11) do
     t.integer  "resume_id"
     t.datetime "updated_at"
   end
+
+  add_index "corp_viewed_resumes", ["updated_at"], :name => "index_corp_viewed_resumes_on_updated_at"
 
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"

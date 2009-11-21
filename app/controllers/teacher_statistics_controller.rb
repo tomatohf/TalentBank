@@ -31,7 +31,6 @@ class TeacherStatisticsController < ApplicationController
     )
   end
   
-  
   def resumes
     page = params[:page]
     page = 1 unless page =~ /\d+/
@@ -41,6 +40,35 @@ class TeacherStatisticsController < ApplicationController
       :order => "id DESC",
       :include => [:corporation, {:resume => [:student]}]
     )
+  end
+  
+  
+  def counts
+    @view = params[:view] && params[:view].strip
+    @period = params[:period] && params[:period].strip
+    
+    group_function, default_period = case @view
+    when "day"
+      [:day, 1.month]
+    when "week"
+      [:week, 1.year]
+    when "month"
+      [:month, 1.year]
+    else
+      # default, day view
+      [:day, 1.month]
+    end
+    
+    from, to = begin
+      @period.split("-", 2).collect { |date|
+        Date.parse(date)
+      }
+    rescue
+      today = Date.today
+      [default_period.ago(today), today]
+    end
+    
+    @query_counts = CorpQuery.period_counts(group_function, from.to_time, to.to_time)
   end
   
   

@@ -1,0 +1,12 @@
+<% talent_page_title("时段统计") %>
+
+
+<h2>时段统计</h2>
+
+<div>
+	<% @query_counts.each_with_groupby_and_count do |query, group, count| %>
+		<div>
+			<%= group %> (<%= count%>)
+		</div>
+	<% end %>
+</div>

@@ -73,7 +73,7 @@
 
 
 <% if has_tags_or_skills %>
-	<tr id="query_detail_<%= query.id %>" style="display: none;">
+	<tr id="query_detail_<%= query.id %>" style="display: none;"<%= %Q! class="odd"! if query_counter.odd? %>>
 		<td></td>
 	
 		<td colspan="8">

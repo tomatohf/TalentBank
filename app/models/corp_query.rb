@@ -6,15 +6,48 @@ class CorpQuery < ActiveRecord::Base
   has_many :skills, :class_name => "CorpQuerySkill", :foreign_key => "query_id", :dependent => :destroy
   
   
+  Sep_Part = "!"
+  Sep_Value = "_"
+  Sep_Pair = "-"
+  
+  
+  include Utils::Searchable
+  
+  define_index do
+    
+    indexes keyword
+    
+    has updated_at, corporation_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
+    
+    has(
+      "REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', 1), '#{Sep_Value}', ',')",
+      :as => :exp_tag_id,
+      :type => :multi
+    )
+    
+    has(
+      "REPLACE(REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', 1), '#{Sep_Pair}', ''), '#{Sep_Value}', ',')",
+      :as => :skill_values,
+      :type => :multi
+    )
+    
+    set_property(
+      :delta => DailyDelta,
+      :column => :updated_at,
+      # :rate => 70.minutes,
+      :hour => Overall_Index_Hour,
+      :minute => Overall_Index_Minute,
+      :batch => 100
+    )
+    
+  end
+  
+  
   validates_presence_of :corporation_id
   
   validates_inclusion_of :from_saved, :in => [true, false]
   
   
-  
-  Sep_Part = "!"
-  Sep_Value = "_"
-  Sep_Pair = "-"
   def self.build_conditions(domain_id, info, tags, skills, keyword)
     [
       domain_id,
@@ -69,6 +102,22 @@ class CorpQuery < ActiveRecord::Base
       get_tags(tags),
       get_skills(skills)
     ]
+  end
+  
+  
+  def self.period_counts(group_function, from, to)
+    filters = {
+      :updated_at => from..to
+    }
+    
+    self.search(
+      :group_by => "updated_at",
+      :group_function => group_function,
+      :group_clause => "updated_at ASC",
+      # :match_mode => Search_Match_Mode,
+      # :order => "updated_at ASC",
+      :with => filters
+    )
   end
   
   

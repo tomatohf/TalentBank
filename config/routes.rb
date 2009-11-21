@@ -39,7 +39,9 @@ ActionController::Routing::Routes.draw do |map|
     
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {
       :queries => :any,
-      :resumes => :any
+      :resumes => :any,
+      
+      :counts => :any
     }
   end
   
