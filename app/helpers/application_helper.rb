@@ -62,4 +62,96 @@ module ApplicationHelper
     text.gsub("'", "")
   end
   
+  
+  def chart_data
+    {
+      # :title => {
+      #   :text => "",
+      #   :style => {
+      #     "font-size" => "20px",
+      #     :color => "#0000FF",
+      #     "font-family" => "Verdana",
+      #     "text-align" => "center"
+      #   }
+      # },
+      
+      :bg_colour => "#FFFFFF",
+      
+      :tooltip => {
+        :shadow => true,
+        :stroke => 5,
+        :colour => "#6E604F",
+        :background => "#BDB396",
+        :title => {
+          "font-size" => "14px",
+          :color => "#CC2A43"
+        },
+        :body => {
+          "font-size" => "10px",
+          "font-weight" => "bold",
+          :color => "#000000"
+        }
+      },
+      
+      :num_decimals => 0,
+      :is_fixed_num_decimals_forced => true,
+      :is_decimal_separator_comma => false,
+      :is_thousand_separator_disabled => false,
+      
+      :x_axis => {
+        :stroke => 2,
+        "tick-height" => 5,
+        :colour => "#878787",
+        "grid-colour" => "#D2D2D2",
+        :steps => 1,
+        :labels => {
+          :labels => ["January","February","March","April","May","June","July","August","Spetember"],
+          :steps => 1,
+          "visible-steps" => 2,
+          :colour => "#333333",
+          :size => 10
+        }
+      },
+      
+      :y_axis => {
+        :stroke => 2,
+        "tick-length" => 10,
+        :colour => "#7F7F7F",
+        "grid-colour" => "#D2D2D2",
+        :labels => {
+          :text => "#val# 次",
+          :colour => "#333333",
+          :size => 10
+        },
+        :min => 0,
+        :max => 20*100,
+        :steps => 200
+      },
+      
+      :elements => [
+        {
+          :type => "line",
+          :colour => "#0077CC",
+          :width => 2,
+          :text => "企业查询数",
+          "font-size" => 12,
+          "dot-style" => {
+            :type => "solid-dot",
+            "dot-size" => 4,
+            "halo-size" => 2,
+            :colour => "#0077CC",
+            :tip => "#x_label#<br>#val#",
+            "on-click" => "//line_click(x_index)"
+          },
+          "on-show" => {
+            :type => "pop-up",
+            :cascade => 1,
+            :delay => 0.5
+          },
+          :values => [10,12,14,9,12,13,10,13,12].collect{|n|n*100}
+        }
+      ]
+    }.to_json
+  end
+  
 end

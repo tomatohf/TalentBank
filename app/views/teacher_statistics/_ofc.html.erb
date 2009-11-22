@@ -1,0 +1,38 @@
+<%
+	data ||= {}
+	chart_id ||= Time.now.usec
+	
+	# width ||= 700
+	height ||= 250
+%>
+
+<script language="JavaScript">
+	function data_of_<%= chart_id %>() {
+		return <%= data.to_json %>;
+	}
+</script>
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+	id="<%= chart_id %>_object" width="100%" height="<%= height %>px"
+	codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+
+	<param name="movie" value="/lib/ofc2/open-flash-chart.swf" />
+	<param name="flashvars" value="get-data=data_of_<%= chart_id %>" />
+	<param name="quality" value="high" />
+	<param name="bgcolor" value="#FFFFFF" />
+	<param name="allowScriptAccess" value="sameDomain" />
+	<param name="allowFullScreen" value="true" />
+	<param name="wmode" value="transparent" />
+
+	<embed id="<%= chart_id %>_embed" src="/lib/ofc2/open-flash-chart.swf"
+		flashvars="get-data=data_of_<%= chart_id %>"
+		quality="high" bgcolor="#FFFFFF"
+		width="100%" height="<%= height %>" name="<%= chart_id %>" align="middle"
+		play="true" loop="false"
+		allowScriptAccess="sameDomain"
+		allowFullScreen="true"
+		wmode="transparent"
+		type="application/x-shockwave-flash"
+		pluginspage="http://www.adobe.com/go/getflashplayer">
+	</embed>
+</object>

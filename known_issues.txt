@@ -1,3 +1,8 @@
+重新编译 open flash chart
+	- clear flash 右键菜单
+	- more dot click parameters
+
+
 统计图表
 	- 仅看某 企业/学生 的 raw data table list, 最近操作
 	- 按照时间 drill down, 统计记录条数, 包括 query 和 view
@@ -22,6 +27,7 @@
 简历被删除后可能导致页面 not found
 	- 企业收藏简历
 	- 老师查看统计报告中的查看简历链接
+	- 测试一下删除简历后对现有功能的影响
 sphinx max_match 对数据统计的影响
 
 

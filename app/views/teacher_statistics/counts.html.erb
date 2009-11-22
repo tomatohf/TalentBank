@@ -26,3 +26,14 @@
 		<%= @view_counts.total_entries %>
 	</div>
 </div>
+
+<div>
+	<%= render(
+		:partial => "ofc",
+		:locals => {
+			:chart_id => "counts_chart",
+			:height => 300,
+			:data => chart_data
+		}
+	) %>
+</div>
