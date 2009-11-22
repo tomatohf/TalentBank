@@ -79,18 +79,12 @@ module ApplicationHelper
       
       :tooltip => {
         :shadow => true,
-        :stroke => 5,
-        :colour => "#6E604F",
-        :background => "#BDB396",
-        :title => {
-          "font-size" => "14px",
-          :color => "#CC2A43"
-        },
-        :body => {
-          "font-size" => "10px",
-          "font-weight" => "bold",
-          :color => "#000000"
-        }
+        :rounded => 15,
+        :stroke => 2,
+        :colour => "#555555",
+        :background => "#FEFEFE",
+        :title => "{font-size:12px;color:#0077CC;}",
+        :body => "{font-size:12px;color:#333333;}"
       },
       
       :num_decimals => 0,
@@ -105,7 +99,7 @@ module ApplicationHelper
         "grid-colour" => "#D2D2D2",
         :steps => 1,
         :labels => {
-          :labels => ["January","February","March","April","May","June","July","August","Spetember"],
+          :labels => ["2009-01-02","2009-01-03","2009-01-04","2009-01-05","2009-01-06","2009-01-07","2009-01-08","2009-01-09","2009-01-10"],
           :steps => 1,
           "visible-steps" => 2,
           :colour => "#333333",
@@ -140,7 +134,6 @@ module ApplicationHelper
             "dot-size" => 4,
             "halo-size" => 2,
             :colour => "#0077CC",
-            :tip => "#x_label#<br>#val#",
             "on-click" => "//line_click(x_index)"
           },
           "on-show" => {
@@ -148,7 +141,12 @@ module ApplicationHelper
             :cascade => 1,
             :delay => 0.5
           },
-          :values => [10,12,14,9,12,13,10,13,12].collect{|n|n*100}
+          :values => [10,12,14,9,12,13,10,13,12].collect{ |n|
+            {
+              :value => n*100,
+              :tip => "09年1月#{n}日 星期#{n} <br> 查询了 #{n} 次"
+            }
+          }
         }
       ]
     }.to_json
