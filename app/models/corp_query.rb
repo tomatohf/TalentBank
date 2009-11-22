@@ -15,7 +15,8 @@ class CorpQuery < ActiveRecord::Base
   
   define_index do
     
-    indexes keyword
+    # indexes keyword
+    indexes id
     
     has updated_at, corporation_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
     
@@ -106,14 +107,17 @@ class CorpQuery < ActiveRecord::Base
   
   
   def self.period_counts(group_function, from, to)
+    from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
+    to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+    
     filters = {
-      :updated_at => from..to
+      :updated_at => from_time..to_time
     }
     
     self.search(
       :group_by => "updated_at",
       :group_function => group_function,
-      :group_clause => "updated_at ASC",
+      :group_clause => "@group ASC",
       # :match_mode => Search_Match_Mode,
       # :order => "updated_at ASC",
       :with => filters

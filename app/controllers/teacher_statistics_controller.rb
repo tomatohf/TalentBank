@@ -54,13 +54,16 @@ class TeacherStatisticsController < ApplicationController
       [:week, 1.year]
     when "month"
       [:month, 1.year]
+    when "year"
+      [:year, 4.year]
     else
       # default, day view
       [:day, 1.month]
     end
     
     from, to = begin
-      @period.split("-", 2).collect { |date|
+      periods = @period.split("-", 2)
+      [periods[0], periods[1]].collect { |date|
         Date.parse(date)
       }
     rescue
@@ -68,7 +71,8 @@ class TeacherStatisticsController < ApplicationController
       [default_period.ago(today), today]
     end
     
-    @query_counts = CorpQuery.period_counts(group_function, from.to_time, to.to_time)
+    @query_counts = CorpQuery.period_counts(group_function, from, to)
+    @view_counts = CorpViewedResume.period_counts(group_function, from, to)
   end
   
   

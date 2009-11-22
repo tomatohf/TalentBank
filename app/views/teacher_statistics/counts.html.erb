@@ -3,10 +3,26 @@
 
 <h2>时段统计</h2>
 
+<% form_tag "", :method => :get, :id => "counts_form" do %>
+	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
+	<input type="hidden" id="period" name="period" value="<%= h(@period) %>" />
+<% end %>
+
 <div>
 	<% @query_counts.each_with_groupby_and_count do |query, group, count| %>
 		<div>
 			<%= group %> (<%= count%>)
 		</div>
 	<% end %>
+	<div>
+		<%= @query_counts.total_entries %>
+	</div>
+	<% @view_counts.each_with_groupby_and_count do |query, group, count| %>
+		<div>
+			<%= group %> (<%= count%>)
+		</div>
+	<% end %>
+	<div>
+		<%= @view_counts.total_entries %>
+	</div>
 </div>
