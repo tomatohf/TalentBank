@@ -62,8 +62,7 @@ class TeacherStatisticsController < ApplicationController
     end
     
     from, to = begin
-      periods = @period.split("-", 2)
-      [periods[0], periods[1]].collect { |date|
+      [(periods = @period.split("-", 2))[0], periods[1]].collect { |date|
         Date.parse(date)
       }
     rescue
