@@ -1,6 +1,6 @@
-重新编译 open flash chart
-	- clear flash 右键菜单
-	- more dot click parameters
+OFC SWF
+	- check on IE: clear flash contextual menu
+	- 修改 ofc swf 文件
 
 
 统计图表
