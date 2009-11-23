@@ -1,3 +1,12 @@
+chart
+	- 处理 点太多 的情况 ...
+	- tip title, 星期0
+	- tip color
+	- 点重叠时的 tip, 重复 title
+	- x axis label , visible-steps
+	- y axis max/step
+	
+
 OFC SWF
 	- check on IE: clear flash contextual menu
 	- 修改 ofc swf 文件

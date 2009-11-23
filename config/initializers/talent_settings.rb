@@ -76,6 +76,8 @@ require_dependency "thinking_sphinx/daily_delta"
 require_dependency "pdf_export/base"
 Mime::Type.register "application/pdf", :pdf
 
+require_dependency "ofc"
+
 ##################################################
 ### END
 ##################################################

@@ -5,6 +5,7 @@ module Utils
     "pass#{uid}word"
   end
   
+  
   def self.lines(text, remove_empty = true)
     text.gsub!(/\r\n?/, "\n")
     lines = text.split(/\n/)
@@ -12,18 +13,63 @@ module Utils
     lines
   end
   
+  
+  def self.step_period(from, to, step = :day)
+    from, to = to, from if from > to
+    
+    this_step = from
+    while this_step < to
+      next_step = case step
+      when :week
+        # 0 means treat Monday as the first day of week
+        # so ...
+        # 6 means treat Sunday as the first day of week
+        6.days.since(
+          begin
+            Date.commercial(this_step.cwyear, this_step.cweek + 1, 1)
+          rescue ArgumentError
+            Date.commercial(this_step.cwyear + 1, 1, 1)
+          end
+        )
+      when :month
+        begin
+          Date.new(this_step.year, this_step.month + 1, 1)
+        rescue ArgumentError
+          Date.new(this_step.year + 1, 1, 1)
+        end
+      when :year
+        Date.new(this_step.year + 1, 1, 1)
+      else
+        # treat as :day defaultly
+        this_step.to_date.next
+      end
+      
+      yield(this_step, [1.day.ago(next_step), to].min) if block_given?
+      
+      this_step = next_step
+    end
+    
+    if this_step == to
+      yield(this_step, to) if block_given?
+    end
+  end
+  
+  
   def self.expand_cache_key(key)
     ActiveSupport::Cache.expand_cache_key(key, :views)
   end
+  
   
   def self.deep_copy(object)
     Marshal::load(Marshal.dump(object))
   end
   
+  
   def self.truncate_text(text, len, append = "...")
     return "" if text.nil?
     text.mb_chars.length > len ? text.mb_chars[0...(len - append.mb_chars.length)] + append : text
   end
+  
   
   def self.get_unique_id
     now = Time.now

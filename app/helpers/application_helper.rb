@@ -57,99 +57,10 @@ module ApplicationHelper
   end
   
   
-  def a(text)
+  def attribute_escape(text)
     # remove single quotes, so that it can be used in html attribute safely
     text.gsub("'", "")
   end
-  
-  
-  def chart_data
-    {
-      # :title => {
-      #   :text => "",
-      #   :style => {
-      #     "font-size" => "20px",
-      #     :color => "#0000FF",
-      #     "font-family" => "Verdana",
-      #     "text-align" => "center"
-      #   }
-      # },
-      
-      :bg_colour => "#FFFFFF",
-      
-      :tooltip => {
-        :shadow => true,
-        :rounded => 15,
-        :stroke => 2,
-        :colour => "#555555",
-        :background => "#FEFEFE",
-        :title => "{font-size:12px;color:#0077CC;}",
-        :body => "{font-size:12px;color:#333333;}"
-      },
-      
-      :num_decimals => 0,
-      :is_fixed_num_decimals_forced => true,
-      :is_decimal_separator_comma => false,
-      :is_thousand_separator_disabled => false,
-      
-      :x_axis => {
-        :stroke => 2,
-        "tick-height" => 5,
-        :colour => "#878787",
-        "grid-colour" => "#D2D2D2",
-        :steps => 1,
-        :labels => {
-          :labels => ["2009-01-02","2009-01-03","2009-01-04","2009-01-05","2009-01-06","2009-01-07","2009-01-08","2009-01-09","2009-01-10"],
-          :steps => 1,
-          "visible-steps" => 2,
-          :colour => "#333333",
-          :size => 10
-        }
-      },
-      
-      :y_axis => {
-        :stroke => 2,
-        "tick-length" => 10,
-        :colour => "#7F7F7F",
-        "grid-colour" => "#D2D2D2",
-        :labels => {
-          :text => "#val# 次",
-          :colour => "#333333",
-          :size => 10
-        },
-        :min => 0,
-        :max => 20*100,
-        :steps => 200
-      },
-      
-      :elements => [
-        {
-          :type => "line",
-          :colour => "#0077CC",
-          :width => 2,
-          :text => "企业查询数",
-          "font-size" => 12,
-          "dot-style" => {
-            :type => "solid-dot",
-            "dot-size" => 4,
-            "halo-size" => 2,
-            :colour => "#0077CC",
-            "on-click" => "//line_click(x_index)"
-          },
-          "on-show" => {
-            :type => "pop-up",
-            :cascade => 1,
-            :delay => 0.5
-          },
-          :values => [10,12,14,9,12,13,10,13,12].collect{ |n|
-            {
-              :value => n*100,
-              :tip => "09年1月#{n}日 星期#{n} <br> 查询了 #{n} 次"
-            }
-          }
-        }
-      ]
-    }.to_json
-  end
+  alias a attribute_escape
   
 end

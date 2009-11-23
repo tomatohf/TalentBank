@@ -9,31 +9,12 @@
 <% end %>
 
 <div>
-	<% @query_counts.each_with_groupby_and_count do |query, group, count| %>
-		<div>
-			<%= group %> (<%= count%>)
-		</div>
-	<% end %>
-	<div>
-		<%= @query_counts.total_entries %>
-	</div>
-	<% @view_counts.each_with_groupby_and_count do |query, group, count| %>
-		<div>
-			<%= group %> (<%= count%>)
-		</div>
-	<% end %>
-	<div>
-		<%= @view_counts.total_entries %>
-	</div>
-</div>
-
-<div>
 	<%= render(
 		:partial => "ofc",
 		:locals => {
 			:chart_id => "counts_chart",
-			:height => 300,
-			:data => chart_data
+			:height => 260,
+			:data => @chart_data
 		}
 	) %>
 </div>
