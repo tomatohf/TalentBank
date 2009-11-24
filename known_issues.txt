@@ -1,17 +1,3 @@
-chart
-	- 处理 点太多 的情况 ...
-	- tip title, 星期0
-	- tip color
-	- 点重叠时的 tip, 重复 title
-	- x axis label , visible-steps
-	- y axis max/step
-	
-
-OFC SWF
-	- check on IE: clear flash contextual menu
-	- 修改 ofc swf 文件
-
-
 统计图表
 	- 仅看某 企业/学生 的 raw data table list, 最近操作
 	- 按照时间 drill down, 统计记录条数, 包括 query 和 view

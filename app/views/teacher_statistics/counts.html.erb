@@ -8,13 +8,40 @@
 	<input type="hidden" id="period" name="period" value="<%= h(@period) %>" />
 <% end %>
 
+<div class="align_r">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td align="right">选择视图:</td>
+			<td style="width: 10px;"></td>
+			<% [["day", "天"], ["week", "周"], ["month", "月"]].each do |view| %>
+				<td style="width: 25px;">
+					<a href="#" title="按每<%= view[1] %>查看" class="view_link_<%= view[0] %>">
+						<img alt="按每<%= view[1] %>查看" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
+				</td>
+			<% end %>
+			<td style="width: 50px;"></td>
+		</tr>
+	</table>
+</div>
+
 <div>
 	<%= render(
 		:partial => "ofc",
 		:locals => {
 			:chart_id => "counts_chart",
-			:height => 260,
+			:height => 200,
 			:data => @chart_data
 		}
 	) %>
 </div>
+
+
+<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var TEACHER_ID = <%= @teacher.id %>;
+	
+	var VIEW = "<%= @view %>";
+</script>
+<script src="/javascripts/teachers/counts.js" type="text/javascript" language="JavaScript"></script>
+<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>

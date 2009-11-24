@@ -20,6 +20,8 @@ class CorpQuery < ActiveRecord::Base
     
     has updated_at, corporation_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
     
+    has corporation.school_id, :as => :school_id
+    
     has(
       "REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', 1), '#{Sep_Value}', ',')",
       :as => :exp_tag_id,
@@ -106,13 +108,14 @@ class CorpQuery < ActiveRecord::Base
   end
   
   
-  def self.period_counts(group_function, from, to)
+  def self.period_counts(school_id, group_function, from, to)
     from, to = to, from if from > to
     
     from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
     to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
     
     filters = {
+      :school_id => school_id,
       :updated_at => from_time..to_time
     }
     

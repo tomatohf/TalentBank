@@ -20,8 +20,8 @@ module OpenFlashChartHelpers
         :stroke => 2,
         :colour => "#555555",
         :background => "#FEFEFE",
-        :title => "{font-size:12px;color:#0077CC}",
-        :body => "{font-size:12px;color:#333333;}"
+        # :title => "{font-size:12px;}",
+        # :body => "{font-size:12px;}"
       }.merge(options.delete(:tooltip) || {}),
 
       :num_decimals => options.delete(:num_decimals) || 0,
@@ -34,6 +34,7 @@ module OpenFlashChartHelpers
         "tick-height" => 5,
         :colour => "#878787",
         "grid-colour" => "#D2D2D2",
+        :steps => 1,
         :labels => {
           :labels => [],
           :steps => 1,
@@ -71,21 +72,16 @@ module OpenFlashChartHelpers
     {
 		  :type => "line",
 		  :colour => "#666666",
-		  :width => 2,
+		  :width => 3,
 		  :text => "",
 		  "font-size" => 12,
 		  "dot-style" => {
 		    :type => "solid-dot",
 		    "dot-size" => 4,
-		    "halo-size" => 2,
+		    "halo-size" => 1,
 		    :colour => "#666666",
 		    "on-click" => "//line_click(x_index)"
 		  }.merge(element.delete("dot-style") || {}),
-		  "on-show" => {
-		    :type => "pop-up",
-		    :cascade => 1,
-		    :delay => 0.5
-		  }.merge(element.delete("on-show") || {}),
 		  :values => [
 		    {
 	        :value => 500,

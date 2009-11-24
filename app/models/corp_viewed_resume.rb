@@ -43,13 +43,14 @@ class CorpViewedResume < ActiveRecord::Base
   end
   
   
-  def self.period_counts(group_function, from, to)
+  def self.period_counts(school_id, group_function, from, to)
     from, to = to, from if from > to
     
     from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
     to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
     
     filters = {
+      :school_id => school_id,
       :updated_at => from_time..to_time
     }
     
