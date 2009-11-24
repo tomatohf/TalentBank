@@ -11,7 +11,17 @@
 <div class="align_r">
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td align="right">选择视图:</td>
+			<td align="right">选择时段:</td>
+			<td style="width: 10px;"></td>
+			<td style="width: 80px;">
+				<input type="text" id="from_date" class="text_field datepicker" value="" style="width: 80px;" />
+			</td>
+			<td style="width: 10px; padding: 0px 1px;" align="center">-</td>
+			<td style="width: 80px;">
+				<input type="text" id="to_date" class="text_field datepicker" value="" style="width: 80px;" />
+			</td>
+		
+			<td style="width: 80px;" align="right">选择视图:</td>
 			<td style="width: 10px;"></td>
 			<% [["day", "天"], ["week", "周"], ["month", "月"]].each do |view| %>
 				<td style="width: 25px;">
@@ -19,6 +29,7 @@
 						<img alt="按每<%= view[1] %>查看" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
 				</td>
 			<% end %>
+		
 			<td style="width: 50px;"></td>
 		</tr>
 	</table>
@@ -35,8 +46,61 @@
 	) %>
 </div>
 
+<div style="margin: 20px 20px 10px 0px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td style="width: 250px;">时间</td>
+				<td>企业搜索数</td>
+				<td>查看简历数</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<% @dots.each_index do |i| %>
+				<%
+					first, last = @dots[i]
+					query_value = @query_values[i][:value]
+					view_value = @view_values[i][:value]
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td align="center">
+						<%= first.strftime("%Y年%m月%d日") %>
+						<% unless first == last %>
+							<span style="margin: 0px 5px;">-</span>
+							<%= last.strftime("%Y年%m月%d日") %>
+						<% end %>
+					</td>
+					
+					<td align="right">
+						<span<%= %Q! class="info"! unless query_value > 0 %>>
+							<%= query_value %>
+						</span>
+					</td>
+					
+					<td align="right">
+						<span<%= %Q! class="info"! unless view_value > 0 %>>
+							<%= view_value %>
+						</span>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
 
+
+<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
+<style>
+	.ui-datepicker, .ui-datepicker table thead {
+		font-size: 12px;
+	}
+	.ui-datepicker table tbody {
+		font-size: 10px;
+	}
+</style>
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
 	

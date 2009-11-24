@@ -1,10 +1,10 @@
-function view_detail() {
-	
+function view_detail(dot_index) {
+	alert(dot_index);
 }
 
 
-function query_detail() {
-	alert();
+function query_detail(dot_index) {
+	alert(dot_index);
 }
 
 
@@ -45,8 +45,23 @@ function setup_view_links() {
 }
 
 
+function setup_datepickers() {
+	$("input.datepicker").datepicker();
+	$("input.datepicker").datepicker(
+		"option",
+		{
+			// dateFormat: "yy-mm-dd",
+			showButtonPanel: false,
+			showMonthAfterYear: true
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
 		setup_view_links();
+		
+		setup_datepickers();
 	}
 );

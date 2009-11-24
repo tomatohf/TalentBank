@@ -1,7 +1,7 @@
 统计图表
-	- 仅看某 企业/学生 的 raw data table list, 最近操作
-	- 按照时间 drill down, 统计记录条数, 包括 query 和 view
-		- 某一个企业, query 和 view 的列表和 按时间发生的图
+	- 按照时间统计记录条数, 包括 query 和 view
+		- list raw data in period
+		- 某一个企业, query 和 view 的列表和 按时间发生的图, 以及 raw data in period
 		- 对比 数据
 	- 按照 学院->专业->学生->求职方向 drill down, 一定时间段内, 简历被查看次数的统计, 仅 view
 	- 排行榜

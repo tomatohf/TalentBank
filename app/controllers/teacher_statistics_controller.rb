@@ -45,7 +45,7 @@ class TeacherStatisticsController < ApplicationController
   
   
   def counts
-    @view = (params[:view] && params[:view].strip) || "day"
+    @view = (params[:view] && params[:view].strip)
     @period = params[:period] && params[:period].strip
     
     view_info = {
@@ -54,7 +54,7 @@ class TeacherStatisticsController < ApplicationController
       "month" => [:month, 1.year, "%Y%m", "%y年%m月"],
       "year" => [:year, 4.year, "%Y", "%y年"]
     }
-    period_unit, default_period, count_key_format, label_format = view_info[@view] || view_info["day"]
+    period_unit, default_period, count_key_format, label_format = view_info[@view] || view_info[@view = "day"]
     
     from, to = begin
       [(periods = @period.split("-", 2))[0], periods[1]].collect { |date|
@@ -76,11 +76,14 @@ class TeacherStatisticsController < ApplicationController
     
     query_line_color = "#0077CC"
     view_line_color = "#FF6600"
+    @dots = []
     @query_values = []
     @view_values = []
-    @labels = []
+    labels = []
     max_value = 0
     Utils.step_period(from, to, period_unit) do |first, last|
+      @dots << [first, last]
+      
       key = first.strftime(count_key_format)
       tip_title = %Q!<font size="12" face="Verdana" color="#333333">! +
                   if first == last
@@ -105,23 +108,23 @@ class TeacherStatisticsController < ApplicationController
         :value => view_value,
 	      :tip => tip
 	    }
-      @labels << first.strftime(label_format)
+      labels << first.strftime(label_format)
       
       max_value = [max_value, query_value, view_value].max
     end
     
-    step_x = (@labels.size / 8) + 1
+    step_x = (labels.size / 8) + 1
     
     max_y = %Q!#{max_value.to_s.first.to_i+1}#{"0"*(max_value.to_s.size-1)}!.to_i
     max_y = 10 if max_y < 10
     
-    dot_type = @labels.size > 60 ? "dot" : "solid-dot"
+    dot_type = labels.size > 60 ? "dot" : "solid-dot"
     
     @chart_data = ofc_chart_data(
 			:x_axis => {
 			  :steps => step_x,
     		:labels => {
-    			:labels => @labels,
+    			:labels => labels,
     			"visible-steps" => step_x
     		}
     	},
@@ -137,25 +140,29 @@ class TeacherStatisticsController < ApplicationController
 
     	:elements => [
         {
-          :type => "line",
+          :type => "area",
           :colour => query_line_color,
           :text => "企业搜索数",
+          :fill => query_line_color,
+          "fill-alpha" => 0.1,
           "dot-style" => {
             :type => dot_type,
             :colour => query_line_color,
-            "on-click" => "//line_click(x_index)"
+            "on-click" => "query_detail"
           },
           :values => @query_values
         },
     		
     		{
-    		  :type => "line",
+    		  :type => "area",
     		  :colour => view_line_color,
     		  :text => "查看简历数",
+    		  :fill => view_line_color,
+          "fill-alpha" => 0.1,
     		  "dot-style" => {
     		    :type => dot_type,
     		    :colour => view_line_color,
-    		    "on-click" => "//line_click(x_index)"
+    		    "on-click" => "view_detail"
     		  },
     		  :values => @view_values
     		}
