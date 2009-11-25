@@ -11,14 +11,9 @@
 <div class="align_r">
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td align="right">选择时段:</td>
-			<td style="width: 10px;"></td>
-			<td style="width: 80px;">
-				<input type="text" id="from_date" class="text_field datepicker" value="" style="width: 80px;" />
-			</td>
-			<td style="width: 10px; padding: 0px 1px;" align="center">-</td>
-			<td style="width: 80px;">
-				<input type="text" id="to_date" class="text_field datepicker" value="" style="width: 80px;" />
+			<td style="width: 60px;" align="left">选择时段:</td>
+			<td style="height: 30px;" align="left">
+				<input type="text" id="date_range" class="text_field" value="" />
 			</td>
 		
 			<td style="width: 80px;" align="right">选择视图:</td>
@@ -35,7 +30,7 @@
 	</table>
 </div>
 
-<div>
+<div style="margin: 20px 0px 30px;">
 	<%= render(
 		:partial => "ofc",
 		:locals => {
@@ -46,7 +41,7 @@
 	) %>
 </div>
 
-<div style="margin: 20px 20px 10px 0px;">
+<div>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
@@ -91,16 +86,10 @@
 
 
 <link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
-<style>
-	.ui-datepicker, .ui-datepicker table thead {
-		font-size: 12px;
-	}
-	.ui-datepicker table tbody {
-		font-size: 10px;
-	}
-</style>
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
+<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
 	
