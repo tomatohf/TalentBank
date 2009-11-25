@@ -1,4 +1,13 @@
-<% talent_page_title("时段统计") %>
+<%
+	talent_page_title("时段统计")
+	
+	current_date_range = @period.split(
+		TeacherStatisticsController::Date_Range_Splitter,
+		2
+	).collect { |date|
+		"#{date[2,2]}年#{date[4,2].to_i}月#{date[6,2].to_i}日"
+	}.join(" #{TeacherStatisticsController::Date_Range_Splitter} ")
+%>
 
 
 <h2>时段统计</h2>
@@ -13,7 +22,7 @@
 		<tr>
 			<td style="width: 60px;" align="left">选择时段:</td>
 			<td style="height: 30px;" align="left">
-				<input type="text" id="date_range" class="text_field" value="" />
+				<input type="text" id="date_range" class="text_field" value="<%= current_date_range %>" />
 			</td>
 		
 			<td style="width: 80px;" align="right">选择视图:</td>

@@ -1,6 +1,7 @@
 class TeacherStatisticsController < ApplicationController
   
   Queries_Page_Size = 100
+  Date_Range_Splitter = "-"
 
   include OpenFlashChartHelpers
   
@@ -57,13 +58,14 @@ class TeacherStatisticsController < ApplicationController
     period_unit, default_period, count_key_format, label_format = view_info[@view] || view_info[@view = "day"]
     
     from, to = begin
-      [(periods = @period.split("-", 2))[0], periods[1]].collect { |date|
+      [(periods = @period.split(Date_Range_Splitter, 2))[0], periods[1]].collect { |date|
         Date.parse(date)
       }
     rescue
       today = Date.today
       [default_period.ago(today), today]
     end
+    @period = %Q!#{from.strftime("%Y%m%d")}#{Date_Range_Splitter}#{to.strftime("%Y%m%d")}!
     
     query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
       hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]

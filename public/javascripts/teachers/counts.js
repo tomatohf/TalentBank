@@ -1,3 +1,7 @@
+var range_date_format = "y年m月d日";
+var range_splitter = "-";
+
+
 function view_detail(dot_index) {
 	alert(dot_index);
 }
@@ -10,12 +14,27 @@ function query_detail(dot_index) {
 
 function change_period() {
 	// check whether changed ... to avoid refresh with same values
-	alert($("#date_range").val());
+	var ranges = $("input#date_range").val().split(range_splitter);
+	if(ranges.length > 1) {
+		var from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]));
+		var to = $.datepicker.parseDate(range_date_format, $.trim(ranges[1]));
+		if(from != null && to != null) {
+			var new_period = [
+				$.datepicker.formatDate("yymmdd", from),
+				$.datepicker.formatDate("yymmdd", to)
+			].join(range_splitter);
+			
+			if(new_period != $("input#period").val()) {
+				$("input#period").val(new_period);
+				$("#counts_form").submit();
+			}
+		}
+	}
 }
 
 
 function change_view(view) {
-	$("#view").val(view);
+	$("input#view").val(view);
 	$("#counts_form").submit();
 }
 
@@ -100,10 +119,11 @@ function setup_datepickers() {
 			doneButtonText: "确定",
 			prevLinkText: "上一时段",
 			nextLinkText: "下一时段",
-			rangeSplitter: "-",
-			dateFormat: "y年m月d日",
-			closeOnSelect: false,
+			rangeSplitter: range_splitter,
+			dateFormat: range_date_format,
+			closeOnSelect: true,
 			arrows: true,
+			onClose: change_period,
 			datepickerOptions: {
 				showButtonPanel: false,
 				showMonthAfterYear: true
@@ -112,12 +132,16 @@ function setup_datepickers() {
 	);
 	
 	
-	$("#date_range").parent().find("a").unbind("click", change_period).click(change_period);
-	
-	// select date range
-	// select one date and click outside
-	// click quick menu item
-	// input edit directly
+	$("input#date_range").unbind("change", change_period).change(change_period)
+	.unbind("keyup").keyup(
+		function(e) {
+			if(e.keyCode == 13) {
+				// ENTER key
+				change_period();
+			}
+		}
+	)
+	.parent().find("a").unbind("click", change_period).click(change_period);
 }
 
 

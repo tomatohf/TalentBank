@@ -109,8 +109,11 @@ jQuery.fn.daterangepicker = function(settings){
 		if(inputDateBtemp == null){inputDateBtemp = inputDateAtemp;} 
 	}
 	else {
-		inputDateAtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[0] );
-		inputDateBtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[1] );
+		// modified by Tomato to leverage dateFormat to parse date
+		inputDateAtemp = $.datepicker.parseDate(options.dateFormat, $.trim(rangeInput.val().split(options.rangeSplitter)[0]));
+		inputDateBtemp = $.datepicker.parseDate(options.dateFormat, $.trim(rangeInput.val().split(options.rangeSplitter)[1]));
+		// inputDateAtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[0] );
+		// inputDateBtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[1] );
 		if(inputDateBtemp == null){inputDateBtemp = inputDateAtemp;} //if one date, set both
 	}
 	if(inputDateAtemp != null){inputDateA = inputDateAtemp;}
