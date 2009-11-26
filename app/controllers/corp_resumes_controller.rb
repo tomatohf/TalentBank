@@ -84,6 +84,9 @@ class CorpResumesController < ApplicationController
   def check_corporation
     corporation_id = params[:corporation_id] && params[:corporation_id].strip
     jump_to("/errors/forbidden") unless (session[:account_id].to_s == corporation_id) && ((@corporation = Corporation.find(corporation_id)).school_id == School.get_school_info(@school.abbr)[0])
+    
+    # check_corporation_name
+    jump_to("/corporations/#{@corporation.id}/edit") unless @corporation.name?
   end
   
   

@@ -1,4 +1,4 @@
-raw data table list 的 links
+date range picker NOT working on Safari
 
 统计图表
 	- 按照时间统计记录条数, 包括 query 和 view
@@ -21,11 +21,12 @@ raw data table list 的 links
 			- 学院 / 专业 / 学历 / 毕业时间
 
 
-简历被删除后可能导致页面 not found
+sphinx max_match 对数据统计的影响
+!!!!!简历被删除后可能导致页面 not found!!!!!
 	- 企业收藏简历
 	- 老师查看统计报告中的查看简历链接
 	- 测试一下删除简历后对现有功能的影响
-sphinx max_match 对数据统计的影响
+		- 列表页面出错, 无法取到 resume 相关数据
 
 
 简历的 修改/评注/评论 功能

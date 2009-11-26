@@ -15,8 +15,7 @@ class CorpQuery < ActiveRecord::Base
   
   define_index do
     
-    # indexes keyword
-    indexes id
+    indexes corporation.name
     
     has updated_at, corporation_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
     
