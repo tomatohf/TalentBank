@@ -122,6 +122,8 @@ jQuery.fn.daterangepicker = function(settings){
 		
 	//build picker and 
 	var rp = jQuery('<div class="ui-daterangepicker ui-widget ui-helper-clearfix ui-widget-content ui-corner-all"></div>');
+	// modified by Tomato to make it work on Safari
+	jQuery(options.appendTo).append(rp);
 	var rpPresets = (function(){
 		var ul = jQuery('<ul class="ui-widget-content"></ul>').appendTo(rp);
 		jQuery.each(options.presetRanges,function(){
@@ -282,7 +284,8 @@ jQuery.fn.daterangepicker = function(settings){
 	rpPickers.css('display', 'none').find('.range-start, .range-end, .btnDone').css('display', 'none');
 	
 	//inject rp
-	jQuery(options.appendTo).append(rp);
+	// modified by Tomato to make it work on Safari
+	// jQuery(options.appendTo).append(rp);
 	
 	//wrap and position
 	rp.wrap('<div class="ui-daterangepickercontain"></div>');

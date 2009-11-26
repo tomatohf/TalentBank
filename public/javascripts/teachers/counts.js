@@ -13,7 +13,7 @@ function query_detail(dot_index) {
 
 
 function change_period() {
-	remove_period_changing_trigger();
+	disable_range_input();
 	
 	
 	var ranges = $("input#date_range").val().split(range_splitter);
@@ -28,8 +28,6 @@ function change_period() {
 			
 			// check whether changed ... to avoid refresh with same values
 			if(new_period != $("input#period").val()) {
-				clear_daterangepicker_triggers();
-				
 				$("input#period").val(new_period);
 				$("#counts_form").submit();
 				
@@ -38,7 +36,7 @@ function change_period() {
 		}
 	}
 	
-	add_period_changing_trigger();
+	enable_range_input();
 }
 
 
@@ -58,25 +56,22 @@ function add_period_changing_trigger() {
 		function(e) {
 			if(e.keyCode == 13) {
 				// ENTER key
+				$(document).trigger('click');
+				
 				change_period();
 			}
 		}
 	)
+	.removeAttr("disabled")
 	.parent().find("a").unbind("click", change_period).click(change_period);
 }
 
-function remove_period_changing_trigger() {
-	$("button.btnDone").unbind("click", change_period);
-	
-	$(".ui-widget-content li").not($(".ui-widget-content li.ui-daterangepicker-dateRange"))
-	.unbind("click", change_period);
-	
-	$("input#date_range").unbind("keyup")
-	.parent().find("a").unbind("click", change_period);
+function disable_range_input() {
+	$("input#date_range").attr("disabled", true);
 }
 
-function clear_daterangepicker_triggers() {
-	$("input#date_range").unbind().parent().find("a").unbind();
+function enable_range_input() {
+	$("input#date_range").removeAttr("disabled");
 }
 
 
@@ -163,7 +158,7 @@ function setup_datepickers() {
 			rangeSplitter: range_splitter,
 			dateFormat: range_date_format,
 			closeOnSelect: true,
-			arrows: true,
+			arrows: false,
 			datepickerOptions: {
 				showButtonPanel: false,
 				showMonthAfterYear: true
@@ -173,53 +168,11 @@ function setup_datepickers() {
 }
 
 
-function adjust_font_size() {
-	$("body").append(
-		$(
-			'<style>' +
-				'.ui-datepicker, .ui-datepicker table thead {' +
-					'font-size: 12px;' +
-				'}' +
-				'.ui-datepicker table tbody {' +
-					'font-size: 10px;' +
-				'}' +
-				'.ui-widget, .ui-widget input {' +
-					'font-size: 12px;' +
-				'}' +
-				
-				'.ui-daterangepicker button.btnDone, .ui-daterangepicker .title-start {' +
-					'font-size: 12px;' +
-				'}' +
-				'.ui-daterangepicker .title-end, .ui-daterangepicker .ui-datepicker-inline {' +
-					'font-size: 12px;' +
-				'}' +
-				'.ui-daterangepicker .ranges {' +
-					'padding-bottom: 30px;' +
-				'}' +
-				'.ui-daterangepicker-arrows {' +
-					'width: ' + (204 + 20) + 'px;' +
-				'}' +
-				'.ui-daterangepicker-arrows input.ui-rangepicker-input {' +
-					'width: ' + (158 + 20) + 'px;' +
-				'}' +
-			'</style>'
-		)
-	);
-}
-
-
 $(document).ready(
 	function() {
 		setup_view_links();
 		
-		adjust_font_size();
-		
-		try {
-			setup_datepickers();
-		}
-		catch(e) {
-			
-		}
+		setup_datepickers();
 		
 		add_period_changing_trigger();
 	}
