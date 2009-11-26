@@ -13,7 +13,9 @@ function query_detail(dot_index) {
 
 
 function change_period() {
-	// check whether changed ... to avoid refresh with same values
+	remove_period_changing_trigger();
+	
+	
 	var ranges = $("input#date_range").val().split(range_splitter);
 	if(ranges.length > 1) {
 		var from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]));
@@ -24,18 +26,57 @@ function change_period() {
 				$.datepicker.formatDate("yymmdd", to)
 			].join(range_splitter);
 			
+			// check whether changed ... to avoid refresh with same values
 			if(new_period != $("input#period").val()) {
+				clear_daterangepicker_triggers();
+				
 				$("input#period").val(new_period);
 				$("#counts_form").submit();
+				
+				return;
 			}
 		}
 	}
+	
+	add_period_changing_trigger();
 }
 
 
 function change_view(view) {
 	$("input#view").val(view);
 	$("#counts_form").submit();
+}
+
+
+function add_period_changing_trigger() {
+	$("button.btnDone").unbind("click", change_period).click(change_period);
+	
+	$(".ui-widget-content li").not($(".ui-widget-content li.ui-daterangepicker-dateRange"))
+	.unbind("click", change_period).click(change_period);
+	
+	$("input#date_range").unbind("keyup").keyup(
+		function(e) {
+			if(e.keyCode == 13) {
+				// ENTER key
+				change_period();
+			}
+		}
+	)
+	.parent().find("a").unbind("click", change_period).click(change_period);
+}
+
+function remove_period_changing_trigger() {
+	$("button.btnDone").unbind("click", change_period);
+	
+	$(".ui-widget-content li").not($(".ui-widget-content li.ui-daterangepicker-dateRange"))
+	.unbind("click", change_period);
+	
+	$("input#date_range").unbind("keyup")
+	.parent().find("a").unbind("click", change_period);
+}
+
+function clear_daterangepicker_triggers() {
+	$("input#date_range").unbind().parent().find("a").unbind();
 }
 
 
@@ -123,25 +164,12 @@ function setup_datepickers() {
 			dateFormat: range_date_format,
 			closeOnSelect: true,
 			arrows: true,
-			onClose: change_period,
 			datepickerOptions: {
 				showButtonPanel: false,
 				showMonthAfterYear: true
 			}
 		}
 	);
-	
-	
-	$("input#date_range").unbind("change", change_period).change(change_period)
-	.unbind("keyup").keyup(
-		function(e) {
-			if(e.keyCode == 13) {
-				// ENTER key
-				change_period();
-			}
-		}
-	)
-	.parent().find("a").unbind("click", change_period).click(change_period);
 }
 
 
@@ -185,6 +213,14 @@ $(document).ready(
 		setup_view_links();
 		
 		adjust_font_size();
-		setup_datepickers();
+		
+		try {
+			setup_datepickers();
+		}
+		catch(e) {
+			
+		}
+		
+		add_period_changing_trigger();
 	}
 );

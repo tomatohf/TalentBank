@@ -64,7 +64,7 @@
 	<td>
 		<% keyword = h(query.keyword) %>
 		<div title="<%= keyword %>">
-			<%= truncate(keyword, 15) %>
+			<%= truncate(keyword, :length => 15) %>
 		</div>
 	</td>
 </tr>
