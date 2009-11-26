@@ -15,11 +15,18 @@ function query_detail(dot_index) {
 function change_period() {
 	disable_range_input();
 	
-	
 	var ranges = $("input#date_range").val().split(range_splitter);
 	if(ranges.length > 1) {
-		var from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]));
-		var to = $.datepicker.parseDate(range_date_format, $.trim(ranges[1]));
+		var from = null;
+		var to = null;
+		try {
+			from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]));
+			to = $.datepicker.parseDate(range_date_format, $.trim(ranges[1]));
+		}
+		catch(e) {
+			from = null;
+			to = null;
+		}
 		if(from != null && to != null) {
 			var new_period = [
 				$.datepicker.formatDate("yymmdd", from),
@@ -62,16 +69,17 @@ function add_period_changing_trigger() {
 			}
 		}
 	)
-	.removeAttr("disabled")
 	.parent().find("a").unbind("click", change_period).click(change_period);
 }
 
 function disable_range_input() {
-	$("input#date_range").attr("disabled", true);
+	$("input#date_range").attr("disabled", true)
+	.parent().find("a").unbind("click", change_period);
 }
 
 function enable_range_input() {
-	$("input#date_range").removeAttr("disabled");
+	$("input#date_range").removeAttr("disabled")
+	.parent().find("a").unbind("click", change_period).click(change_period);
 }
 
 
@@ -158,7 +166,7 @@ function setup_datepickers() {
 			rangeSplitter: range_splitter,
 			dateFormat: range_date_format,
 			closeOnSelect: true,
-			arrows: false,
+			arrows: true,
 			datepickerOptions: {
 				showButtonPanel: false,
 				showMonthAfterYear: true

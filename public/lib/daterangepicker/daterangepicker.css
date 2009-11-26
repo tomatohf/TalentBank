@@ -41,7 +41,7 @@
 }
 .ui-daterangepicker ul {
 	/* modified by Tomato */
-	width: 174px;
+	width: 220px;
 	/* width: 17.6em; */
 	background: none;
 	border: 0;
@@ -85,11 +85,15 @@
 }
 .ui-daterangepicker-arrows {
 	padding: 2px;
-	width: 204px;
+	/* modified by Tomato */
+	width: 226px;
+	/* width: 204px; */
 	position: relative;
 }
 .ui-daterangepicker-arrows input.ui-rangepicker-input {
-	width: 158px;
+	/* modified by Tomato */
+	width: 180px;
+	/* width: 158px; */
 	margin: 0 2px 0 20px;
 	padding: 2px;
 	height: 1.1em;
