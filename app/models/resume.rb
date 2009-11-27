@@ -98,6 +98,9 @@ class Resume < ActiveRecord::Base
   named_scope :online, :conditions => { :online => true }
   
   
+  include Utils::NotDeletable
+  
+  
   
   def self.edit_parts
     [

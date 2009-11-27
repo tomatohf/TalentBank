@@ -1,5 +1,5 @@
 <%
-	talent_page_title("时段统计")
+	talent_page_title("查询数目统计")
 	
 	current_date_range = @period.split(
 		TeacherStatisticsController::Date_Range_Splitter,
@@ -10,7 +10,7 @@
 %>
 
 
-<h2>时段统计</h2>
+<h2>查询数目统计</h2>
 
 <% form_tag "", :method => :get, :id => "counts_form" do %>
 	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
