@@ -24,13 +24,16 @@ module Utils
         # 0 means treat Monday as the first day of week
         # so ...
         # 6 means treat Sunday as the first day of week
-        6.days.since(
+        next_sunday = 6.days.since(
           begin
             Date.commercial(this_step.cwyear, this_step.cweek + 1, 1)
           rescue ArgumentError
             Date.commercial(this_step.cwyear + 1, 1, 1)
           end
         )
+        # if Sunday, return next Sunday
+        # if NOT Sunday, return this Sunday
+        this_step.wday > 0 ? 1.week.ago(next_sunday) : next_sunday
       when :month
         begin
           Date.new(this_step.year, this_step.month + 1, 1)
