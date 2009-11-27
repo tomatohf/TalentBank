@@ -1,31 +1,47 @@
-<%
-	talent_page_title("查询数目统计")
-	
-	current_date_range = @period.split(
-		TeacherStatisticsController::Date_Range_Splitter,
-		2
-	).collect { |date|
-		"#{date[2,2]}年#{date[4,2].to_i}月#{date[6,2].to_i}日"
-	}.join(" #{TeacherStatisticsController::Date_Range_Splitter} ")
-%>
+<% talent_page_title("查询数目统计") %>
 
 
 <h2>查询数目统计</h2>
 
-<% form_tag "", :method => :get, :id => "counts_form" do %>
+<% form_tag "", :method => :get, :id => "refresh_form" do %>
 	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
 	<input type="hidden" id="period" name="period" value="<%= h(@period) %>" />
+	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
+	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
 <% end %>
 
-<div class="align_r">
+<div>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td style="width: 35px;" align="left">时段:</td>
-			<td style="height: 30px;" align="left">
-				<input type="text" id="date_range" class="text_field" value="<%= current_date_range %>" style="width: 180px;" />
+			<td style="width: 35px;">时段:</td>
+			<td style="width: 180px; height: 30px;">
+				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
 			</td>
-		
-			<td style="width: 50px;" align="right">视图:</td>
+			
+			<td style="width: 100px;" align="center">
+				对比
+			</td>
+			
+			<td>对比时段</td>
+		</tr>
+	</table>
+</div>
+
+<div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td align="right">
+				<a href="#" class="none" onclick="change_line('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_line_name %>" style="color: <%= @query_line_color %>">
+					<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+					<%= @query_line_name %></a>
+			</td>
+			<td style="width: 100px;" align="right">
+				<a href="#" class="none" onclick="change_line('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_line_name %>" style="color: <%= @view_line_color %>">
+					<img alt="<%= @v ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @v %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+					<%= @view_line_name %></a>
+			</td>
+			
+			<td style="width: 60px;" align="right">视图:</td>
 			<td style="width: 10px;"></td>
 			<% [["day", "天"], ["week", "周"], ["month", "月"]].each do |view| %>
 				<td style="width: 25px;">
@@ -39,7 +55,11 @@
 	</table>
 </div>
 
-<div style="margin: 20px 0px 30px;">
+<% if !(@q || @v) %>
+	<br />
+<% end %>
+
+<div>
 	<%= render(
 		:partial => "ofc",
 		:locals => {
@@ -50,23 +70,23 @@
 	) %>
 </div>
 
-<div>
+<div style="margin-top: 30px;">
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
 				<td style="width: 250px;">时间</td>
-				<td>企业搜索数</td>
-				<td>查看简历数</td>
+				<% if @q %>
+					<td><%= @query_line_name %></td>
+				<% end %>
+				<% if @v %>
+					<td><%= @view_line_name %></td>
+				<% end %>
 			</tr>
 		</thead>
 		
 		<tbody>
 			<% @dots.each_index do |i| %>
-				<%
-					first, last = @dots[i]
-					query_value = @query_values[i][:value]
-					view_value = @view_values[i][:value]
-				%>
+				<% first, last = @dots[i] %>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<td align="center">
 						<%= first.strftime("%Y年%m月%d日") %>
@@ -76,17 +96,23 @@
 						<% end %>
 					</td>
 					
-					<td align="right">
-						<span<%= %Q! class="info"! unless query_value > 0 %>>
-							<%= query_value %>
-						</span>
-					</td>
+					<% if @q %>
+						<td align="right">
+							<% query_value = @query_values[i][:value] %>
+							<span<%= %Q! class="info"! unless query_value > 0 %>>
+								<%= query_value %>
+							</span>
+						</td>
+					<% end %>
 					
-					<td align="right">
-						<span<%= %Q! class="info"! unless view_value > 0 %>>
-							<%= view_value %>
-						</span>
-					</td>
+					<% if @v %>
+						<td align="right">
+							<% view_value = @view_values[i][:value] %>
+							<span<%= %Q! class="info"! unless view_value > 0 %>>
+								<%= view_value %>
+							</span>
+						</td>
+					<% end %>
 				</tr>
 			<% end %>
 		</tbody>
@@ -102,8 +128,9 @@
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
 	
+	var PERIOD = "<%= @period %>";
 	var VIEW = "<%= @view %>";
 </script>
-<script src="/javascripts/teachers/counts.js" type="text/javascript" language="JavaScript"></script>
+<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 <script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>

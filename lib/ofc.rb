@@ -59,7 +59,7 @@ module OpenFlashChartHelpers
         :steps => 100
       }.merge(options.delete(:y_axis) || {}),
 
-      :elements => (options.delete(:elements) || [{}]).collect { |element|
+      :elements => (options.delete(:elements) || []).collect { |element|
         line_element(element)
       }
     }

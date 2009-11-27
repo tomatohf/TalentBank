@@ -46,8 +46,15 @@ class TeacherStatisticsController < ApplicationController
   
   
   def counts
-    @view = (params[:view] && params[:view].strip)
+    @query_line_color = "#0077CC"
+    @view_line_color = "#FF6600"
+    @query_line_name = "企业搜索数"
+    @view_line_name = "查看简历数"
+    
+    @view = params[:view] && params[:view].strip
     @period = params[:period] && params[:period].strip
+    @q = !(params[:q] == "f")
+    @v = !(params[:v] == "f")
     
     view_info = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -67,17 +74,24 @@ class TeacherStatisticsController < ApplicationController
     end
     @period = %Q!#{from.strftime("%Y%m%d")}#{Date_Range_Splitter}#{to.strftime("%Y%m%d")}!
     
-    query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
-      hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-      hash
-    end
-    view_counts = CorpViewedResume.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
-      hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-      hash
+    query_counts = if @q
+      CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
+        hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+        hash
+      end
+    else
+      {}
     end
     
-    query_line_color = "#0077CC"
-    view_line_color = "#FF6600"
+    view_counts = if @v
+      CorpViewedResume.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
+        hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+        hash
+      end
+    else
+      {}
+    end
+    
     @dots = []
     @query_values = []
     @view_values = []
@@ -87,29 +101,33 @@ class TeacherStatisticsController < ApplicationController
       @dots << [first, last]
       
       key = first.strftime(count_key_format)
-      tip_title = %Q!<font size="12" face="Verdana" color="#333333">! +
-                  if first == last
-                    %Q!#{first.year}年#{first.month}月#{first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][first.wday]}!
-                  else
-                    %Q!#{first.year}年#{first.month}月#{first.mday}日 - #{last.year}年#{last.month}月#{last.mday}日!
-                  end +
-                  %Q!</font>!
       query_value = query_counts[key] || 0
       view_value = view_counts[key] || 0
-      tip = %Q!#{tip_title}! +
-            %Q!  <br>! +
-            %Q!<font size="12" face="Verdana" color="#{query_line_color}">进行了 <b>#{query_value}</b> 次搜索</font>! +
-            %Q!<br>! +
-            %Q!<font size="12" face="Verdana" color="#{view_line_color}">查看了 <b>#{view_value}</b> 次简历</font>!
+      
+      tip = %Q!<font size="12" face="Verdana" color="#333333">! +
+            if first == last
+              %Q!#{first.year}年#{first.month}月#{first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][first.wday]}!
+            else
+              %Q!#{first.year}年#{first.month}月#{first.mday}日 - #{last.year}年#{last.month}月#{last.mday}日!
+            end +
+            %Q!</font>!
+      if @q
+        tip = tip + %Q! <br>! +
+                    %Q!<font size="12" face="Verdana" color="#{@query_line_color}">进行了 <b>#{query_value}</b> 次搜索</font>!
+      end
+      if @v
+        tip = tip + %Q! <br>! +
+                    %Q!<font size="12" face="Verdana" color="#{@view_line_color}">查看了 <b>#{view_value}</b> 次简历</font>!
+      end
       
       @query_values << {
         :value => query_value,
-	      :tip => (query_value == view_value) ? "" : tip
-	    }
+	      :tip => ((query_value == view_value) && @v) ? "" : tip
+	    } if @q
       @view_values << {
         :value => view_value,
 	      :tip => tip
-	    }
+	    } if @v
       labels << first.strftime(label_format)
       
       max_value = [max_value, query_value, view_value].max
@@ -140,35 +158,28 @@ class TeacherStatisticsController < ApplicationController
     		:steps => max_y/5
     	},
 
-    	:elements => [
-        {
-          :type => "area",
-          :colour => query_line_color,
-          :text => "企业搜索数",
-          :fill => query_line_color,
-          "fill-alpha" => 0.1,
-          "dot-style" => {
-            :type => dot_type,
-            :colour => query_line_color,
-            "on-click" => "query_detail"
-          },
-          :values => @query_values
-        },
-    		
-    		{
-    		  :type => "area",
-    		  :colour => view_line_color,
-    		  :text => "查看简历数",
-    		  :fill => view_line_color,
-          "fill-alpha" => 0.1,
-    		  "dot-style" => {
-    		    :type => dot_type,
-    		    :colour => view_line_color,
-    		    "on-click" => "view_detail"
-    		  },
-    		  :values => @view_values
-    		}
-    	]
+    	:elements => ["query", "view"].collect { |line|
+    	  values = self.instance_variable_get("@#{line}_values")
+    	  if values.size > 0
+    	    color = self.instance_variable_get("@#{line}_line_color")
+    	    name = self.instance_variable_get("@#{line}_line_name")
+      	  {
+            :type => "area",
+            :colour => color,
+            :text => name,
+            :fill => color,
+            "fill-alpha" => 0.1,
+            "dot-style" => {
+              :type => dot_type,
+              :colour => color,
+              "on-click" => "#{line}_detail"
+            },
+            :values => values
+          }
+        else
+          nil
+        end
+    	}.compact
 		)
   end
   
