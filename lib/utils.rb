@@ -14,6 +14,14 @@ module Utils
   end
   
   
+  def self.growth(a, b, n)
+    return "N/A" if (b == 0)
+    
+    format = "%.#{n}f"
+    "#{format % (((a-b)/b.to_f)*100)}%"
+  end
+  
+  
   def self.step_period(from, to, step = :day)
     from, to = to, from if from > to
     

@@ -126,11 +126,17 @@ class TeacherStatisticsController < ApplicationController
     end
     if @q
       @query_values = []
-      @compared_query_values = [] if comparing
+      if comparing
+        @compared_query_values = []
+        @query_diffs = []
+      end
     end
     if @v
       @view_values = []
-      @compared_view_values = [] if comparing
+      if comparing
+        @compared_view_values = []
+        @view_diffs = []
+      end
     end
     labels = []
     max_value = 0
@@ -149,6 +155,9 @@ class TeacherStatisticsController < ApplicationController
         compared_key = compared_first.strftime(count_key_format)
         compared_query_value = compared_query_counts[compared_key] || 0
         compared_view_value = compared_view_counts[compared_key] || 0
+        
+        query_diff = Utils.growth(query_value, compared_query_value, 1)
+        view_diff = Utils.growth(view_value, compared_view_value, 1)
       end
       step_period_index += 1
       
@@ -161,11 +170,48 @@ class TeacherStatisticsController < ApplicationController
             %Q!</font>!
       if @q
         tip = tip + %Q! <br>! +
-                    %Q!<font size="12" face="Verdana" color="#{@query_line_color}">进行了 <b>#{query_value}</b> 次搜索</font>!
+                    %Q!<font size="12" face="Verdana" color="#{@query_line_color}">! +
+                    %Q!进行了 <b>#{query_value}</b> 次搜索! +
+                    %Q!</font>! +
+                    %Q!<font size="11" face="Verdana" color="#{@query_line_color}">! +
+                    (comparing ? %Q! (#{query_diff})! : "") +
+                    %Q!</font>!
       end
       if @v
         tip = tip + %Q! <br>! +
-                    %Q!<font size="12" face="Verdana" color="#{@view_line_color}">查看了 <b>#{view_value}</b> 次简历</font>!
+                    %Q!<font size="12" face="Verdana" color="#{@view_line_color}">! +
+                    %Q!查看了 <b>#{view_value}</b> 次简历! +
+                    %Q!</font>! +
+                    %Q!<font size="11" face="Verdana" color="#{@view_line_color}">! +
+                    (comparing ? %Q! (#{view_diff})! : "") +
+                    %Q!</font>!
+      end
+      
+      if comparing
+        compared_tip = %Q!<font size="12" face="Verdana" color="#333333">! +
+              if compared_first == compared_last
+                %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][compared_first.wday]}!
+              else
+                %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 - #{compared_last.year}年#{compared_last.month}月#{compared_last.mday}日!
+              end +
+              %Q! <b>(对比)</b>! +
+              %Q!</font>!
+        if @q
+          compared_tip = compared_tip +
+                          %Q! <br>! +
+                          %Q!<font size="12" face="Verdana" color="#{@query_line_color}">! +
+                          %Q!进行了 <b>#{compared_query_value}</b> 次搜索! +
+                          %Q! (对比)! +
+                          %Q!</font>!
+        end
+        if @v
+          compared_tip = compared_tip +
+                          %Q! <br>! +
+                          %Q!<font size="12" face="Verdana" color="#{@view_line_color}">! +
+                          %Q!查看了 <b>#{compared_view_value}</b> 次简历! +
+                          %Q! (对比)! +
+                          %Q!</font>!
+        end
       end
       
       if @q
@@ -174,10 +220,14 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => ((query_value == view_value) && @v) ? "" : tip
   	    }
   	    
-  	    @compared_query_values << {
-          :value => compared_query_value,
-  	      :tip => compared_first.strftime("%y-%m-%d") + " - " + compared_last.strftime("%y-%m-%d")
-  	    } if comparing
+  	    if comparing
+    	    @compared_query_values << {
+            :value => compared_query_value,
+            :tip => ((compared_query_value == compared_view_value) && @v) ? "" : compared_tip
+    	    }
+    	    
+    	    @query_diffs << query_diff
+  	    end
 	    end
 	    if @v
         @view_values << {
@@ -185,14 +235,18 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => tip
   	    }
   	    
-  	    @compared_view_values << {
-          :value => compared_view_value,
-  	      :tip => ""
-  	    } if comparing
+  	    if comparing
+    	    @compared_view_values << {
+            :value => compared_view_value,
+            :tip => compared_tip
+    	    }
+    	    
+    	    @view_diffs << view_diff
+  	    end
 	    end
       labels << first.strftime(label_format)
       
-      max_value = [max_value, query_value, view_value].max
+      max_value = [max_value, query_value, view_value, compared_query_value, compared_view_value].max
     end
     
     step_x = (labels.size / 8) + 1

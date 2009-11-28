@@ -92,7 +92,7 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
-				<td style="width: 220px;">时间</td>
+				<td>时间</td>
 				<% if @q %>
 					<td style="color: <%= @query_line_color %>">
 						<%= @query_line_name %>
@@ -100,7 +100,10 @@
 					
 					<% if comparing %>
 						<td style="color: <%= @query_line_color %>">
-							(对比)
+							对比数
+						</td>
+						<td style="color: <%= @query_line_color %>">
+							变化率
 						</td>
 					<% end %>
 				<% end %>
@@ -111,12 +114,15 @@
 					
 					<% if comparing %>
 						<td style="color: <%= @view_line_color %>">
-							(对比)
+							对比数
+						</td>
+						<td style="color: <%= @view_line_color %>">
+							变化率
 						</td>
 					<% end %>
 				<% end %>
 				<% if comparing %>
-					<td style="width: 220px;">时间 (对比)</td>
+					<td>对比时间</td>
 				<% end %>
 			</tr>
 		</thead>
@@ -127,10 +133,10 @@
 					<td align="center">
 						<% first, last = @dots[i] %>
 						
-						<%= first.strftime("%Y年%m月%d日") %>
+						<%= first.strftime("%Y.%m.%d") %>
 						<% unless first == last %>
-							<span style="margin: 0px 5px;">-</span>
-							<%= last.strftime("%Y年%m月%d日") %>
+							-
+							<%= last.strftime("%Y.%m.%d") %>
 						<% end %>
 					</td>
 					
@@ -148,6 +154,10 @@
 								<span<%= %Q! class="info"! unless compared_query_value > 0 %>>
 									<%= compared_query_value %>
 								</span>
+							</td>
+							
+							<td align="right" style="color: <%= @query_line_color %>;">
+								<%= @query_diffs[i] %>
 							</td>
 						<% end %>
 					<% end %>
@@ -167,6 +177,10 @@
 									<%= compared_view_value %>
 								</span>
 							</td>
+							
+							<td align="right" style="color: <%= @view_line_color %>;">
+								<%= @view_diffs[i] %>
+							</td>
 						<% end %>
 					<% end %>
 					
@@ -174,10 +188,10 @@
 						<td align="center">
 							<% compared_first, compared_last = @compared_dots[i] %>
 
-							<%= compared_first.strftime("%Y年%m月%d日") %>
+							<%= compared_first.strftime("%Y.%m.%d") %>
 							<% unless compared_first == compared_last %>
-								<span style="margin: 0px 5px;">-</span>
-								<%= compared_last.strftime("%Y年%m月%d日") %>
+								-
+								<%= compared_last.strftime("%Y.%m.%d") %>
 							<% end %>
 						</td>
 					<% end %>
