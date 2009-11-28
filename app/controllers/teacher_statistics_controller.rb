@@ -55,6 +55,7 @@ class TeacherStatisticsController < ApplicationController
     @period = params[:period] && params[:period].strip
     @q = !(params[:q] == "f")
     @v = !(params[:v] == "f")
+    @compare = params[:compare] && params[:compare].strip
     
     view_info = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -74,35 +75,82 @@ class TeacherStatisticsController < ApplicationController
     end
     @period = %Q!#{from.strftime("%Y%m%d")}#{Date_Range_Splitter}#{to.strftime("%Y%m%d")}!
     
-    query_counts = if @q
-      CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
+    compared_from = begin
+      Date.parse(@compare)
+    rescue
+      @compare = ""
+      nil
+    end
+    # if the count of days are the same of two periods
+    # then the difference of the count of other unit(week, month ...)
+    # would NOT be bigger than 2
+    compared_to = 2.send(period_unit).since(compared_from + (to - from)) if compared_from
+    comparing = compared_from && compared_to
+    
+    query_counts = {}
+    compared_query_counts = {}
+    if @q
+      query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
         hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
         hash
       end
-    else
-      {}
+      
+      if comparing
+        compared_query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, compared_from, compared_to).inject({}) do |hash, record|
+          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+          hash
+        end
+      end
     end
     
-    view_counts = if @v
-      CorpViewedResume.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
+    view_counts = {}
+    compared_view_counts = {}
+    if @v
+      view_counts = CorpViewedResume.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
         hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
         hash
       end
-    else
-      {}
+      
+      if comparing
+        compared_view_counts = CorpViewedResume.period_counts(@teacher.school_id, period_unit, compared_from, compared_to).inject({}) do |hash, record|
+          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+          hash
+        end
+      end
     end
     
     @dots = []
-    @query_values = []
-    @view_values = []
+    if comparing
+      @compared_dots = []
+      compared_periods = Utils.step_period(compared_from, compared_to, period_unit)
+    end
+    if @q
+      @query_values = []
+      @compared_query_values = [] if comparing
+    end
+    if @v
+      @view_values = []
+      @compared_view_values = [] if comparing
+    end
     labels = []
     max_value = 0
+    step_period_index = 0
     Utils.step_period(from, to, period_unit) do |first, last|
       @dots << [first, last]
       
       key = first.strftime(count_key_format)
       query_value = query_counts[key] || 0
       view_value = view_counts[key] || 0
+      
+      if comparing
+        compared_first, compared_last = compared_periods[step_period_index]
+        @compared_dots << compared_periods[step_period_index]
+        
+        compared_key = compared_first.strftime(count_key_format)
+        compared_query_value = compared_query_counts[compared_key] || 0
+        compared_view_value = compared_view_counts[compared_key] || 0
+      end
+      step_period_index += 1
       
       tip = %Q!<font size="12" face="Verdana" color="#333333">! +
             if first == last
@@ -120,14 +168,28 @@ class TeacherStatisticsController < ApplicationController
                     %Q!<font size="12" face="Verdana" color="#{@view_line_color}">查看了 <b>#{view_value}</b> 次简历</font>!
       end
       
-      @query_values << {
-        :value => query_value,
-	      :tip => ((query_value == view_value) && @v) ? "" : tip
-	    } if @q
-      @view_values << {
-        :value => view_value,
-	      :tip => tip
-	    } if @v
+      if @q
+        @query_values << {
+          :value => query_value,
+  	      :tip => ((query_value == view_value) && @v) ? "" : tip
+  	    }
+  	    
+  	    @compared_query_values << {
+          :value => compared_query_value,
+  	      :tip => compared_first.strftime("%y-%m-%d") + " - " + compared_last.strftime("%y-%m-%d")
+  	    } if comparing
+	    end
+	    if @v
+        @view_values << {
+          :value => view_value,
+  	      :tip => tip
+  	    }
+  	    
+  	    @compared_view_values << {
+          :value => compared_view_value,
+  	      :tip => ""
+  	    } if comparing
+	    end
       labels << first.strftime(label_format)
       
       max_value = [max_value, query_value, view_value].max
@@ -159,27 +221,51 @@ class TeacherStatisticsController < ApplicationController
     	},
 
     	:elements => ["query", "view"].collect { |line|
-    	  values = self.instance_variable_get("@#{line}_values")
-    	  if values.size > 0
+    	  if self.instance_variable_get("@#{line[0, 1]}")
     	    color = self.instance_variable_get("@#{line}_line_color")
     	    name = self.instance_variable_get("@#{line}_line_name")
-      	  {
-            :type => "area",
-            :colour => color,
-            :text => name,
-            :fill => color,
-            "fill-alpha" => 0.1,
-            "dot-style" => {
-              :type => dot_type,
+      	  line_styles = [
+      	    {
+              :type => "area",
               :colour => color,
-              "on-click" => "#{line}_detail"
-            },
-            :values => values
-          }
+              :text => name,
+              :fill => color,
+              "fill-alpha" => 0.1,
+              "dot-style" => {
+                :type => dot_type,
+                :colour => color,
+                "on-click" => "#{line}_detail"
+              },
+              :values => self.instance_variable_get("@#{line}_values")
+            }
+      	  ]
+      	  
+      	  line_styles << line_styles[0].merge(
+      	    {
+      	      "line-style" => {
+                :style => "dash",
+                :on => 6,
+                :off => 5
+              },
+              :width => 2,
+              
+              :type => "line",
+              :text => "",
+      	      "dot-style" => {
+                :type => dot_type,
+                :colour => color,
+                "dot-size" => 3,
+                "on-click" => "compared_#{line}_detail"
+              },
+              :values => self.instance_variable_get("@compared_#{line}_values")
+      	    }
+      	  ) if comparing
+      	  
+      	  line_styles
         else
           nil
         end
-    	}.compact
+    	}.flatten.compact
 		)
   end
   

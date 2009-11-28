@@ -14,6 +14,16 @@ function query_detail(dot_index) {
 }
 
 
+function compared_view_detail(dot_index) {
+	alert("compared_view: " + dot_index);
+}
+
+
+function compared_query_detail(dot_index) {
+	alert("compared_query: " + dot_index);
+}
+
+
 function change_view(view) {
 	$("input#view").val(view);
 	$("#refresh_form").submit();
@@ -22,6 +32,12 @@ function change_view(view) {
 
 function change_line(id, value) {
 	$("input#" + id).val(value);
+	$("#refresh_form").submit();
+}
+
+
+function change_compare(date_text) {
+	$("input#compare").val(date_text);
 	$("#refresh_form").submit();
 }
 
@@ -78,10 +94,10 @@ $(document).ready(
 		init_date_range();
 		
 		setup_daterangepicker();
-		
 		add_period_changing_trigger();
 		
 		setup_view_links();
+		setup_compare();
 	}
 );
 
@@ -90,8 +106,8 @@ function init_date_range() {
 	var from = null;
 	var to = null;
 	
-	var ranges = PERIOD.split(range_splitter);
 	try {
+		var ranges = $("input#period").val().split(range_splitter);
 		from = $.datepicker.parseDate(period_date_format, $.trim(ranges[0]));
 		to = $.datepicker.parseDate(period_date_format, $.trim(ranges[1]));
 	}
@@ -207,21 +223,57 @@ function setup_view_links() {
 	.unbind("mouseenter mouseleave").hover(
 		function() {
 			var view = $(this).attr("class").substr("view_link_".length);
+			var current_view = $("input#view").val();
 			$(this).find("img").attr(
 				"src",
 				"/images/teachers/view_icons/" + view + "_view" +
-				(VIEW == view ? "_selected" : "_hover") +
+				(view == current_view ? "_selected" : "_hover") +
 				"_icon.gif"
 			);
 		},
 		function() {
 			var view = $(this).attr("class").substr("view_link_".length);
+			var current_view = $("input#view").val();
 			$(this).find("img").attr(
 				"src",
 				"/images/teachers/view_icons/" + view + "_view" +
-				(VIEW == view ? "_selected" : "") +
+				(view == current_view ? "_selected" : "") +
 				"_icon.gif"
 			);
+		}
+	);
+}
+
+
+function setup_compare() {
+	$("a#compare_link").unbind("click").click(
+		function(e) {
+			$(this).datepicker(
+				"dialog",
+				$("input#compare").val(),
+				function(date_text, inst) {
+					change_compare(date_text);
+				},
+				{
+					dateFormat: period_date_format,
+					beforeShow: function(input) {
+						$(input).hide();
+					},
+					showButtonPanel: false,
+					showMonthAfterYear: true
+				},
+				e
+			);
+			
+			return false;
+		}
+	);
+	
+	$("a#remove_compare_link").unbind("click").click(
+		function() {
+			change_compare("");
+			
+			return false;
 		}
 	);
 }

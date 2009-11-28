@@ -1,4 +1,8 @@
-<% talent_page_title("查询数目统计") %>
+<%
+	talent_page_title("查询数目统计")
+	
+	comparing = !@compare.blank?
+%>
 
 
 <h2>查询数目统计</h2>
@@ -8,21 +12,35 @@
 	<input type="hidden" id="period" name="period" value="<%= h(@period) %>" />
 	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
 	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
+	<input type="hidden" id="compare" name="compare" value="<%= h(@compare) %>" />
 <% end %>
 
 <div>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
 			<td style="width: 35px;">时段:</td>
-			<td style="width: 180px; height: 30px;">
+			<td style="width: 250px; height: 30px;">
 				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
 			</td>
 			
-			<td style="width: 100px;" align="center">
-				对比
+			<td style="width: 150px;">
+				<a href="#" class="none" title="与其他时段进行对比" id="compare_link">
+					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 2px -1px 0px;" />
+					对比</a>
+				
+				<% if comparing %>
+					<span style="color: #555555; margin-right: 1px;">
+						:
+						<%= "#{@compare[2, 2]}年#{@compare[4, 2].to_i}月#{@compare[6, 2].to_i}日" %>
+					</span>
+					<a href="#" title="清除对比" id="remove_compare_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
 			</td>
 			
-			<td>对比时段</td>
+			<td align="right">
+				过滤企业
+			</td>
 		</tr>
 	</table>
 </div>
@@ -74,21 +92,41 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
-				<td style="width: 250px;">时间</td>
+				<td style="width: 220px;">时间</td>
 				<% if @q %>
-					<td><%= @query_line_name %></td>
+					<td style="color: <%= @query_line_color %>">
+						<%= @query_line_name %>
+					</td>
+					
+					<% if comparing %>
+						<td style="color: <%= @query_line_color %>">
+							(对比)
+						</td>
+					<% end %>
 				<% end %>
 				<% if @v %>
-					<td><%= @view_line_name %></td>
+					<td style="color: <%= @view_line_color %>">
+						<%= @view_line_name %>
+					</td>
+					
+					<% if comparing %>
+						<td style="color: <%= @view_line_color %>">
+							(对比)
+						</td>
+					<% end %>
+				<% end %>
+				<% if comparing %>
+					<td style="width: 220px;">时间 (对比)</td>
 				<% end %>
 			</tr>
 		</thead>
 		
 		<tbody>
 			<% @dots.each_index do |i| %>
-				<% first, last = @dots[i] %>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<td align="center">
+						<% first, last = @dots[i] %>
+						
 						<%= first.strftime("%Y年%m月%d日") %>
 						<% unless first == last %>
 							<span style="margin: 0px 5px;">-</span>
@@ -97,20 +135,50 @@
 					</td>
 					
 					<% if @q %>
-						<td align="right">
+						<td align="right" style="color: <%= @query_line_color %>; font-weight: bold;">
 							<% query_value = @query_values[i][:value] %>
 							<span<%= %Q! class="info"! unless query_value > 0 %>>
 								<%= query_value %>
 							</span>
 						</td>
+						
+						<% if comparing %>
+							<td align="right" style="color: <%= @query_line_color %>; font-weight: bold;">
+								<% compared_query_value = @compared_query_values[i][:value] %>
+								<span<%= %Q! class="info"! unless compared_query_value > 0 %>>
+									<%= compared_query_value %>
+								</span>
+							</td>
+						<% end %>
 					<% end %>
 					
 					<% if @v %>
-						<td align="right">
+						<td align="right" style="color: <%= @view_line_color %>; font-weight: bold;">
 							<% view_value = @view_values[i][:value] %>
 							<span<%= %Q! class="info"! unless view_value > 0 %>>
 								<%= view_value %>
 							</span>
+						</td>
+						
+						<% if comparing %>
+							<td align="right" style="color: <%= @view_line_color %>; font-weight: bold;">
+								<% compared_view_value = @compared_view_values[i][:value] %>
+								<span<%= %Q! class="info"! unless compared_view_value > 0 %>>
+									<%= compared_view_value %>
+								</span>
+							</td>
+						<% end %>
+					<% end %>
+					
+					<% if comparing %>
+						<td align="center">
+							<% compared_first, compared_last = @compared_dots[i] %>
+
+							<%= compared_first.strftime("%Y年%m月%d日") %>
+							<% unless compared_first == compared_last %>
+								<span style="margin: 0px 5px;">-</span>
+								<%= compared_last.strftime("%Y年%m月%d日") %>
+							<% end %>
 						</td>
 					<% end %>
 				</tr>
@@ -127,9 +195,6 @@
 <script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
-	
-	var PERIOD = "<%= @period %>";
-	var VIEW = "<%= @view %>";
 </script>
 <script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />

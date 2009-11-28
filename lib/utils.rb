@@ -17,6 +17,8 @@ module Utils
   def self.step_period(from, to, step = :day)
     from, to = to, from if from > to
     
+    periods = []
+    
     this_step = from
     while this_step < to
       next_step = case step
@@ -47,14 +49,19 @@ module Utils
         this_step.to_date.next
       end
       
-      yield(this_step, [1.day.ago(next_step), to].min) if block_given?
+      period_from, period_to = this_step, [1.day.ago(next_step), to].min
+      periods << [period_from, period_to]
+      yield(period_from, period_to) if block_given?
       
       this_step = next_step
     end
     
     if this_step == to
+      periods << [this_step, to]
       yield(this_step, to) if block_given?
     end
+    
+    periods
   end
   
   
