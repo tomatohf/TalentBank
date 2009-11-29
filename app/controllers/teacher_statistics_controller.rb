@@ -2,6 +2,12 @@ class TeacherStatisticsController < ApplicationController
   
   Queries_Page_Size = 100
   Date_Range_Splitter = "-"
+  
+  Perspectives = [
+    ["counts", "查询数目统计"],
+    ["#", "简历查看统计"],
+    ["#", "企业搜索统计"]
+  ]
 
   include OpenFlashChartHelpers
   
@@ -56,7 +62,7 @@ class TeacherStatisticsController < ApplicationController
     @q = !(params[:q] == "f")
     @v = !(params[:v] == "f")
     @compare = params[:compare] && params[:compare].strip
-    @corp = params[:corp] && params[:corp].strip
+    @corp = !(corp_id = params[:corp] && params[:corp].strip).blank? && Corporation.try_find(corp_id)
     
     view_info = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -89,7 +95,7 @@ class TeacherStatisticsController < ApplicationController
     comparing = compared_from && compared_to
     
     filters = {}
-    filters[:corporation_id] = [@corp] unless @corp.blank?
+    filters[:corporation_id] = [@corp.id] if @corp
     count_options = {
       :group_function => period_unit,
       :filters => filters

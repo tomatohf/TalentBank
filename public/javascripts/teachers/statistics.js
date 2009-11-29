@@ -42,6 +42,12 @@ function change_compare(date_text) {
 }
 
 
+function change_corp_filter(corp) {
+	$("input#corp").val(corp);
+	$("#refresh_form").submit();
+}
+
+
 function change_period() {
 	disable_range_input();
 	
@@ -283,5 +289,19 @@ function setup_compare() {
 
 
 function setup_corp_filter() {
+	$("a#corp_filter_link").unbind("click").click(
+		function() {
+			// aaa
+			
+			return false;
+		}
+	);
 	
+	$("a#remove_corp_filter_link").unbind("click").click(
+		function() {
+			change_corp_filter("");
+			
+			return false;
+		}
+	);
 }

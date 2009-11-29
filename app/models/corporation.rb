@@ -97,4 +97,9 @@ class Corporation < ActiveRecord::Base
     !self.name.blank?
   end
   
+  
+  def self.try_find(*args)
+    self.find(*args) rescue nil
+  end
+  
 end
