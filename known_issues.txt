@@ -1,7 +1,4 @@
 统计图表 (导出 数据 / 图 / 报告)
-	* 数据过滤
-		- 企业
-	==========
 	- 查询数目统计 (both query and view)
 		* list raw data in selected dot
 		* 企业查看简历数目排行

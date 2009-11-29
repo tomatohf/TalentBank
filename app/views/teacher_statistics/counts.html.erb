@@ -43,7 +43,7 @@
 					<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
 					过滤企业</a>
 				<% if @corp %>
-					<% corp_name = h(@corp.name) %>
+					<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
 					<span title="<%= corp_name %>" style="color: #555555; margin-right: 1px;">
 						:
 						<%= truncate(corp_name, :length => 20) %>

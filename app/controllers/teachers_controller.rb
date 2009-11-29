@@ -101,6 +101,24 @@ class TeachersController < ApplicationController
         :province_id => @province_id
       )
     end
+    
+    if request.xhr?
+      return render(
+        :layout => false,
+        :inline => %Q!
+          <% @corporations.each do |corp| %>
+            <a href="#" id="filter_corp_<%= corp.id %>" class="filter_corp_link">
+              <%= h(corp.name) %> (<%= h(corp.uid) %>)</a>
+          <% end %>
+          
+          <br />
+          
+          <div>
+            <%= paging_buttons(@corporations) %>
+          </div>
+        !
+      )
+    end
   end
   
   

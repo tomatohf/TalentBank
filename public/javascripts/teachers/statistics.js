@@ -95,6 +95,77 @@ function enable_range_input() {
 }
 
 
+function filter_corp() {
+	show_filter_corp_dialog(filter_corp_dialog_content);
+}
+
+
+function filter_corp_dialog_content(container, url) {
+	if(url == null) {
+		container.html(
+			'<img src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px 15px;" />' +
+			'正在载入, 请稍候 ...'
+		);
+	}
+	
+	$.ajax(
+		{
+			type: "GET",
+			url: url || ("/teachers/" + TEACHER_ID + "/corporations"),
+			dataType: "html",
+			data: {},
+			error: function() {
+				show_filter_corp_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
+			},
+			success: function(data, text_status) {
+				container.html(data);
+				
+				// setup event handlers
+				setup_filter_corp_links(container);
+			}
+		}
+	);
+}
+
+
+function setup_filter_corp_links(container) {
+	$("a[id^='filter_corp_']").unbind("click").click(
+		function() {
+			change_corp_filter($(this).attr("id").substr("filter_corp_".length));
+			// DIALOG.disappear();
+			
+			return false;
+		}
+	);
+	
+	
+	$(".pagination a").unbind("click").click(
+		function() {
+			filter_corp_dialog_content(container, $(this).attr("href"));
+			
+			return false;
+		}
+	);
+}
+
+
+function show_filter_corp_dialog(content) {
+	DIALOG.appear(
+		{
+			title: "过滤企业",
+			content: content,
+			button_text: {},
+			width: 400,
+			margin_top: 80,
+			fixed: false,
+			data: {},
+			modal: false,
+			close: true
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
 		init_date_range();
@@ -291,7 +362,7 @@ function setup_compare() {
 function setup_corp_filter() {
 	$("a#corp_filter_link").unbind("click").click(
 		function() {
-			// aaa
+			filter_corp();
 			
 			return false;
 		}

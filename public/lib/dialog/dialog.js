@@ -155,6 +155,8 @@ var DIALOG = {
 		else {
 			close_link.hide();
 		}
+		
+		$(document).unbind("keyup", DIALOG.document_keyup).keyup(DIALOG.document_keyup);
 
 		if (typeof(setting.content) == "string") {
 			$("#dialog_content").html(setting.content);
@@ -194,6 +196,17 @@ var DIALOG = {
 				$(this).css("opacity", "");
 			}
 		);
+	},
+	
+	
+	// functions that should be treated as private
+	
+	document_keyup: function(e) {
+		if(e.keyCode == 27) {
+			// ESC key
+			
+			DIALOG.disappear();
+		}
 	}
 	
 }

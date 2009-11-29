@@ -533,3 +533,17 @@ a.corp_tag:hover {
 .grid tbody td.datetime {
 	font-size: 10px;
 }
+
+
+a.filter_corp_link {
+	text-decoration: none;
+	font-size: 14px;
+	display: block;
+	padding: 5px 5px 5px 25px;
+	background: transparent url(/images/teachers/filter_icon.gif) no-repeat scroll 5px center;
+}
+
+a.filter_corp_link:hover {
+	color: #FFFFFF;
+	background-color: #3B5998;
+}
