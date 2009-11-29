@@ -208,6 +208,31 @@ module Utils
         
       }
       
+      
+      def including_model.group_counts(school_id, from, to, options = {})
+        from, to = to, from if from > to
+
+        from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
+        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+        
+        filters = {
+          :school_id => school_id,
+          :updated_at => from_time..to_time
+        }.merge(options[:filters] || {})
+
+        self.search(
+          :group_by => options[:group_by] || "updated_at",
+          :group_function => options[:group_function] || :day,
+          :group_clause => options[:group_clause] || "@group ASC",
+          # :match_mode => Search_Match_Mode,
+          # :order => "updated_at ASC",
+          :with => filters
+        ).inject({}) do |hash, record|
+          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+          hash
+        end
+      end
+      
     end
   end
 

@@ -13,6 +13,7 @@
 	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
 	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
 	<input type="hidden" id="compare" name="compare" value="<%= h(@compare) %>" />
+	<input type="hidden" id="corp" name="corp" value="<%= h(@corp) %>" />
 <% end %>
 
 <div>
@@ -23,9 +24,9 @@
 				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
 			</td>
 			
-			<td style="width: 150px;">
+			<td style="width: 180px;">
 				<a href="#" class="none" title="与其他时段进行对比" id="compare_link">
-					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 2px -1px 0px;" />
+					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 1px -1px 0px;" />
 					对比</a>
 				
 				<% if comparing %>
@@ -39,7 +40,9 @@
 			</td>
 			
 			<td align="right">
-				过滤企业
+				<a href="#" class="none" title="过滤企业" id="filter_corp_link">
+					<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
+					过滤</a>
 			</td>
 		</tr>
 	</table>
@@ -92,7 +95,7 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
-				<td>时间</td>
+				<td style="width: 120px;">时间</td>
 				<% if @q %>
 					<td style="color: <%= @query_line_color %>">
 						<%= @query_line_name %>
@@ -122,7 +125,7 @@
 					<% end %>
 				<% end %>
 				<% if comparing %>
-					<td>对比时间</td>
+					<td style="width: 120px;">对比时间</td>
 				<% end %>
 			</tr>
 		</thead>
@@ -133,10 +136,10 @@
 					<td align="center">
 						<% first, last = @dots[i] %>
 						
-						<%= first.strftime("%Y.%m.%d") %>
+						<%= first.strftime("%y.%m.%d") %>
 						<% unless first == last %>
 							-
-							<%= last.strftime("%Y.%m.%d") %>
+							<%= last.strftime("%y.%m.%d") %>
 						<% end %>
 					</td>
 					
@@ -188,10 +191,10 @@
 						<td align="center">
 							<% compared_first, compared_last = @compared_dots[i] %>
 
-							<%= compared_first.strftime("%Y.%m.%d") %>
+							<%= compared_first.strftime("%y.%m.%d") %>
 							<% unless compared_first == compared_last %>
 								-
-								<%= compared_last.strftime("%Y.%m.%d") %>
+								<%= compared_last.strftime("%y.%m.%d") %>
 							<% end %>
 						</td>
 					<% end %>

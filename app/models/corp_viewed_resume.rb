@@ -42,26 +42,4 @@ class CorpViewedResume < ActiveRecord::Base
     ).save
   end
   
-  
-  def self.period_counts(school_id, group_function, from, to)
-    from, to = to, from if from > to
-    
-    from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
-    to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
-    
-    filters = {
-      :school_id => school_id,
-      :updated_at => from_time..to_time
-    }
-    
-    self.search(
-      :group_by => "updated_at",
-      :group_function => group_function,
-      :group_clause => "@group ASC",
-      # :match_mode => Search_Match_Mode,
-      # :order => "updated_at ASC",
-      :with => filters
-    )
-  end
-  
 end

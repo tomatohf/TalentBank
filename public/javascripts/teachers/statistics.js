@@ -96,8 +96,11 @@ $(document).ready(
 		setup_daterangepicker();
 		add_period_changing_trigger();
 		
-		setup_view_links();
+		setup_corp_filter();
+		
 		setup_compare();
+		
+		setup_view_links();
 	}
 );
 
@@ -276,4 +279,9 @@ function setup_compare() {
 			return false;
 		}
 	);
+}
+
+
+function setup_corp_filter() {
+	
 }

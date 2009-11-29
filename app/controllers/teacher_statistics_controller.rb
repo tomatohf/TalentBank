@@ -56,6 +56,7 @@ class TeacherStatisticsController < ApplicationController
     @q = !(params[:q] == "f")
     @v = !(params[:v] == "f")
     @compare = params[:compare] && params[:compare].strip
+    @corp = params[:corp] && params[:corp].strip
     
     view_info = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -87,35 +88,30 @@ class TeacherStatisticsController < ApplicationController
     compared_to = 2.send(period_unit).since(compared_from + (to - from)) if compared_from
     comparing = compared_from && compared_to
     
+    filters = {}
+    filters[:corporation_id] = [@corp] unless @corp.blank?
+    count_options = {
+      :group_function => period_unit,
+      :filters => filters
+    }
+    
     query_counts = {}
     compared_query_counts = {}
     if @q
-      query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
-        hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-        hash
-      end
+      query_counts = CorpQuery.group_counts(@teacher.school_id, from, to, count_options)
       
       if comparing
-        compared_query_counts = CorpQuery.period_counts(@teacher.school_id, period_unit, compared_from, compared_to).inject({}) do |hash, record|
-          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-          hash
-        end
+        compared_query_counts = CorpQuery.group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
     
     view_counts = {}
     compared_view_counts = {}
     if @v
-      view_counts = CorpViewedResume.period_counts(@teacher.school_id, period_unit, from, to).inject({}) do |hash, record|
-        hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-        hash
-      end
+      view_counts = CorpViewedResume.group_counts(@teacher.school_id, from, to, count_options)
       
       if comparing
-        compared_view_counts = CorpViewedResume.period_counts(@teacher.school_id, period_unit, compared_from, compared_to).inject({}) do |hash, record|
-          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
-          hash
-        end
+        compared_view_counts = CorpViewedResume.group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
     
@@ -246,7 +242,8 @@ class TeacherStatisticsController < ApplicationController
 	    end
       labels << first.strftime(label_format)
       
-      max_value = [max_value, query_value, view_value, compared_query_value, compared_view_value].max
+      max_value = [max_value, query_value, view_value].max
+      max_value = [max_value, compared_query_value, compared_view_value].max if comparing
     end
     
     step_x = (labels.size / 8) + 1
