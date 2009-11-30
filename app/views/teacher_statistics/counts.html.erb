@@ -1,8 +1,4 @@
-<%
-	talent_page_title("查询数目统计")
-	
-	comparing = !@compare.blank?
-%>
+<% talent_page_title("查询数目统计") %>
 
 
 <h2>查询数目统计</h2>
@@ -17,43 +13,7 @@
 <% end %>
 
 <div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-		<tr>
-			<td style="width: 35px;">时段:</td>
-			<td style="width: 250px; height: 30px;">
-				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
-			</td>
-			
-			<td>
-				<a href="#" class="none" title="与其他时段进行对比" id="compare_link">
-					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 1px -1px 0px;" />
-					对比时段</a>
-				<% if comparing %>
-					<span style="color: #555555; margin-right: 1px;">
-						:
-						<%= "#{@compare[2, 2]}年#{@compare[4, 2].to_i}月#{@compare[6, 2].to_i}日" %>
-					</span>
-					<a href="#" title="清除对比" id="remove_compare_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-				
-				<span class="info" style="margin: 0px 10px;">|</span>
-				
-				<a href="#" class="none" title="过滤企业" id="corp_filter_link">
-					<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
-					过滤企业</a>
-				<% if @corp %>
-					<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
-					<span title="<%= corp_name %>" style="color: #555555; margin-right: 1px;">
-						:
-						<%= truncate(corp_name, :length => 20) %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_corp_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-			</td>
-		</tr>
-	</table>
+	<%= render :partial => "filters" %>
 </div>
 
 <div>
@@ -109,7 +69,7 @@
 						<%= @query_line_name %>
 					</td>
 					
-					<% if comparing %>
+					<% if @comparing %>
 						<td style="color: <%= @query_line_color %>">
 							对比数
 						</td>
@@ -123,7 +83,7 @@
 						<%= @view_line_name %>
 					</td>
 					
-					<% if comparing %>
+					<% if @comparing %>
 						<td style="color: <%= @view_line_color %>">
 							对比数
 						</td>
@@ -132,7 +92,7 @@
 						</td>
 					<% end %>
 				<% end %>
-				<% if comparing %>
+				<% if @comparing %>
 					<td style="width: 120px;">对比时间</td>
 				<% end %>
 			</tr>
@@ -165,7 +125,7 @@
 							<% end %>
 						</td>
 						
-						<% if comparing %>
+						<% if @comparing %>
 							<td align="right" style="font-weight: bold;">
 								<% compared_query_value = @compared_query_values[i][:value] %>
 								
@@ -195,7 +155,7 @@
 							<% end %>
 						</td>
 						
-						<% if comparing %>
+						<% if @comparing %>
 							<td align="right" style="font-weight: bold;">
 								<% compared_view_value = @compared_view_values[i][:value] %>
 								
@@ -213,7 +173,7 @@
 						<% end %>
 					<% end %>
 					
-					<% if comparing %>
+					<% if @comparing %>
 						<td align="center">
 							<% compared_first, compared_last = @compared_dots[i] %>
 
@@ -233,14 +193,4 @@
 </div>
 
 
-<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
-<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
-<script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
-<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
-<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	var TEACHER_ID = <%= @teacher.id %>;
-</script>
-<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
-<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+<%= render :partial => "scripts" %>

@@ -9,5 +9,27 @@
 <% end %>
 
 <div>
+	<%= render :partial => "filters" %>
+</div>
+
+<div>
 	
 </div>
+
+<div>
+	<%= render(
+		:partial => "ofc",
+		:locals => {
+			:chart_id => "resumes_chart",
+			:height => 200,
+			:data => @chart_data
+		}
+	) %>
+</div>
+
+<div>
+	
+</div>
+
+
+<%= render :partial => "scripts" %>

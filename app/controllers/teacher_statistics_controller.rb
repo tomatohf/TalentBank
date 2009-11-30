@@ -144,7 +144,7 @@ class TeacherStatisticsController < ApplicationController
     # then the difference of the count of other unit(week, month ...)
     # would NOT be bigger than 2
     compared_to = 2.send(period_unit).since(compared_from + (to - from)) if compared_from
-    comparing = compared_from && compared_to
+    @comparing = compared_from && compared_to
     
     filters = {}
     filters[:corporation_id] = [@corp.id] if @corp
@@ -158,7 +158,7 @@ class TeacherStatisticsController < ApplicationController
     if @q
       query_counts = CorpQuery.period_group_counts(@teacher.school_id, from, to, count_options)
       
-      if comparing
+      if @comparing
         compared_query_counts = CorpQuery.period_group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
@@ -168,26 +168,26 @@ class TeacherStatisticsController < ApplicationController
     if @v
       view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, from, to, count_options)
       
-      if comparing
+      if @comparing
         compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
     
     @dots = []
-    if comparing
+    if @comparing
       @compared_dots = []
       compared_periods = Utils.step_period(compared_from, compared_to, period_unit)
     end
     if @q
       @query_values = []
-      if comparing
+      if @comparing
         @compared_query_values = []
         @query_diffs = []
       end
     end
     if @v
       @view_values = []
-      if comparing
+      if @comparing
         @compared_view_values = []
         @view_diffs = []
       end
@@ -202,7 +202,7 @@ class TeacherStatisticsController < ApplicationController
       query_value = query_counts[key] || 0
       view_value = view_counts[key] || 0
       
-      if comparing
+      if @comparing
         compared_first, compared_last = compared_periods[step_period_index]
         @compared_dots << compared_periods[step_period_index]
         
@@ -228,7 +228,7 @@ class TeacherStatisticsController < ApplicationController
                     %Q!进行了 <b>#{query_value}</b> 次搜索! +
                     %Q!</font>! +
                     %Q!<font size="11" face="Verdana" color="#{@query_line_color}">! +
-                    (comparing ? %Q! (#{query_diff})! : "") +
+                    (@comparing ? %Q! (#{query_diff})! : "") +
                     %Q!</font>!
       end
       if @v
@@ -237,11 +237,11 @@ class TeacherStatisticsController < ApplicationController
                     %Q!查看了 <b>#{view_value}</b> 次简历! +
                     %Q!</font>! +
                     %Q!<font size="11" face="Verdana" color="#{@view_line_color}">! +
-                    (comparing ? %Q! (#{view_diff})! : "") +
+                    (@comparing ? %Q! (#{view_diff})! : "") +
                     %Q!</font>!
       end
       
-      if comparing
+      if @comparing
         compared_tip = %Q!<font size="12" face="Verdana" color="#333333">! +
               if compared_first == compared_last
                 %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][compared_first.wday]}!
@@ -274,7 +274,7 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => ((query_value == view_value) && @v) ? "" : tip
   	    }
   	    
-  	    if comparing
+  	    if @comparing
     	    @compared_query_values << {
             :value => compared_query_value,
             :tip => ((compared_query_value == compared_view_value) && @v) ? "" : compared_tip
@@ -289,7 +289,7 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => tip
   	    }
   	    
-  	    if comparing
+  	    if @comparing
     	    @compared_view_values << {
             :value => compared_view_value,
             :tip => compared_tip
@@ -301,7 +301,7 @@ class TeacherStatisticsController < ApplicationController
       labels << first.strftime(label_format)
       
       max_value = [max_value, query_value, view_value].max
-      max_value = [max_value, compared_query_value, compared_view_value].max if comparing
+      max_value = [max_value, compared_query_value, compared_view_value].max if @comparing
     end
     
     step_x = (labels.size / 8) + 1
@@ -368,7 +368,7 @@ class TeacherStatisticsController < ApplicationController
               },
               :values => self.instance_variable_get("@compared_#{line}_values")
       	    }
-      	  ) if comparing
+      	  ) if @comparing
       	  
       	  line_styles
         else
@@ -380,7 +380,13 @@ class TeacherStatisticsController < ApplicationController
   
   
   def resumes
+    @comparing = false
     
+    @chart_data = ofc_chart_data(
+      {
+        
+      }
+    )
   end
   
   
