@@ -102,7 +102,7 @@ function show_details_dialog(content) {
 			},
 			width: 800,
 			margin_top: 30,
-			fixed: true,
+			fixed: false,
 			data: {},
 			modal: false,
 			close: true

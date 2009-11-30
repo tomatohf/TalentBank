@@ -1,34 +1,13 @@
-<% talent_page_title("最近企业查询") %>
-
-<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+<% talent_page_title("简历查看统计") %>
 
 
-<h2>最近企业查询</h2>
+<h2>简历查看统计</h2>
 
-<%= render :partial => "recent_nav" %>
+<% form_tag "", :method => :get, :id => "refresh_form" do %>
+	<input type="hidden" id="period" name="period" value="<%= h(@period) %>" />
+	<input type="hidden" id="corp" name="corp" value="<%= @corp.id if @corp %>" />
+<% end %>
 
-<%= render :partial => "resumes_grid", :locals => {:records => @viewed_resumes} %>
-
-
-<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	$(document).ready(
-		function() {
-			$(".operation_link").unbind("click").click(
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-					$(this).parent().hover(
-						function() {
-						},
-						function() {
-							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-						}
-					);
-
-					return false;
-				}
-			);
-		}
-	);
-</script>
+<div>
+	
+</div>

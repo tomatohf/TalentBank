@@ -5,7 +5,7 @@ class TeacherStatisticsController < ApplicationController
   
   Perspectives = [
     ["counts", "查询数目统计"],
-    ["#", "简历查看统计"],
+    ["resumes", "简历查看统计"],
     ["#", "企业搜索统计"]
   ]
 
@@ -28,7 +28,7 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def queries
+  def querying
     page = params[:page]
     page = 1 unless page =~ /\d+/
     @corp_queries = CorpQuery.paginate(
@@ -39,7 +39,7 @@ class TeacherStatisticsController < ApplicationController
     )
   end
   
-  def resumes
+  def viewing
     page = params[:page]
     page = 1 unless page =~ /\d+/
     @viewed_resumes = CorpViewedResume.paginate(
@@ -376,6 +376,11 @@ class TeacherStatisticsController < ApplicationController
         end
     	}.flatten.compact
 		)
+  end
+  
+  
+  def resumes
+    
   end
   
   
