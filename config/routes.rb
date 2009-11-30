@@ -41,6 +41,8 @@ ActionController::Routing::Routes.draw do |map|
       :queries => :any,
       :resumes => :any,
       
+      :details => :any,
+      
       :counts => :any
     }
   end

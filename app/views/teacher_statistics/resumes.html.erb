@@ -7,31 +7,7 @@
 
 <%= render :partial => "recent_nav" %>
 
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
-		<thead>
-			<tr>
-				<td style="width: 100px;">时间</td>
-				<td>企业</td>
-				<td>学生姓名</td>
-				<td>简历方向</td>
-				<td>学院</td>
-				<td>专业</td>
-				<td>学历</td>
-				<td>毕业时间</td>
-				<td style="width: 16px;"></td>
-			</tr>
-		</thead>
-		
-		<tbody>
-			<%= render :partial => "viewed_resume", :collection => @viewed_resumes %>
-		</tbody>
-	</table>
-	
-	<div>
-		<%= paging_buttons(@viewed_resumes) %>
-	</div>
-</div>
+<%= render :partial => "resumes_grid", :locals => {:records => @viewed_resumes} %>
 
 
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>

@@ -100,7 +100,7 @@
 </div>
 
 <div style="margin-top: 30px;">
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<table id="chart_data_list" border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
 				<td style="width: 120px;">时间</td>
@@ -149,22 +149,32 @@
 							-
 							<%= last.strftime("%y.%m.%d") %>
 						<% end %>
+						
+						<input type="hidden" id="dot_<%= i %>" value="<%= %Q!#{first.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{last.strftime("%Y%m%d")}! %>" />
 					</td>
 					
 					<% if @q %>
-						<td align="right" style="color: <%= @query_line_color %>; font-weight: bold;">
+						<td align="right" style="font-weight: bold;">
 							<% query_value = @query_values[i][:value] %>
-							<span<%= %Q! class="info"! unless query_value > 0 %>>
-								<%= query_value %>
-							</span>
+							
+							<% if query_value > 0 %>
+								<a href="#" onclick="query_detail(<%= i %>); return false;" class="none" style="color: <%= @query_line_color %>;">
+									<%= query_value %></a>
+							<% else %>
+								<span class="info"><%= query_value %></span>
+							<% end %>
 						</td>
 						
 						<% if comparing %>
-							<td align="right" style="color: <%= @query_line_color %>; font-weight: bold;">
+							<td align="right" style="font-weight: bold;">
 								<% compared_query_value = @compared_query_values[i][:value] %>
-								<span<%= %Q! class="info"! unless compared_query_value > 0 %>>
-									<%= compared_query_value %>
-								</span>
+								
+								<% if compared_query_value > 0 %>
+									<a href="#" onclick="compared_query_detail(<%= i %>); return false;" class="none" style="color: <%= @query_line_color %>;">
+										<%= compared_query_value %></a>
+								<% else %>
+									<span class="info"><%= compared_query_value %></span>
+								<% end %>
 							</td>
 							
 							<td align="right" style="color: <%= @query_line_color %>;">
@@ -174,19 +184,27 @@
 					<% end %>
 					
 					<% if @v %>
-						<td align="right" style="color: <%= @view_line_color %>; font-weight: bold;">
+						<td align="right" style="font-weight: bold;">
 							<% view_value = @view_values[i][:value] %>
-							<span<%= %Q! class="info"! unless view_value > 0 %>>
-								<%= view_value %>
-							</span>
+							
+							<% if view_value > 0 %>
+								<a href="#" onclick="view_detail(<%= i %>); return false;" class="none" style="color: <%= @view_line_color %>;">
+									<%= view_value %></a>
+							<% else %>
+								<span class="info"><%= view_value %></span>
+							<% end %>
 						</td>
 						
 						<% if comparing %>
-							<td align="right" style="color: <%= @view_line_color %>; font-weight: bold;">
+							<td align="right" style="font-weight: bold;">
 								<% compared_view_value = @compared_view_values[i][:value] %>
-								<span<%= %Q! class="info"! unless compared_view_value > 0 %>>
-									<%= compared_view_value %>
-								</span>
+								
+								<% if compared_view_value > 0 %>
+									<a href="#" onclick="compared_view_detail(<%= i %>); return false;" class="none" style="color: <%= @view_line_color %>;">
+										<%= compared_view_value %></a>
+								<% else %>
+									<span class="info"><%= compared_view_value %></span>
+								<% end %>
 							</td>
 							
 							<td align="right" style="color: <%= @view_line_color %>;">
@@ -204,6 +222,8 @@
 								-
 								<%= compared_last.strftime("%y.%m.%d") %>
 							<% end %>
+							
+							<input type="hidden" id="compared_dot_<%= i %>" value="<%= %Q!#{compared_first.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{compared_last.strftime("%Y%m%d")}! %>" />
 						</td>
 					<% end %>
 				</tr>

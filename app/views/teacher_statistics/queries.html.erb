@@ -7,49 +7,11 @@
 
 <%= render :partial => "recent_nav" %>
 
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
-		<thead>
-			<tr>
-				<td style="width: 13px;"></td>
-				<td style="width: 100px;">时间</td>
-				<td>企业</td>
-				<td>学院</td>
-				<td>专业</td>
-				<td>学历</td>
-				<td>毕业时间</td>
-				<td>求职方向</td>
-				<td style="width: 160px;">关键词</td>
-			</tr>
-		</thead>
-		
-		<tbody>
-			<%= render :partial => "query", :collection => @corp_queries %>
-		</tbody>
-	</table>
-	
-	<div>
-		<%= paging_buttons(@corp_queries) %>
-	</div>
-</div>
+<%= render :partial => "queries_grid", :locals => {:records => @corp_queries} %>
 
 
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
-	function toggle_query_detail(query_id) {
-		var query_detail = document.getElementById("query_detail_" + query_id);
-		var query_detail_icon = document.getElementById("query_detail_icon_" + query_id);
-		if(query_detail.style.display == "none") {
-			query_detail.style.display = "";
-			query_detail_icon.src = "/images/corporations/collapse_icon.gif";
-		}
-		else {
-			query_detail.style.display = "none";
-			query_detail_icon.src = "/images/corporations/expand_icon.gif";
-		}
-	}
-
-
 	$(document).ready(
 		function() {
 			$(".operation_link").unbind("click").click(

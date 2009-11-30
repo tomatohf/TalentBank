@@ -1,0 +1,49 @@
+<div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td style="width: 13px;"></td>
+				<td style="width: 100px;">时间</td>
+				<td>企业</td>
+				<td>学院</td>
+				<td>专业</td>
+				<td>学历</td>
+				<td>毕业时间</td>
+				<td>求职方向</td>
+				<td style="width: 160px;">关键词</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "query", :collection => records %>
+		</tbody>
+	</table>
+	
+	<div>
+		<%= paging_buttons(records) %>
+	</div>
+</div>
+
+
+<script language="JavaScript">
+	function toggle_query_detail(query_id) {
+		var query_detail = $("#query_detail_" + query_id);
+		var query_detail_icon = $("#query_detail_icon_" + query_id);
+		if(query_detail.is(":visible")) {
+			$(query_detail).find("td div").slideUp(
+				"fast",
+				function() {
+					query_detail.hide();
+				}
+			);
+				
+			query_detail_icon.attr("src", "/images/corporations/expand_icon.gif");
+		}
+		else {
+			$(query_detail).show();
+			$(query_detail).find("td div").hide().slideDown("fast");
+			
+			query_detail_icon.attr("src", "/images/corporations/collapse_icon.gif");
+		}
+	}
+</script>

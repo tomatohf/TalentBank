@@ -5,22 +5,109 @@ var period_date_format = "yymmdd";
 
 
 function view_detail(dot_index) {
-	alert("view: " + dot_index);
+	show_details("view", $("input#dot_" + dot_index).val());
 }
 
 
 function query_detail(dot_index) {
-	alert("query: " + dot_index);
+	show_details("query", $("input#dot_" + dot_index).val());
 }
 
 
 function compared_view_detail(dot_index) {
-	alert("compared_view: " + dot_index);
+	show_details("view", $("input#compared_dot_" + dot_index).val());
 }
 
 
 function compared_query_detail(dot_index) {
-	alert("compared_query: " + dot_index);
+	show_details("query", $("input#compared_dot_" + dot_index).val());
+}
+
+
+function show_details(detail_type, detail_period) {
+	show_details_dialog(
+		function(container) {
+			show_details_dialog_content(container, null, detail_type, detail_period);
+		}
+	);
+}
+
+
+function show_details_dialog_content(container, url, detail_type, detail_period) {
+	if(url == null) {
+		container.html(
+			'<img src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px 15px;" />' +
+			'正在载入, 请稍候 ...'
+		);
+	}
+	
+	$.ajax(
+		{
+			type: "GET",
+			url: url || ("/teachers/" + TEACHER_ID + "/statistics/details"),
+			dataType: "html",
+			data: {
+				type: detail_type,
+				period: detail_period,
+				corp: $("input#corp").val()
+			},
+			error: function() {
+				show_details_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
+			},
+			success: function(data, text_status) {
+				container.html(data);
+				
+				setup_details_dialog_links(container, detail_type, detail_period);
+			}
+		}
+	);
+}
+
+
+function setup_details_dialog_links(container, detail_type, detail_period) {
+	$(".pagination a").unbind("click").click(
+		function() {
+			show_details_dialog_content(container, $(this).attr("href"), detail_type, detail_period);
+			
+			return false;
+		}
+	);
+	
+	
+	$(".operation_link").unbind("click").click(
+		function() {
+			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+			$(this).parent().hover(
+				function() {
+				},
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+				}
+			);
+
+			return false;
+		}
+	);
+}
+
+
+function show_details_dialog(content) {
+	DIALOG.appear(
+		{
+			title: "详细数据列表",
+			content: content,
+			button_text: {
+				cancel: "确定"
+			},
+			width: 800,
+			margin_top: 30,
+			fixed: true,
+			data: {},
+			modal: false,
+			close: true
+		}
+	);
 }
 
 
@@ -120,7 +207,6 @@ function filter_corp_dialog_content(container, url) {
 			success: function(data, text_status) {
 				container.html(data);
 				
-				// setup event handlers
 				setup_filter_corp_links(container);
 			}
 		}

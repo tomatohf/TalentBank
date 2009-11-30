@@ -51,6 +51,65 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def details
+    type = params[:type] && params[:type].strip
+    @from, @to = extract_period(params[:period] && params[:period].strip, 0.day)
+    @corp = extract_corp
+    
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    detail_class, detail_title, detail_template, includes = {
+      "query" => [CorpQuery, "企业搜索操作", "queries_grid", [:corporation]],
+      "view" => [CorpViewedResume, "企业查看简历", "resumes_grid", [:corporation, {:resume => [:student]}]]
+    }[type]
+    
+    filters = {}
+    filters[:corporation_id] = [@corp.id] if @corp
+    options = {
+      :includes => includes,
+      :page => page,
+      :per_page => 10,
+      :with => filters
+    }
+    
+    @records = (detail_class && detail_class.period_records(@teacher.school_id, @from, @to, options)) || []
+		
+    render(
+      :layout => false,
+      :inline => %Q!
+        <link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+        
+        <div style="margin: 0px 10px 10px;">
+          <span style="font-size: 13px; font-weight: bold;">#{detail_title}</span>
+          
+          <span class="info" style="margin: 0px 10px;">|</span>
+          
+          时段:
+          <%= @from.strftime("%Y年%m月%d日") %>
+          <% unless @from == @to %>
+            -
+            <%= @to.strftime("%Y年%m月%d日") %>
+          <% end %>
+          
+          <% if @corp %>
+            <span class="info" style="margin: 0px 10px;">|</span>
+            
+            <% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
+            过滤企业:
+  					<span title="<%= corp_name %>">
+  						<%= truncate(corp_name, :length => 20) %>
+  					</span>
+          <% end %>
+        </div>
+        
+        <% if @records.size > 0 %>
+          <%= render :partial => "#{detail_template}", :locals => {:records => @records} %>
+        <% end %>
+      !
+    )
+  end
+  
+  
   def counts
     @query_line_color = "#0077CC"
     @view_line_color = "#FF6600"
@@ -62,7 +121,7 @@ class TeacherStatisticsController < ApplicationController
     @q = !(params[:q] == "f")
     @v = !(params[:v] == "f")
     @compare = params[:compare] && params[:compare].strip
-    @corp = !(corp_id = params[:corp] && params[:corp].strip).blank? && Corporation.try_find(corp_id)
+    @corp = extract_corp
     
     view_info = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -72,14 +131,7 @@ class TeacherStatisticsController < ApplicationController
     }
     period_unit, default_period, count_key_format, label_format = view_info[@view] || view_info[@view = "day"]
     
-    from, to = begin
-      [(periods = @period.split(Date_Range_Splitter, 2))[0], periods[1]].collect { |date|
-        Date.parse(date)
-      }
-    rescue
-      today = Date.today
-      [default_period.ago(today), today]
-    end
+    from, to = extract_period(@period, default_period)
     @period = %Q!#{from.strftime("%Y%m%d")}#{Date_Range_Splitter}#{to.strftime("%Y%m%d")}!
     
     compared_from = begin
@@ -98,26 +150,26 @@ class TeacherStatisticsController < ApplicationController
     filters[:corporation_id] = [@corp.id] if @corp
     count_options = {
       :group_function => period_unit,
-      :filters => filters
+      :with => filters
     }
     
     query_counts = {}
     compared_query_counts = {}
     if @q
-      query_counts = CorpQuery.group_counts(@teacher.school_id, from, to, count_options)
+      query_counts = CorpQuery.period_group_counts(@teacher.school_id, from, to, count_options)
       
       if comparing
-        compared_query_counts = CorpQuery.group_counts(@teacher.school_id, compared_from, compared_to, count_options)
+        compared_query_counts = CorpQuery.period_group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
     
     view_counts = {}
     compared_view_counts = {}
     if @v
-      view_counts = CorpViewedResume.group_counts(@teacher.school_id, from, to, count_options)
+      view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, from, to, count_options)
       
       if comparing
-        compared_view_counts = CorpViewedResume.group_counts(@teacher.school_id, compared_from, compared_to, count_options)
+        compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, compared_from, compared_to, count_options)
       end
     end
     
@@ -337,6 +389,24 @@ class TeacherStatisticsController < ApplicationController
   
   def check_teacher_statistic
     jump_to("/errors/unauthorized") unless @teacher.statistic
+  end
+  
+  
+  def extract_period(period, default_period)
+    begin
+      [(periods = (period || "").split(Date_Range_Splitter, 2))[0], periods[1]].collect { |date|
+        Date.parse(date)
+      }
+    rescue
+      today = Date.today
+      [default_period.ago(today), today]
+    end
+  end
+  
+  
+  def extract_corp
+    corp_id = params[:corp] && params[:corp].strip
+    corp_id.blank? ? nil : Corporation.try_find(corp_id)
   end
   
 end

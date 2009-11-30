@@ -1,6 +1,5 @@
 统计图表 (导出 数据 / 图 / 报告)
 	- 查询数目统计 (both query and view)
-		* list raw data in selected dot
 		* 企业查看简历数目排行
 		* 企业查询数目排行
 	- 简历查看统计 (only view data)
