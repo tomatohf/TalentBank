@@ -68,6 +68,39 @@ form {
 }
 
 
+.dropdown_menu {
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+}
+.dropdown_menu ul.dropdown_sub_menu {
+	list-style: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	margin: 0px;
+	padding: 0px;
+	display: none;
+	background-color: #F8F8F8;
+	border: 1px solid #B2B2B2;
+}
+.dropdown_menu ul.dropdown_sub_menu li {
+	margin: 0px;
+	padding: 0px;
+}
+.dropdown_menu ul.dropdown_sub_menu li a {
+	display: block;
+	margin: 0px;
+	padding: 3px 20px;
+	width: 85px;
+	text-decoration: none;
+}
+.dropdown_menu ul.dropdown_sub_menu li a:hover {
+	background-color: #FFFFFF;
+}
+
+
+
 .page_container {
 	margin: 0px auto;
 	/* max-width: 980px; */

@@ -60,7 +60,11 @@ module OpenFlashChartHelpers
       }.merge(options.delete(:y_axis) || {}),
 
       :elements => (options.delete(:elements) || []).collect { |element|
-        line_element(element)
+        if ["line", "area"].include?(element[:type])
+          line_element(element)
+        else
+          element
+        end
       }
     }
   end

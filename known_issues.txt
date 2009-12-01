@@ -1,4 +1,9 @@
+chart 保存下来, dialog 显示图片让用户去另存为
 统计图表 (导出 数据 / 图 / 报告)
+	group by
+	filters
+	hide if not applicable
+	==========
 	- 查询数目统计 (both query and view)
 		* 企业查看简历数目排行
 		* 企业查询数目排行

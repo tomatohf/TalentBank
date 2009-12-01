@@ -5,7 +5,7 @@ class TeacherStatisticsController < ApplicationController
   
   Perspectives = [
     ["counts", "查询数目统计"],
-    ["resumes", "简历查看统计"],
+    ["#", "简历查看统计"],
     ["#", "企业搜索统计"]
   ]
 
@@ -77,8 +77,6 @@ class TeacherStatisticsController < ApplicationController
     render(
       :layout => false,
       :inline => %Q!
-        <link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
-        
         <div style="margin: 0px 10px 10px;">
           <span style="font-size: 13px; font-weight: bold;">#{detail_title}</span>
           
@@ -376,17 +374,6 @@ class TeacherStatisticsController < ApplicationController
         end
     	}.flatten.compact
 		)
-  end
-  
-  
-  def resumes
-    @comparing = false
-    
-    @chart_data = ofc_chart_data(
-      {
-        
-      }
-    )
   end
   
   

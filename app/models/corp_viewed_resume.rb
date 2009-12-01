@@ -13,6 +13,7 @@ class CorpViewedResume < ActiveRecord::Base
     has updated_at, corporation_id, resume_id
     
     has resume.domain_id, :as => :domain_id
+    has resume.student_id, :as => :student_id
     
     has resume.student.school_id, :as => :school_id
     has resume.student.college_id, :as => :college_id

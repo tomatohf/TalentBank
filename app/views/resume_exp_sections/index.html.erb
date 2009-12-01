@@ -1,7 +1,7 @@
-<% domain = ResumeDomain.find(@resume.domain_id)[:name] %>
-<% talent_page_title("编辑 #{domain} 的简历") %>
-
-<link href="/stylesheets/dropdown_menu.css" rel="stylesheet" type="text/css" />
+<% 
+	domain = ResumeDomain.find(@resume.domain_id)[:name]
+	talent_page_title("编辑 #{domain} 的简历")
+%>
 
 
 <h2>编辑 <%= domain %> 的简历</h2>
