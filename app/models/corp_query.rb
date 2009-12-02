@@ -21,6 +21,8 @@ class CorpQuery < ActiveRecord::Base
     
     has corporation.school_id, :as => :school_id
     
+    has "CRC32(keyword)", :as => :keyword, :type => :integer
+    
     has(
       "REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', 1), '#{Sep_Value}', ',')",
       :as => :exp_tag_id,
@@ -28,7 +30,7 @@ class CorpQuery < ActiveRecord::Base
     )
     
     has(
-      "REPLACE(REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', 1), '#{Sep_Pair}', ''), '#{Sep_Value}', ',')",
+      "REPLACE(REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', -1), '#{Sep_Pair}', ''), '#{Sep_Value}', ',')",
       :as => :skill_values,
       :type => :multi
     )

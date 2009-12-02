@@ -53,6 +53,24 @@ class TeacherStudentsController < ApplicationController
         :include => [:resumes]
       )
     end
+    
+    if request.xhr?
+      return render(
+        :layout => false,
+        :inline => %Q!
+          <% @students.each do |student| %>
+            <a href="#" id="filter_student_<%= student.id %>" class="filter_item_link">
+              <%= h(student.name) %></a>
+          <% end %>
+          
+          <br />
+          
+          <div>
+            <%= paging_buttons(@students) %>
+          </div>
+        !
+      )
+    end
   end
   
   

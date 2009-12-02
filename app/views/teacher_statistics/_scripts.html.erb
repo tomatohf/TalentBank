@@ -5,6 +5,13 @@
 <script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
+	
+	var COLLEGES = [];
+	var MAJORS = {};
+	<% College.data[@school.abbr].each do |college| %>
+		COLLEGES.push({id:<%= college[:id] %>, name:"<%= college[:name] %>"});
+		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+	<% end %>
 </script>
 <script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />

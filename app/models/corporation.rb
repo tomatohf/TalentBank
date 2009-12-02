@@ -1,5 +1,7 @@
 class Corporation < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   has_one :profile, :class_name => "CorporationProfile", :foreign_key => "corporation_id", :dependent => :destroy
@@ -95,11 +97,6 @@ class Corporation < ActiveRecord::Base
   
   def name?
     !self.name.blank?
-  end
-  
-  
-  def self.try_find(*args)
-    self.find(*args) rescue nil
   end
   
 end

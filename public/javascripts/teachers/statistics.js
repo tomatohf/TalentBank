@@ -49,7 +49,9 @@ function show_details_dialog_content(container, url, detail_type, detail_period)
 			data: {
 				type: detail_type,
 				period: detail_period,
-				corp: $("input#corp").val()
+				corp: $("input#corp").val(),
+				college: $("input#college").val(),
+				major: $("input#major").val()
 			},
 			error: function() {
 				show_details_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
@@ -117,7 +119,7 @@ function change_view(view) {
 }
 
 
-function change_line(id, value) {
+function change_dataset(id, value) {
 	$("input#" + id).val(value);
 	$("#refresh_form").submit();
 }
@@ -129,8 +131,8 @@ function change_compare(date_text) {
 }
 
 
-function change_corp_filter(corp) {
-	$("input#corp").val(corp);
+function change_filter(id, value) {
+	$("input#" + id).val(value);
 	$("#refresh_form").submit();
 }
 
@@ -182,8 +184,85 @@ function enable_range_input() {
 }
 
 
+function filter_college() {
+	show_filter_dialog(
+		function(container) {
+			var links = $.map(
+				COLLEGES,
+				function(college_obj, i) {
+					return '<a href="#" id="filter_college_' + college_obj.id + '" class="filter_item_link">' +
+								college_obj.name +
+							'</a>';
+				}
+			);
+
+			container.html(links.join(""));
+			
+			setup_filter_links(container);
+		},
+		"过滤学院"
+	);
+}
+
+
+function filter_major() {
+	show_filter_dialog(
+		function(container) {
+			var major_objs = MAJORS["c_" + $("input#college").val()];
+			if(major_objs != null && major_objs.length > 0) {
+				var links = $.map(
+					major_objs,
+					function(major_obj, i) {
+						return '<a href="#" id="filter_major_' + major_obj.id + '" class="filter_item_link">' +
+									major_obj.name +
+								'</a>';
+					}
+				);
+
+				container.html(links.join(""));
+
+				setup_filter_links(container);
+			}
+		},
+		"过滤专业"
+	);
+}
+
+
+function filter_student() {
+	show_filter_dialog(filter_student_dialog_content, "过滤学生");
+}
+
+
+function filter_student_dialog_content(container, url) {
+	if(url == null) {
+		container.html(
+			'<img src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px 15px;" />' +
+			'正在载入, 请稍候 ...'
+		);
+	}
+	
+	$.ajax(
+		{
+			type: "GET",
+			url: url || ("/teachers/" + TEACHER_ID + "/students"),
+			dataType: "html",
+			data: {},
+			error: function() {
+				show_filter_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
+			},
+			success: function(data, text_status) {
+				container.html(data);
+				
+				setup_filter_links(container);
+			}
+		}
+	);
+}
+
+
 function filter_corp() {
-	show_filter_corp_dialog(filter_corp_dialog_content);
+	show_filter_dialog(filter_corp_dialog_content, "过滤企业");
 }
 
 
@@ -202,22 +281,23 @@ function filter_corp_dialog_content(container, url) {
 			dataType: "html",
 			data: {},
 			error: function() {
-				show_filter_corp_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
+				show_filter_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
 			},
 			success: function(data, text_status) {
 				container.html(data);
 				
-				setup_filter_corp_links(container);
+				setup_filter_links(container);
 			}
 		}
 	);
 }
 
 
-function setup_filter_corp_links(container) {
-	$("a[id^='filter_corp_']").unbind("click").click(
+function setup_filter_links(container) {
+	container.find("a[id^='filter_']").unbind("click").click(
 		function() {
-			change_corp_filter($(this).attr("id").substr("filter_corp_".length));
+			var filter = $(this).attr("id").substr("filter_".length).split("_");
+			change_filter(filter[0], filter[1]);
 			// DIALOG.disappear();
 			
 			return false;
@@ -225,7 +305,7 @@ function setup_filter_corp_links(container) {
 	);
 	
 	
-	$(".pagination a").unbind("click").click(
+	container.find(".pagination a").unbind("click").click(
 		function() {
 			filter_corp_dialog_content(container, $(this).attr("href"));
 			
@@ -235,10 +315,10 @@ function setup_filter_corp_links(container) {
 }
 
 
-function show_filter_corp_dialog(content) {
+function show_filter_dialog(content, title) {
 	DIALOG.appear(
 		{
-			title: "过滤企业",
+			title: title || "过滤",
 			content: content,
 			button_text: {},
 			width: 400,
@@ -259,7 +339,7 @@ $(document).ready(
 		setup_daterangepicker();
 		add_period_changing_trigger();
 		
-		setup_corp_filter();
+		setup_filters();
 		
 		setup_compare();
 		
@@ -445,20 +525,25 @@ function setup_compare() {
 }
 
 
-function setup_corp_filter() {
-	$("a#corp_filter_link").unbind("click").click(
-		function() {
-			filter_corp();
-			
-			return false;
-		}
-	);
-	
-	$("a#remove_corp_filter_link").unbind("click").click(
-		function() {
-			change_corp_filter("");
-			
-			return false;
+function setup_filters() {
+	$.each(
+		["corp", "college", "major", "student"],
+		function(i, value) {
+			$("a#" + value + "_filter_link").unbind("click").click(
+				function() {
+					eval("filter_" + value)();
+
+					return false;
+				}
+			);
+
+			$("a#remove_" + value + "_filter_link").unbind("click").click(
+				function() {
+					change_filter(value, "");
+
+					return false;
+				}
+			);
 		}
 	);
 }

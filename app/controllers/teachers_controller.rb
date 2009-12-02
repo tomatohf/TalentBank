@@ -107,7 +107,7 @@ class TeachersController < ApplicationController
         :layout => false,
         :inline => %Q!
           <% @corporations.each do |corp| %>
-            <a href="#" id="filter_corp_<%= corp.id %>" class="filter_corp_link">
+            <a href="#" id="filter_corp_<%= corp.id %>" class="filter_item_link">
               <%= h(corp.name) %> (<%= h(corp.uid) %>)</a>
           <% end %>
           

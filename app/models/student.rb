@@ -1,5 +1,7 @@
 class Student < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   has_one :profile, :class_name => "StudentProfile", :foreign_key => "student_id", :dependent => :destroy

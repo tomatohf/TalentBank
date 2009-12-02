@@ -568,7 +568,7 @@ a.corp_tag:hover {
 }
 
 
-a.filter_corp_link {
+a.filter_item_link {
 	text-decoration: none;
 	font-size: 14px;
 	display: block;
@@ -576,7 +576,7 @@ a.filter_corp_link {
 	background: transparent url(/images/teachers/filter_icon.gif) no-repeat scroll 5px center;
 }
 
-a.filter_corp_link:hover {
+a.filter_item_link:hover {
 	color: #FFFFFF;
 	background-color: #3B5998;
 }

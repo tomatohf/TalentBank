@@ -1,13 +1,5 @@
 chart 保存下来, dialog 显示图片让用户去另存为
 统计图表 (导出 数据 / 图 / 报告)
-	- 自定义统计
-		group by
-		filters
-		hide if not applicable
-		仅显示前 x 条, except group by time(line chart)
-	- 预定义一些统计条目
-	- 允许保存自定义的统计条件
-	==========
 	- 查询数目统计 (both query and view)
 		* 企业查看简历数目排行
 		* 企业查询数目排行

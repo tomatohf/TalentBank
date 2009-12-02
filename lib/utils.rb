@@ -184,6 +184,17 @@ module Utils
   end
   
   
+  module ActiveRecordHelpers
+    def self.included(including_model)
+      
+      def including_model.try_find(*args)
+        self.find(*args) rescue nil
+      end
+      
+    end
+  end
+  
+  
   module Searchable
     def self.included(including_model)
       
