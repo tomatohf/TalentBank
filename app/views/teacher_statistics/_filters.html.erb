@@ -1,4 +1,6 @@
 <%
+	dataset &&= true
+	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
@@ -11,8 +13,10 @@
 	<input type="hidden" id="period" name="period" value="<%= period %>" />
 	<input type="hidden" id="compare" name="compare" value="<%= compare %>" />
 	
-	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
-	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
+	<% if dataset %>
+		<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
+		<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
+	<% end %>
 	
 	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
 	
@@ -47,18 +51,20 @@
 				<% end %>
 			</td>
 			
-			<td style="width: 35px;" align="right">数据:</td>
-			<td style="width: 90px;" align="right">
-				<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>" style="color: <%= @query_dataset_color %>">
-					<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
-					<%= @query_dataset_name %></a>
-			</td>
-			<td style="width: 90px;" align="right">
-				<a href="#" class="none" onclick="change_dataset('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_dataset_name %>" style="color: <%= @view_dataset_color %>">
-					<img alt="<%= @v ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @v %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
-					<%= @view_dataset_name %></a>
-			</td>
-			<td style="width: 30px;"></td>
+			<% if dataset %>
+				<td style="width: 35px;" align="right">数据:</td>
+				<td style="width: 90px;" align="right">
+					<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>" style="color: <%= @query_dataset_color %>">
+						<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+						<%= @query_dataset_name %></a>
+				</td>
+				<td style="width: 90px;" align="right">
+					<a href="#" class="none" onclick="change_dataset('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_dataset_name %>" style="color: <%= @view_dataset_color %>">
+						<img alt="<%= @v ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @v %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+						<%= @view_dataset_name %></a>
+				</td>
+				<td style="width: 30px;"></td>
+			<% end %>
 		</tr>
 	</table>
 </div>

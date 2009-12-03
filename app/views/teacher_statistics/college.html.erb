@@ -5,12 +5,97 @@
 
 <%= render :partial => "filters" %>
 
-<div>
-	
+<div style="margin-bottom: 8px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td align="right">视图:</td>
+			<td style="width: 10px;"></td>
+			<% [["bar", "柱图"], ["pie", "饼图"]].each do |view| %>
+				<td style="width: 21px;">
+					<a href="#" title="查看<%= view[1] %>" id="view_link_<%= view[0] %>">
+						<img alt="查看<%= view[1] %>" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
+				</td>
+			<% end %>
+		
+			<td style="width: 8px;"></td>
+		</tr>
+	</table>
 </div>
 
 <div>
-	<%= render(
+	<% graph_width = 350 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td style="width: 25px;"></td>
+				<td>学院</td>
+				<td>查看简历数</td>
+				<td style="width: <%= graph_width %>px;"></td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%
+				no = 0
+				percent_format = "%.1f"
+			%>
+			<% @view_counts.each_with_groupby_and_count do |record, group, count| %>
+				<tr>
+					<%
+						no += 1
+						college = College.find(@school.abbr, group)
+						@groups.delete(college)
+					%>
+
+					<td align="center"><%= no %></td>
+
+					<td>
+						<%= college[:name] %>
+					</td>
+
+					<td align="right" style="font-weight: bold;">
+						<%= count %>
+					</td>
+
+					<td>
+						<% 
+							width = (graph_width-50) * (count.to_f/@max)
+						%>
+						<div class="graph_bar" style="background-color: #FF6600; width: <%= width.round %>px;"></div>
+						<%= percent_format % ((count.to_f/@total_count)*100) %>%
+					</td>
+				</tr>
+			<% end %>
+			
+			<% @groups.each do |group| %>
+				<tr>
+					<%
+						no += 1
+						college = group
+						count = 0
+					%>
+
+					<td align="center"><%= no %></td>
+
+					<td>
+						<%= college[:name] %>
+					</td>
+
+					<td align="right" style="font-weight: bold;">
+						<%= count %>
+					</td>
+
+					<td>
+						<%= percent_format % 0 %>%
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
+
+<div>
+	<%#= render(
 		:partial => "ofc",
 		:locals => {
 			:chart_id => "time_chart",

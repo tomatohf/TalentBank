@@ -14,6 +14,12 @@ module Utils
   end
   
   
+  def self.top_axis(max_value)
+    top = %Q!#{max_value.to_s.first.to_i+1}#{"0"*(max_value.to_s.size-1)}!.to_i
+    top < 10 ? 10 : top
+  end
+  
+  
   def self.growth(a, b, n)
     return "N/A" if (b == 0)
     

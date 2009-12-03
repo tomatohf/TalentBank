@@ -5,8 +5,8 @@ class TeacherStatisticsController < ApplicationController
   
   Perspectives = [
     ["time", "时段统计"],
-    ["college", "院系统计"],
-    ["#", "搜索统计"]
+    ["college", "简历查看统计"],
+    ["#", "企业搜索统计"]
   ]
 
   include OpenFlashChartHelpers
@@ -107,8 +107,13 @@ class TeacherStatisticsController < ApplicationController
   
   
   def time
-    prepare_dataset_styles
-    prepare_dataset_visible
+    @query_dataset_color = "#0077CC"
+    @view_dataset_color = "#FF6600"
+    @query_dataset_name = "企业搜索数"
+    @view_dataset_name = "查看简历数"
+    
+    @q = !(params[:q] == "f")
+    @v = !(params[:v] == "f")
     
     filters = prepare_filters
     
@@ -280,8 +285,7 @@ class TeacherStatisticsController < ApplicationController
     
     step_x = (labels.size / 8) + 1
     
-    max_y = %Q!#{max_value.to_s.first.to_i+1}#{"0"*(max_value.to_s.size-1)}!.to_i
-    max_y = 10 if max_y < 10
+    max_y = Utils.top_axis(max_value)
     
     dot_type = labels.size > 60 ? "dot" : "solid-dot"
     
@@ -354,11 +358,7 @@ class TeacherStatisticsController < ApplicationController
   
   
   def college
-    prepare_dataset_styles
-    prepare_dataset_visible
-    
-    filters = prepare_filters
-    
+    prepare_rank_view
     prepare_period(1.year.ago(Date.today))
     compared_to = prepare_compare
     
@@ -366,28 +366,24 @@ class TeacherStatisticsController < ApplicationController
       :group_by => "college_id",
       :group_function => :attr,
       :group_clause => "@count DESC",
-      :with => filters
+      :with => prepare_filters
     }
     
-    query_counts = []
-    compared_query_counts = []
-    if @q
-      query_counts = CorpQuery.period_group_counts(@teacher.school_id, @from, @to, count_options)
-      
-      if @compared_from
-        compared_query_counts = CorpQuery.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
-      end
-    end
+    @view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
     
-    view_counts = []
-    compared_view_counts = []
-    if @v
-      view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
-      
-      if @compared_from
-        compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
-      end
-    end
+    # if @compared_from
+    #   @compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
+    # end
+    
+    max_value = 0
+    @total_count = @view_counts.inject(0) { |sum, record|
+      count = record.sphinx_attributes["@count"]
+      max_value = [max_value, count].max
+      sum + count
+    }
+    @max = Utils.top_axis(max_value)
+    
+    @groups = College.data[@school.abbr]
     
     @chart_data = ofc_chart_data(
       
@@ -405,14 +401,6 @@ class TeacherStatisticsController < ApplicationController
   
   def check_teacher_statistic
     jump_to("/errors/unauthorized") unless @teacher.statistic
-  end
-  
-  
-  def prepare_dataset_styles
-    @query_dataset_color = "#0077CC"
-    @view_dataset_color = "#FF6600"
-    @query_dataset_name = "企业搜索数"
-    @view_dataset_name = "查看简历数"
   end
   
   
@@ -473,17 +461,18 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def prepare_rank_view
+    @view = params[:view] && params[:view].strip
+    
+    @view = "bar" unless ["bar", "pie"].include?(@view)
+  end
+  
+  
   def prepare_compare
     compare = params[:compare] && params[:compare].strip
     @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
     
     @compared_from && (@compared_from + (@to - @from))
-  end
-  
-  
-  def prepare_dataset_visible
-    @q = !(params[:q] == "f")
-    @v = !(params[:v] == "f")
   end
   
 end

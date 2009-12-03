@@ -513,16 +513,16 @@ function add_period_changing_trigger() {
 
 
 function setup_view_links() {
-	$("a[class^='view_link_']").unbind("click").click(
+	$("a[id^='view_link_']").unbind("click").click(
 		function() {
-			change_view($(this).attr("class").substr("view_link_".length));
+			change_view($(this).attr("id").substr("view_link_".length));
 			
 			return false;
 		}
 	)
 	.unbind("mouseenter mouseleave").hover(
 		function() {
-			var view = $(this).attr("class").substr("view_link_".length);
+			var view = $(this).attr("id").substr("view_link_".length);
 			var current_view = $("input#view").val();
 			$(this).find("img").attr(
 				"src",
@@ -532,7 +532,7 @@ function setup_view_links() {
 			);
 		},
 		function() {
-			var view = $(this).attr("class").substr("view_link_".length);
+			var view = $(this).attr("id").substr("view_link_".length);
 			var current_view = $("input#view").val();
 			$(this).find("img").attr(
 				"src",
