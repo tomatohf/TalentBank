@@ -1,65 +1,171 @@
-<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-	<tr>
-		<td style="width: 35px;">过滤:</td>
-		
-		<td>
-			<a href="#" class="none" title="过滤企业" id="corp_filter_link">
-				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
-				企业</a>
-			<% if @corp %>
-				<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
-				<span title="<%= corp_name %>" style="color: #555555; margin-right: 1px;">
-					:
-					<%= truncate(corp_name, :length => 20) %>
-				</span>
-				<a href="#" title="清除过滤" id="remove_corp_filter_link">
-					<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-			<% end %>
-			
-			<span class="info" style="margin: 0px 10px;">|</span>
-			
-			<a href="#" class="none" title="过滤学院" id="college_filter_link">
-				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
-				学院</a>
-			<% if @college %>
-				<span title="<%= @college[:name] %>" style="color: #555555; margin-right: 1px;">
-					:
-					<%= truncate(@college[:name], :length => 15) %>
-				</span>
-				<a href="#" title="清除过滤" id="remove_college_filter_link">
-					<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-					
+<%
+	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
+	
+	compare = @compared_from && @compared_from.strftime("%Y%m%d")
+	
+	graduation = h(@graduation)
+%>
 
-				<span class="info" style="margin: 0px 5px;">|</span>
 
-				<a href="#" class="none" title="过滤专业" id="major_filter_link">
-					<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
-					专业</a>
-				<% if @major %>
-					<span title="<%= @major[:name] %>" style="color: #555555; margin-right: 1px;">
+<% form_tag "", :method => :get, :id => "refresh_form" do %>
+	<input type="hidden" id="period" name="period" value="<%= period %>" />
+	<input type="hidden" id="compare" name="compare" value="<%= compare %>" />
+	
+	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
+	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
+	
+	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
+	
+	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
+	<input type="hidden" id="level" name="level" value="<%= @level && @level[:id] %>" />
+	<input type="hidden" id="graduation" name="graduation" value="<%= graduation %>" />
+	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
+	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
+	<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
+<% end %>
+
+
+<div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td style="width: 35px;">时段:</td>
+			<td style="width: 250px; height: 30px;">
+				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
+			</td>
+
+			<td>
+				<a href="#" class="none" title="与其他时段进行对比" id="compare_link">
+					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 1px -1px 0px;" />
+					对比时段</a>
+				<% if @compared_from %>
+					<span style="color: #555555; margin-right: 1px;">
 						:
-						<%= truncate(@major[:name], :length => 15) %>
+						<%= @compared_from.strftime("%y年%m月%d日") %>
 					</span>
-					<a href="#" title="清除过滤" id="remove_major_filter_link">
+					<a href="#" title="清除对比" id="remove_compare_link">
 						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-						
-						
-					<span class="info" style="margin: 0px 5px;">|</span>
+				<% end %>
+			</td>
+			
+			<td style="width: 35px;" align="right">数据:</td>
+			<td style="width: 90px;" align="right">
+				<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>" style="color: <%= @query_dataset_color %>">
+					<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+					<%= @query_dataset_name %></a>
+			</td>
+			<td style="width: 90px;" align="right">
+				<a href="#" class="none" onclick="change_dataset('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_dataset_name %>" style="color: <%= @view_dataset_color %>">
+					<img alt="<%= @v ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @v %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+					<%= @view_dataset_name %></a>
+			</td>
+			<td style="width: 30px;"></td>
+		</tr>
+	</table>
+</div>
 
-					<a href="#" class="none" title="过滤学生" id="student_filter_link">
-						<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin: 0px 1px -1px 0px;" />
-						学生</a>
-					<% if @student %>
-						<% student_name = h(@student.name) %>
-						<span title="<%= student_name %>" style="color: #555555; margin-right: 1px;">
+
+<div style="margin-top: 8px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td style="width: 35px;" valign="top">过滤:</td>
+			
+			<td style="width: 20px; padding-top: 2px;" valign="top">
+				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
+			</td>
+
+			<td>
+				<a href="#" class="none" title="过滤教育水平" id="level_filter_link">
+					学历</a>
+				<% if @level %>
+					<span title="<%= @level[:name] %>" style="color: #555555; margin-right: 1px;">
+						:
+						<%= @level[:name] %>
+					</span>
+					<a href="#" title="清除过滤" id="remove_level_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
+				
+
+				<span class="info" style="margin: 0px 2px;">|</span>
+				
+				<a href="#" class="none" title="过滤毕业时间" id="graduation_filter_link">
+					毕业时间</a>
+				<% unless @graduation.blank? %>
+					<span title="<%= graduation %>" style="color: #555555; margin-right: 1px;">
+						:
+						<%= graduation %>年
+					</span>
+					<a href="#" title="清除过滤" id="remove_graduation_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
+				
+
+				<span class="info" style="margin: 0px 2px;">|</span>
+					
+				<a href="#" class="none" title="过滤学院" id="college_filter_link">
+					学院</a>
+				<% if @college %>
+					<span title="<%= @college[:name] %>" style="color: #555555; margin-right: 1px;">
+						:
+						<%= truncate(@college[:name], :length => 15) %>
+					</span>
+					<a href="#" title="清除过滤" id="remove_college_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+
+
+					<span class="info" style="margin: 0px 2px;">|</span>
+
+					<a href="#" class="none" title="过滤专业" id="major_filter_link">
+						专业</a>
+					<% if @major %>
+						<span title="<%= @major[:name] %>" style="color: #555555; margin-right: 1px;">
 							:
-							<%= truncate(student_name, :length => 20) %>
+							<%= truncate(@major[:name], :length => 15) %>
 						</span>
-						<a href="#" title="清除过滤" id="remove_student_filter_link">
+						<a href="#" title="清除过滤" id="remove_major_filter_link">
 							<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+
+
+						<span class="info" style="margin: 0px 2px;">|</span>
+
+						<a href="#" class="none" title="过滤学生" id="student_filter_link">
+							学生</a>
+						<% if @student %>
+							<% student_name = h(@student.name) %>
+							<span title="<%= student_name %>" style="color: #555555; margin-right: 1px;">
+								:
+								<%= truncate(student_name, :length => 20) %>
+							</span>
+							<a href="#" title="清除过滤" id="remove_student_filter_link">
+								<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+						<% end %>
 					<% end %>
 				<% end %>
-			<% end %>
-		</td>
-	</tr>
-</table>
+			</td>
+		</tr>
+		
+		<tr><td colspan="3" style="height: 5px;"></td></tr>
+		
+		<tr>
+			<td></td>
+			
+			<td style="width: 20px; padding-top: 2px;" valign="top">
+				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
+			</td>
+
+			<td>
+				<a href="#" class="none" title="过滤企业" id="corp_filter_link">
+					企业</a>
+				<% if @corp %>
+					<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
+					<span title="<%= corp_name %>" style="color: #555555; margin-right: 1px;">
+						:
+						<%= truncate(corp_name, :length => 20) %>
+					</span>
+					<a href="#" title="清除过滤" id="remove_corp_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+</div>

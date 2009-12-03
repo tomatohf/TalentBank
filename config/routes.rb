@@ -43,7 +43,8 @@ ActionController::Routing::Routes.draw do |map|
       
       :details => :any,
       
-      :time => :any
+      :time => :any,
+      :college => :any
     }
   end
   

@@ -5,7 +5,7 @@ class TeacherStatisticsController < ApplicationController
   
   Perspectives = [
     ["time", "时段统计"],
-    ["#", "院系统计"],
+    ["college", "院系统计"],
     ["#", "搜索统计"]
   ]
 
@@ -53,7 +53,7 @@ class TeacherStatisticsController < ApplicationController
   
   def details
     type = params[:type] && params[:type].strip
-    @from, @to = extract_period(Date.today)
+    prepare_period(Date.today)
     filters = prepare_filters
     
     page = params[:page]
@@ -108,22 +108,21 @@ class TeacherStatisticsController < ApplicationController
   
   def time
     prepare_dataset_styles
+    prepare_dataset_visible
+    
     filters = prepare_filters
     
-    @q = !(params[:q] == "f" || @student)
-    @v = !(params[:v] == "f")
-    @view, view_info = extract_time_view
-    period_unit, default_period, count_key_format, label_format = view_info
-    @from, @to = extract_period(default_period.ago(Date.today))
-    @compared_from = extract_compare
+    period_unit, default_period, count_key_format, label_format = prepare_time_view
+    prepare_period(default_period.ago(Date.today))
+    compared_to = prepare_compare
     
     # if the count of days are the same of two periods
     # then the difference of the count of other unit(week, month ...)
     # would NOT be bigger than 2
-    compared_to = 2.send(period_unit).since(@compared_from + (@to - @from)) if @compared_from
-    @comparing = @compared_from && compared_to
+    compared_to &&= 2.send(period_unit).since(compared_to)
     
     count_options = {
+      :group_by => "updated_at",
       :group_function => period_unit,
       :with => filters
     }
@@ -133,7 +132,7 @@ class TeacherStatisticsController < ApplicationController
     if @q
       query_counts = CorpQuery.period_group_counts(@teacher.school_id, @from, @to, count_options)
       
-      if @comparing
+      if @compared_from
         compared_query_counts = CorpQuery.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
       end
     end
@@ -143,26 +142,26 @@ class TeacherStatisticsController < ApplicationController
     if @v
       view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
       
-      if @comparing
+      if @compared_from
         compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
       end
     end
     
     @dots = []
-    if @comparing
+    if @compared_from
       @compared_dots = []
       compared_periods = Utils.step_period(@compared_from, compared_to, period_unit)
     end
     if @q
       @query_values = []
-      if @comparing
+      if @compared_from
         @compared_query_values = []
         @query_diffs = []
       end
     end
     if @v
       @view_values = []
-      if @comparing
+      if @compared_from
         @compared_view_values = []
         @view_diffs = []
       end
@@ -177,7 +176,7 @@ class TeacherStatisticsController < ApplicationController
       query_value = query_counts[key] || 0
       view_value = view_counts[key] || 0
       
-      if @comparing
+      if @compared_from
         compared_first, compared_last = compared_periods[step_period_index]
         @compared_dots << compared_periods[step_period_index]
         
@@ -203,7 +202,7 @@ class TeacherStatisticsController < ApplicationController
                     %Q!进行了 <b>#{query_value}</b> 次搜索! +
                     %Q!</font>! +
                     %Q!<font size="11" face="Verdana" color="#{@query_dataset_color}">! +
-                    (@comparing ? %Q! (#{query_diff})! : "") +
+                    (@compared_from ? %Q! (#{query_diff})! : "") +
                     %Q!</font>!
       end
       if @v
@@ -212,11 +211,11 @@ class TeacherStatisticsController < ApplicationController
                     %Q!查看了 <b>#{view_value}</b> 次简历! +
                     %Q!</font>! +
                     %Q!<font size="11" face="Verdana" color="#{@view_dataset_color}">! +
-                    (@comparing ? %Q! (#{view_diff})! : "") +
+                    (@compared_from ? %Q! (#{view_diff})! : "") +
                     %Q!</font>!
       end
       
-      if @comparing
+      if @compared_from
         compared_tip = %Q!<font size="12" face="Verdana" color="#333333">! +
               if compared_first == compared_last
                 %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][compared_first.wday]}!
@@ -249,7 +248,7 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => ((query_value == view_value) && @v) ? "" : tip
   	    }
   	    
-  	    if @comparing
+  	    if @compared_from
     	    @compared_query_values << {
             :value => compared_query_value,
             :tip => ((compared_query_value == compared_view_value) && @v) ? "" : compared_tip
@@ -264,7 +263,7 @@ class TeacherStatisticsController < ApplicationController
   	      :tip => tip
   	    }
   	    
-  	    if @comparing
+  	    if @compared_from
     	    @compared_view_values << {
             :value => compared_view_value,
             :tip => compared_tip
@@ -276,7 +275,7 @@ class TeacherStatisticsController < ApplicationController
       labels << first.strftime(label_format)
       
       max_value = [max_value, query_value, view_value].max
-      max_value = [max_value, compared_query_value, compared_view_value].max if @comparing
+      max_value = [max_value, compared_query_value, compared_view_value].max if @compared_from
     end
     
     step_x = (labels.size / 8) + 1
@@ -343,7 +342,7 @@ class TeacherStatisticsController < ApplicationController
               },
               :values => self.instance_variable_get("@compared_#{line}_values")
       	    }
-      	  ) if @comparing
+      	  ) if @compared_from
       	  
       	  line_styles
         else
@@ -351,6 +350,48 @@ class TeacherStatisticsController < ApplicationController
         end
     	}.flatten.compact
 		)
+  end
+  
+  
+  def college
+    prepare_dataset_styles
+    prepare_dataset_visible
+    
+    filters = prepare_filters
+    
+    prepare_period(1.year.ago(Date.today))
+    compared_to = prepare_compare
+    
+    count_options = {
+      :group_by => "college_id",
+      :group_function => :attr,
+      :group_clause => "@count DESC",
+      :with => filters
+    }
+    
+    query_counts = []
+    compared_query_counts = []
+    if @q
+      query_counts = CorpQuery.period_group_counts(@teacher.school_id, @from, @to, count_options)
+      
+      if @compared_from
+        compared_query_counts = CorpQuery.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
+      end
+    end
+    
+    view_counts = []
+    compared_view_counts = []
+    if @v
+      view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
+      
+      if @compared_from
+        compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
+      end
+    end
+    
+    @chart_data = ofc_chart_data(
+      
+    )
   end
   
   
@@ -375,21 +416,14 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def extract_period(default_from)
-    periods = (params[:period] || "").split(Date_Range_Splitter, 2)
-    begin
-      [periods[0], periods[1]].collect { |date|
-        Date.parse(date)
-      }
-    rescue
-      [default_from, Date.today]
-    end
-  end
-  
-  
   def prepare_filters
     corp_id = params[:corp] && params[:corp].strip
     @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
+    
+    level_id = params[:level] && params[:level].strip
+    @level = EduLevel.find(level_id.to_i)
+    
+    @graduation = params[:graduation] && params[:graduation].strip
     
     college_id = params[:college] && params[:college].strip
     @college = College.find(@school.abbr, college_id.to_i)
@@ -404,6 +438,8 @@ class TeacherStatisticsController < ApplicationController
     
     filters = {}
     filters[:corporation_id] = @corp.id if @corp
+    filters[:edu_level_id] = @level[:id] if @level
+    filters[:graduation_year] = @graduation unless @graduation.blank?
     filters[:college_id] = @college[:id] if @college
     filters[:major_id] = @major[:id] if @major
     filters[:student_id] = @student.id if @student
@@ -412,8 +448,20 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def extract_time_view
-    view = params[:view] && params[:view].strip
+  def prepare_period(default_from)
+    periods = (params[:period] || "").split(Date_Range_Splitter, 2)
+    @from, @to = begin
+      [periods[0], periods[1]].collect { |date|
+        Date.parse(date)
+      }
+    rescue
+      [default_from, Date.today]
+    end
+  end
+  
+  
+  def prepare_time_view
+    @view = params[:view] && params[:view].strip
     
     view_infos = {
       "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
@@ -421,16 +469,21 @@ class TeacherStatisticsController < ApplicationController
       "month" => [:month, 1.year, "%Y%m", "%y年%m月"],
       "year" => [:year, 4.year, "%Y", "%y年"]
     }
-    view_info = view_infos[view] || view_infos[view = "day"]
-    
-    [view, view_info]
+    view_infos[@view] || view_infos[@view = "day"]
   end
   
   
-  def extract_compare
+  def prepare_compare
     compare = params[:compare] && params[:compare].strip
+    @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
     
-    compare.blank? ? nil : (Date.parse(compare) rescue nil)
+    @compared_from && (@compared_from + (@to - @from))
+  end
+  
+  
+  def prepare_dataset_visible
+    @q = !(params[:q] == "f")
+    @v = !(params[:v] == "f")
   end
   
 end

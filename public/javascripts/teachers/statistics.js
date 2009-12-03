@@ -3,6 +3,8 @@ var range_splitter = "-";
 
 var period_date_format = "yymmdd";
 
+var FILTERS = ["level", "graduation", "college", "major", "student", "corp"];
+
 
 function view_detail(dot_index) {
 	show_details("view", $("input#dot_" + dot_index).val());
@@ -41,18 +43,23 @@ function show_details_dialog_content(container, url, detail_type, detail_period)
 		);
 	}
 	
+	var data = {
+		type: detail_type,
+		period: detail_period
+	};
+	$.each(
+		FILTERS,
+		function(i, value) {
+			data[value] = $("input#" + value).val()
+		}
+	);
+	
 	$.ajax(
 		{
 			type: "GET",
 			url: url || ("/teachers/" + TEACHER_ID + "/statistics/details"),
 			dataType: "html",
-			data: {
-				type: detail_type,
-				period: detail_period,
-				corp: $("input#corp").val(),
-				college: $("input#college").val(),
-				major: $("input#major").val()
-			},
+			data: data,
 			error: function() {
 				show_details_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
 			},
@@ -184,6 +191,48 @@ function enable_range_input() {
 }
 
 
+function filter_level() {
+	show_filter_dialog(
+		function(container) {
+			var links = $.map(
+				LEVELS,
+				function(level_obj, i) {
+					return '<a href="#" id="filter_level_' + level_obj.id + '" class="filter_item_link">' +
+								level_obj.name +
+							'</a>';
+				}
+			);
+
+			container.html(links.join(""));
+			
+			setup_filter_links(container);
+		},
+		"过滤教育水平"
+	);
+}
+
+
+function filter_graduation() {
+	show_filter_dialog(
+		function(container) {
+			var links = $.map(
+				GRADUATIONS,
+				function(graduation_obj, i) {
+					return '<a href="#" id="filter_graduation_' + graduation_obj.id + '" class="filter_item_link">' +
+								graduation_obj.name +
+							'</a>';
+				}
+			);
+
+			container.html(links.join(""));
+			
+			setup_filter_links(container);
+		},
+		"过滤毕业时间"
+	);
+}
+
+
 function filter_college() {
 	show_filter_dialog(
 		function(container) {
@@ -247,7 +296,12 @@ function filter_student_dialog_content(container, url) {
 			type: "GET",
 			url: url || ("/teachers/" + TEACHER_ID + "/students"),
 			dataType: "html",
-			data: {},
+			data: {
+				c: $("input#college").val(),
+				m: $("input#major").val(),
+				e: $("input#level").val(),
+				g: $("input#graduation").val()
+			},
 			error: function() {
 				show_filter_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
 			},
@@ -527,7 +581,7 @@ function setup_compare() {
 
 function setup_filters() {
 	$.each(
-		["corp", "college", "major", "student"],
+		FILTERS,
 		function(i, value) {
 			$("a#" + value + "_filter_link").unbind("click").click(
 				function() {

@@ -6,6 +6,11 @@
 <script language="JavaScript">
 	var TEACHER_ID = <%= @teacher.id %>;
 	
+	var LEVELS = [<%= EduLevel.data.collect{|level| %Q!{id:#{level[:id]}, name:"#{level[:name]}"}!}.join(",") %>];
+	
+	<% year = @school.coming_graduation_year %>
+	var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}"}!}.join(",") %>];
+	
 	var COLLEGES = [];
 	var MAJORS = {};
 	<% College.data[@school.abbr].each do |college| %>

@@ -226,20 +226,32 @@ module Utils
         from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
         to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
         
-        self.search(
+        group_function = options[:group_function] || :attr
+        
+        search_args = {
           :group_by => options[:group_by] || "updated_at",
-          :group_function => options[:group_function] || :day,
-          :group_clause => options[:group_clause] || "@group ASC",
+          :group_function => group_function,
           # :match_mode => self::Search_Match_Mode,
           # :order => "updated_at ASC",
           :with => {
             :school_id => school_id,
             :updated_at => from_time..to_time
           }.merge(options[:with] || {})
-        ).inject({}) do |hash, record|
+        }
+        search_args[:group_clause] = options[:group_clause] if options[:group_clause]
+        if options[:limit]
+          search_args[:page] = 1
+          search_args[:per_page] = options[:limit]
+        end
+        
+        result = self.search(search_args)
+        
+        result = result.inject({}) { |hash, record|
           hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
           hash
-        end
+        } unless (group_function == :attr)
+        
+        result
       end
       
       

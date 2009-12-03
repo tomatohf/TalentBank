@@ -24,7 +24,7 @@ class TeacherStudentsController < ApplicationController
       Student.search(
         :conditions => {:number => @number},
         :with => {:school_id => @teacher.school_id},
-        :include => [:resumes]
+        :include => request.xhr? ? [] : [:resumes]
       )
     else
       @college_id = params[:c] && params[:c].strip
@@ -50,7 +50,7 @@ class TeacherStudentsController < ApplicationController
         :order => "@relevance DESC, updated_at DESC",
         :field_weights => {},
         :with => filters,
-        :include => [:resumes]
+        :include => request.xhr? ? [] : [:resumes]
       )
     end
     

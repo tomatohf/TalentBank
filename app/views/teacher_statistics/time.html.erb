@@ -1,72 +1,9 @@
-<%
-	talent_page_title("时段统计")
-	
-	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
-	
-	compare = @compared_from && @compared_from.strftime("%Y%m%d")
-%>
+<% talent_page_title("时段统计") %>
 
 
 <h2>时段统计</h2>
 
-<% form_tag "", :method => :get, :id => "refresh_form" do %>
-	<input type="hidden" id="period" name="period" value="<%= period %>" />
-	<input type="hidden" id="compare" name="compare" value="<%= compare %>" />
-	
-	<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
-	<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
-	
-	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
-	
-	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
-	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
-	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
-	<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
-<% end %>
-
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-		<tr>
-			<td style="width: 35px;">时段:</td>
-			<td style="width: 250px; height: 30px;">
-				<input type="text" id="date_range" class="text_field" style="width: 180px;" />
-			</td>
-
-			<td>
-				<a href="#" class="none" title="与其他时段进行对比" id="compare_link">
-					<img alt="对比" src="/images/teachers/compare_icon.png" border="0" style="margin: 0px 1px -1px 0px;" />
-					对比时段</a>
-				<% if @comparing %>
-					<span style="color: #555555; margin-right: 1px;">
-						:
-						<%= @compared_from.strftime("%y年%m月%d日") %>
-					</span>
-					<a href="#" title="清除对比" id="remove_compare_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-			</td>
-			
-			<td style="width: 35px;" align="right">数据:</td>
-			<% unless @student %>
-				<td style="width: 90px;" align="right">
-					<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>" style="color: <%= @query_dataset_color %>">
-						<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
-						<%= @query_dataset_name %></a>
-				</td>
-			<% end %>
-			<td style="width: 90px;" align="right">
-				<a href="#" class="none" onclick="change_dataset('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_dataset_name %>" style="color: <%= @view_dataset_color %>">
-					<img alt="<%= @v ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @v %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
-					<%= @view_dataset_name %></a>
-			</td>
-			<td style="width: 30px;"></td>
-		</tr>
-	</table>
-</div>
-
-<div style="margin-top: 5px;">
-	<%= render :partial => "filters" %>
-</div>
+<%= render :partial => "filters" %>
 
 <div>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
@@ -106,7 +43,7 @@
 						<%= @query_dataset_name %>
 					</td>
 					
-					<% if @comparing %>
+					<% if @compared_from %>
 						<td style="color: <%= @query_dataset_color %>">
 							对比数
 						</td>
@@ -120,7 +57,7 @@
 						<%= @view_dataset_name %>
 					</td>
 					
-					<% if @comparing %>
+					<% if @compared_from %>
 						<td style="color: <%= @view_dataset_color %>">
 							对比数
 						</td>
@@ -129,7 +66,7 @@
 						</td>
 					<% end %>
 				<% end %>
-				<% if @comparing %>
+				<% if @compared_from %>
 					<td style="width: 120px;">对比时间</td>
 				<% end %>
 			</tr>
@@ -162,7 +99,7 @@
 							<% end %>
 						</td>
 						
-						<% if @comparing %>
+						<% if @compared_from %>
 							<td align="right" style="font-weight: bold;">
 								<% compared_query_value = @compared_query_values[i][:value] %>
 								
@@ -192,7 +129,7 @@
 							<% end %>
 						</td>
 						
-						<% if @comparing %>
+						<% if @compared_from %>
 							<td align="right" style="font-weight: bold;">
 								<% compared_view_value = @compared_view_values[i][:value] %>
 								
@@ -210,7 +147,7 @@
 						<% end %>
 					<% end %>
 					
-					<% if @comparing %>
+					<% if @compared_from %>
 						<td align="center">
 							<% compared_first, compared_last = @compared_dots[i] %>
 

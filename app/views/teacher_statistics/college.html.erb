@@ -1,0 +1,24 @@
+<% talent_page_title("学院统计") %>
+
+
+<h2>学院统计</h2>
+
+<%= render :partial => "filters" %>
+
+<div>
+	
+</div>
+
+<div>
+	<%= render(
+		:partial => "ofc",
+		:locals => {
+			:chart_id => "time_chart",
+			:height => 200,
+			:data => @chart_data
+		}
+	) %>
+</div>
+
+
+<%= render :partial => "scripts" %>
