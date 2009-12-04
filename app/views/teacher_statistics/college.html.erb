@@ -32,13 +32,10 @@
 		
 		<tbody>
 			<% @counts.each_index do |i| %>
-				<tr>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<%
 						group = @counts[i][1]["@groupby"]
 						count = @counts[i][1]["@count"]
-						
-						width = (graph_width-50) * (count.to_f/@max)
-						percent = percent_format % ((count.to_f/@total_count)*100)
 					%>
 
 					<td align="center"><%= i+1 %></td>
@@ -51,25 +48,36 @@
 						<%= count %>
 					</td>
 
-					<td>
-						<div class="graph_bar" style="background-color: #FF6600; width: <%= width.round %>px;"></div>
-						<%= percent %>%
-					</td>
+					<% unless @view == "pie" %>
+						<td>
+							<%
+								width = (graph_width-50) * (count.to_f/@max)
+								percent = percent_format % ((count.to_f/@total_count)*100)
+							%>
+
+							<div class="graph_bar" style="background-color: #FF6600; width: <%= width.round %>px;"></div>
+							<%= percent %>%
+						</td>
+					<% else %>
+						<% unless i > 0 %>
+							<td rowspan="<%= @counts.size %>" style="background-color: #FFFFFF;">
+								<div>
+									<%= render(
+										:partial => "ofc",
+										:locals => {
+											:chart_id => "pie_chart",
+											:height => graph_width,
+											:data => @chart_data
+										}
+									) %>
+								</div>
+							</td>
+						<% end %>
+					<% end %>
 				</tr>
 			<% end %>
 		</tbody>
 	</table>
-</div>
-
-<div>
-	<%#= render(
-		:partial => "ofc",
-		:locals => {
-			:chart_id => "time_chart",
-			:height => 200,
-			:data => @chart_data
-		}
-	) %>
 </div>
 
 

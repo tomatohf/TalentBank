@@ -414,6 +414,8 @@ $(document).ready(
 		setup_view_links();
 		
 		setup_limit_slider();
+		
+		// setup_graph_bar_animation(1000);
 	}
 );
 
@@ -601,6 +603,24 @@ function setup_limit_slider() {
 						'</div>';
 		$("#limit_slider").append(tick_mark);
 	}
+}
+
+
+function setup_graph_bar_animation(duration) {
+	$.each(
+		$(".graph_bar"),
+		function(i, bar) {
+			var w = $(bar).css("width");
+			$(bar).css("width", "0px");
+			
+			$(bar).animate(
+				{
+					width: w
+				},
+				duration
+			);
+		}
+	);
 }
 
 

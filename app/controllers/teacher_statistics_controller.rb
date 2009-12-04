@@ -387,12 +387,30 @@ class TeacherStatisticsController < ApplicationController
     
     @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
-    max_value = @counts.inject(0) { |max, record| [max, record[1]["@count"]].max }
-    @max = Utils.top_axis(max_value)
-    
-    @chart_data = ofc_chart_data(
-      
-    )
+    unless @view == "pie"
+      max_value = @counts.inject(0) { |max, record| [max, record[1]["@count"]].max }
+      @max = Utils.top_axis(max_value)
+    else
+      @chart_data = ofc_chart_data(
+        :x_axis => nil,
+        :y_axis => nil,
+        :elements => [
+          {
+            :type => "pie",
+            :alpha => 0.6,
+            "start-angle" => 35,
+            :animate => [
+              {
+                :type => "fade"
+              }
+            ],
+            :tip => "#val# of #total#, #percent# of 100%",
+            :colours => [ "#1C9E05", "#FF368D" ],
+            :values => [ 2, 3, 4, { :value => 6.5, :label => "hello (6.5)" } ]
+          }
+        ]
+      )
+    end
   end
   
   

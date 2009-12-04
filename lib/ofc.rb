@@ -62,6 +62,8 @@ module OpenFlashChartHelpers
       :elements => (options.delete(:elements) || []).collect { |element|
         if ["line", "area"].include?(element[:type])
           line_element(element)
+        elsif ["pie"].include?(element[:type])
+          pie_element(element)
         else
           element
         end
@@ -92,6 +94,13 @@ module OpenFlashChartHelpers
 	        :tip => "500"
 	      }
 	    ]
+		}.merge(element || {})
+  end
+  
+  
+  def pie_element(element)
+    {
+		  
 		}.merge(element || {})
   end
   
