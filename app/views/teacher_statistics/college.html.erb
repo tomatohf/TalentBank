@@ -20,7 +20,7 @@
 		<thead>
 			<tr>
 				<td style="width: 25px;"></td>
-				<td>学院</td>
+				<td><%= @groups_name %></td>
 				<td>查看简历数</td>
 				<td style="width: <%= graph_width %>px;"></td>
 			</tr>
@@ -35,13 +35,14 @@
 				<tr>
 					<%
 						no += 1
-						college = College.find(@school.abbr, group)
+						width = (graph_width-50) * (count.to_f/@max)
+						percent = percent_format % ((count.to_f/@total_count)*100)
 					%>
 
 					<td align="center"><%= no %></td>
 
 					<td>
-						<%= college[:name] %>
+						<%= @group_title_proc.call(group) %>
 					</td>
 
 					<td align="right" style="font-weight: bold;">
@@ -49,11 +50,8 @@
 					</td>
 
 					<td>
-						<% 
-							width = (graph_width-50) * (count.to_f/@max)
-						%>
 						<div class="graph_bar" style="background-color: #FF6600; width: <%= width.round %>px;"></div>
-						<%= percent_format % ((count.to_f/@total_count)*100) %>%
+						<%= percent %>%
 					</td>
 				</tr>
 			<% end %>

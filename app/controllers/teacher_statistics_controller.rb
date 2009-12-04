@@ -358,6 +358,13 @@ class TeacherStatisticsController < ApplicationController
   
   
   def college
+    @group_by = "college_id"
+    @groups_name = "学院"
+    @group_title_proc = Proc.new { |group|
+      college = College.find(@school.abbr, group)
+      college[:name]
+    }
+    
     prepare_rank_view
     prepare_period(1.year.ago(Date.today))
     compared_to = prepare_compare
@@ -365,7 +372,7 @@ class TeacherStatisticsController < ApplicationController
     prepare_limit
     
     count_options = {
-      :group_by => "college_id",
+      :group_by => @group_by,
       :group_function => :attr,
       :group_clause => "@count #{@order.upcase}",
       :limit => @limit,
