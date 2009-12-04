@@ -15,7 +15,11 @@
 %>
 
 <div>
-	<% graph_width = 350 %>
+	<%
+		graph_width = 350
+		
+		percent_format = "%.1f"
+	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
@@ -27,19 +31,17 @@
 		</thead>
 		
 		<tbody>
-			<%
-				no = 0
-				percent_format = "%.1f"
-			%>
-			<% @counts.each_with_groupby_and_count do |record, group, count| %>
+			<% @counts.each_index do |i| %>
 				<tr>
 					<%
-						no += 1
+						group = @counts[i][1]["@groupby"]
+						count = @counts[i][1]["@count"]
+						
 						width = (graph_width-50) * (count.to_f/@max)
 						percent = percent_format % ((count.to_f/@total_count)*100)
 					%>
 
-					<td align="center"><%= no %></td>
+					<td align="center"><%= i+1 %></td>
 
 					<td>
 						<%= @group_title_proc.call(group) %>

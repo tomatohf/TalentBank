@@ -85,3 +85,37 @@ module ThinkingSphinx
     end
   end
 end
+
+
+# added by Tomato
+# 
+# to allow search_for_ids method also return sphinx_attributes
+
+module ThinkingSphinx
+  class Search
+    
+    private
+    
+    alias original_populate populate
+    
+    def populate
+      already = @populated
+      
+      original_populate
+      
+      return if already
+      
+      if options[:ids_only] && options[:with_attributes]
+        replace(
+          @results[:matches].collect { |match|
+            [
+              match[:attributes]["sphinx_internal_id"],
+              match[:attributes]
+            ]
+          }
+        )
+      end
+    end
+    
+  end
+end

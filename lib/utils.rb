@@ -235,6 +235,8 @@ module Utils
         group_function = options[:group_function] || :attr
         
         search_args = {
+          :with_attributes => true,
+          
           :group_by => options[:group_by] || "updated_at",
           :group_function => group_function,
           # :match_mode => self::Search_Match_Mode,
@@ -250,10 +252,10 @@ module Utils
           search_args[:per_page] = options[:limit]
         end
         
-        result = self.search(search_args)
+        result = self.search_for_ids(search_args)
         
         result = result.inject({}) { |hash, record|
-          hash[record.sphinx_attributes["@groupby"].to_s] = record.sphinx_attributes["@count"]
+          hash[record[1]["@groupby"].to_s] = record[1]["@count"]
           hash
         } unless (group_function == :attr)
         

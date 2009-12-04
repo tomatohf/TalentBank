@@ -387,7 +387,7 @@ class TeacherStatisticsController < ApplicationController
     
     @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
-    max_value = @counts.inject(0) { |max, record| [max, record.sphinx_attributes["@count"]].max }
+    max_value = @counts.inject(0) { |max, record| [max, record[1]["@count"]].max }
     @max = Utils.top_axis(max_value)
     
     @chart_data = ofc_chart_data(
