@@ -447,6 +447,8 @@ function init_date_range() {
 
 
 function setup_daterangepicker() {
+	if($("input#date_range").length <= 0) { return; }
+	
 	$("input#date_range").daterangepicker(
 		{
 			presetRanges: [
@@ -529,7 +531,7 @@ function add_period_changing_trigger() {
 
 
 function setup_view_links() {
-	$("a[id^='view_link_']").unbind("click").click(
+	$("a.view_link").unbind("click").click(
 		function() {
 			change_view($(this).attr("id").substr("view_link_".length));
 			
@@ -565,11 +567,14 @@ function setup_limit_slider() {
 	var current_limit = $("input#limit").val();
 	$("#limit_slider_label").html(current_limit);
 	
+	if($("#limit_slider").length <= 0) { return; }
+	
 	$("#limit_slider").slider(
 		{
 			animate: true,
 			min: 1,
 			max: 100,
+			range: "min",
 			step: 1,
 			slide: function(event, ui) {
 				$("#limit_slider_label").html(ui.value);
@@ -580,6 +585,22 @@ function setup_limit_slider() {
 		}
 	)
 	.slider("value", current_limit);
+
+	// create tick marks
+	var slider_max = 100;
+	var slider_width = 200;
+	var tick_mark_num = 5;
+	var tick_mark_width = slider_width/tick_mark_num;
+	var tick_mark_value = slider_max/tick_mark_num;
+	var label_width = 8; // used to make label text place at the center of tick mark
+	for(var i=0; i<tick_mark_num; i++) {
+		var tick_mark = '<div class="tick_mark"' +
+						' style="left: ' + tick_mark_width*i + 'px;' +
+						' width: ' + (tick_mark_width+(label_width/2)) + 'px;">' +
+						(i < (tick_mark_num-1) ? tick_mark_value*(i+1) : '') +
+						'</div>';
+		$("#limit_slider").append(tick_mark);
+	}
 }
 
 
@@ -595,7 +616,16 @@ function setup_compare() {
 				{
 					dateFormat: period_date_format,
 					beforeShow: function(input) {
-						$(input).hide();
+						// only for working around on IE6 ...
+						// or we can just call $(input).hide();
+						$(input).show();
+						$(input).unbind("focus").focus(
+							function() {
+								$(this).hide();
+							}
+						);
+						
+						$(input).siblings(".ui-datepicker-dialog").css("z-index", 100);
 					},
 					showButtonPanel: false,
 					showMonthAfterYear: true

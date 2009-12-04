@@ -13,7 +13,7 @@ module Schools
     
     
     def logo
-      "/images/school/qiaobutang_logo.png"
+      "/images/school/qiaobutang_logo.jpg"
     end
     
     def logo_title
