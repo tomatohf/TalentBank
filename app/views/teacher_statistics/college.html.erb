@@ -3,24 +3,16 @@
 
 <h2>学院统计</h2>
 
-<%= render :partial => "filters" %>
-
-<div style="margin-bottom: 8px;">
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-		<tr>
-			<td align="right">视图:</td>
-			<td style="width: 10px;"></td>
-			<% [["bar", "柱图"], ["pie", "饼图"]].each do |view| %>
-				<td style="width: 21px;">
-					<a href="#" title="查看<%= view[1] %>" id="view_link_<%= view[0] %>">
-						<img alt="查看<%= view[1] %>" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
-				</td>
-			<% end %>
-		
-			<td style="width: 8px;"></td>
-		</tr>
-	</table>
-</div>
+<%=
+	render(
+		:partial => "filters",
+		:locals => {
+			:views => [["bar", "查看柱图"], ["pie", "查看饼图"]],
+			:views_style => {:width => 21, :right => 8},
+			:hide => [:dataset]
+		}
+	)
+%>
 
 <div>
 	<% graph_width = 350 %>
@@ -39,12 +31,11 @@
 				no = 0
 				percent_format = "%.1f"
 			%>
-			<% @view_counts.each_with_groupby_and_count do |record, group, count| %>
+			<% @counts.each_with_groupby_and_count do |record, group, count| %>
 				<tr>
 					<%
 						no += 1
 						college = College.find(@school.abbr, group)
-						@groups.delete(college)
 					%>
 
 					<td align="center"><%= no %></td>
@@ -66,30 +57,6 @@
 					</td>
 				</tr>
 			<% end %>
-			
-			<% @groups.each do |group| %>
-				<tr>
-					<%
-						no += 1
-						college = group
-						count = 0
-					%>
-
-					<td align="center"><%= no %></td>
-
-					<td>
-						<%= college[:name] %>
-					</td>
-
-					<td align="right" style="font-weight: bold;">
-						<%= count %>
-					</td>
-
-					<td>
-						<%= percent_format % 0 %>%
-					</td>
-				</tr>
-			<% end %>
 		</tbody>
 	</table>
 </div>
@@ -106,4 +73,4 @@
 </div>
 
 
-<%= render :partial => "scripts" %>
+<%= render :partial => "scripts", :locals => {:slider => true} %>

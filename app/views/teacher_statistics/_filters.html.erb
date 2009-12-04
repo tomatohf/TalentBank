@@ -1,10 +1,13 @@
 <%
-	dataset &&= true
+	views ||= []
+	views_style ||= {}
+	hide ||= []
+	hide_dataset = hide.include?(:dataset)
+	hide_order = hide.include?(:order)
+	hide_limit = hide.include?(:limit)
 	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
-	
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
-	
 	graduation = h(@graduation)
 %>
 
@@ -13,12 +16,12 @@
 	<input type="hidden" id="period" name="period" value="<%= period %>" />
 	<input type="hidden" id="compare" name="compare" value="<%= compare %>" />
 	
-	<% if dataset %>
+	<% unless hide_dataset %>
 		<input type="hidden" id="q" name="q" value="<%= "f" unless @q %>" />
 		<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
 	<% end %>
 	
-	<input type="hidden" id="view" name="view" value="<%= h(@view) %>" />
+	<input type="hidden" id="view" name="view" value="<%= @view %>" />
 	
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
 	<input type="hidden" id="level" name="level" value="<%= @level && @level[:id] %>" />
@@ -26,6 +29,13 @@
 	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
 	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
 	<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
+	
+	<% unless hide_order %>
+		<input type="hidden" id="order" name="order" value="<%= @order %>" />
+	<% end %>
+	<% unless hide_limit %>
+		<input type="hidden" id="limit" name="limit" value="<%= @limit %>" />
+	<% end %>
 <% end %>
 
 
@@ -51,7 +61,7 @@
 				<% end %>
 			</td>
 			
-			<% if dataset %>
+			<% unless hide_dataset %>
 				<td style="width: 35px;" align="right">数据:</td>
 				<td style="width: 90px;" align="right">
 					<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>" style="color: <%= @query_dataset_color %>">
@@ -172,6 +182,54 @@
 						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
 				<% end %>
 			</td>
+		</tr>
+	</table>
+</div>
+
+
+<div style="margin-bottom: 8px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td>&nbsp;</td>
+			
+			<% unless hide_limit %>
+				<td style="width: 35px;">行数:</td>
+				<td style="width: 30px;">
+					<div id="limit_slider_label"></div>
+				</td>
+				<td style="width: 200px;">
+					<div id="limit_slider"></div>
+				</td>
+				<td style="width: 30px;"></td>
+			<% end %>
+			
+			<% unless hide_order %>
+				<% asc = (@order == "asc") %>
+				<td style="width: 35px;">排序:</td>
+				<td style="width: 85px;">
+					<% if asc %>
+						<a href="#" title="改为从多到少" class="none" onclick="change_order('desc'); return false;">
+							从少到多
+							<img alt="升序" src="/images/teachers/asc_icon.gif" border="0" style="margin-bottom: -1px;" />
+						</a>
+					<% else %>
+						<a href="#" title="改为从少到多" class="none" onclick="change_order('asc'); return false;">
+							从多到少
+							<img alt="降序" src="/images/teachers/desc_icon.gif" border="0" style="margin-bottom: -1px;" />
+						</a>
+					<% end %>
+				</td>
+			<% end %>
+			
+			<td style="width: 35px;">视图:</td>
+			<% views.each do |view| %>
+				<td style="width: <%= views_style[:width] || "25" %>px;">
+					<a href="#" title="<%= view[1] %>" id="view_link_<%= view[0] %>">
+						<img alt="<%= view[1] %>" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
+				</td>
+			<% end %>
+		
+			<td style="width: <%= views_style[:right] || "50" %>px;"></td>
 		</tr>
 	</table>
 </div>

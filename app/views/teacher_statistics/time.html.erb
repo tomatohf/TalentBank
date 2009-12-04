@@ -3,24 +3,16 @@
 
 <h2>时段统计</h2>
 
-<%= render :partial => "filters", :locals => {:dataset => true} %>
-
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-		<tr>
-			<td align="right">视图:</td>
-			<td style="width: 10px;"></td>
-			<% [["day", "天"], ["week", "周"], ["month", "月"]].each do |view| %>
-				<td style="width: 25px;">
-					<a href="#" title="按每<%= view[1] %>查看" id="view_link_<%= view[0] %>">
-						<img alt="按每<%= view[1] %>查看" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
-				</td>
-			<% end %>
-		
-			<td style="width: 50px;"></td>
-		</tr>
-	</table>
-</div>
+<%=
+	render(
+		:partial => "filters",
+		:locals => {
+			:views => [["day", "按每天查看"], ["week", "按每周查看"], ["month", "按每月查看"]],
+			:views_style => {:width => 25, :right => 50},
+			:hide => [:order, :limit]
+		}
+	)
+%>
 
 <div>
 	<%= render(

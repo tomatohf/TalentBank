@@ -1,6 +1,10 @@
+<%
+	slider &&= true
+%>
+
 <link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
-<script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
+<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
 <script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">

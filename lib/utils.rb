@@ -261,6 +261,23 @@ module Utils
       end
       
       
+      def including_model.period_total_count(school_id, from, to, options = {})
+        from, to = to, from if from > to
+
+        from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
+        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+        
+        self.search_count(
+          # :match_mode => self::Search_Match_Mode,
+          # :order => "updated_at ASC",
+          :with => {
+            :school_id => school_id,
+            :updated_at => from_time..to_time
+          }.merge(options[:with] || {})
+        )
+      end
+      
+      
       def including_model.period_records(school_id, from, to, options = {})
         from, to = to, from if from > to
 

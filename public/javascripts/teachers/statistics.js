@@ -132,6 +132,20 @@ function change_dataset(id, value) {
 }
 
 
+function change_order(order) {
+	$("input#order").val(order);
+	$("#refresh_form").submit();
+}
+
+
+function change_limit(limit) {
+	if($("input#limit").val() != (limit+"")) {
+		$("input#limit").val(limit);
+		$("#refresh_form").submit();
+	}
+}
+
+
 function change_compare(date_text) {
 	$("input#compare").val(date_text);
 	$("#refresh_form").submit();
@@ -398,6 +412,8 @@ $(document).ready(
 		setup_compare();
 		
 		setup_view_links();
+		
+		setup_limit_slider();
 	}
 );
 
@@ -542,6 +558,28 @@ function setup_view_links() {
 			);
 		}
 	);
+}
+
+
+function setup_limit_slider() {
+	var current_limit = $("input#limit").val();
+	$("#limit_slider_label").html(current_limit);
+	
+	$("#limit_slider").slider(
+		{
+			animate: true,
+			min: 1,
+			max: 100,
+			step: 1,
+			slide: function(event, ui) {
+				$("#limit_slider_label").html(ui.value);
+			},
+			stop: function(event, ui) {
+				change_limit(ui.value);
+			}
+		}
+	)
+	.slider("value", current_limit);
 }
 
 

@@ -361,29 +361,27 @@ class TeacherStatisticsController < ApplicationController
     prepare_rank_view
     prepare_period(1.year.ago(Date.today))
     compared_to = prepare_compare
+    prepare_order
+    prepare_limit
     
     count_options = {
       :group_by => "college_id",
       :group_function => :attr,
-      :group_clause => "@count DESC",
+      :group_clause => "@count #{@order.upcase}",
+      :limit => @limit,
       :with => prepare_filters
     }
     
-    @view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
+    @counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
     
     # if @compared_from
-    #   @compared_view_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
+    #   @compared_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
     # end
     
-    max_value = 0
-    @total_count = @view_counts.inject(0) { |sum, record|
-      count = record.sphinx_attributes["@count"]
-      max_value = [max_value, count].max
-      sum + count
-    }
-    @max = Utils.top_axis(max_value)
+    @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
-    @groups = College.data[@school.abbr]
+    max_value = @counts.inject(0) { |max, record| [max, record.sphinx_attributes["@count"]].max }
+    @max = Utils.top_axis(max_value)
     
     @chart_data = ofc_chart_data(
       
@@ -473,6 +471,23 @@ class TeacherStatisticsController < ApplicationController
     @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
     
     @compared_from && (@compared_from + (@to - @from))
+  end
+  
+  
+  def prepare_order
+    @order = params[:order] && params[:order].strip
+    
+    @order = "desc" unless ["asc", "desc"].include?(@order)
+  end
+  
+  
+  def prepare_limit
+    limit_param = params[:limit] && params[:limit].strip
+    
+    @limit = limit_param.blank? ? 30 : limit_param.to_i
+    
+    @limit = [@limit, 100].min
+    @limit = [@limit, 1].max
   end
   
 end
