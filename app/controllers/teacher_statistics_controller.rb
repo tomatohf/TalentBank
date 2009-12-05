@@ -2,12 +2,6 @@ class TeacherStatisticsController < ApplicationController
   
   Queries_Page_Size = 100
   Date_Range_Splitter = "-"
-  load "ofc.rb"
-  
-  Pie_Chart_Colors = [
-    "#058DC7", "#50B432", "#ED561B", "#EDEF00", "#24CBE5",
-    "#64E572", "#FF9655", "#FFF263", "#6AF9C4", "#B2DEFF"
-  ]
   
   Perspectives = [
     ["time", "时段统计"],
@@ -389,29 +383,52 @@ class TeacherStatisticsController < ApplicationController
     }
     
     @counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
-    
-    # if @compared_from
-    #   @compared_counts = CorpViewedResume.period_group_counts(@teacher.school_id, @compared_from, compared_to, count_options)
-    # end
-    
     @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
+    if @compared_from
+      @compared_counts = CorpViewedResume.period_group_counts(
+        @teacher.school_id,
+        @compared_from,
+        compared_to,
+        count_options
+      ).inject({}) { |hash, record|
+        hash[record[1]["@groupby"]] = record[1]["@count"]
+        hash
+      }
+      @compared_total_count = CorpViewedResume.period_total_count(@teacher.school_id, @compared_from, compared_to, count_options)
+    end
+    
     unless @view == "pie"
-      max_value = @counts.inject(0) { |max, record| [max, record[1]["@count"]].max }
+      max_value = @counts.inject(0) { |max, record|
+        group = record[1]["@groupby"]
+        values = [max, record[1]["@count"]]
+        values << @compared_counts[group] if @compared_from
+        values.max
+      }
       @max = Utils.top_axis(max_value)
     else
       total_shown_count = 0
+      if @compared_from
+        compared_total_shown_count = 0
+        compared_values = []
+      end
       values = @counts.enum_with_index.collect { |count_record, i|
         group = count_record[1]["@groupby"]
 				count = count_record[1]["@count"]
 				
-				total_shown_count += count
+        total_shown_count += count
+        
+        if @compared_from
+				  compared_count = @compared_counts[group]
+				  compared_total_shown_count += compared_count
+				  compared_values << get_pie_chart_value(compared_count, @compared_total_count, "#{@group_titles[group]} (对比)", i)
+			  end
 				
-				get_pie_chart_value(count, @group_titles[group], i)
+				get_pie_chart_value(count, @total_count, @group_titles[group], i)
       }
       
       else_count = @total_count - total_shown_count
-      values << get_pie_chart_value(else_count, "其他", Pie_Chart_Colors.size) if else_count > 0
+      values << get_pie_chart_value(else_count, @total_count, "其他#{@groups_name}", TeacherStatisticsHelper::Pie_Chart_Colors.size) if else_count > 0
       
       @chart_data = ofc_chart_data(
         :elements => [
@@ -425,6 +442,25 @@ class TeacherStatisticsController < ApplicationController
       )
       @chart_data.delete(:x_axis)
       @chart_data.delete(:y_axis)
+      
+      if @compared_from
+        compared_else_count = @compared_total_count - compared_total_shown_count
+        compared_values << get_pie_chart_value(compared_else_count, @compared_total_count, "其他#{@groups_name} (对比)", TeacherStatisticsHelper::Pie_Chart_Colors.size) if compared_else_count > 0
+        
+        @compared_chart_data = ofc_chart_data(
+          :elements => [
+            {
+              :type => "pie",
+              :alpha => 0.6,
+              :radius => 100,
+              "on-click" => "alert",
+              :values => compared_values
+            }
+          ]
+        )
+        @compared_chart_data.delete(:x_axis)
+        @compared_chart_data.delete(:y_axis)
+      end
     end
   end
   
@@ -531,20 +567,24 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def get_pie_chart_color(index)
-    index < Pie_Chart_Colors.size ? Pie_Chart_Colors[index] : "#CCCCCC"
-  end
-  
-  
-  def get_pie_chart_value(count, group_title, color_index)
-    percent = (count.to_f/@total_count)*100
+  def get_pie_chart_value(count, total, group_title, color_index)
+    percent = (count.to_f/total)*100
 		percent_label = "#{@percent_format % percent}%"
+		color = self.class.helpers.get_pie_chart_color(color_index)
+		
+		tip = %Q!<font size="13" face="Verdana" color="#{color}"><b>#{group_title}</b></font>! +
+		      %Q! <br> ! +
+		      %Q!<font size="12" face="Verdana" color="#{color}">! +
+		      %Q!<b>#{count}</b>   -   #{percent_label}! +
+		      %Q!</font>! +
+		      %Q! <br> ! +
+		      %Q!<font size="12" face="Verdana" color="#888888">总计: #{total}</font>!
     
     element = {
       :value => count,
-      :colour => get_pie_chart_color(color_index),
-      :label => (@compared_from || (percent < 10)) ? "" : percent_label,
-      :tip => "#{group_title}: #{count}, #{percent_label}"
+      :colour => color,
+      :label => (percent < 10) ? "" : percent_label,
+      :tip => tip
     }
     
     element

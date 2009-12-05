@@ -102,16 +102,17 @@ module OpenFlashChartHelpers
     {
 		  :type => "pie",
       :alpha => 0.8,
-      "start-angle" => 0,
+      "start-angle" => 180,
       :animate => [
         {
           :type => "fade"
         },
         {
           :type => "bounce",
-          :distance => 10
+          :distance => 12
         }
       ],
+      "on-show-animate" => nil,
       :radius => 100,
       "gradient-fill" => false,
       # "label-colour" => "#333333",

@@ -1,4 +1,8 @@
-<% talent_page_title("学院统计") %>
+<%
+	talent_page_title("学院统计")
+	
+	pie_view = (@view == "pie")
+%>
 
 
 <h2>学院统计</h2>
@@ -15,14 +19,29 @@
 %>
 
 <div>
-	<% graph_width = 350 %>
+	<%
+		graph_width = 310
+		
+		compared_label_color = "#888888"
+		compared_bar_color = "#AAAAAA"
+	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
 				<td style="width: 25px;"></td>
 				<td><%= @groups_name %></td>
-				<td>查看简历数</td>
-				<td style="width: <%= graph_width %>px;"></td>
+				<td colspan="2">查看简历数</td>
+				<% if @compared_from %>
+					<td colspan="2">对比数</td>
+					<td>变化率</td>
+				<% end %>
+				<td style="width: <%= graph_width %>px;">
+					总计: <%= @total_count %>
+					<% if @compared_from %>
+						<span style="margin: 0px 8px;">-</span>
+						对比总计: <%= @compared_total_count %>
+					<% end %>
+				</td>
 			</tr>
 		</thead>
 		
@@ -32,31 +51,79 @@
 					<%
 						group = @counts[i][1]["@groupby"]
 						count = @counts[i][1]["@count"]
+						
+						color = get_pie_chart_color(i)
+						
+						percent = @percent_format % ((count.to_f/@total_count)*100)
+						percent_label = "#{percent}%"
+						
+						if @compared_from
+							compared_count = @compared_counts[group]
+
+							compared_percent = @percent_format % ((compared_count.to_f/@compared_total_count)*100)
+							compared_percent_label = "#{compared_percent}%"
+						end
 					%>
 
 					<td align="center"><%= i+1 %></td>
 
 					<td>
-						<%= @group_titles[group] %>
+						<% if pie_view %>
+							<div class="graph_legend" style="background-color: <%= color %>;"></div>
+						<% end %>
+						
+						<div>
+							<a href="#" class="none">
+								<%= @group_titles[group] %></a>
+						</div>
 					</td>
-
+					
 					<td align="right" style="font-weight: bold;">
 						<%= count %>
 					</td>
+					<td align="right">
+						<%= percent_label %>
+					</td>
+					
+					<% if @compared_from %>
+						<td align="right" style="font-weight: bold; color: <%= compared_label_color %>;">
+							<%= compared_count %>
+						</td>
+						<td align="right" style="color: <%= compared_label_color %>;">
+							<%= compared_percent_label %>
+						</td>
+						
+						<td align="right" style="color: <%= compared_label_color %>;">
+							<%= Utils.growth(count, compared_count, 1) %>
+						</td>
+					<% end %>
 
-					<% unless @view == "pie" %>
+					<% unless pie_view %>
 						<td>
 							<%
 								width = (graph_width-50) * (count.to_f/@max)
-								percent = @percent_format % ((count.to_f/@total_count)*100)
+								bar_title = "#{count} / #{@total_count} = #{percent_label}"
 							%>
 
-							<div class="graph_bar" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;"></div>
-							<%= percent %>%
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;"></div>
+							<%= count %>
+							
+							
+							<% if @compared_from %>
+								<div class="clear_l"></div>
+								
+								<%
+									compared_width = (graph_width-50) * (compared_count.to_f/@max)
+									compared_bar_title = "#{compared_count} / #{@compared_total_count} = #{compared_percent_label}"
+								%>
+
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;"></div>
+								<%= compared_count %>
+							<% end %>
 						</td>
 					<% else %>
 						<% unless i > 0 %>
-							<td rowspan="<%= @counts.size %>" style="background-color: #FFFFFF;">
+							<td rowspan="<%= @counts.size %>" valign="top" style="background-color: #FFFFFF;">
 								<div>
 									<%= render(
 										:partial => "ofc",
@@ -67,6 +134,19 @@
 										}
 									) %>
 								</div>
+								
+								<% if @compared_from %>
+									<div>
+										<%= render(
+											:partial => "ofc",
+											:locals => {
+												:chart_id => "compared_pie_chart",
+												:height => graph_width,
+												:data => @compared_chart_data
+											}
+										) %>
+									</div>
+								<% end %>
 							</td>
 						<% end %>
 					<% end %>
