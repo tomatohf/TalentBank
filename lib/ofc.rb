@@ -100,7 +100,32 @@ module OpenFlashChartHelpers
   
   def pie_element(element)
     {
-		  
+		  :type => "pie",
+      :alpha => 0.8,
+      "start-angle" => 0,
+      :animate => [
+        {
+          :type => "fade"
+        },
+        {
+          :type => "bounce",
+          :distance => 10
+        }
+      ],
+      :radius => 100,
+      "gradient-fill" => false,
+      # "label-colour" => "#333333",
+      "no-labels" => false,
+      # :colours => [ "#FF0000", "#00FF00", "#0000FF" ],
+      :values => [
+        {
+          :value => 500,
+          :tip => "500",
+          :colour => "#FF0000",
+          "label-colour" => "#333333",
+          "font-size" => 12
+        }
+      ]
 		}.merge(element || {})
   end
   

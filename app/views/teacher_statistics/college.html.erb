@@ -15,11 +15,7 @@
 %>
 
 <div>
-	<%
-		graph_width = 350
-		
-		percent_format = "%.1f"
-	%>
+	<% graph_width = 350 %>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
 		<thead>
 			<tr>
@@ -41,7 +37,7 @@
 					<td align="center"><%= i+1 %></td>
 
 					<td>
-						<%= @group_title_proc.call(group) %>
+						<%= @group_titles[group] %>
 					</td>
 
 					<td align="right" style="font-weight: bold;">
@@ -52,10 +48,10 @@
 						<td>
 							<%
 								width = (graph_width-50) * (count.to_f/@max)
-								percent = percent_format % ((count.to_f/@total_count)*100)
+								percent = @percent_format % ((count.to_f/@total_count)*100)
 							%>
 
-							<div class="graph_bar" style="background-color: #FF6600; width: <%= width.round %>px;"></div>
+							<div class="graph_bar" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;"></div>
 							<%= percent %>%
 						</td>
 					<% else %>

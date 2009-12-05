@@ -2,6 +2,12 @@ class TeacherStatisticsController < ApplicationController
   
   Queries_Page_Size = 100
   Date_Range_Splitter = "-"
+  load "ofc.rb"
+  
+  Pie_Chart_Colors = [
+    "#058DC7", "#50B432", "#ED561B", "#EDEF00", "#24CBE5",
+    "#64E572", "#FF9655", "#FFF263", "#6AF9C4", "#B2DEFF"
+  ]
   
   Perspectives = [
     ["time", "时段统计"],
@@ -358,12 +364,15 @@ class TeacherStatisticsController < ApplicationController
   
   
   def college
+    @dataset_color = "#FF6600"
     @group_by = "college_id"
     @groups_name = "学院"
-    @group_title_proc = Proc.new { |group|
-      college = College.find(@school.abbr, group)
-      college[:name]
+    @group_titles = College.data[@school.abbr].inject({}) { |hash, college|
+      hash[college[:id]] = college[:name]
+      hash
     }
+    
+    @percent_format = "%.1f"
     
     prepare_rank_view
     prepare_period(1.year.ago(Date.today))
@@ -391,25 +400,31 @@ class TeacherStatisticsController < ApplicationController
       max_value = @counts.inject(0) { |max, record| [max, record[1]["@count"]].max }
       @max = Utils.top_axis(max_value)
     else
+      total_shown_count = 0
+      values = @counts.enum_with_index.collect { |count_record, i|
+        group = count_record[1]["@groupby"]
+				count = count_record[1]["@count"]
+				
+				total_shown_count += count
+				
+				get_pie_chart_value(count, @group_titles[group], i)
+      }
+      
+      else_count = @total_count - total_shown_count
+      values << get_pie_chart_value(else_count, "其他", Pie_Chart_Colors.size) if else_count > 0
+      
       @chart_data = ofc_chart_data(
-        :x_axis => nil,
-        :y_axis => nil,
         :elements => [
           {
             :type => "pie",
-            :alpha => 0.6,
-            "start-angle" => 35,
-            :animate => [
-              {
-                :type => "fade"
-              }
-            ],
-            :tip => "#val# of #total#, #percent# of 100%",
-            :colours => [ "#1C9E05", "#FF368D" ],
-            :values => [ 2, 3, 4, { :value => 6.5, :label => "hello (6.5)" } ]
+            :radius => 100,
+            "on-click" => "alert",
+            :values => values
           }
         ]
       )
+      @chart_data.delete(:x_axis)
+      @chart_data.delete(:y_axis)
     end
   end
   
@@ -513,6 +528,26 @@ class TeacherStatisticsController < ApplicationController
     
     @limit = [@limit, 100].min
     @limit = [@limit, 1].max
+  end
+  
+  
+  def get_pie_chart_color(index)
+    index < Pie_Chart_Colors.size ? Pie_Chart_Colors[index] : "#CCCCCC"
+  end
+  
+  
+  def get_pie_chart_value(count, group_title, color_index)
+    percent = (count.to_f/@total_count)*100
+		percent_label = "#{@percent_format % percent}%"
+    
+    element = {
+      :value => count,
+      :colour => get_pie_chart_color(color_index),
+      :label => (@compared_from || (percent < 10)) ? "" : percent_label,
+      :tip => "#{group_title}: #{count}, #{percent_label}"
+    }
+    
+    element
   end
   
 end
