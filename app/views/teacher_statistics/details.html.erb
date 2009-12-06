@@ -1,0 +1,71 @@
+<div style="margin: 0px 10px 10px;">
+	<span style="font-size: 13px; font-weight: bold;"><%= @detail_title %></span>
+
+	<span class="info" style="margin: 0px 5px;">|</span>
+
+	时段:
+	<%= @from.strftime("%Y年%m月%d日") %>
+	<% unless @from == @to %>
+		-
+		<%= @to.strftime("%Y年%m月%d日") %>
+	<% end %>
+
+
+	<% if @level %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		教育水平:
+		<%= @level[:name] %>
+	<% end %>
+
+	
+	<% unless @graduation.blank? %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		毕业时间:
+		<%= @graduation %>年
+	<% end %>
+
+	
+	<% if @college %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		学院:
+		<%= @college[:name] %>
+	<% end %>
+
+
+	<% if @major %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		专业:
+		<%= @major[:name] %>
+	<% end %>
+
+
+	<% if @student %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		<% student_name = h(@student.name) %>
+		学生:
+		<span title="<%= student_name %>">
+			<%= truncate(student_name, :length => 20) %>
+		</span>
+	<% end %>
+	
+	
+	<% if @corp %>
+		<span class="info" style="margin: 0px 5px;">|</span>
+
+		<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
+		企业:
+		<span title="<%= corp_name %>">
+			<%= truncate(corp_name, :length => 20) %>
+		</span>
+	<% end %>
+</div>
+
+
+<% if @records.size > 0 %>
+	<%= render :partial => @detail_template, :locals => {:records => @records} %>
+<% end %>

@@ -58,7 +58,7 @@ class TeacherStatisticsController < ApplicationController
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    detail_class, detail_title, detail_template, includes = {
+    detail_class, @detail_title, @detail_template, includes = {
       "query" => [CorpQuery, "企业搜索操作", "queries_grid", [:corporation]],
       "view" => [CorpViewedResume, "企业查看简历", "resumes_grid", [:corporation, {:resume => [:student]}]]
     }[type]
@@ -72,37 +72,7 @@ class TeacherStatisticsController < ApplicationController
     
     @records = (detail_class && detail_class.period_records(@teacher.school_id, @from, @to, options)) || []
 		
-    render(
-      :layout => false,
-      :inline => %Q!
-        <div style="margin: 0px 10px 10px;">
-          <span style="font-size: 13px; font-weight: bold;">#{detail_title}</span>
-          
-          <span class="info" style="margin: 0px 10px;">|</span>
-          
-          时段:
-          <%= @from.strftime("%Y年%m月%d日") %>
-          <% unless @from == @to %>
-            -
-            <%= @to.strftime("%Y年%m月%d日") %>
-          <% end %>
-          
-          <% if @corp %>
-            <span class="info" style="margin: 0px 10px;">|</span>
-            
-            <% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
-            过滤企业:
-  					<span title="<%= corp_name %>">
-  						<%= truncate(corp_name, :length => 20) %>
-  					</span>
-          <% end %>
-        </div>
-        
-        <% if @records.size > 0 %>
-          <%= render :partial => "#{detail_template}", :locals => {:records => @records} %>
-        <% end %>
-      !
-    )
+    render :layout => false
   end
   
   
@@ -321,7 +291,7 @@ class TeacherStatisticsController < ApplicationController
               "dot-style" => {
                 :type => dot_type,
                 :colour => color,
-                "on-click" => "#{line}_detail"
+                "on-click" => "#{line}_dot_detail"
               },
               :values => self.instance_variable_get("@#{line}_values")
             }
@@ -342,7 +312,7 @@ class TeacherStatisticsController < ApplicationController
                 :type => dot_type,
                 :colour => color,
                 "dot-size" => 3,
-                "on-click" => "compared_#{line}_detail"
+                "on-click" => "compared_#{line}_dot_detail"
               },
               :values => self.instance_variable_get("@compared_#{line}_values")
       	    }
@@ -369,7 +339,7 @@ class TeacherStatisticsController < ApplicationController
     @percent_format = "%.1f"
     
     prepare_rank_view
-    prepare_period(1.year.ago(Date.today))
+    prepare_period(1.month.ago(Date.today))
     compared_to = prepare_compare
     prepare_order
     prepare_limit
@@ -416,7 +386,7 @@ class TeacherStatisticsController < ApplicationController
       max_value = @counts.inject(0) { |max, record|
         group = record[1]["@groupby"]
         values = [max, record[1]["@count"]]
-        values << @compared_counts[group] if @compared_from
+        values << (@compared_counts[group] || 0) if @compared_from
         values.max
       }
       @max = Utils.top_axis(max_value)
@@ -433,7 +403,7 @@ class TeacherStatisticsController < ApplicationController
         total_shown_count += count
         
         if @compared_from
-				  compared_count = @compared_counts[group]
+				  compared_count = @compared_counts[group] || 0
 				  compared_total_shown_count += compared_count
 				  compared_values << get_pie_chart_value(compared_count, @compared_total_count, "#{@group_titles[group]} (对比)", i)
 			  end
@@ -449,7 +419,7 @@ class TeacherStatisticsController < ApplicationController
           {
             :type => "pie",
             :radius => 100,
-            "on-click" => "alert",
+            "on-click" => "group_view_detail",
             :values => values
           }
         ]
@@ -467,7 +437,7 @@ class TeacherStatisticsController < ApplicationController
               :type => "pie",
               :alpha => 0.6,
               :radius => 100,
-              "on-click" => "alert",
+              "on-click" => "compared_group_view_detail",
               :values => compared_values
             }
           ]
@@ -560,7 +530,7 @@ class TeacherStatisticsController < ApplicationController
     compare = params[:compare] && params[:compare].strip
     @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
     
-    @compared_from && (@compared_from + (@to - @from))
+    @compared_from && self.class.helpers.get_compared_to(@from, @to, @compared_from)
   end
   
   

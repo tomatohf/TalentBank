@@ -592,6 +592,9 @@ a.filter_item_link:hover {
 	top: 2px;
 }
 
+.graph_bar {
+	cursor: pointer;
+}
 
 .graph_legend {
 	height: 9px;

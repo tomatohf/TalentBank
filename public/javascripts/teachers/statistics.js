@@ -6,36 +6,52 @@ var period_date_format = "yymmdd";
 var FILTERS = ["level", "graduation", "college", "major", "student", "corp"];
 
 
-function view_detail(dot_index) {
-	show_details("view", $("input#dot_" + dot_index).val());
+function view_dot_detail(dot_index) {
+	show_details("view", $("input#dot_" + dot_index).val(), {});
 }
 
 
-function query_detail(dot_index) {
-	show_details("query", $("input#dot_" + dot_index).val());
+function query_dot_detail(dot_index) {
+	show_details("query", $("input#dot_" + dot_index).val(), {});
 }
 
 
-function compared_view_detail(dot_index) {
-	show_details("view", $("input#compared_dot_" + dot_index).val());
+function compared_view_dot_detail(dot_index) {
+	show_details("view", $("input#compared_dot_" + dot_index).val(), {});
 }
 
 
-function compared_query_detail(dot_index) {
-	show_details("query", $("input#compared_dot_" + dot_index).val());
+function compared_query_dot_detail(dot_index) {
+	show_details("query", $("input#compared_dot_" + dot_index).val(), {});
 }
 
 
-function show_details(detail_type, detail_period) {
+function group_view_detail(value_index) {
+	var extra_filters = {};
+	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	
+	show_details("view", $("input#period").val(), extra_filters);
+}
+
+
+function compared_group_view_detail(value_index) {
+	var extra_filters = {};
+	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	
+	show_details("view", $("input#compared_period").val(), extra_filters);
+}
+
+
+function show_details(detail_type, detail_period, extra_filters) {
 	show_details_dialog(
 		function(container) {
-			show_details_dialog_content(container, null, detail_type, detail_period);
+			show_details_dialog_content(container, null, detail_type, detail_period, extra_filters);
 		}
 	);
 }
 
 
-function show_details_dialog_content(container, url, detail_type, detail_period) {
+function show_details_dialog_content(container, url, detail_type, detail_period, extra_filters) {
 	if(url == null) {
 		container.html(
 			'<img src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px 15px;" />' +
@@ -43,15 +59,13 @@ function show_details_dialog_content(container, url, detail_type, detail_period)
 		);
 	}
 	
-	var data = {
-		type: detail_type,
-		period: detail_period
-	};
-	$.each(
-		FILTERS,
-		function(i, value) {
-			data[value] = $("input#" + value).val()
-		}
+	var data = $.extend(
+		{
+			type: detail_type,
+			period: detail_period
+		},
+		get_filter_values(),
+		extra_filters
 	);
 	
 	$.ajax(
@@ -66,17 +80,17 @@ function show_details_dialog_content(container, url, detail_type, detail_period)
 			success: function(data, text_status) {
 				container.html(data);
 				
-				setup_details_dialog_links(container, detail_type, detail_period);
+				setup_details_dialog_links(container, detail_type, detail_period, extra_filters);
 			}
 		}
 	);
 }
 
 
-function setup_details_dialog_links(container, detail_type, detail_period) {
+function setup_details_dialog_links(container, detail_type, detail_period, extra_filters) {
 	$(".pagination a").unbind("click").click(
 		function() {
-			show_details_dialog_content(container, $(this).attr("href"), detail_type, detail_period);
+			show_details_dialog_content(container, $(this).attr("href"), detail_type, detail_period, extra_filters);
 			
 			return false;
 		}
@@ -415,6 +429,8 @@ $(document).ready(
 		
 		setup_limit_slider();
 		
+		setup_period_detail_links();
+		
 		// setup_graph_bar_animation(1000);
 	}
 );
@@ -624,6 +640,33 @@ function setup_graph_bar_animation(duration) {
 }
 
 
+function setup_period_detail_links() {
+	var filters = get_filter_values();
+	
+	$.each(
+		$("a[id^='period_detail_link_']"),
+		function(i, link) {
+			var value_index = $(link).attr("id").substr("period_detail_link_".length);
+			var extra_filters = {};
+			extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+			
+			var params = $.extend(
+				{
+					q: "f",
+					period: $("input#period").val()
+				},
+				get_filter_values(),
+				extra_filters
+			);
+			
+			var href = "/teachers/" + TEACHER_ID + "/statistics/time?" + $.param(params);
+			
+			$(link).attr("href", href);
+		}
+	);
+}
+
+
 function setup_compare() {
 	$("a#compare_link").unbind("click").click(
 		function(e) {
@@ -688,4 +731,18 @@ function setup_filters() {
 			);
 		}
 	);
+}
+
+
+function get_filter_values() {
+	var filters = {};
+	
+	$.each(
+		FILTERS,
+		function(i, value) {
+			filters[value] = $("input#" + value).val()
+		}
+	);
+	
+	return filters;
 }

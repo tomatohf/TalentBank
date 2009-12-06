@@ -150,7 +150,14 @@ var DIALOG = {
 		var close_link = dialog.find("a.dialog_close");
 		if(setting.close) {
 			close_link.show();
-			close_link.unbind("click").bind("click", DIALOG.disappear);
+			close_link.unbind("click").bind(
+				"click",
+				function() {
+					DIALOG.disappear();
+					
+					return false;
+				}
+			);
 		}
 		else {
 			close_link.hide();

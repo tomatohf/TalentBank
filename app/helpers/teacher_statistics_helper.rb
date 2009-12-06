@@ -9,4 +9,9 @@ module TeacherStatisticsHelper
     index < Pie_Chart_Colors.size ? Pie_Chart_Colors[index] : "#BBBBBB"
   end
   
+  
+  def get_compared_to(from, to , compared_from)
+    compared_from + (to - from)
+  end
+  
 end

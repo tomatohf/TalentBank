@@ -19,6 +19,11 @@
 %>
 
 <div>
+	<input type="hidden" id="group_by_field" value="<%= @group_by.to_s.gsub(/_id$/, "") %>" />
+	<% if @compared_from %>
+		<input type="hidden" id="compared_period" value="<%= %Q!#{@compared_from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{get_compared_to(@from, @to, @compared_from).strftime("%Y%m%d")}! %>" />
+	<% end %>
+	
 	<%
 		graph_width = 310
 		
@@ -58,7 +63,7 @@
 						percent_label = "#{percent}%"
 						
 						if @compared_from
-							compared_count = @compared_counts[group]
+							compared_count = @compared_counts[group] || 0
 
 							compared_percent = @percent_format % ((compared_count.to_f/@compared_total_count)*100)
 							compared_percent_label = "#{compared_percent}%"
@@ -75,19 +80,26 @@
 						<div>
 							<a href="#" class="none">
 								<%= @group_titles[group] %></a>
+								
+							<a href="#" title="查看详细时段统计" target="_blank" id="period_detail_link_<%= i %>">
+								<img alt="线图" src="/images/teachers/line_chart_icon.gif" border="0" style="margin: 0px 0px -2px 2px;" /></a>
 						</div>
+						
+						<input type="hidden" id="group_value_<%= i %>" value="<%= group %>" />
 					</td>
 					
 					<td align="right" style="font-weight: bold;">
-						<%= count %>
+						<a href="#" onclick="group_view_detail(<%= i %>); return false;" class="none">
+							<%= count %></a>
 					</td>
 					<td align="right">
 						<%= percent_label %>
 					</td>
 					
 					<% if @compared_from %>
-						<td align="right" style="font-weight: bold; color: <%= compared_label_color %>;">
-							<%= compared_count %>
+						<td align="right" style="font-weight: bold;">
+							<a href="#" onclick="compared_group_view_detail(<%= i %>); return false;" class="none">
+								<%= compared_count %></a>
 						</td>
 						<td align="right" style="color: <%= compared_label_color %>;">
 							<%= compared_percent_label %>
@@ -105,7 +117,7 @@
 								bar_title = "#{count} / #{@total_count} = #{percent_label}"
 							%>
 
-							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;"></div>
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;" onclick="group_view_detail(<%= i %>);"></div>
 							<%= count %>
 							
 							
@@ -117,7 +129,7 @@
 									compared_bar_title = "#{compared_count} / #{@compared_total_count} = #{compared_percent_label}"
 								%>
 
-								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;"></div>
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_group_view_detail(<%= i %>);"></div>
 								<%= compared_count %>
 							<% end %>
 						</td>
