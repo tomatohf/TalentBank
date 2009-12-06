@@ -4,9 +4,9 @@ class TeacherStatisticsController < ApplicationController
   Date_Range_Splitter = "-"
   
   Perspectives = [
-    ["time", "时段统计"],
-    ["college", "简历查看统计"],
-    ["#", "企业搜索统计"]
+    ["", "时段统计"],
+    ["college", "院系统计"],
+    ["#", "搜索统计"]
   ]
 
   include OpenFlashChartHelpers
@@ -21,11 +21,6 @@ class TeacherStatisticsController < ApplicationController
   before_filter :check_teacher
   
   before_filter :check_teacher_statistic
-  
-  
-  def index
-    
-  end
   
   
   def querying
@@ -76,7 +71,7 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def time
+  def index
     @query_dataset_color = "#0077CC"
     @view_dataset_color = "#FF6600"
     @query_dataset_name = "企业搜索数"
@@ -336,8 +331,149 @@ class TeacherStatisticsController < ApplicationController
       hash
     }
     
-    @percent_format = "%.1f"
+    rank
+    render :action => "rank"
+  end
+  
+  
+  def major
     
+  end
+  
+  
+  def student
+    
+  end
+  
+  
+  private
+  
+  def check_teacher
+    teacher_id = params[:teacher_id] && params[:teacher_id].strip
+    jump_to("/errors/forbidden") unless (session[:account_id].to_s == teacher_id) && ((@teacher = Teacher.find(teacher_id)).school_id == School.get_school_info(@school.abbr)[0])
+  end
+  
+  
+  def check_teacher_statistic
+    jump_to("/errors/unauthorized") unless @teacher.statistic
+  end
+  
+  
+  def prepare_filters
+    corp_id = params[:corp] && params[:corp].strip
+    @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
+    
+    level_id = params[:level] && params[:level].strip
+    @level = EduLevel.find(level_id.to_i)
+    
+    @graduation = params[:graduation] && params[:graduation].strip
+    
+    college_id = params[:college] && params[:college].strip
+    @college = College.find(@school.abbr, college_id.to_i)
+    
+    if @college
+      major_id = params[:major] && params[:major].strip
+  	  @major = Major.find(@college[:id], major_id.to_i)
+	  end
+	  
+	  student_id = params[:student] && params[:student].strip
+    @student = student_id.blank? ? nil : Student.try_find(student_id)
+    
+    filters = {}
+    filters[:corporation_id] = @corp.id if @corp
+    filters[:edu_level_id] = @level[:id] if @level
+    filters[:graduation_year] = @graduation unless @graduation.blank?
+    filters[:college_id] = @college[:id] if @college
+    filters[:major_id] = @major[:id] if @major
+    filters[:student_id] = @student.id if @student
+    
+    filters
+  end
+  
+  
+  def prepare_period(default_from)
+    periods = (params[:period] || "").split(Date_Range_Splitter, 2)
+    @from, @to = begin
+      [periods[0], periods[1]].collect { |date|
+        Date.parse(date)
+      }
+    rescue
+      [default_from, Date.today]
+    end
+  end
+  
+  
+  def prepare_time_view
+    @view = params[:view] && params[:view].strip
+    
+    view_infos = {
+      "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
+      "week" => [:week, 1.year, "%Y%j", "%y年%U周"],
+      "month" => [:month, 1.year, "%Y%m", "%y年%m月"],
+      "year" => [:year, 4.year, "%Y", "%y年"]
+    }
+    view_infos[@view] || view_infos[@view = "day"]
+  end
+  
+  
+  def prepare_rank_view
+    @view = params[:view] && params[:view].strip
+    
+    @view = "bar" unless ["bar", "pie"].include?(@view)
+  end
+  
+  
+  def prepare_compare
+    compare = params[:compare] && params[:compare].strip
+    @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
+    
+    @compared_from && self.class.helpers.get_compared_to(@from, @to, @compared_from)
+  end
+  
+  
+  def prepare_order
+    @order = params[:order] && params[:order].strip
+    
+    @order = "desc" unless ["asc", "desc"].include?(@order)
+  end
+  
+  
+  def prepare_limit
+    limit_param = params[:limit] && params[:limit].strip
+    
+    @limit = limit_param.blank? ? 30 : limit_param.to_i
+    
+    @limit = [@limit, 100].min
+    @limit = [@limit, 1].max
+  end
+  
+  
+  def get_pie_chart_value(count, total, group_title, color_index)
+    percent = (count.to_f/total)*100
+		percent_label = Utils.percent(count, total, 1)
+		color = self.class.helpers.get_pie_chart_color(color_index)
+		
+		tip = %Q!<font size="13" face="Verdana" color="#{color}"><b>#{group_title}</b></font>! +
+		      %Q! <br> ! +
+		      %Q!<font size="12" face="Verdana" color="#{color}">! +
+		      %Q!<b>#{count}</b>   -   #{percent_label}! +
+		      %Q!</font>! +
+		      %Q! <br> ! +
+		      %Q!<font size="12" face="Verdana" color="#888888">总计: #{total}</font>!
+    
+    element = {
+      :value => count,
+      :colour => color,
+      # only show label for those larger than 10%
+      :label => (count*10 > total) ? percent_label : "",
+      :tip => tip
+    }
+    
+    element
+  end
+  
+  
+  def rank
     prepare_rank_view
     prepare_period(1.month.ago(Date.today))
     compared_to = prepare_compare
@@ -446,132 +582,6 @@ class TeacherStatisticsController < ApplicationController
         @compared_chart_data.delete(:y_axis)
       end
     end
-  end
-  
-  
-  private
-  
-  def check_teacher
-    teacher_id = params[:teacher_id] && params[:teacher_id].strip
-    jump_to("/errors/forbidden") unless (session[:account_id].to_s == teacher_id) && ((@teacher = Teacher.find(teacher_id)).school_id == School.get_school_info(@school.abbr)[0])
-  end
-  
-  
-  def check_teacher_statistic
-    jump_to("/errors/unauthorized") unless @teacher.statistic
-  end
-  
-  
-  def prepare_filters
-    corp_id = params[:corp] && params[:corp].strip
-    @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
-    
-    level_id = params[:level] && params[:level].strip
-    @level = EduLevel.find(level_id.to_i)
-    
-    @graduation = params[:graduation] && params[:graduation].strip
-    
-    college_id = params[:college] && params[:college].strip
-    @college = College.find(@school.abbr, college_id.to_i)
-    
-    if @college
-      major_id = params[:major] && params[:major].strip
-  	  @major = Major.find(@college[:id], major_id.to_i)
-	  end
-	  
-	  student_id = params[:student] && params[:student].strip
-    @student = student_id.blank? ? nil : Student.try_find(student_id)
-    
-    filters = {}
-    filters[:corporation_id] = @corp.id if @corp
-    filters[:edu_level_id] = @level[:id] if @level
-    filters[:graduation_year] = @graduation unless @graduation.blank?
-    filters[:college_id] = @college[:id] if @college
-    filters[:major_id] = @major[:id] if @major
-    filters[:student_id] = @student.id if @student
-    
-    filters
-  end
-  
-  
-  def prepare_period(default_from)
-    periods = (params[:period] || "").split(Date_Range_Splitter, 2)
-    @from, @to = begin
-      [periods[0], periods[1]].collect { |date|
-        Date.parse(date)
-      }
-    rescue
-      [default_from, Date.today]
-    end
-  end
-  
-  
-  def prepare_time_view
-    @view = params[:view] && params[:view].strip
-    
-    view_infos = {
-      "day" => [:day, 1.month, "%Y%m%d", "%y.%m.%d"],
-      "week" => [:week, 1.year, "%Y%j", "%y年%U周"],
-      "month" => [:month, 1.year, "%Y%m", "%y年%m月"],
-      "year" => [:year, 4.year, "%Y", "%y年"]
-    }
-    view_infos[@view] || view_infos[@view = "day"]
-  end
-  
-  
-  def prepare_rank_view
-    @view = params[:view] && params[:view].strip
-    
-    @view = "bar" unless ["bar", "pie"].include?(@view)
-  end
-  
-  
-  def prepare_compare
-    compare = params[:compare] && params[:compare].strip
-    @compared_from = compare.blank? ? nil : (Date.parse(compare) rescue nil)
-    
-    @compared_from && self.class.helpers.get_compared_to(@from, @to, @compared_from)
-  end
-  
-  
-  def prepare_order
-    @order = params[:order] && params[:order].strip
-    
-    @order = "desc" unless ["asc", "desc"].include?(@order)
-  end
-  
-  
-  def prepare_limit
-    limit_param = params[:limit] && params[:limit].strip
-    
-    @limit = limit_param.blank? ? 30 : limit_param.to_i
-    
-    @limit = [@limit, 100].min
-    @limit = [@limit, 1].max
-  end
-  
-  
-  def get_pie_chart_value(count, total, group_title, color_index)
-    percent = (count.to_f/total)*100
-		percent_label = "#{@percent_format % percent}%"
-		color = self.class.helpers.get_pie_chart_color(color_index)
-		
-		tip = %Q!<font size="13" face="Verdana" color="#{color}"><b>#{group_title}</b></font>! +
-		      %Q! <br> ! +
-		      %Q!<font size="12" face="Verdana" color="#{color}">! +
-		      %Q!<b>#{count}</b>   -   #{percent_label}! +
-		      %Q!</font>! +
-		      %Q! <br> ! +
-		      %Q!<font size="12" face="Verdana" color="#888888">总计: #{total}</font>!
-    
-    element = {
-      :value => count,
-      :colour => color,
-      :label => (percent < 10) ? "" : percent_label,
-      :tip => tip
-    }
-    
-    element
   end
   
 end

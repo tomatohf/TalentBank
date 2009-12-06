@@ -56,17 +56,13 @@
 					<%
 						group = @counts[i][1]["@groupby"]
 						count = @counts[i][1]["@count"]
+						percent_label = Utils.percent(count, @total_count, 1)
 						
 						color = get_pie_chart_color(i)
 						
-						percent = @percent_format % ((count.to_f/@total_count)*100)
-						percent_label = "#{percent}%"
-						
 						if @compared_from
 							compared_count = @compared_counts[group] || 0
-
-							compared_percent = @percent_format % ((compared_count.to_f/@compared_total_count)*100)
-							compared_percent_label = "#{compared_percent}%"
+							compared_percent_label = Utils.percent(compared_count, @compared_total_count, 1)
 						end
 					%>
 

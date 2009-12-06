@@ -659,7 +659,7 @@ function setup_period_detail_links() {
 				extra_filters
 			);
 			
-			var href = "/teachers/" + TEACHER_ID + "/statistics/time?" + $.param(params);
+			var href = "/teachers/" + TEACHER_ID + "/statistics?" + $.param(params);
 			
 			$(link).attr("href", href);
 		}

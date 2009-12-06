@@ -47,16 +47,19 @@
 					</div>
 					
 					<div style="padding-left: 15px;">
+						<a href="/teachers/<%= @teacher.id %>/statistics/college">
+							简历查看统计</a>
+					</div>
+					
+					<div style="padding-left: 15px;">
+						<a href="/teachers/<%= @teacher.id %>/statistics/">
+							企业搜索统计</a>
+					</div>
+					
+					<div style="padding-left: 15px;">
 						<a href="/teachers/<%= @teacher.id %>/statistics/querying">
 							最近操作列表</a>
 					</div>
-					
-					<% TeacherStatisticsController::Perspectives.each do |perspective| %>
-						<div style="padding-left: 15px;">
-							<a href="/teachers/<%= @teacher.id %>/statistics/<%= perspective[0] %>">
-								<%= perspective[1] %></a>
-						</div>
-					<% end %>
 				<% end %>
 				
 				<div>

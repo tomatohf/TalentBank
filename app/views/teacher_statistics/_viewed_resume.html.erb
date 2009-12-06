@@ -17,7 +17,7 @@
 			<ul class="dropdown_sub_menu">
 				<% TeacherStatisticsController::Perspectives.each do |perspective| %>
 					<li>
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics/<%= perspective[0] %>?corp=<%= viewed_resume.corporation_id %>">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics<%= perspective[0] %>?corp=<%= viewed_resume.corporation_id %>">
 							<%= perspective[1] %></a>
 					</li>
 				<% end %>

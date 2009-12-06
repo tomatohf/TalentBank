@@ -18,11 +18,11 @@
 			<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
 			数据统计</a>
 			
-		<div class="dropdown_menu" style="font-size: 12px;">
+		<div class="dropdown_menu" style="font-size: 12px; text-align: left;">
 			<ul class="dropdown_sub_menu">
 				<% TeacherStatisticsController::Perspectives.each do |perspective| %>
 					<li>
-						<a href="/teachers/<%= @teacher.id %>/statistics/<%= perspective[0] %>?corp=<%= corporation.id %>">
+						<a href="/teachers/<%= @teacher.id %>/statistics<%= perspective[0] %>?corp=<%= corporation.id %>">
 							<%= perspective[1] %></a>
 					</li>
 				<% end %>
