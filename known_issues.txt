@@ -9,7 +9,6 @@ chart 保存下来, dialog 显示图片让用户去另存为
 		* 学院被查看数目排行
 			- 隐藏不合适的 过滤器
 			- 饼图时, 行数太少的话, 左边每行的高度自动拉大了
-			- compared_counts 用 limit 限制后, 可能无法取出 counts 中有的对应的 count
 	- 企业搜索统计 (only query data)
 		排行 - 正序, 倒序
 		* 关键词 统计分析排行

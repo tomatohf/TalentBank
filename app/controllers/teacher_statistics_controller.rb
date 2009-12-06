@@ -359,7 +359,7 @@ class TeacherStatisticsController < ApplicationController
   
   def college
     @dataset_color = "#FF6600"
-    @group_by = "college_id"
+    @group_by = :college_id
     @groups_name = "学院"
     @group_titles = College.data[@school.abbr].inject({}) { |hash, college|
       hash[college[:id]] = college[:name]
@@ -373,28 +373,42 @@ class TeacherStatisticsController < ApplicationController
     compared_to = prepare_compare
     prepare_order
     prepare_limit
+    filters = prepare_filters
     
     count_options = {
-      :group_by => @group_by,
+      :group_by => @group_by.to_s,
       :group_function => :attr,
       :group_clause => "@count #{@order.upcase}",
       :limit => @limit,
-      :with => prepare_filters
+      :with => filters
     }
     
     @counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
     @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
     if @compared_from
+      compared_count_options = count_options.merge(
+        {
+          :group_clause => nil,
+          :limit => nil,
+          :with => filters.merge(
+            {
+              @group_by => @counts.collect { |record| record[1]["@groupby"] }
+            }
+          )
+        }
+      )
+      
       @compared_counts = CorpViewedResume.period_group_counts(
         @teacher.school_id,
         @compared_from,
         compared_to,
-        count_options
+        compared_count_options
       ).inject({}) { |hash, record|
         hash[record[1]["@groupby"]] = record[1]["@count"]
         hash
       }
+      
       @compared_total_count = CorpViewedResume.period_total_count(@teacher.school_id, @compared_from, compared_to, count_options)
     end
     
