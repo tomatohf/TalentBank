@@ -554,13 +554,12 @@ a.corp_tag:hover {
 }
 
 .grid tbody td {
-	background: #F9F9F9 none repeat scroll 0 0;
 	border: 1px solid #DDDDDD;
 	padding: 5px;
 }
 
 .grid tbody tr.odd td {
-	background-color: #FFFFFF;
+	background-color: #F9F9F9;
 }
 
 .grid tbody td.datetime {

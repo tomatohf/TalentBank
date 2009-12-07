@@ -57,6 +57,16 @@
 		</thead>
 		
 		<tbody>
+			<%
+				lack_h = 0
+				graph_rowspan = @counts.size
+				if pie_view
+					row_h = 30
+					chart_h = graph_width * (@compared_from ? 2 : 1)
+					lack_h = chart_h - (@counts.size * row_h) if @counts.size > 0
+					graph_rowspan += 1 if lack_h > 0
+				end
+			%>
 			<% @counts.each_index do |i| %>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<%
@@ -144,7 +154,7 @@
 						</td>
 					<% else %>
 						<% unless i > 0 %>
-							<td rowspan="<%= @counts.size %>" valign="top" style="background-color: #FFFFFF;">
+							<td rowspan="<%= graph_rowspan %>" valign="top">
 								<div>
 									<%= render(
 										:partial => "ofc",
@@ -172,6 +182,10 @@
 						<% end %>
 					<% end %>
 				</tr>
+			<% end %>
+			
+			<% if lack_h > 0 %>
+				<tr><td colspan="<%= @compared_from ? 7 : 4 %>" style="height: <%= lack_h %>px;"></td></tr>
 			<% end %>
 		</tbody>
 	</table>
