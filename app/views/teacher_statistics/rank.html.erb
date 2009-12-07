@@ -1,11 +1,13 @@
 <%
-	talent_page_title("#{@groups_name}统计")
+	page_title = "#{@page_title_prefix} - #{@groups_name}统计"
+
+	talent_page_title(page_title)
 	
 	pie_view = (@view == "pie")
 %>
 
 
-<h2><%= @groups_name %>统计</h2>
+<h2><%= page_title %></h2>
 
 <% if @nav %>
 	<div style="margin-bottom: 10px;">
@@ -25,7 +27,7 @@
 %>
 
 <div>
-	<input type="hidden" id="group_by_field" value="<%= @group_by.to_s.gsub(/_id$/, "") %>" />
+	<input type="hidden" id="group_by_field" value="<%= get_group_by_field(@group_by) %>" />
 	<% if @compared_from %>
 		<input type="hidden" id="compared_period" value="<%= %Q!#{@compared_from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{get_compared_to(@from, @to, @compared_from).strftime("%Y%m%d")}! %>" />
 	<% end %>
@@ -95,7 +97,7 @@
 							<% if drill_down_action %>
 								<a href="#" class="none" id="drill_down_link_<%= i %>_to_<%= drill_down_action %>">
 							<% end %>
-									<%= @group_titles[group] %>
+									<%= h(@group_titles[group]) %>
 							<% if drill_down_action %>
 								</a>
 							<% end %>

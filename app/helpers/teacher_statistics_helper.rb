@@ -14,4 +14,18 @@ module TeacherStatisticsHelper
     compared_from + (to - from)
   end
   
+  
+  def get_group_by_field(group_by)
+    case group_by
+      when :corporation_id
+        "corp"
+      when :edu_level_id
+        "level"
+      when :graduation_year
+        "graduation"
+      else
+        group_by.to_s.gsub(/_id$/, "")
+    end
+  end
+  
 end

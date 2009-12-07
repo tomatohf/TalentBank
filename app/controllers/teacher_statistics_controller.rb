@@ -356,7 +356,23 @@ class TeacherStatisticsController < ApplicationController
     @groups_name = "学生"
     
     viewing_rank do |group_values|
-      Student.find(
+      (@student && { @student.id => @student.name }) || Student.find(
+        :all,
+        :conditions => ["id in (?)", group_values]
+      ).inject({}) { |hash, record|
+        hash[record.id] = record.name
+        hash
+      }
+    end
+  end
+  
+  
+  def viewing_corp
+    @group_by = :corporation_id
+    @groups_name = "企业"
+    
+    viewing_rank do |group_values|
+      (@corp && { @corp.id => @corp.name? ? @corp.name : @corp.uid }) || Corporation.find(
         :all,
         :conditions => ["id in (?)", group_values]
       ).inject({}) { |hash, record|
@@ -608,6 +624,7 @@ class TeacherStatisticsController < ApplicationController
   
   
   def viewing_rank(&block)
+    @page_title_prefix = "简历查看"
     @nav = "viewing_nav"
     @dataset_color = "#FF6600"
     @drill = ["college", "major", "student", nil]

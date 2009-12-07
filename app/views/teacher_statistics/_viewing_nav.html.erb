@@ -3,7 +3,8 @@
 		[
 			["college", "学院统计"],
 			["major", "专业统计"],
-			["student", "学生统计"]
+			["student", "学生统计"],
+			["viewing_corp", "企业统计"]
 		].each do |part|
 	%>
 		<a href="/teachers/<%= @teacher.id %>/statistics/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == action_name %>>
