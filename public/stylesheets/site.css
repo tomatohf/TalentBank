@@ -601,3 +601,8 @@ a.filter_item_link:hover {
 	width: 9px;
 	top: 4px;
 }
+
+* html .graph_legend {
+	font-size: 1px;
+	top: 1px;
+}
