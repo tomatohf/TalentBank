@@ -5,7 +5,7 @@ class TeacherStatisticsController < ApplicationController
   
   Perspectives = [
     ["", "时段统计"],
-    ["college", "院系统计"],
+    ["/college", "院系统计"],
     ["#", "搜索统计"]
   ]
 
@@ -77,10 +77,10 @@ class TeacherStatisticsController < ApplicationController
     @query_dataset_name = "企业搜索数"
     @view_dataset_name = "查看简历数"
     
-    @q = !(params[:q] == "f")
-    @v = !(params[:v] == "f")
-    
     filters = prepare_filters
+    
+    @q = !(params[:q] == "f" || @student)
+    @v = !(params[:v] == "f")
     
     period_unit, default_period, count_key_format, label_format = prepare_time_view
     prepare_period(default_period.ago(Date.today))
@@ -323,26 +323,47 @@ class TeacherStatisticsController < ApplicationController
   
   
   def college
-    @dataset_color = "#FF6600"
     @group_by = :college_id
     @groups_name = "学院"
-    @group_titles = College.data[@school.abbr].inject({}) { |hash, college|
-      hash[college[:id]] = college[:name]
-      hash
-    }
     
-    rank
-    render :action => "rank"
+    viewing_rank do |group_values|
+      school_abbr = @school.abbr
+      group_values.inject({}) { |hash, group_value|
+        record = College.find(school_abbr, group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
   end
   
   
   def major
+    @group_by = :major_id
+    @groups_name = "专业"
     
+    viewing_rank do |group_values|
+      group_values.inject({}) { |hash, group_value|
+        record = Major.find_by_id(group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
   end
   
   
   def student
+    @group_by = :student_id
+    @groups_name = "学生"
     
+    viewing_rank do |group_values|
+      Student.find(
+        :all,
+        :conditions => ["id in (?)", group_values]
+      ).inject({}) { |hash, record|
+        hash[record.id] = record.name
+        hash
+      }
+    end
   end
   
   
@@ -371,10 +392,8 @@ class TeacherStatisticsController < ApplicationController
     college_id = params[:college] && params[:college].strip
     @college = College.find(@school.abbr, college_id.to_i)
     
-    if @college
-      major_id = params[:major] && params[:major].strip
-  	  @major = Major.find(@college[:id], major_id.to_i)
-	  end
+    major_id = params[:major] && params[:major].strip
+	  @major = Major.find_by_id(major_id.to_i)
 	  
 	  student_id = params[:student] && params[:student].strip
     @student = student_id.blank? ? nil : Student.try_find(student_id)
@@ -492,6 +511,9 @@ class TeacherStatisticsController < ApplicationController
     @counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
     @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
     
+    group_values = @counts.collect { |record| record[1]["@groupby"] }
+    @group_titles = yield(group_values) if block_given?
+    
     if @compared_from
       compared_count_options = count_options.merge(
         {
@@ -499,7 +521,7 @@ class TeacherStatisticsController < ApplicationController
           :limit => nil,
           :with => filters.merge(
             {
-              @group_by => @counts.collect { |record| record[1]["@groupby"] }
+              @group_by => group_values
             }
           )
         }
@@ -582,6 +604,16 @@ class TeacherStatisticsController < ApplicationController
         @compared_chart_data.delete(:y_axis)
       end
     end
+  end
+  
+  
+  def viewing_rank(&block)
+    @nav = "viewing_nav"
+    @dataset_color = "#FF6600"
+    @drill = ["college", "major", "student", nil]
+    
+    rank { |group_values| block.call(group_values) }
+    render :action => "rank"
   end
   
 end

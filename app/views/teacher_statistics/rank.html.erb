@@ -1,11 +1,17 @@
 <%
-	talent_page_title("学院统计")
+	talent_page_title("#{@groups_name}统计")
 	
 	pie_view = (@view == "pie")
 %>
 
 
-<h2>学院统计</h2>
+<h2><%= @groups_name %>统计</h2>
+
+<% if @nav %>
+	<div style="margin-bottom: 10px;">
+		<%= render(:partial => @nav) %>
+	</div>
+<% end %>
 
 <%=
 	render(
@@ -74,8 +80,15 @@
 						<% end %>
 						
 						<div>
-							<a href="#" class="none">
-								<%= @group_titles[group] %></a>
+							<% drill_down_action = @drill && @drill[(@drill.index(action_name) || @drill.size) + 1] %>
+							
+							<% if drill_down_action %>
+								<a href="#" class="none" id="drill_down_link_<%= i %>_to_<%= drill_down_action %>">
+							<% end %>
+									<%= @group_titles[group] %>
+							<% if drill_down_action %>
+								</a>
+							<% end %>
 								
 							<a href="#" title="查看详细时段统计" target="_blank" id="period_detail_link_<%= i %>">
 								<img alt="线图" src="/images/teachers/line_chart_icon.gif" border="0" style="margin: 0px 0px -2px 2px;" /></a>

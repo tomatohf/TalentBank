@@ -286,7 +286,16 @@ function filter_major() {
 	show_filter_dialog(
 		function(container) {
 			var major_objs = MAJORS["c_" + $("input#college").val()];
-			if(major_objs != null && major_objs.length > 0) {
+			if(major_objs == null) {
+				major_objs = [];
+				$.each(
+					MAJORS,
+					function(key, value) {
+						$.merge(major_objs, value);
+					}
+				);
+			}
+			if(major_objs.length > 0) {
 				var links = $.map(
 					major_objs,
 					function(major_obj, i) {
@@ -429,6 +438,7 @@ $(document).ready(
 		
 		setup_limit_slider();
 		
+		setup_drill_down_links();
 		setup_period_detail_links();
 		
 		// setup_graph_bar_animation(1000);
@@ -660,6 +670,33 @@ function setup_period_detail_links() {
 			);
 			
 			var href = "/teachers/" + TEACHER_ID + "/statistics?" + $.param(params);
+			
+			$(link).attr("href", href);
+		}
+	);
+}
+
+
+function setup_drill_down_links() {
+	var filters = get_filter_values();
+	
+	$.each(
+		$("a[id^='drill_down_link_']"),
+		function(i, link) {
+			var drill_infos = $(link).attr("id").substr("drill_down_link_".length).split("_to_");
+			
+			var extra_filters = {};
+			extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + drill_infos[0]).val();
+			
+			var params = $.extend(
+				{
+					period: $("input#period").val()
+				},
+				get_filter_values(),
+				extra_filters
+			);
+			
+			var href = "/teachers/" + TEACHER_ID + "/statistics/" + drill_infos[1] + "?" + $.param(params);
 			
 			$(link).attr("href", href);
 		}
