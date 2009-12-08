@@ -19,6 +19,8 @@ module TeacherStatisticsHelper
     case group_by
       when :corporation_id
         "corp"
+      when :exp_tag_id
+        "tag"
       when :edu_level_id
         "level"
       when :graduation_year

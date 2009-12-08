@@ -1,12 +1,10 @@
 <div class="horizontal_nav">
 	<%
 		[
-			["college", "学院统计"],
-			["major", "专业统计"],
-			["student", "学生统计"],
-			["viewing_domain", "求职方向统计"],
+			["querying_corp", "企业统计"],
 			
-			["viewing_corp", "企业统计"]
+			["querying_domain", "求职方向统计"],
+			["tag", "经历标签统计"]
 		].each do |part|
 	%>
 		<a href="/teachers/<%= @teacher.id %>/statistics/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == action_name %>>

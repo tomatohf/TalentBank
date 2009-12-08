@@ -367,6 +367,20 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def viewing_domain
+    @group_by = :domain_id
+    @groups_name = "求职方向"
+    
+    viewing_rank do |group_values|
+      group_values.inject({}) { |hash, group_value|
+        record = ResumeDomain.find(group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
+  end
+  
+  
   def viewing_corp
     @group_by = :corporation_id
     @groups_name = "企业"
@@ -377,6 +391,52 @@ class TeacherStatisticsController < ApplicationController
         :conditions => ["id in (?)", group_values]
       ).inject({}) { |hash, record|
         hash[record.id] = record.name
+        hash
+      }
+    end
+  end
+  
+  
+  def querying_corp
+    @group_by = :corporation_id
+    @groups_name = "企业"
+    
+    querying_rank do |group_values|
+      (@corp && { @corp.id => @corp.name? ? @corp.name : @corp.uid }) || Corporation.find(
+        :all,
+        :conditions => ["id in (?)", group_values]
+      ).inject({}) { |hash, record|
+        hash[record.id] = record.name
+        hash
+      }
+    end
+  end
+  
+  
+  def querying_domain
+    @drill = ["querying_domain", "tag", nil]
+    
+    @group_by = :domain_id
+    @groups_name = "求职方向"
+    
+    querying_rank do |group_values|
+      group_values.inject({}) { |hash, group_value|
+        record = ResumeDomain.find(group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
+  end
+  
+  
+  def tag
+    @group_by = :exp_tag_id
+    @groups_name = "经历标签"
+    
+    querying_rank do |group_values|
+      group_values.inject({}) { |hash, group_value|
+        record = ResumeExpTag.find_by_id(group_value)
+        hash[record[:id]] = record[:name]
         hash
       }
     end
@@ -418,6 +478,9 @@ class TeacherStatisticsController < ApplicationController
     domain_id = params[:domain] && params[:domain].strip
     @domain = ResumeDomain.find(domain_id.to_i)
     
+    tag_id = params[:tag] && params[:tag].strip
+	  @tag = ResumeExpTag.find_by_id(tag_id.to_i)
+    
     
     filters = {}
     
@@ -429,6 +492,7 @@ class TeacherStatisticsController < ApplicationController
     
     filters[:corporation_id] = @corp.id if @corp
     filters[:domain_id] = @domain[:id] if @domain
+    filters[:exp_tag_id] = @tag[:id] if @tag
     
     filters
   end
@@ -516,7 +580,7 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
-  def rank
+  def rank(dataset_class)
     prepare_rank_view
     prepare_period(1.month.ago(Date.today))
     compared_to = prepare_compare
@@ -532,8 +596,8 @@ class TeacherStatisticsController < ApplicationController
       :with => filters
     }
     
-    @counts = CorpViewedResume.period_group_counts(@teacher.school_id, @from, @to, count_options)
-    @total_count = CorpViewedResume.period_total_count(@teacher.school_id, @from, @to, count_options)
+    @counts = dataset_class.period_group_counts(@teacher.school_id, @from, @to, count_options)
+    @total_count = dataset_class.period_total_count(@teacher.school_id, @from, @to, count_options)
     
     group_values = @counts.collect { |record| record[1]["@groupby"] }
     @group_titles = yield(group_values) if block_given?
@@ -551,7 +615,7 @@ class TeacherStatisticsController < ApplicationController
         }
       )
       
-      @compared_counts = CorpViewedResume.period_group_counts(
+      @compared_counts = dataset_class.period_group_counts(
         @teacher.school_id,
         @compared_from,
         compared_to,
@@ -561,7 +625,7 @@ class TeacherStatisticsController < ApplicationController
         hash
       }
       
-      @compared_total_count = CorpViewedResume.period_total_count(@teacher.school_id, @compared_from, compared_to, count_options)
+      @compared_total_count = dataset_class.period_total_count(@teacher.school_id, @compared_from, compared_to, count_options)
     end
     
     unless @view == "pie"
@@ -601,7 +665,7 @@ class TeacherStatisticsController < ApplicationController
           {
             :type => "pie",
             :radius => 100,
-            "on-click" => "group_view_detail",
+            "on-click" => @detail_function,
             :values => values
           }
         ]
@@ -619,7 +683,7 @@ class TeacherStatisticsController < ApplicationController
               :type => "pie",
               :alpha => 0.6,
               :radius => 100,
-              "on-click" => "compared_group_view_detail",
+              "on-click" => "compared_#{@detail_function}",
               :values => compared_values
             }
           ]
@@ -633,11 +697,25 @@ class TeacherStatisticsController < ApplicationController
   
   def viewing_rank(&block)
     @page_title_prefix = "简历查看"
+    @dataset_name = "查看简历数"
     @nav = "viewing_nav"
     @dataset_color = "#FF6600"
-    @drill = ["college", "major", "student", nil]
+    @detail_function = "group_view_detail"
+    @drill = ["college", "major", "student", "viewing_domain", nil]
     
-    rank { |group_values| block.call(group_values) }
+    rank(CorpViewedResume) { |group_values| block.call(group_values) }
+    render :action => "rank"
+  end
+  
+  
+  def querying_rank(&block)
+    @page_title_prefix = "搜索操作"
+    @dataset_name = "企业搜索数"
+    @nav = "querying_nav"
+    @dataset_color = "#0077CC"
+    @detail_function = "group_query_detail"
+    
+    rank(CorpQuery) { |group_values| block.call(group_values) }
     render :action => "rank"
   end
   

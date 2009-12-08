@@ -5,7 +5,7 @@ var period_date_format = "yymmdd";
 
 var FILTERS = [
 	"level", "graduation", "college", "major", "student",
-	"corp", "domain"
+	"corp", "domain", "tag"
 ];
 
 
@@ -42,6 +42,22 @@ function compared_group_view_detail(value_index) {
 	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
 	
 	show_details("view", $("input#compared_period").val(), extra_filters);
+}
+
+
+function group_query_detail(value_index) {
+	var extra_filters = {};
+	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	
+	show_details("query", $("input#period").val(), extra_filters);
+}
+
+
+function compared_group_query_detail(value_index) {
+	var extra_filters = {};
+	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	
+	show_details("query", $("input#compared_period").val(), extra_filters);
 }
 
 
@@ -327,6 +343,22 @@ function filter_corp_dialog_content(container, url) {
 
 function filter_domain() {
 	show_static_filter_dialog("domain", DOMAINS, "过滤求职方向");
+}
+
+
+function filter_tag() {
+	var tag_objs = TAGS["d_" + $("input#domain").val()];
+	if(tag_objs == null) {
+		tag_objs = [];
+		$.each(
+			TAGS,
+			function(key, value) {
+				$.merge(tag_objs, value);
+			}
+		);
+	}
+	
+	show_static_filter_dialog("tag", tag_objs, "过滤经历标签");
 }
 
 

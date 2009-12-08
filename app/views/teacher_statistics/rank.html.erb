@@ -43,7 +43,7 @@
 			<tr>
 				<td style="width: 25px;"></td>
 				<td><%= @groups_name %></td>
-				<td colspan="2">查看简历数</td>
+				<td colspan="2"><%= @dataset_name %></td>
 				<% if @compared_from %>
 					<td colspan="2">对比数</td>
 					<td>变化率</td>
@@ -110,7 +110,7 @@
 					</td>
 					
 					<td align="right" style="font-weight: bold;">
-						<a href="#" onclick="group_view_detail(<%= i %>); return false;" class="none">
+						<a href="#" onclick="<%= @detail_function %>(<%= i %>); return false;" class="none">
 							<%= count %></a>
 					</td>
 					<td align="right">
@@ -119,7 +119,7 @@
 					
 					<% if @compared_from %>
 						<td align="right" style="font-weight: bold;">
-							<a href="#" onclick="compared_group_view_detail(<%= i %>); return false;" class="none">
+							<a href="#" onclick="compared_<%= @detail_function %>(<%= i %>); return false;" class="none">
 								<%= compared_count %></a>
 						</td>
 						<td align="right" style="color: <%= compared_label_color %>;">
@@ -138,7 +138,7 @@
 								bar_title = "#{count} / #{@total_count} = #{percent_label}"
 							%>
 
-							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;" onclick="group_view_detail(<%= i %>);"></div>
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @dataset_color %>; width: <%= width.round %>px;" onclick="<%= @detail_function %>(<%= i %>);"></div>
 							<%= count %>
 							
 							
@@ -150,7 +150,7 @@
 									compared_bar_title = "#{compared_count} / #{@compared_total_count} = #{compared_percent_label}"
 								%>
 
-								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_group_view_detail(<%= i %>);"></div>
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_<%= @detail_function %>(<%= i %>);"></div>
 								<%= compared_count %>
 							<% end %>
 						</td>
