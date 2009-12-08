@@ -30,34 +30,51 @@ function compared_query_dot_detail(dot_index) {
 
 
 function group_view_detail(value_index) {
-	var extra_filters = {};
-	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	var extra_filters = get_extra_filters(value_index);
 	
-	show_details("view", $("input#period").val(), extra_filters);
+	if(extra_filters != null) {
+		show_details("view", $("input#period").val(), extra_filters);
+	}
 }
 
 
 function compared_group_view_detail(value_index) {
-	var extra_filters = {};
-	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	var extra_filters = get_extra_filters(value_index);
 	
-	show_details("view", $("input#compared_period").val(), extra_filters);
+	if(extra_filters != null) {
+		show_details("view", $("input#compared_period").val(), extra_filters);
+	}
 }
 
 
 function group_query_detail(value_index) {
-	var extra_filters = {};
-	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	var extra_filters = get_extra_filters(value_index);
 	
-	show_details("query", $("input#period").val(), extra_filters);
+	if(extra_filters != null) {
+		show_details("query", $("input#period").val(), extra_filters);
+	}
 }
 
 
 function compared_group_query_detail(value_index) {
-	var extra_filters = {};
-	extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+	var extra_filters = get_extra_filters(value_index);
 	
-	show_details("query", $("input#compared_period").val(), extra_filters);
+	if(extra_filters != null) {
+		show_details("query", $("input#compared_period").val(), extra_filters);
+	}
+}
+
+
+function get_extra_filters(value_index) {
+	var extra_filters = null;
+	
+	var group_value = $("input#group_value_" + value_index).val();
+	if(group_value != null) {
+		extra_filters = {};
+		extra_filters[$("input#group_by_field").val()] = group_value;
+	}
+	
+	return extra_filters;
 }
 
 
@@ -662,9 +679,7 @@ function setup_period_detail_links() {
 	$.each(
 		$("a[id^='period_detail_link_']"),
 		function(i, link) {
-			var value_index = $(link).attr("id").substr("period_detail_link_".length);
-			var extra_filters = {};
-			extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + value_index).val();
+			var extra_filters = get_extra_filters($(link).attr("id").substr("period_detail_link_".length));
 			
 			var params = $.extend(
 				{
@@ -672,7 +687,7 @@ function setup_period_detail_links() {
 					period: $("input#period").val()
 				},
 				get_filter_values(),
-				extra_filters
+				extra_filters || {}
 			);
 			
 			var href = "/teachers/" + TEACHER_ID + "/statistics?" + $.param(params);
@@ -691,15 +706,14 @@ function setup_drill_down_links() {
 		function(i, link) {
 			var drill_infos = $(link).attr("id").substr("drill_down_link_".length).split("_to_");
 			
-			var extra_filters = {};
-			extra_filters[$("input#group_by_field").val()] = $("input#group_value_" + drill_infos[0]).val();
+			var extra_filters = get_extra_filters(drill_infos[0]);
 			
 			var params = $.extend(
 				{
 					period: $("input#period").val()
 				},
 				get_filter_values(),
-				extra_filters
+				extra_filters || {}
 			);
 			
 			var href = "/teachers/" + TEACHER_ID + "/statistics/" + drill_infos[1] + "?" + $.param(params);
