@@ -432,8 +432,11 @@ class TeacherStatisticsController < ApplicationController
   def tag
     @group_by = :exp_tag_id
     @groups_name = "经历标签"
+    @hide_filters = [:views]
     
     querying_rank do |group_values|
+      @view = "bar"
+      
       group_values.inject({}) { |hash, group_value|
         record = ResumeExpTag.find_by_id(group_value)
         hash[record[:id]] = record[:name]

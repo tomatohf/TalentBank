@@ -5,6 +5,7 @@
 	hide_dataset = hide.include?(:dataset)
 	hide_order = hide.include?(:order)
 	hide_limit = hide.include?(:limit)
+	hide_views = hide.include?(:views)
 	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
@@ -138,6 +139,8 @@
 				%>
 			</td>
 		</tr>
+		
+		<tr><td colspan="3" style="height: 5px;"></td></tr>
 	</table>
 </div>
 
@@ -176,15 +179,17 @@
 				</td>
 			<% end %>
 			
-			<td style="width: 35px;">视图:</td>
-			<% views.each do |view| %>
-				<td style="width: <%= views_style[:width] || "25" %>px;">
-					<a href="#" title="<%= view[1] %>" id="view_link_<%= view[0] %>" class="view_link">
-						<img alt="<%= view[1] %>" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
-				</td>
-			<% end %>
+			<% unless hide_views %>
+				<td style="width: 35px;">视图:</td>
+				<% views.each do |view| %>
+					<td style="width: <%= views_style[:width] || "25" %>px;">
+						<a href="#" title="<%= view[1] %>" id="view_link_<%= view[0] %>" class="view_link">
+							<img alt="<%= view[1] %>" src="/images/teachers/view_icons/<%= view[0] %>_view<%= "_selected" if view[0] == @view %>_icon.gif" border="0" /></a>
+					</td>
+				<% end %>
 		
-			<td style="width: <%= views_style[:right] || "50" %>px;"></td>
+				<td style="width: <%= views_style[:right] || "50" %>px;"></td>
+			<% end %>
 		</tr>
 	</table>
 </div>

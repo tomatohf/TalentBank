@@ -21,12 +21,13 @@
 		:locals => {
 			:views => [["bar", "查看柱图"], ["pie", "查看饼图"]],
 			:views_style => {:width => 21, :right => 8},
-			:hide => [:dataset]
+			:hide => [:dataset] + (@hide_filters || [])
 		}
 	)
 %>
 
 <div>
+	<input type="hidden" id="dataset_field" value="<%= @nav && @nav.first %>" />
 	<input type="hidden" id="group_by_field" value="<%= get_group_by_field(@group_by) %>" />
 	<% if @compared_from %>
 		<input type="hidden" id="compared_period" value="<%= %Q!#{@compared_from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{get_compared_to(@from, @to, @compared_from).strftime("%Y%m%d")}! %>" />

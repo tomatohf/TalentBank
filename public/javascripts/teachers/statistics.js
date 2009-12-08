@@ -683,11 +683,18 @@ function setup_period_detail_links() {
 			
 			var params = $.extend(
 				{
-					q: "f",
 					period: $("input#period").val()
 				},
 				get_filter_values(),
 				extra_filters || {}
+			);
+			$.each(
+				["q", "v"],
+				function(i, value) {
+					if(value != $("#dataset_field").val()) {
+						params[value] = "f"
+					}
+				}
 			);
 			
 			var href = "/teachers/" + TEACHER_ID + "/statistics?" + $.param(params);
