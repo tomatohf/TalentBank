@@ -397,9 +397,6 @@ class TeacherStatisticsController < ApplicationController
   
   
   def prepare_filters
-    corp_id = params[:corp] && params[:corp].strip
-    @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
-    
     level_id = params[:level] && params[:level].strip
     @level = EduLevel.find(level_id.to_i)
     
@@ -414,13 +411,24 @@ class TeacherStatisticsController < ApplicationController
 	  student_id = params[:student] && params[:student].strip
     @student = student_id.blank? ? nil : Student.try_find(student_id)
     
+    
+    corp_id = params[:corp] && params[:corp].strip
+    @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
+    
+    domain_id = params[:domain] && params[:domain].strip
+    @domain = ResumeDomain.find(domain_id.to_i)
+    
+    
     filters = {}
-    filters[:corporation_id] = @corp.id if @corp
+    
     filters[:edu_level_id] = @level[:id] if @level
     filters[:graduation_year] = @graduation unless @graduation.blank?
     filters[:college_id] = @college[:id] if @college
     filters[:major_id] = @major[:id] if @major
     filters[:student_id] = @student.id if @student
+    
+    filters[:corporation_id] = @corp.id if @corp
+    filters[:domain_id] = @domain[:id] if @domain
     
     filters
   end

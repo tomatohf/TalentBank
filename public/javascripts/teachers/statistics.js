@@ -3,7 +3,10 @@ var range_splitter = "-";
 
 var period_date_format = "yymmdd";
 
-var FILTERS = ["level", "graduation", "college", "major", "student", "corp"];
+var FILTERS = [
+	"level", "graduation", "college", "major", "student",
+	"corp", "domain"
+];
 
 
 function view_dot_detail(dot_index) {
@@ -45,6 +48,9 @@ function compared_group_view_detail(value_index) {
 function show_details(detail_type, detail_period, extra_filters) {
 	show_details_dialog(
 		function(container) {
+			// remove height property to let content expand the container height
+			container.css( { height: "" } );
+			
 			show_details_dialog_content(container, null, detail_type, detail_period, extra_filters);
 		}
 	);
@@ -220,98 +226,33 @@ function enable_range_input() {
 
 
 function filter_level() {
-	show_filter_dialog(
-		function(container) {
-			var links = $.map(
-				LEVELS,
-				function(level_obj, i) {
-					return '<a href="#" id="filter_level_' + level_obj.id + '" class="filter_item_link">' +
-								level_obj.name +
-							'</a>';
-				}
-			);
-
-			container.html(links.join(""));
-			
-			setup_filter_links(container);
-		},
-		"过滤教育水平"
-	);
+	show_static_filter_dialog("level", LEVELS, "过滤教育水平");
 }
 
 
 function filter_graduation() {
-	show_filter_dialog(
-		function(container) {
-			var links = $.map(
-				GRADUATIONS,
-				function(graduation_obj, i) {
-					return '<a href="#" id="filter_graduation_' + graduation_obj.id + '" class="filter_item_link">' +
-								graduation_obj.name +
-							'</a>';
-				}
-			);
-
-			container.html(links.join(""));
-			
-			setup_filter_links(container);
-		},
-		"过滤毕业时间"
-	);
+	show_static_filter_dialog("graduation", GRADUATIONS, "过滤毕业时间");
 }
 
 
 function filter_college() {
-	show_filter_dialog(
-		function(container) {
-			var links = $.map(
-				COLLEGES,
-				function(college_obj, i) {
-					return '<a href="#" id="filter_college_' + college_obj.id + '" class="filter_item_link">' +
-								college_obj.name +
-							'</a>';
-				}
-			);
-
-			container.html(links.join(""));
-			
-			setup_filter_links(container);
-		},
-		"过滤学院"
-	);
+	show_static_filter_dialog("college", COLLEGES, "过滤学院");
 }
 
 
 function filter_major() {
-	show_filter_dialog(
-		function(container) {
-			var major_objs = MAJORS["c_" + $("input#college").val()];
-			if(major_objs == null) {
-				major_objs = [];
-				$.each(
-					MAJORS,
-					function(key, value) {
-						$.merge(major_objs, value);
-					}
-				);
+	var major_objs = MAJORS["c_" + $("input#college").val()];
+	if(major_objs == null) {
+		major_objs = [];
+		$.each(
+			MAJORS,
+			function(key, value) {
+				$.merge(major_objs, value);
 			}
-			if(major_objs.length > 0) {
-				var links = $.map(
-					major_objs,
-					function(major_obj, i) {
-						return '<a href="#" id="filter_major_' + major_obj.id + '" class="filter_item_link">' +
-									major_obj.name +
-								'</a>';
-					}
-				);
-
-				container.html(links.join(""));
-
-				setup_filter_links(container);
-			}
-		},
-		"过滤专业"
-	);
+		);
+	}
+	
+	show_static_filter_dialog("major", major_objs, "过滤专业");
 }
 
 
@@ -384,6 +325,11 @@ function filter_corp_dialog_content(container, url) {
 }
 
 
+function filter_domain() {
+	show_static_filter_dialog("domain", DOMAINS, "过滤求职方向");
+}
+
+
 function setup_filter_links(container) {
 	container.find("a[id^='filter_']").unbind("click").click(
 		function() {
@@ -419,6 +365,34 @@ function show_filter_dialog(content, title) {
 			modal: false,
 			close: true
 		}
+	);
+}
+
+
+function show_static_filter_dialog(filter_name, filter_objs, title) {
+	show_filter_dialog(
+		function(container) {
+			// remove height property to let content expand the container height
+			container.css( { height: "" } );
+			
+			var links = $.map(
+				filter_objs,
+				function(filter_obj, i) {
+					return '<a href="#" id="filter_' + filter_name + '_' + filter_obj.id + '" class="filter_item_link">' +
+								filter_obj.name +
+							'</a>';
+				}
+			);
+
+			container.html(links.join(""));
+			
+			// adjust height to avoid beyond one page
+			var max_h = 400;
+			if(container.height() > max_h) { container.height(max_h); }
+			
+			setup_filter_links(container);
+		},
+		title
 	);
 }
 

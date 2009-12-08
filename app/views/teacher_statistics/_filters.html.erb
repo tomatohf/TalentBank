@@ -23,12 +23,14 @@
 	
 	<input type="hidden" id="view" name="view" value="<%= @view %>" />
 	
-	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
 	<input type="hidden" id="level" name="level" value="<%= @level && @level[:id] %>" />
 	<input type="hidden" id="graduation" name="graduation" value="<%= graduation %>" />
 	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
 	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
 	<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
+	
+	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
+	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
 	
 	<% unless hide_order %>
 		<input type="hidden" id="order" name="order" value="<%= @order %>" />
@@ -100,73 +102,17 @@
 			</td>
 
 			<td>
-				<a href="#" class="none" title="过滤教育水平" id="level_filter_link">
-					学历</a>
-				<% if @level %>
-					<span title="<%= @level[:name] %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= @level[:name] %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_level_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-				
-
-				<span class="info" style="margin: 0px 2px;">|</span>
-				
-				<a href="#" class="none" title="过滤毕业时间" id="graduation_filter_link">
-					毕业时间</a>
-				<% unless @graduation.blank? %>
-					<span title="<%= graduation %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= graduation %>年
-					</span>
-					<a href="#" title="清除过滤" id="remove_graduation_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-				
-
-				<span class="info" style="margin: 0px 2px;">|</span>
-					
-				<a href="#" class="none" title="过滤学院" id="college_filter_link">
-					学院</a>
-				<% if @college %>
-					<span title="<%= @college[:name] %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= truncate(@college[:name], :length => 15) %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_college_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-				
-				
-				<span class="info" style="margin: 0px 2px;">|</span>
-
-				<a href="#" class="none" title="过滤专业" id="major_filter_link">
-					专业</a>
-				<% if @major %>
-					<span title="<%= @major[:name] %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= truncate(@major[:name], :length => 15) %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_major_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
-				
-				
-				<span class="info" style="margin: 0px 2px;">|</span>
-
-				<a href="#" class="none" title="过滤学生" id="student_filter_link">
-					学生</a>
-				<% if @student %>
-					<% student_name = h(@student.name) %>
-					<span title="<%= student_name %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= truncate(student_name, :length => 20) %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_student_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
+				<%=
+					render_filters(
+						[
+							["level", "教育水平"],
+							["graduation", "毕业时间"],
+							["college", "学院"],
+							["major", "专业"],
+							["student", "学生"]
+						]
+					)
+				%>
 			</td>
 		</tr>
 		
@@ -180,17 +126,14 @@
 			</td>
 
 			<td>
-				<a href="#" class="none" title="过滤企业" id="corp_filter_link">
-					企业</a>
-				<% if @corp %>
-					<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
-					<span title="<%= corp_name %>" style="color: #333333; margin-right: 1px;">
-						:
-						<%= truncate(corp_name, :length => 20) %>
-					</span>
-					<a href="#" title="清除过滤" id="remove_corp_filter_link">
-						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
-				<% end %>
+				<%=
+					render_filters(
+						[
+							["corp", "企业"],
+							["domain", "求职方向"]
+						]
+					)
+				%>
 			</td>
 		</tr>
 	</table>
