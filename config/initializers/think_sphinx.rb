@@ -20,9 +20,9 @@ module Riddle
       
       def settings_body
         charset_dictpath = if ThinkingSphinx::Configuration.environment == "production"
-          "/home/tomato/websites/app/CareerCommunity/shared/sphinx/dict"
+          "/home/tomato/websites/app/TalentBank/shared/sphinx/dict"
         else
-          "/Users/tomato/Dev/git/projects/CareerCommunity/db/sphinx/dict"
+          "/Users/tomato/Dev/git/projects/TalentBank/db/sphinx/dict"
         end
         
         if self.class.name == "Riddle::Configuration::Index"
