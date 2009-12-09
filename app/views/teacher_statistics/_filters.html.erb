@@ -33,6 +33,7 @@
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
 	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
 	<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
+	<input type="hidden" id="skill" name="skill" value="<%= @skill && @skill[:id] %>" />
 	
 	<% unless hide_order %>
 		<input type="hidden" id="order" name="order" value="<%= @order %>" />
@@ -133,7 +134,8 @@
 						[
 							["corp", "企业"],
 							["domain", "求职方向"],
-							["tag", "经历标签"]
+							["tag", "经历标签"],
+							["skill", "技能和证书"]
 						]
 					)
 				%>

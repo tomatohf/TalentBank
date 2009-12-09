@@ -207,7 +207,7 @@ class StudentsController < ApplicationController
     blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
     
     if blocked_corp.save
-      flash[:success_msg] = "操作成功, 已将企业 #{@corporation.name} 添加到黑名单"
+      flash[:success_msg] = "操作成功, 已将企业 #{@corporation.get_name} 添加到黑名单"
     else
       flash[:error_msg] = "操作失败, 再试一次吧"
     end
@@ -221,7 +221,7 @@ class StudentsController < ApplicationController
     blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
     blocked_corp.destroy
     
-    flash[:success_msg] = "操作成功, 已将企业 #{@corporation.name} 从黑名单中移除"
+    flash[:success_msg] = "操作成功, 已将企业 #{@corporation.get_name} 从黑名单中移除"
     
     back = params[:back] && params[:back].strip
     back = "blocked_corps" if back.blank?

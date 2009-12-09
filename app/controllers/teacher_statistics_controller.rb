@@ -386,7 +386,7 @@ class TeacherStatisticsController < ApplicationController
     @groups_name = "企业"
     
     viewing_rank do |group_values|
-      (@corp && { @corp.id => @corp.name? ? @corp.name : @corp.uid }) || Corporation.find(
+      (@corp && { @corp.id => @corp.get_name }) || Corporation.find(
         :all,
         :conditions => ["id in (?)", group_values]
       ).inject({}) { |hash, record|
@@ -446,6 +446,23 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def skill
+    @group_by = :skill_id
+    @groups_name = "技能和证书"
+    @hide_filters = [:views]
+    
+    querying_rank do |group_values|
+      @view = "bar"
+      
+      group_values.inject({}) { |hash, group_value|
+        record = Skill.find(group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
+  end
+  
+  
   private
   
   def check_teacher
@@ -483,6 +500,9 @@ class TeacherStatisticsController < ApplicationController
     
     tag_id = params[:tag] && params[:tag].strip
 	  @tag = ResumeExpTag.find_by_id(tag_id.to_i)
+	  
+	  skill_id = params[:skill] && params[:skill].strip
+	  @skill = Skill.find(skill_id.to_i)
     
     
     filters = {}
@@ -496,6 +516,7 @@ class TeacherStatisticsController < ApplicationController
     filters[:corporation_id] = @corp.id if @corp
     filters[:domain_id] = @domain[:id] if @domain
     filters[:exp_tag_id] = @tag[:id] if @tag
+    filters[:skill_id] = @skill[:id] if @skill
     
     filters
   end

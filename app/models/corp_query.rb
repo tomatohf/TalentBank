@@ -30,7 +30,13 @@ class CorpQuery < ActiveRecord::Base
     )
     
     has(
-      "REPLACE(REPLACE(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', -1), '#{Sep_Pair}', ''), '#{Sep_Value}', ',')",
+      "REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', -2), '#{Sep_Part}', -1), '#{Sep_Value}', ',')",
+      :as => :skill_id,
+      :type => :multi
+    )
+    
+    has(
+      "REPLACE(REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(other_conditions, '#{Sep_Part}', -2), '#{Sep_Part}', 1), '#{Sep_Pair}', ''), '#{Sep_Value}', ',')",
       :as => :skill_values,
       :type => :multi
     )
@@ -85,7 +91,12 @@ class CorpQuery < ActiveRecord::Base
       
       :keyword => keyword,
       
-      :other_conditions => [tags, skills].join(Sep_Part)
+      :other_conditions => [
+        tags,
+        skills,
+        # it's only used for sphinx index on skill_id attribute
+        skills && skills.gsub(/-\d*/, "")
+      ].join(Sep_Part)
     )
   end
   

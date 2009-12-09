@@ -51,7 +51,8 @@ ActionController::Routing::Routes.draw do |map|
       
       :querying_corp => :any,
       :querying_domain => :any,
-      :tag => :any
+      :tag => :any,
+      :skill => :any
     }
   end
   

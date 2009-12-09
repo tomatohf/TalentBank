@@ -57,7 +57,7 @@
 	<% if @corp %>
 		<span class="info" style="margin: 0px 5px;">|</span>
 
-		<% corp_name = h(@corp.name? ? @corp.name : @corp.uid) %>
+		<% corp_name = h(@corp.get_name) %>
 		企业:
 		<span title="<%= corp_name %>">
 			<%= truncate(corp_name, :length => 20) %>

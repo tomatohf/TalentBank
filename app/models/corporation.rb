@@ -99,4 +99,9 @@ class Corporation < ActiveRecord::Base
     !self.name.blank?
   end
   
+  
+  def get_name
+    self.name? ? self.name : self.uid
+  end
+  
 end

@@ -5,7 +5,7 @@ var period_date_format = "yymmdd";
 
 var FILTERS = [
 	"level", "graduation", "college", "major", "student",
-	"corp", "domain", "tag"
+	"corp", "domain", "tag", "skill"
 ];
 
 
@@ -376,6 +376,11 @@ function filter_tag() {
 	}
 	
 	show_static_filter_dialog("tag", tag_objs, "过滤经历标签");
+}
+
+
+function filter_skill() {
+	
 }
 
 

@@ -1,5 +1,5 @@
 # The skill id and skill data will be concated to the skill_values,
-# which will be used to filter resume in sphinx.
+# which will be used as attribute for filtering in sphinx.
 # So the skill id (which starts with 100100, step 100) should NOT be larger than ***6 numbers***,
 # and the skill data (which starts with 0, step 10) should NOT be larger than ***3 numbers***
 

@@ -44,7 +44,7 @@ module TeacherStatisticsHelper
           record
         elsif record.respond_to?(:name)
           if record.respond_to?(:uid)
-						h(record.name? ? record.name : record.uid)
+						h(record.get_name)
 					else
 						h(record.name)
 					end
