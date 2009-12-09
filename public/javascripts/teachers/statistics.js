@@ -380,7 +380,7 @@ function filter_tag() {
 
 
 function filter_skill() {
-	
+	show_static_filter_dialog("skill", SKILLS, "过滤技能和证书");
 }
 
 

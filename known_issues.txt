@@ -5,7 +5,6 @@ chart 保存下来, dialog 显示图片让用户去另存为
 		- 隐藏, 隐藏对当前页面完全不适用的过滤器, 仅适用于某数据的过滤器要标明出来
 	- 搜索操作统计 (only query data)
 		* 关键词 统计分析排行
-		* skills 统计分析排行
 
 
 sphinx max_match 对数据统计的影响

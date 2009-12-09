@@ -447,6 +447,8 @@ class TeacherStatisticsController < ApplicationController
   
   
   def skill
+    @drill = ["skill", "skill_value", nil]
+    
     @group_by = :skill_id
     @groups_name = "技能和证书"
     @hide_filters = [:views]
@@ -457,6 +459,32 @@ class TeacherStatisticsController < ApplicationController
       group_values.inject({}) { |hash, group_value|
         record = Skill.find(group_value)
         hash[record[:id]] = record[:name]
+        hash
+      }
+    end
+  end
+  
+  
+  def skill_value
+    skill_id = params[:skill] && params[:skill].strip
+    jump_to("/teachers/#{@teacher.id}/statistics/skill") if skill_id.blank?
+    
+    @group_by = :skill_values
+    @hide_filters = [:limit]
+    
+    @counts_post_proc = Proc.new { |counts|
+      counts.delete_if { |record| record[1]["@groupby"].to_s[0, 6] != @skill[:id].to_s }
+    }
+    
+    querying_rank do |group_values|
+      @groups_name = @skill[:name]
+      
+      group_values.inject({}) { |hash, group_value|
+        skill = Skill.find(group_value.to_s[0, 6].to_i)
+        skill_value = group_value.to_s[6..-1].to_i
+        skill_value_label = SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], skill_value)
+        
+        hash[group_value] = skill_value_label.blank? ? "不限" : skill_value_label
         hash
       }
     end
@@ -502,7 +530,15 @@ class TeacherStatisticsController < ApplicationController
 	  @tag = ResumeExpTag.find_by_id(tag_id.to_i)
 	  
 	  skill_id = params[:skill] && params[:skill].strip
-	  @skill = Skill.find(skill_id.to_i)
+	  unless skill_id.blank?
+	    @skill = if skill_id.size > 6
+	      @skill_value = skill_id[6..-1].to_i
+	      
+	      Skill.find(skill_id[0, 6].to_i)
+      else
+        Skill.find(skill_id.to_i)
+      end
+    end
     
     
     filters = {}
@@ -516,7 +552,13 @@ class TeacherStatisticsController < ApplicationController
     filters[:corporation_id] = @corp.id if @corp
     filters[:domain_id] = @domain[:id] if @domain
     filters[:exp_tag_id] = @tag[:id] if @tag
-    filters[:skill_id] = @skill[:id] if @skill
+    if @skill
+      if @skill_value
+        filters[:skill_values] = skill_id.to_i
+      else
+        filters[:skill_id] = @skill[:id]
+      end
+    end
     
     filters
   end
@@ -576,6 +618,8 @@ class TeacherStatisticsController < ApplicationController
     
     @limit = [@limit, 100].min
     @limit = [@limit, 1].max
+    
+    @limit = nil if @hide_filters && @hide_filters.include?(:limit)
   end
   
   
@@ -621,6 +665,7 @@ class TeacherStatisticsController < ApplicationController
     }
     
     @counts = dataset_class.period_group_counts(@teacher.school_id, @from, @to, count_options)
+    @counts = @counts_post_proc.call(@counts) if @counts_post_proc
     @total_count = dataset_class.period_total_count(@teacher.school_id, @from, @to, count_options)
     
     group_values = @counts.collect { |record| record[1]["@groupby"] }

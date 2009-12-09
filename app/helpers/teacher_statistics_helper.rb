@@ -21,6 +21,8 @@ module TeacherStatisticsHelper
         "corp"
       when :exp_tag_id
         "tag"
+      when :skill_values
+        "skill"
       when :edu_level_id
         "level"
       when :graduation_year

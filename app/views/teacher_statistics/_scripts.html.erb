@@ -29,6 +29,8 @@
 		DOMAINS.push({id:<%= domain[:id] %>, name:"<%= domain[:name] %>"});
 		TAGS["d_<%= domain[:id] %>"] = [<%= (ResumeExpTag.data[domain[:id]] || []).collect{|tag| %Q!{id:#{tag[:id]}, name:"#{tag[:name]}"}!}.join(",") %>];
 	<% end %>
+	
+	var SKILLS = [<%= Skill.data.collect{|skill| %Q!{id:#{skill[:id]}, name:"#{skill[:name]}"}!}.join(",") %>];
 </script>
 <script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
 <link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />

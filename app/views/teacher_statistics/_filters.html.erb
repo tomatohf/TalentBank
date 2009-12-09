@@ -10,6 +10,11 @@
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
 	graduation = h(@graduation)
+	
+	if @skill
+		skill = @skill[:id].to_s
+		skill += @skill_value.to_s if @skill_value
+	end
 %>
 
 
@@ -33,7 +38,7 @@
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
 	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
 	<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
-	<input type="hidden" id="skill" name="skill" value="<%= @skill && @skill[:id] %>" />
+	<input type="hidden" id="skill" name="skill" value="<%= skill %>" />
 	
 	<% unless hide_order %>
 		<input type="hidden" id="order" name="order" value="<%= @order %>" />
@@ -134,11 +139,44 @@
 						[
 							["corp", "企业"],
 							["domain", "求职方向"],
-							["tag", "经历标签"],
-							["skill", "技能和证书"]
+							["tag", "经历标签"]
 						]
 					)
 				%>
+				
+				
+				<span class="info" style="margin: 0px 2px;">|</span>
+				
+				<a href="#" class="none" title="过滤技能和证书" id="skill_filter_link">
+					技能和证书</a>
+				<% if @skill %>
+					<%
+						skill_data_array = @skill[:data].collect { |data|
+							data_id = "#{@skill[:id]}#{data[:value]}"
+							data_name = data[:label].blank? ? "不限" : data[:label]
+							%Q!{id:#{data_id}, name:'#{data_name}'}!
+						}.join(",")
+						
+						if @skill_value
+							clear_skill_value_item = "{id:#{@skill[:id]}, name:'取消过滤 #{@skill[:name]}'}"
+							clear_skill_value_item += "," unless skill_data_array.blank?
+							skill_data_array = clear_skill_value_item + skill_data_array
+						end
+					%>
+					<span title="<%= @skill[:name] %>" style="color: #333333; margin-right: 1px;">
+						:
+						<a href="#" class="none" onclick="show_static_filter_dialog('skill', [<%= skill_data_array %>], '过滤<%= @skill[:name] %>'); return false;">
+							<%= truncate(@skill[:name], :length => 20) %></a>
+							
+						<% if @skill_value %>
+							<% skill_value_label = SkillValueTypes.get_type(@skill[:value_type]).render_label(@skill[:data], @skill_value) %>
+							-
+							<%= skill_value_label.blank? ? "不限" : skill_value_label %>
+						<% end %>
+					</span>
+					<a href="#" title="清除过滤" id="remove_skill_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
 			</td>
 		</tr>
 	</table>
