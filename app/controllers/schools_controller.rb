@@ -67,6 +67,7 @@ class SchoolsController < ApplicationController
     @teacher.uid = params[:uid] && params[:uid].strip
     @teacher.password = ::Utils.generate_password(@teacher.uid)
     @teacher.admin = (params[:admin] == "true")
+    @teacher.statistic = (params[:statistic] == "true")
     
     if @teacher.save
       flash[:success_msg] = "操作成功, 已添加老师 #{@teacher.uid}"
