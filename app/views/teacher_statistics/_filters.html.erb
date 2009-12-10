@@ -103,56 +103,83 @@
 </div>
 
 
-<div style="margin-top: 8px;">
+<div style="margin: 8px 0px;">
+	<%
+		filters = [
+			["corp", "企业"],
+			
+			["level", "教育水平"],
+			["graduation", "毕业时间"],
+			
+			["college", "学院"],
+			["major", "专业"],
+			["student", "学生"],
+			
+			["domain", "求职方向"],
+			["tag", "经历标签"],
+			
+			["skill", "技能和证书"]
+		]
+	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td style="width: 35px;" valign="top">过滤:</td>
-			
-			<td style="width: 20px; padding-top: 2px;" valign="top">
-				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
+			<td style="width: 75px;" valign="top">
+				<a href="#" id="filters_link" class="none">
+					<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" style="margin-bottom: -2px;" />
+					过滤数据:</a>
+					
+				<div class="dropdown_menu" style="font-size: 12px;">
+					<ul class="dropdown_sub_menu">
+						<% filters.each do |filter| %>
+							<%# record = self.instance_variable_get("@#{filter[0]}") %>
+							<%# if record.blank? %>
+								<li>
+									<a href="#" class="<%= filter[0] %>_filter_link">
+										<%= filter[1] %></a>
+								</li>
+							<%# end %>
+						<% end %>
+					</ul>
+				</div>
 			</td>
 
 			<td>
-				<%=
-					render_filters(
-						[
-							["level", "教育水平"],
-							["graduation", "毕业时间"],
-							["college", "学院"],
-							["major", "专业"],
-							["student", "学生"]
-						]
-					)
-				%>
-			</td>
-		</tr>
-		
-		<tr><td colspan="3" style="height: 5px;"></td></tr>
-		
-		<tr>
-			<td></td>
-			
-			<td style="width: 20px; padding-top: 2px;" valign="top">
-				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
-			</td>
-
-			<td>
-				<%=
-					render_filters(
-						[
-							["corp", "企业"],
-							["domain", "求职方向"],
-							["tag", "经历标签"]
-						]
-					)
-				%>
+				<% no_filter = true %>
+				<% filters[0..-2].each do |filter| %>
+					<% record = self.instance_variable_get("@#{filter[0]}") %>
+					<% unless record.blank? %>
+						<%
+							record_name = if record.kind_of?(String)
+								record
+							elsif record.respond_to?(:name)
+								if record.respond_to?(:uid)
+									h(record.get_name)
+								else
+									h(record.name)
+								end
+							else
+								record[:name]
+							end
+						%>
+						
+						<% unless no_filter %>
+							<span class="info" style="margin: 0px 5px;">|</span>
+						<% end %>
+						<% no_filter = false %>
+						
+						<a href="#" class="none <%= filter[0] %>_filter_link" title="过滤<%= filter[1] %>">
+							<%= filter[1] %></a>
+						<span title="<%= record_name %>" style="color: #333333; margin-right: 1px;">
+							:
+							<%= truncate(record_name, :length => 20) %>
+						</span>
+						<a href="#" title="清除过滤<%= filter[1] %>" id="remove_<%= filter[0] %>_filter_link">
+							<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+					<% end %>
+				<% end %>
 				
 				
-				<span class="info" style="margin: 0px 2px;">|</span>
-				
-				<a href="#" class="none" title="过滤技能和证书" id="skill_filter_link">
-					技能和证书</a>
-				<% if @skill %>
+				<% unless @skill.blank? %>
 					<%
 						skill_data_array = @skill[:data].collect { |data|
 							data_id = "#{@skill[:id]}#{data[:value]}"
@@ -166,6 +193,14 @@
 							skill_data_array = clear_skill_value_item + skill_data_array
 						end
 					%>
+					
+					<% unless no_filter %>
+						<span class="info" style="margin: 0px 5px;">|</span>
+					<% end %>
+					<% no_filter = false %>
+
+					<a href="#" class="none skill_filter_link" title="过滤技能和证书">
+						技能和证书</a>
 					<span title="<%= @skill[:name] %>" style="color: #333333; margin-right: 1px;">
 						:
 						<a href="#" class="none" onclick="show_static_filter_dialog('skill', [<%= skill_data_array %>], '过滤<%= @skill[:name] %>'); return false;">
@@ -177,29 +212,31 @@
 							<%= skill_value_label.blank? ? "不限" : skill_value_label %>
 						<% end %>
 					</span>
-					<a href="#" title="清除过滤" id="remove_skill_filter_link">
+					<a href="#" title="清除过滤技能和证书" id="remove_skill_filter_link">
 						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
 				<% end %>
-			</td>
-		</tr>
-		
-		<tr><td colspan="3" style="height: 5px;"></td></tr>
-		
-		<tr>
-			<td></td>
-			
-			<td style="width: 20px; padding-top: 2px;" valign="top">
-				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
-			</td>
-
-			<td>
-				<%=
-					render_filters(
-						[
-							["keyword", "关键词"]
-						]
-					)
-				%>
+				
+				
+				<% unless @keyword.blank? %>
+					<% unless no_filter %>
+						<span class="info" style="margin: 0px 5px;">|</span>
+					<% end %>
+					<% no_filter = false %>
+					
+					<span title="<%= keyword %>" style="color: #333333; margin-right: 1px;">
+						关键词:
+						<%= truncate(keyword, :length => 20) %>
+					</span>
+					<a href="#" title="清除过滤关键词" id="remove_keyword_filter_link">
+						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
+				<% end %>
+				
+				
+				<% if no_filter %>
+					<div class="info">
+						(无)
+					</div>
+				<% end %>
 			</td>
 		</tr>
 	</table>

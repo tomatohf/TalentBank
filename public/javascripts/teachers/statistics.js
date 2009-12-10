@@ -384,11 +384,6 @@ function filter_skill() {
 }
 
 
-function filter_keyword() {
-	
-}
-
-
 function setup_filter_links(container) {
 	container.find("a[id^='filter_']").unbind("click").click(
 		function() {
@@ -463,6 +458,7 @@ $(document).ready(
 		setup_daterangepicker();
 		add_period_changing_trigger();
 		
+		setup_filters_dropdown_menu();
 		setup_filters();
 		
 		setup_compare();
@@ -784,11 +780,30 @@ function setup_compare() {
 }
 
 
+function setup_filters_dropdown_menu() {
+	$("#filters_link").unbind("click").click(
+		function() {
+			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+			$(this).parent().hover(
+				function() {
+				},
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+				}
+			);
+			
+			return false;
+		}
+	);
+}
+
+
 function setup_filters() {
 	$.each(
 		FILTERS,
 		function(i, value) {
-			$("a#" + value + "_filter_link").unbind("click").click(
+			$("a." + value + "_filter_link").unbind("click").click(
 				function() {
 					eval("filter_" + value)();
 
