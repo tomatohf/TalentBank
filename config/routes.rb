@@ -53,7 +53,8 @@ ActionController::Routing::Routes.draw do |map|
       :querying_domain => :any,
       :tag => :any,
       :skill => :any,
-      :skill_value => :any
+      :skill_value => :any,
+      :keyword => :any
     }
   end
   

@@ -83,6 +83,8 @@
 							compared_count = @compared_counts[group] || 0
 							compared_percent_label = Utils.percent(compared_count, @compared_total_count, 1)
 						end
+						
+						group_title = h(@group_titles[group])
 					%>
 
 					<td align="center"><%= i+1 %></td>
@@ -98,7 +100,7 @@
 							<% if drill_down_action %>
 								<a href="#" class="none" id="drill_down_link_<%= i %>_to_<%= drill_down_action %>">
 							<% end %>
-									<%= h(@group_titles[group]) %>
+									<%= group_title %>
 							<% if drill_down_action %>
 								</a>
 							<% end %>
@@ -107,7 +109,7 @@
 								<img alt="线图" src="/images/teachers/line_chart_icon.gif" border="0" style="margin: 0px 0px -2px 2px;" /></a>
 						</div>
 						
-						<input type="hidden" id="group_value_<%= i %>" value="<%= group %>" />
+						<input type="hidden" id="group_value_<%= i %>" value="<%= @using_title_as_group_value ? group_title : group %>" />
 					</td>
 					
 					<td align="right" style="font-weight: bold;">

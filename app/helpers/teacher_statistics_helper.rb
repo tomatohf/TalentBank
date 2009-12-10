@@ -42,7 +42,7 @@ module TeacherStatisticsHelper
 			
       record = self.instance_variable_get("@#{filter_info[0]}")
       unless record.blank?
-        record_name = if record.kind_of?(Integer)
+        record_name = if record.kind_of?(String)
           record
         elsif record.respond_to?(:name)
           if record.respond_to?(:uid)

@@ -5,7 +5,7 @@ var period_date_format = "yymmdd";
 
 var FILTERS = [
 	"level", "graduation", "college", "major", "student",
-	"corp", "domain", "tag", "skill"
+	"corp", "domain", "tag", "skill", "keyword"
 ];
 
 
@@ -381,6 +381,11 @@ function filter_tag() {
 
 function filter_skill() {
 	show_static_filter_dialog("skill", SKILLS, "过滤技能和证书");
+}
+
+
+function filter_keyword() {
+	
 }
 
 

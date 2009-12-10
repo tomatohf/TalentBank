@@ -6,7 +6,9 @@
 			["querying_domain", "求职方向统计"],
 			["tag", "经历标签统计"],
 			
-			["skill", "技能和证书统计"]
+			["skill", "技能和证书统计"],
+			
+			["keyword", "关键词统计"]
 		].each do |part|
 	%>
 		<a href="/teachers/<%= @teacher.id %>/statistics/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == action_name %>>

@@ -491,6 +491,34 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def keyword
+    @group_by = :keyword
+    @groups_name = "关键词"
+    
+    @using_title_as_group_value = true
+    @extra_count_options = {
+      :without => {
+        :keyword => 0
+      }
+    }
+    
+    querying_rank do |group_values|
+      keyword_map = CorpQuery.find(
+        :all,
+        :conditions => ["id in (?)", @counts.collect{|c| c[0]}]
+      ).inject({}) { |hash, query|
+        hash[query.keyword.to_crc32] = query.keyword
+        hash
+      }
+      
+      group_values.inject({}) { |hash, group_value|
+        hash[group_value] = keyword_map[group_value]
+        hash
+      }
+    end
+  end
+  
+  
   private
   
   def check_teacher
@@ -540,6 +568,8 @@ class TeacherStatisticsController < ApplicationController
       end
     end
     
+    @keyword = params[:keyword] && params[:keyword].strip
+    
     
     filters = {}
     
@@ -559,6 +589,7 @@ class TeacherStatisticsController < ApplicationController
         filters[:skill_id] = @skill[:id]
       end
     end
+    filters[:keyword] = @keyword.to_crc32 unless @keyword.blank?
     
     filters
   end
@@ -662,7 +693,7 @@ class TeacherStatisticsController < ApplicationController
       :group_clause => "@count #{@order.upcase}",
       :limit => @limit,
       :with => filters
-    }
+    }.merge(@extra_count_options || {})
     
     @counts = dataset_class.period_group_counts(@teacher.school_id, @from, @to, count_options)
     @counts = @counts_post_proc.call(@counts) if @counts_post_proc
@@ -682,7 +713,7 @@ class TeacherStatisticsController < ApplicationController
             }
           )
         }
-      )
+      ).merge(@extra_count_options || {})
       
       @compared_counts = dataset_class.period_group_counts(
         @teacher.school_id,

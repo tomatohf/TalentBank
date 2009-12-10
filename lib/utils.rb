@@ -259,6 +259,7 @@ module Utils
           search_args[:page] = 1
           search_args[:per_page] = options[:limit]
         end
+        search_args[:without] = options[:without] if options[:without]
         
         result = self.search_for_ids(search_args)
         
@@ -277,14 +278,17 @@ module Utils
         from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
         to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
         
-        self.search_count(
+        search_args = {
           # :match_mode => self::Search_Match_Mode,
           # :order => "updated_at ASC",
           :with => {
             :school_id => school_id,
             :updated_at => from_time..to_time
           }.merge(options[:with] || {})
-        )
+        }
+        search_args[:without] = options[:without] if options[:without]
+        
+        self.search_count(search_args)
       end
       
       

@@ -15,6 +15,8 @@
 		skill = @skill[:id].to_s
 		skill += @skill_value.to_s if @skill_value
 	end
+	
+	keyword = h(@keyword)
 %>
 
 
@@ -39,6 +41,7 @@
 	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
 	<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
 	<input type="hidden" id="skill" name="skill" value="<%= skill %>" />
+	<input type="hidden" id="keyword" name="keyword" value="<%= keyword %>" />
 	
 	<% unless hide_order %>
 		<input type="hidden" id="order" name="order" value="<%= @order %>" />
@@ -177,6 +180,26 @@
 					<a href="#" title="清除过滤" id="remove_skill_filter_link">
 						<img alt="清除" src="/images/teachers/delete_icon.gif" border="0" /></a>
 				<% end %>
+			</td>
+		</tr>
+		
+		<tr><td colspan="3" style="height: 5px;"></td></tr>
+		
+		<tr>
+			<td></td>
+			
+			<td style="width: 20px; padding-top: 2px;" valign="top">
+				<img alt="过滤" src="/images/teachers/filter_icon.gif" border="0" />
+			</td>
+
+			<td>
+				<%=
+					render_filters(
+						[
+							["keyword", "关键词"]
+						]
+					)
+				%>
 			</td>
 		</tr>
 	</table>
