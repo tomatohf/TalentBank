@@ -7,6 +7,10 @@
 	hide_limit = hide.include?(:limit)
 	hide_views = hide.include?(:views)
 	
+	hide_student = hide.include?(:student)
+	hide_tag = hide.include?(:tag)
+	hide_skill = hide.include?(:skill)
+	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
 	graduation = h(@graduation)
@@ -35,12 +39,18 @@
 	<input type="hidden" id="graduation" name="graduation" value="<%= graduation %>" />
 	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
 	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
-	<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
+	<% unless hide_student %>
+		<input type="hidden" id="student" name="student" value="<%= @student && @student.id %>" />
+	<% end %>
 	
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
 	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
-	<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
-	<input type="hidden" id="skill" name="skill" value="<%= skill %>" />
+	<% unless hide_tag %>
+		<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
+	<% end %>
+	<% unless hide_skill %>
+		<input type="hidden" id="skill" name="skill" value="<%= skill %>" />
+	<% end %>
 	<input type="hidden" id="keyword" name="keyword" value="<%= keyword %>" />
 	
 	<% unless hide_order %>
@@ -77,16 +87,12 @@
 			<% unless hide_dataset %>
 				<td style="width: 35px;" align="right">数据:</td>
 				<td style="width: 90px;" align="right">
-					<% unless @student %>
-						<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>">
-					<% end %>
-							<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
-							<span style="color: <%= @query_dataset_color %>">
-								<%= @query_dataset_name %>
-							</span>
-					<% unless @student %>
-						</a>
-					<% end %>
+					<a href="#" class="none" onclick="change_dataset('q', '<%= "f" if @q %>'); return false;" title="<%= @q ? "隐藏" : "显示" %> <%= @query_dataset_name %>">
+						<img alt="<%= @q ? "隐藏" : "显示" %>" src="/images/teachers/<%= "un" unless @q %>checked_icon.gif" border="0" style="margin-bottom: -2px;" />
+						<span style="color: <%= @query_dataset_color %>">
+							<%= @query_dataset_name %>
+						</span>
+					</a>
 				</td>
 				<td style="width: 90px;" align="right">
 					<a href="#" class="none" onclick="change_dataset('v', '<%= "f" if @v %>'); return false;" title="<%= @v ? "隐藏" : "显示" %> <%= @view_dataset_name %>">
@@ -130,14 +136,21 @@
 					
 				<div class="dropdown_menu" style="font-size: 12px;">
 					<ul class="dropdown_sub_menu">
-						<% filters.each do |filter| %>
-							<%# record = self.instance_variable_get("@#{filter[0]}") %>
-							<%# if record.blank? %>
-								<li>
-									<a href="#" class="<%= filter[0] %>_filter_link">
-										<%= filter[1] %></a>
-								</li>
-							<%# end %>
+						<%
+							filters_in_menu = filters
+							filters_in_menu = filters_in_menu[0..4] + filters_in_menu[6..-1] if @q
+							filters_in_menu = filters_in_menu[0..-3] if @v
+						%>
+						<% filters_in_menu.each do |filter| %>
+							<% unless hide.include?(filter[0].to_sym) %>
+								<%# record = self.instance_variable_get("@#{filter[0]}") %>
+								<%# if record.blank? %>
+									<li>
+										<a href="#" class="<%= filter[0] %>_filter_link">
+											<%= filter[1] %></a>
+									</li>
+								<%# end %>
+							<% end %>
 						<% end %>
 					</ul>
 				</div>

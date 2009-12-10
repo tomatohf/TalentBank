@@ -15,10 +15,10 @@
 			
 		<div class="dropdown_menu" style="font-size: 12px;">
 			<ul class="dropdown_sub_menu">
-				<% TeacherStatisticsController::Perspectives.each do |perspective| %>
+				<% TeacherStatisticsHelper.corp_filter_menus.each do |menu| %>
 					<li>
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics<%= perspective[0] %>?corp=<%= viewed_resume.corporation_id %>">
-							<%= perspective[1] %></a>
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics<%= menu[0] %>?corp=<%= viewed_resume.corporation_id %>">
+							<%= menu[1] %></a>
 					</li>
 				<% end %>
 			</ul>

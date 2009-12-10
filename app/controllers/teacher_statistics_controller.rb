@@ -2,12 +2,6 @@ class TeacherStatisticsController < ApplicationController
   
   Queries_Page_Size = 100
   Date_Range_Splitter = "-"
-  
-  Perspectives = [
-    ["", "时段统计"],
-    ["/college", "院系统计"],
-    ["#", "搜索统计"]
-  ]
 
   include OpenFlashChartHelpers
   
@@ -79,7 +73,7 @@ class TeacherStatisticsController < ApplicationController
     
     filters = prepare_filters
     
-    @q = !(params[:q] == "f" || @student)
+    @q = !(params[:q] == "f")
     @v = !(params[:v] == "f")
     
     period_unit, default_period, count_key_format, label_format = prepare_time_view
@@ -802,6 +796,7 @@ class TeacherStatisticsController < ApplicationController
     @dataset_color = "#FF6600"
     @detail_function = "group_view_detail"
     @drill = ["college", "major", "student", "viewing_domain", nil]
+    @hide_filters = [:tag, :skill] + (@hide_filters || [])
     
     rank(CorpViewedResume) { |group_values| block.call(group_values) }
     render :action => "rank"
@@ -814,6 +809,7 @@ class TeacherStatisticsController < ApplicationController
     @nav = "querying_nav"
     @dataset_color = "#0077CC"
     @detail_function = "group_query_detail"
+    @hide_filters = [:student] + (@hide_filters || [])
     
     rank(CorpQuery) { |group_values| block.call(group_values) }
     render :action => "rank"
