@@ -205,10 +205,25 @@ class Resume < ActiveRecord::Base
   end
   
   
+  def empty!
+    self.job_intention && self.job_intention.destroy
+    self.hobby && self.hobby.destroy
+    self.award && self.award.destroy
+    
+    self.exp_sections.each { |exp_section| exp_section.destroy }
+    
+    self.skills.each { |skill| skill.destroy }
+    self.list_skills.each { |list_skill| list_skill.destroy }
+    
+    self.list_sections.each { |list_section| list_section.destroy }
+  end
+  
+  
   def copy_to(to_resume)
     begin
       ActiveRecord::Base.transaction do
-        to_resume.save! if to_resume.new_record?
+        # clear contents of to_resume
+        to_resume.empty!
 
         # copy resume contents
         

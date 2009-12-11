@@ -17,10 +17,6 @@
 
 <% if @available_domains.size > 0 %>
 	<div>
-		<% form_tag "", :method => :post, :id => "copy_resume_form" do %>
-			<input type="hidden" id="copy_to_domain_id" name="domain_id" />
-		<% end %>
-		
 		<%
 			domain_category_mapping = @available_domains.group_by do |domain|
 				domain[:category_id]
@@ -30,42 +26,6 @@
 				ResumeDomainCategory.find(category_id)
 			end
 		%>
-		
-		<script language="JavaScript">
-			var DOMAINS = {};
-			<% categories.each do |category| %>
-				DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
-			<% end %>
-
-			function fill_domains(category_id) {
-				$("#domain_id").html("");
-
-				var domain_objs = DOMAINS["c_" + category_id];
-				if(domain_objs != null && domain_objs.length > 0) {
-					var options = $.map(
-						domain_objs,
-						function(domain_obj, i) {
-							return "<option value='" + domain_obj.id + "'>" + domain_obj.name + "</option>";
-						}
-					);
-
-					$("#domain_id").append(options.join(""));
-				}
-			}
-			
-			
-			function copy_resume(resume_id, from_domain_name) {
-				var domain_select = $("select#domain_id");
-				var to_domain_id = domain_select.val();
-				var to_domain_name = $.trim(domain_select.text());
-				if(confirm("确定要将 " + from_domain_name + " 的简历内容复制到 " + to_domain_name + " 的简历么 ?")) {
-					$("#copy_to_domain_id").val(to_domain_id);
-					$("#copy_resume_form")
-						.attr("action", "/students/<%= @student.id %>/resumes/" + resume_id + "/copy")
-						.submit();
-				}
-			}
-		</script>
 		
 		<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
 			<table border="0" cellspacing="5" cellpadding="0" style="font-size: 14px;">
@@ -89,26 +49,6 @@
 					<td style="padding: 0px 20px;">
 						<%= submit_tag "添加新简历", :class => "button", :disabled => !@account_active %>
 					</td>
-					
-					<td>
-						<img src="/images/students/copy_icon.gif" border="0" alt="复制" />
-					</td>
-					
-					<td>
-						<a href="#" class="none edit_link">或从已有简历复制</a>
-							
-						<div class="dropdown_menu" style="font-size: 12px;">
-							<ul class="dropdown_sub_menu">
-								<% @resumes.each do |resume| %>
-									<% domain = ResumeDomain.find(resume.domain_id)[:name] %>
-									<li>
-										<a href="#" onclick="copy_resume(<%= resume.id %>, '<%= a(domain) %>'); return false;">
-											<%= domain %></a>
-									</li>
-								<% end %>
-							</ul>
-						</div>
-					</td>
 				</tr>
 			</table>
 		<% end %>
@@ -121,31 +61,16 @@
 	<% form_tag "", :method => :put, :id => "update_resume_form" do %>
 		<input type="hidden" id="online" name="online" />
 	<% end %>
-	<script language="JavaScript">
-		function del_resume(resume_id, domain) {
-			if(confirm("确定要删除 " + domain + " 的简历么 ? 该简历中所有的数据都将被删除 !")) {
-				del_form = document.getElementById("del_resume_form");
-				del_form.action = "/students/<%= @student.id %>/resumes/" + resume_id;
-				del_form.submit();
-			}
-		}
-		
-		function update_resume(resume_id, domain, online) {
-			var msg = online ? "确定要将 " + domain + " 的简历上线么 ?" : "确定要将 " + domain + " 的简历下线么 ? 下线后该简历将无法被企业检索和浏览";
-			if(confirm(msg)) {
-				update_form = document.getElementById("update_resume_form");
-				update_form.action = "/students/<%= @student.id %>/resumes/" + resume_id;
-				document.getElementById("online").value = online.toString();
-				update_form.submit();
-			}
-		}
-	</script>
+	<% form_tag "", :method => :post, :id => "copy_resume_form" do %>
+		<input type="hidden" id="copy_to_resume_id" name="to_resume_id" />
+	<% end %>
 	
 	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
 		<thead>
 			<tr>
 				<td></td>
 				<td></td>
+				<td style="width: 60px;"></td>
 				<td style="width: 50px;"></td>
 				<td style="width: 50px;"></td>
 				<td style="width: 50px;"></td>
@@ -158,14 +83,14 @@
 			<% grouped_resumes.keys.sort.each do |category_id| %>
 				<% category = ResumeDomainCategory.find(category_id) %>
 				<tr>
-					<td colspan="6">
+					<td colspan="7" style="padding-left: 0px; padding-right: 0px;">
 						<div class="align_c" style="background-color: #EAEAEA; padding: 5px 0px;">
 							<%= category[:name] %>
 						</div>
 					</td>
 				</tr>
 				
-				<%= render :partial => "added_resume", :collection => grouped_resumes[category_id] %>
+				<%= render :partial => "added_resume", :collection => grouped_resumes[category_id], :locals => {:resumes => @resumes} %>
 			<% end %>
 		</tbody>
 	</table>
@@ -174,30 +99,13 @@
 
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
-	$(document).ready(
-		function() {
-			$(".edit_link").click(
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-					$(this).parent().hover(
-						function() {
-						},
-						function() {
-							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-						}
-					);
-					
-					return false;
-				}
-			);
-			
-			
-			$("#domain_category").change(
-				function() {
-					fill_domains($(this).val());
-				}
-			);
-		}
-	);
+	var STUDENT_ID = <%= @student.id %>;
+	
+	<% if @available_domains.size > 0 %>
+		var DOMAINS = {};
+		<% categories.each do |category| %>
+			DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+		<% end %>
+	<% end %>
 </script>
+<script src="/javascripts/resumes/resumes.js" type="text/javascript" language="JavaScript"></script>

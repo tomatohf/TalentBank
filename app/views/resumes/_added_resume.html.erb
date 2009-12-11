@@ -15,6 +15,29 @@
 	
 	
 	<td>
+		<% if resumes.size > 1 %>
+			<a href="#" title="复制简历" class="none edit_link">
+				<img src="/images/students/copy_icon.gif" border="0" alt="复制" style="margin-bottom: -1px;" />
+				复制到</a>
+
+			<div class="dropdown_menu" style="font-size: 12px;">
+				<ul class="dropdown_sub_menu">
+					<% resumes.each do |to_resume| %>
+						<% unless to_resume.id == added_resume.id %>
+							<% to_domain = ResumeDomain.find(to_resume.domain_id)[:name] %>
+							<li>
+								<a href="#" onclick="copy_resume(<%= added_resume.id %>, <%= to_resume.id %>, '<%= a(domain) %>', '<%= a(to_domain) %>'); return false;">
+									<%= to_domain %></a>
+							</li>
+						<% end %>
+					<% end %>
+				</ul>
+			</div>
+		<% end %>
+	</td>
+	
+	
+	<td>
 		<a href="#" title="删除简历" class="none" onclick="del_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
 			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除简历" />
 			删除</a>

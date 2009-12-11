@@ -53,22 +53,15 @@ class ResumesController < ApplicationController
   
   
   def copy
-    domain_id = params[:domain_id] && params[:domain_id].strip
+    to_resume = Resume.find(params[:to_resume_id])
     
-    unless domain_id.blank?
-      if @school.resume_domains.include?(domain_id.to_i)
-        new_resume = Resume.new(
-          :student_id => @student.id,
-          :domain_id => domain_id
-        )
+    return jump_to("/errors/forbidden") unless to_resume.student_id == @student.id
 
-        if @resume.copy_to(new_resume)
-          flash[:success_msg] = "操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历内容" +
-                                "复制到 #{ResumeDomain.find(new_resume.domain_id)[:name]} 的简历"
-        else
-          flash[:error_msg] = "操作失败, 再试一次吧"
-        end
-      end
+    if @resume.copy_to(to_resume)
+      flash[:success_msg] = "操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历内容" +
+                            "复制到 #{ResumeDomain.find(to_resume.domain_id)[:name]} 的简历"
+    else
+      flash[:error_msg] = "操作失败, 再试一次吧"
     end
     
     jump_to("/students/#{@student.id}/resumes")
