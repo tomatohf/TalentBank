@@ -75,7 +75,10 @@ class TeacherStudentsController < ApplicationController
   
   
   def resume
-    
+    @taggers = ResumeExpTagger.find(
+      :all,
+      :conditions => ["resume_id = ?", @resume.id]
+    )
   end
   
   
@@ -95,7 +98,7 @@ class TeacherStudentsController < ApplicationController
   
   def check_resume
     @resume = Resume.find(params[:id])
-    jump_to("/errors/forbidden") unless @resume.student.school_id == @teacher.school_id
+    jump_to("/errors/forbidden") if @resume.hidden || @resume.student.school_id != @teacher.school_id
   end
   
 end

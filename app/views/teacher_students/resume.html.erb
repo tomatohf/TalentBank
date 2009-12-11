@@ -9,6 +9,18 @@
 
 <h2>查看 <%= student_name %> 的 <%= domain %> 的简历</h2>
 
+
+<% if @taggers.size > 0 %>
+	<div class="resume_exp_tags_bar">
+		<font color="#888888">经历标签:</font>
+		<% @taggers.each do |tagger| %>
+			<% tag = ResumeExpTag.find_by_id(tagger.tag_id) %>
+			<span><%= tag[:name] %></span>
+		<% end %>
+	</div>
+<% end %>
+
+
 <div>
 	<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => false} %>
 </div>

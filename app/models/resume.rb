@@ -61,7 +61,7 @@ class Resume < ActiveRecord::Base
     
     has student.blocked_corps.corporation_id, :as => :blocked_corp_id
     
-    has domain_id, online, updated_at
+    has domain_id, online, hidden, updated_at
     
     has exp_taggers.tag_id, :as => :exp_tag_id
     
@@ -134,7 +134,8 @@ class Resume < ActiveRecord::Base
     end
     
     filters = {
-      :online => true
+      :online => true,
+      :hidden => false
     }
     filters.merge!(:school_id => corporation.school_id)
     [:college_id, :major_id, :edu_level_id, :graduation_year, :domain_id].each do |filter_key|
@@ -200,8 +201,8 @@ class Resume < ActiveRecord::Base
   
   
   def available?(corp_id)
-    # the resume is online and the corporation is NOT in the blacklist
-    self.online && BlockedCorp.get_record(self.student_id, corp_id).new_record?
+    # the resume is (not hidden) and online and the corporation is NOT in the blacklist
+    (!self.hidden) && self.online && BlockedCorp.get_record(self.student_id, corp_id).new_record?
   end
   
   

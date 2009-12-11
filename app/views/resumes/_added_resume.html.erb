@@ -49,7 +49,7 @@
 				<div class="dropdown_menu" style="font-size: 12px;">
 					<ul class="dropdown_sub_menu">
 						<% resumes.each do |to_resume| %>
-							<% unless to_resume.id == added_resume.id %>
+							<% unless to_resume.hidden || (to_resume.id == added_resume.id) %>
 								<% to_domain = ResumeDomain.find(to_resume.domain_id)[:name] %>
 								<li>
 									<a href="#" onclick="copy_resume(<%= added_resume.id %>, <%= to_resume.id %>, '<%= a(domain) %>', '<%= a(to_domain) %>'); return false;">

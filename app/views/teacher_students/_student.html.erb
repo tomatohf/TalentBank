@@ -20,11 +20,13 @@
 			<div class="dropdown_menu" style="font-size: 12px;">
 				<ul class="dropdown_sub_menu">
 					<% resumes.each do |resume| %>
-						<% domain = ResumeDomain.find(resume.domain_id) %>
-						<li>
-							<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
-								<%= domain[:name] %></a>
-						</li>
+						<% unless resume.hidden %>
+							<% domain = ResumeDomain.find(resume.domain_id) %>
+							<li>
+								<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
+									<%= domain[:name] %></a>
+							</li>
+						<% end %>
 					<% end %>
 				</ul>
 			</div>

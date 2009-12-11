@@ -108,17 +108,23 @@ div.ibutton-label-off span {
 /* create an outline when button gets focus via keyboard */
 .ibutton-container label {
 	cursor: inherit;
+	/* modified by Tomato
 	border: 1px dotted transparent;
+	*/
 }
 
 .ibutton-focus label {
 	/* we must use border, since outline doesn't work in IE */
+	/* modified by Tomato
 	border: 1px dotted #666 !important;
+	*/
 }
 
 .ibutton-focus div.ibutton-label-on span label {
 	/* use white for more contrast */
+	/* modified by Tomato
 	border-color: #fff !important;
+	*/
 }
 
 /* add padding to right/left so that text gets clipped before absolute edge */

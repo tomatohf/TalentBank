@@ -65,3 +65,16 @@
 ul.no_bullet {
 	list-style-type: none;
 }
+
+
+.resume_exp_tags_bar {
+	text-align:right;
+	font-size: 14px;
+	margin: 5px 40px 10px 20px;
+}
+
+.resume_exp_tags_bar span {
+	margin: 0px 6px;
+	padding-left: 16px;
+	background: transparent url(/images/students/tag_icon.gif) no-repeat scroll left center;
+}

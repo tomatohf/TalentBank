@@ -96,8 +96,9 @@ function setup_resume_mouse_over() {
 
 function setup_trash_visible_ibutton() {
 	var cookie_name = "trash_visible";
+	var checked = ($.cookie(cookie_name) == "1");
 	
-	if($.cookie(cookie_name) == "1") {
+	if(checked) {
 		$("#trash_visible").attr("checked", true);
 		
 		show_trash_resume(false);
@@ -141,6 +142,8 @@ function setup_trash_visible_ibutton() {
 			"padding-right": 12
 		}
 	);
+	
+	$("#trash_visible").iButton("toggle", checked);
 }
 
 
