@@ -86,6 +86,8 @@ class Resumes < ActiveRecord::Migration
       
       t.column :online, :boolean, :default => false
       
+      t.column :hidden, :boolean, :default => false
+      
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
     end

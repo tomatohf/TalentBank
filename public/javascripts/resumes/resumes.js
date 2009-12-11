@@ -26,9 +26,18 @@ function copy_resume(from_resume_id, to_resume_id, from_domain_name, to_domain_n
 
 
 function del_resume(resume_id, domain) {
-	if(confirm("确定要删除 " + domain + " 的简历么 ? 该简历中所有的数据都将被删除 !")) {
+	if(confirm("确定要将 " + domain + " 的简历放入回收站么 ?")) {
 		$("#del_resume_form")
 			.attr("action", "/students/" + STUDENT_ID + "/resumes/" + resume_id)
+			.submit();
+	}
+}
+
+
+function restore_resume(resume_id, domain) {
+	if(confirm("确定要将 " + domain + " 的简历从回收站中还原么 ?")) {
+		$("#restore_resume_form")
+			.attr("action", "/students/" + STUDENT_ID + "/resumes/" + resume_id + "/restore")
 			.submit();
 	}
 }
@@ -45,29 +54,179 @@ function update_resume(resume_id, domain, online) {
 }
 
 
-$(document).ready(
-	function() {
-		$(".edit_link").click(
-			function() {
-				$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+function setup_dropdown_menus() {
+	$(".edit_link").unbind("click").click(
+		function() {
+			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
 
-				$(this).parent().hover(
-					function() {
-					},
-					function() {
-						$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-					}
-				);
+			$(this).parent().hover(
+				function() {
+				},
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+				}
+			);
+			
+			return false;
+		}
+	);
+}
+
+
+function setup_domain_select() {
+	$("#domain_category").unbind("change").change(
+		function() {
+			fill_domains($(this).val());
+		}
+	);
+}
+
+
+function setup_resume_mouse_over() {
+	$(".resume_row, .trash_resume_row").unbind("mouseenter mouseleave").hover(
+		function() {
+			$(this).css("backgroundColor", "#F8F8F8");
+		},
+		function() {
+			$(this).css("backgroundColor", "#FFFFFF");
+		}
+	);
+}
+
+
+function setup_trash_visible_ibutton() {
+	var cookie_name = "trash_visible";
+	
+	if($.cookie(cookie_name) == "1") {
+		$("#trash_visible").attr("checked", true);
+		
+		show_trash_resume(false);
+	}
+	else {
+		$("#trash_visible").attr("checked", false);
+		
+		hide_trash_resume(false);
+	}
+	
+	
+	$("#trash_visible").iButton(
+		{
+			labelOn: "显示",
+			labelOff: "隐藏",
+			change: function(checkbox) {
+				var checked = checkbox.is(":checked")
+				if(checked) {
+					show_trash_resume(true);
+				}
+				else {
+					hide_trash_resume(true);
+				}
 				
-				return false;
+				// store the value in cookie
+				var date = new Date();
+				// 1 year(365 days) later
+				date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+				$.cookie(cookie_name, checked ? 1 : 0, { expires: date });
 			}
-		);
-		
-		
-		$("#domain_category").change(
+		}
+	);
+	
+	$("div.ibutton-label-on span").css(
+		{
+			"padding-left": 12
+		}
+	);
+	$("div.ibutton-label-off span").css(
+		{
+			"padding-right": 12
+		}
+	);
+}
+
+
+function show_trash_resume(animation) {
+	$(".trash_section_title").show();
+	
+	$(".trash_resume_row").show();
+	
+	if(animation) {
+		$(".trash_resume_row").find("td div").hide().slideDown("fast");
+	}
+}
+
+
+function hide_trash_resume(animation) {
+	if(animation) {
+		$(".trash_resume_row").find("td div").slideUp(
+			"fast",
 			function() {
-				fill_domains($(this).val());
+				$(".trash_resume_row").hide();
+				
+				$(".trash_section_title").hide();
 			}
 		);
 	}
+	else {
+		$(".trash_resume_row").hide();
+		
+		$(".trash_section_title").hide();
+	}
+}
+
+
+$(document).ready(
+	function() {
+		setup_trash_visible_ibutton();
+		
+		setup_dropdown_menus();
+		
+		setup_domain_select();
+		
+		setup_resume_mouse_over();
+	}
 );
+
+
+
+// jquery cookie plugin
+jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        // CAUTION: Needed to parenthesize options.path and options.domain
+        // in the following expressions, otherwise they evaluate to undefined
+        // in the packed version for some reason...
+        var path = options.path ? '; path=' + (options.path) : '';
+        var domain = options.domain ? '; domain=' + (options.domain) : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};

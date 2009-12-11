@@ -78,9 +78,23 @@ class ResumesController < ApplicationController
   
   
   def destroy
-    @resume.destroy
+    @resume.hidden = true
+    @resume.online = false
     
-    flash[:success_msg] = "操作成功, 已删除 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历"
+    if @resume.save
+      flash[:success_msg] = "操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历放入回收站"
+    end
+  
+    jump_to("/students/#{@student.id}/resumes")
+  end
+  
+  
+  def restore
+    @resume.hidden = false
+    
+    if @resume.save
+      flash[:success_msg] = "操作成功, 已将 #{ResumeDomain.find(@resume.domain_id)[:name]} 的简历从回收站中还原"
+    end
   
     jump_to("/students/#{@student.id}/resumes")
   end

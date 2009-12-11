@@ -1,83 +1,110 @@
-<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
-	<td>
-		<% domain = ResumeDomain.find(added_resume.domain_id)[:name] %>
-		<%= domain %>
-	</td>
-	
-	
-	<td>
-		<% if added_resume.online %>
-			<font color="green">已上线</font>
-		<% else %>
-			<font color="red">下线中</font>
-		<% end %>
-	</td>
-	
-	
-	<td>
-		<% if resumes.size > 1 %>
-			<a href="#" title="复制简历" class="none edit_link">
-				<img src="/images/students/copy_icon.gif" border="0" alt="复制" style="margin-bottom: -1px;" />
-				复制到</a>
+<% domain = ResumeDomain.find(added_resume.domain_id)[:name] %>
 
+<% if added_resume.hidden %>
+	<tr class="trash_resume_row" style="display: none;">
+		<td>
+			<div>
+				<%= domain %>
+			</div>
+		</td>
+
+
+		<td>
+			<div>
+				<font color="yellow">回收站</font>
+			</div>
+		</td>
+
+
+		<td colspan="5">
+			<div>
+				<a href="#" title="从回收站中还原简历" class="none" onclick="restore_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
+					<img src="/images/students/restore_icon.gif" border="0" alt="从回收站中还原" style="margin: 0px 2px -2px 0px;" />
+					还原简历</a>
+			</div>
+		</td>
+	</tr>
+<% else %>
+	<tr class="resume_row<%= %Q! hidden_resume_row! if added_resume.hidden %>">
+		<td>
+			<%= domain %>
+		</td>
+	
+	
+		<td>
+			<% if added_resume.online %>
+				<font color="green">已上线</font>
+			<% else %>
+				<font color="red">下线中</font>
+			<% end %>
+		</td>
+	
+	
+		<td>
+			<% if resumes.size > 1 %>
+				<a href="#" title="复制简历" class="none edit_link">
+					<img src="/images/students/copy_icon.gif" border="0" alt="复制" style="margin-bottom: -1px;" />
+					复制到</a>
+
+				<div class="dropdown_menu" style="font-size: 12px;">
+					<ul class="dropdown_sub_menu">
+						<% resumes.each do |to_resume| %>
+							<% unless to_resume.id == added_resume.id %>
+								<% to_domain = ResumeDomain.find(to_resume.domain_id)[:name] %>
+								<li>
+									<a href="#" onclick="copy_resume(<%= added_resume.id %>, <%= to_resume.id %>, '<%= a(domain) %>', '<%= a(to_domain) %>'); return false;">
+										<%= to_domain %></a>
+								</li>
+							<% end %>
+						<% end %>
+					</ul>
+				</div>
+			<% end %>
+		</td>
+	
+	
+		<td>
+			<a href="#" title="将简历放入回收站" class="none" onclick="del_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
+				<img src="/images/teachers/delete_icon.gif" border="0" alt="放入回收站" />
+				删除</a>
+		</td>
+	
+	
+		<td>
+			<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>/edit_job_intention" title="编辑简历" class="none edit_link">
+				<img src="/images/students/edit_icon.gif" border="0" alt="编辑简历" />
+				编辑</a>
+			
 			<div class="dropdown_menu" style="font-size: 12px;">
 				<ul class="dropdown_sub_menu">
-					<% resumes.each do |to_resume| %>
-						<% unless to_resume.id == added_resume.id %>
-							<% to_domain = ResumeDomain.find(to_resume.domain_id)[:name] %>
-							<li>
-								<a href="#" onclick="copy_resume(<%= added_resume.id %>, <%= to_resume.id %>, '<%= a(domain) %>', '<%= a(to_domain) %>'); return false;">
-									<%= to_domain %></a>
-							</li>
-						<% end %>
+					<% Resume.edit_parts.each do |part| %>
+						<li>
+							<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>/<%= part[0] %>">
+								<%= part[1] %></a>
+						</li>
 					<% end %>
 				</ul>
 			</div>
-		<% end %>
-	</td>
+		</td>
 	
 	
-	<td>
-		<a href="#" title="删除简历" class="none" onclick="del_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
-			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除简历" />
-			删除</a>
-	</td>
-	
-	
-	<td>
-		<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>/edit_job_intention" title="编辑简历" class="none edit_link">
-			<img src="/images/students/edit_icon.gif" border="0" alt="编辑简历" />
-			编辑</a>
-			
-		<div class="dropdown_menu" style="font-size: 12px;">
-			<ul class="dropdown_sub_menu">
-				<% Resume.edit_parts.each do |part| %>
-					<li>
-						<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>/<%= part[0] %>">
-							<%= part[1] %></a>
-					</li>
+		<td>
+			<a href="#" class="none" onclick="update_resume(<%= added_resume.id %>, '<%= a(domain) %>', <%= !added_resume.online %>); return false;">
+				<% if added_resume.online %>					
+					<img src="/images/students/offline_icon.png" border="0" alt="下线简历" />
+					下线
+				<% else %>
+					<img src="/images/students/online_icon.png" border="0" alt="上线简历" />
+					上线
 				<% end %>
-			</ul>
-		</div>
-	</td>
+			</a>
+		</td>
 	
 	
-	<td>
-		<a href="#" class="none" onclick="update_resume(<%= added_resume.id %>, '<%= a(domain) %>', <%= !added_resume.online %>); return false;">
-			<% if added_resume.online %>					
-				<img src="/images/students/offline_icon.png" border="0" alt="下线简历" />
-				下线
-			<% else %>
-				<img src="/images/students/online_icon.png" border="0" alt="上线简历" />
-				上线
-			<% end %>
-		</a>
-	</td>
-	
-	
-	<td>
-		<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>" title="预览简历" class="none" target="_blank">
-			<img src="/images/students/preview_resume_icon.gif" border="0" alt="预览简历" />
-			预览</a>
-	</td>
-</tr>
+		<td>
+			<a href="/students/<%= @student.id %>/resumes/<%= added_resume.id %>" title="预览简历" class="none" target="_blank">
+				<img src="/images/students/preview_resume_icon.gif" border="0" alt="预览简历" />
+				预览</a>
+		</td>
+	</tr>
+<% end %>

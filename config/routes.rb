@@ -100,7 +100,9 @@ ActionController::Routing::Routes.draw do |map|
       :add_exp_tag => :post,
       :remove_exp_tag => :post,
       
-      :copy => :post
+      :copy => :post,
+      
+      :restore => :post
     } do |resumes|
       resumes.resources :resume_list_sections, :as => :list_sections
       

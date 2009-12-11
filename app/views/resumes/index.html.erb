@@ -15,48 +15,59 @@
 	</p>
 <% end %>
 
-<% if @available_domains.size > 0 %>
-	<div>
-		<%
-			domain_category_mapping = @available_domains.group_by do |domain|
-				domain[:category_id]
-			end
-			
-			categories = domain_category_mapping.keys.sort.collect do |category_id|
-				ResumeDomainCategory.find(category_id)
-			end
-		%>
-		
-		<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
-			<table border="0" cellspacing="5" cellpadding="0" style="font-size: 14px;">
-				<tr>
-					<td style="padding: 0px 10px;">
+<div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w" style="font-size: 14px;">
+		<tr>
+			<% if @available_domains.size > 0 %>
+				<%
+					domain_category_mapping = @available_domains.group_by do |domain|
+						domain[:category_id]
+					end
+
+					categories = domain_category_mapping.keys.sort.collect do |category_id|
+						ResumeDomainCategory.find(category_id)
+					end
+				%>
+				
+				<td style="width: 400px;">
+					<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
 						<select id="domain_category" class="dropdown_list" style="font-size: 14px;">
 							<% categories.each do |category| %>
 								<option value="<%= category[:id] %>"><%= category[:name] %></option>
 							<% end %>
 						</select>
-					</td>
-					
-					<td>
-						<select name="domain_id" id="domain_id" class="dropdown_list" style="font-size: 14px;">
+						
+						<select name="domain_id" id="domain_id" class="dropdown_list" style="font-size: 14px; margin: 0px 10px;">
 							<% domain_category_mapping[categories[0][:id]].each do |domain| %>
 								<option value="<%= domain[:id] %>"><%= domain[:name] %></option>
 							<% end %>
 						</select>
-					</td>
-					
-					<td style="padding: 0px 20px;">
+						
 						<%= submit_tag "添加新简历", :class => "button", :disabled => !@account_active %>
-					</td>
-				</tr>
-			</table>
-		<% end %>
-	</div>
-<% end %>
-
-<div>
+					<% end %>
+				</td>
+			<% end %>
+			
+			
+			<td align="right">
+				<label for="trash_visible">
+					回收站
+				</label>
+			</td>
+			
+			<td align="center" style="width: 16px;">
+				:
+			</td>
+			
+			<td align="left" style="height: 27px; width: 120px;">
+				<input type="checkbox" id="trash_visible" value="true" />
+			</td>
+		</tr>
+	</table>
+	
 	<% form_tag "", :method => :delete, :id => "del_resume_form" do %>
+	<% end %>
+	<% form_tag "", :method => :post, :id => "restore_resume_form" do %>
 	<% end %>
 	<% form_tag "", :method => :put, :id => "update_resume_form" do %>
 		<input type="hidden" id="online" name="online" />
@@ -81,8 +92,11 @@
 		<tbody>
 			<% grouped_resumes = @resumes.group_by{|resume| ResumeDomain.find(resume.domain_id)[:category_id]} %>
 			<% grouped_resumes.keys.sort.each do |category_id| %>
-				<% category = ResumeDomainCategory.find(category_id) %>
-				<tr>
+				<%
+					category = ResumeDomainCategory.find(category_id)
+					all_hidden = grouped_resumes[category_id].all? {|r| r.hidden}
+				%>
+				<tr<%= %Q! class="trash_section_title"! if all_hidden %>>
 					<td colspan="7" style="padding-left: 0px; padding-right: 0px;">
 						<div class="align_c" style="background-color: #EAEAEA; padding: 5px 0px;">
 							<%= category[:name] %>
@@ -98,6 +112,8 @@
 
 
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<link href="/lib/ibutton/css/jquery.ibutton.min.css" rel="stylesheet" type="text/css" />
+<script src="/lib/ibutton/lib/jquery.ibutton.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var STUDENT_ID = <%= @student.id %>;
 	

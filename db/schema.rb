@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(:version => 11) do
     t.boolean  "online",                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "hidden",                  :default => false
   end
 
   add_index "resumes", ["student_id", "domain_id"], :name => "index_resumes_on_student_id_and_domain_id", :unique => true
