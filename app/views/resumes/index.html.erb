@@ -1,4 +1,8 @@
-<% talent_page_title("管理简历") %>
+<%
+	talent_page_title("管理简历")
+	
+	show_trash_ibutton = @resumes.any? {|r| r.hidden}
+%>
 
 
 <h2>管理简历</h2>
@@ -49,19 +53,23 @@
 			<% end %>
 			
 			
-			<td align="right">
-				<label for="trash_visible">
-					回收站
-				</label>
-			</td>
+			<% if show_trash_ibutton %>
+				<td align="right">
+					<label for="trash_visible">
+						回收站
+					</label>
+				</td>
 			
-			<td align="center" style="width: 16px;">
-				:
-			</td>
+				<td align="center" style="width: 16px;">
+					:
+				</td>
 			
-			<td align="left" style="height: 27px; width: 120px;">
-				<input type="checkbox" id="trash_visible" value="true" />
-			</td>
+				<td align="left" style="height: 27px; width: 120px;">
+					<input type="checkbox" id="trash_visible" value="true" />
+				</td>
+			<% else %>
+				<td>&nbsp;</td>
+			<% end %>
 		</tr>
 	</table>
 	
