@@ -20,12 +20,26 @@
 			
 		<div class="dropdown_menu" style="font-size: 12px; text-align: left;">
 			<ul class="dropdown_sub_menu">
-				<% TeacherStatisticsHelper.corp_filter_menus.each do |menu| %>
-					<li>
-						<a href="/teachers/<%= @teacher.id %>/statistics<%= menu[0] %>?corp=<%= corporation.id %>">
-							<%= menu[1] %></a>
-					</li>
-				<% end %>
+				<li>
+					<a href="/teachers/<%= @teacher.id %>/statistics?corp=<%= corporation.id %>">
+						时段统计</a>
+				</li>
+				<li>
+					<a href="/teachers/<%= @teacher.id %>/statistics/college?corp=<%= corporation.id %>">
+						简历查看统计</a>
+				</li>
+				<li>
+					<a href="/teachers/<%= @teacher.id %>/statistics/querying_domain?corp=<%= corporation.id %>">
+						求职方向</a>
+				</li>
+				<li>
+					<a href="/teachers/<%= @teacher.id %>/statistics/skill?corp=<%= corporation.id %>">
+						技能和证书</a>
+				</li>
+				<li>
+					<a href="/teachers/<%= @teacher.id %>/statistics/keyword?corp=<%= corporation.id %>">
+						关键词</a>
+				</li>
 			</ul>
 		</div>
 	</td>

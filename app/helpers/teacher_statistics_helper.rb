@@ -32,12 +32,4 @@ module TeacherStatisticsHelper
     end
   end
   
-  
-  
-  def self.corp_filter_menus
-    [
-      ["", "时段统计"]
-    ]
-  end
-  
 end

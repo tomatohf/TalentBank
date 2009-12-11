@@ -27,6 +27,15 @@
 					return false;
 				}
 			);
+			
+			
+			$("a.query_keyword").unbind("click").click(
+				function() {
+					$(this).siblings("form").submit();
+					
+					return false;
+				}
+			);
 		}
 	);
 </script>
