@@ -1,7 +1,7 @@
 <% domain = ResumeDomain.find(added_resume.domain_id)[:name] %>
 
 <% if added_resume.hidden %>
-	<tr class="trash_resume_row" style="display: none;">
+	<tr class="trash_resume_row info" style="display: none;">
 		<td>
 			<div>
 				<%= domain %>
@@ -11,30 +11,33 @@
 
 		<td>
 			<div>
-				<font color="yellow">回收站</font>
+				<img src="/images/students/trash_status_icon.gif" border="0" alt="回收站" style="margin-bottom: -2px;" />
+				回收站
 			</div>
 		</td>
 
 
 		<td colspan="5">
 			<div>
-				<a href="#" title="从回收站中还原简历" class="none" onclick="restore_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
-					<img src="/images/students/restore_icon.gif" border="0" alt="从回收站中还原" style="margin: 0px 2px -2px 0px;" />
-					还原简历</a>
+				<a href="#" title="从回收站中还原简历" class="none info" onclick="restore_resume(<%= added_resume.id %>, '<%= a(domain) %>'); return false;">
+					<img src="/images/students/restore_icon.gif" border="0" alt="从回收站中还原" style="margin-bottom: -2px;" />
+					还原</a>
 			</div>
 		</td>
 	</tr>
 <% else %>
 	<tr class="resume_row<%= %Q! hidden_resume_row! if added_resume.hidden %>">
 		<td>
-			<%= domain %>
+			<strong><%= domain %></strong>
 		</td>
 	
 	
 		<td>
 			<% if added_resume.online %>
+				<img src="/images/students/online_status_icon.gif" border="0" alt="已上线" style="margin-bottom: -2px;" />
 				<font color="green">已上线</font>
 			<% else %>
+			<img src="/images/students/offline_status_icon.gif" border="0" alt="下线中" style="margin-bottom: -2px;" />
 				<font color="red">下线中</font>
 			<% end %>
 		</td>
