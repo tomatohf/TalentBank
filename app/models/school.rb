@@ -1,5 +1,8 @@
 class School < ActiveRecord::Base
   
+  acts_as_trashable
+  
+  
   validates_presence_of :abbr, :message => "请输入 英文缩写"
   validates_presence_of :password, :message => "请输入 密码"
   
