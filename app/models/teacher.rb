@@ -1,5 +1,8 @@
 class Teacher < ActiveRecord::Base
   
+  acts_as_trashable
+  
+  
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   
@@ -17,7 +20,7 @@ class Teacher < ActiveRecord::Base
   validates_confirmation_of :password, :message => "密码 与 确认密码 不相同"
   
   
-  named_scope :admin, :conditions => { :admin => true }
+  include Utils::NotDeletable
   
   
   
@@ -29,6 +32,21 @@ class Teacher < ActiveRecord::Base
   
   def self.get_from_uid(abbr, uid)
     self.find(:first, :conditions => ["school_id = ? and uid = ?", School.get_school_info(abbr)[0], uid])
+  end
+  
+  
+  def name?
+    !self.name.blank?
+  end
+  
+  
+  def get_name
+    self.name? ? self.name : self.uid
+  end
+  
+  
+  def self.revisers(school_id)
+    self.find(:all, :conditions => ["school_id = ? and revision = ?", school_id, true])
   end
   
 end

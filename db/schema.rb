@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 11) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -343,9 +343,12 @@ ActiveRecord::Schema.define(:version => 11) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "statistic",                :default => false
+    t.boolean  "resume",                   :default => true
+    t.boolean  "revision",                 :default => false
   end
 
   add_index "teachers", ["school_id", "created_at"], :name => "index_teachers_on_school_id_and_created_at"
+  add_index "teachers", ["school_id", "revision"], :name => "index_teachers_on_school_id_and_revision"
   add_index "teachers", ["school_id", "uid"], :name => "index_teachers_on_school_id_and_uid", :unique => true
 
   create_table "trash_records", :force => true do |t|

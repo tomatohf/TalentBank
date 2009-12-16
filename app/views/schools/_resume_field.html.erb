@@ -1,0 +1,29 @@
+<div id="resume_field_<%= teacher.id %>">
+	<a href="#" title="调整查询简历的权限" class="none operation_link">
+		<% if teacher.resume %>
+			<img src="/images/teachers/green_point.gif" border="0" alt="允许" style="margin-bottom: -2px;" />
+			<font color="green">允许查询</font>
+		<% else %>
+			<img src="/images/teachers/red_point.gif" border="0" alt="禁止" style="margin-bottom: -2px;" />
+			<font color="red">禁止查询</font>
+		<% end %>
+	</a>
+
+	<div class="dropdown_menu" style="font-size: 12px;">
+		<ul class="dropdown_sub_menu">
+			<% if teacher.resume %>
+				<li>
+					<a href="#" onclick="inhibit_teacher(<%= teacher.id %>, 'resume'); return false;">
+						<img src="/images/teachers/red_point_small.gif" border="0" alt="禁止" />
+						禁止查询简历</a>
+				</li>
+			<% else %>
+				<li>
+					<a href="#" onclick="allow_teacher(<%= teacher.id %>, 'resume'); return false;">
+						<img src="/images/teachers/green_point_small.gif" border="0" alt="允许" />
+						允许查询简历</a>
+				</li>
+			<% end %>
+		</ul>
+	</div>
+</div>

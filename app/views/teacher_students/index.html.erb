@@ -72,7 +72,9 @@
 		<thead>
 			<tr>
 				<td style="width: 45px;"></td>
-				<td style="width: 45px;"></td>
+				<% if @teacher.statistic %>
+					<td style="width: 45px;"></td>
+				<% end %>
 				<td style="width: 80px;">学号</td>
 				<td style="width: 50px;">姓名</td>
 				<td>学院</td>

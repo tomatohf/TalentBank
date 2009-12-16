@@ -9,13 +9,17 @@ ActionController::Routing::Routes.draw do |map|
     :new_teacher => :get,
     :create_teacher => :post,
     
-    :destroy_teacher => :post,
-    
     :allow_teacher_admin => :post,
     :inhibit_teacher_admin => :post,
     
     :allow_teacher_statistic => :post,
-    :inhibit_teacher_statistic => :post
+    :inhibit_teacher_statistic => :post,
+    
+    :allow_teacher_resume => :post,
+    :inhibit_teacher_resume => :post,
+    
+    :allow_teacher_revision => :post,
+    :inhibit_teacher_revision => :post
   }
   
   

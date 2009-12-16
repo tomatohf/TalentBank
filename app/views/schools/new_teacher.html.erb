@@ -31,13 +31,25 @@
 		
 		<tr>
 			<td>
-				<label for="admin">
-					允许老师管理企业帐号
+				<label for="resume">
+					允许老师查询学生简历
 				</label>
 			</td>
 			
 			<td>
-				<%= check_box_tag :admin, value = "true", @teacher.admin %>
+				<%= check_box_tag :resume, value = "true", @teacher.resume %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="revision">
+					允许老师修改学生简历
+				</label>
+			</td>
+			
+			<td>
+				<%= check_box_tag :revision, value = "true", @teacher.revision %>
 			</td>
 		</tr>
 		
@@ -50,6 +62,18 @@
 			
 			<td>
 				<%= check_box_tag :statistic, value = "true", @teacher.statistic %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="admin">
+					允许老师管理企业帐号
+				</label>
+			</td>
+			
+			<td>
+				<%= check_box_tag :admin, value = "true", @teacher.admin %>
 			</td>
 		</tr>
 		

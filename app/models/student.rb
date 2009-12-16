@@ -43,10 +43,6 @@ class Student < ActiveRecord::Base
   validates_confirmation_of :password, :message => "密码 与 确认密码 不相同"
   
   
-  named_scope :enabled, :conditions => { :enabled => true }
-  named_scope :active, :conditions => { :active => true }
-  
-  
   include Utils::NotDeletable
   
   after_save { |student|

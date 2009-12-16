@@ -28,10 +28,12 @@
 						修改信息</a>
 				</div>
 				
-				<div>
-					<a href="/teachers/<%= @teacher.id %>/students">
-						查询学生</a>
-				</div>
+				<% if @teacher.resume %>
+					<div>
+						<a href="/teachers/<%= @teacher.id %>/students">
+							查询学生</a>
+					</div>
+				<% end %>
 				
 				<% if @teacher.admin %>
 					<div>

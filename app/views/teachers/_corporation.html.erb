@@ -13,36 +13,38 @@
 		<%= render :partial => "allow_query_field", :locals => {:corporation => corporation} %>
 	</td>
 	
-	<td align="center">
-		<a href="#" title="查看企业的数据统计" class="none operation_link">
-			<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
-			数据统计</a>
+	<% if @teacher.statistic %>
+		<td align="center">
+			<a href="#" title="查看企业的数据统计" class="none operation_link">
+				<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
+				数据统计</a>
 			
-		<div class="dropdown_menu" style="font-size: 12px; text-align: left;">
-			<ul class="dropdown_sub_menu">
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics?corp=<%= corporation.id %>">
-						时段统计</a>
-				</li>
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics/college?corp=<%= corporation.id %>">
-						简历查看统计</a>
-				</li>
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics/querying_domain?corp=<%= corporation.id %>">
-						求职方向</a>
-				</li>
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics/skill?corp=<%= corporation.id %>">
-						技能和证书</a>
-				</li>
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics/keyword?corp=<%= corporation.id %>">
-						关键词</a>
-				</li>
-			</ul>
-		</div>
-	</td>
+			<div class="dropdown_menu" style="font-size: 12px; text-align: left;">
+				<ul class="dropdown_sub_menu">
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics?corp=<%= corporation.id %>">
+							时段统计</a>
+					</li>
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics/college?corp=<%= corporation.id %>">
+							简历查看统计</a>
+					</li>
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics/querying_domain?corp=<%= corporation.id %>">
+							求职方向</a>
+					</li>
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics/skill?corp=<%= corporation.id %>">
+							技能和证书</a>
+					</li>
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics/keyword?corp=<%= corporation.id %>">
+							关键词</a>
+					</li>
+				</ul>
+			</div>
+		</td>
+	<% end %>
 	
 	<td></td>
 </tr>

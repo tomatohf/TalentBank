@@ -9,3 +9,9 @@
 	    <%= flash[:success_msg] %>
 	</p>
 <% end %>
+
+
+<% unless @teacher.name? %>
+	<a href="/teachers/<%= @teacher.id %>/edit">
+		填写名称</a>
+<% end %>

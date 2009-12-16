@@ -5,9 +5,11 @@ class SchoolsController < ApplicationController
   
   before_filter :check_login_for_school
   
-  before_filter :check_active, :only => [:update, :create_teacher, :destroy_teacher,
+  before_filter :check_active, :only => [:update, :create_teacher,
                                           :allow_teacher_admin, :inhibit_teacher_admin,
-                                          :allow_teacher_statistic, :inhibit_teacher_statistic]
+                                          :allow_teacher_statistic, :inhibit_teacher_statistic,
+                                          :allow_teacher_resume, :inhibit_teacher_resume,
+                                          :allow_teacher_revision, :inhibit_teacher_revision]
   
   before_filter :check_school
   
@@ -59,6 +61,7 @@ class SchoolsController < ApplicationController
   
   def new_teacher
     @teacher = Teacher.new(:school_id => @school_id)
+    @teacher.resume = true
   end
   
   def create_teacher
@@ -66,8 +69,11 @@ class SchoolsController < ApplicationController
     
     @teacher.uid = params[:uid] && params[:uid].strip
     @teacher.password = ::Utils.generate_password(@teacher.uid)
-    @teacher.admin = (params[:admin] == "true")
+    
+    @teacher.resume = (params[:resume] == "true")
+    @teacher.revision = (params[:revision] == "true")
     @teacher.statistic = (params[:statistic] == "true")
+    @teacher.admin = (params[:admin] == "true")
     
     if @teacher.save
       flash[:success_msg] = "操作成功, 已添加老师 #{@teacher.uid}"
@@ -75,20 +81,6 @@ class SchoolsController < ApplicationController
     end
     
     render :action => "new_teacher"
-  end
-  
-  
-  def destroy_teacher
-    teacher_id = params[:teacher_id] && params[:teacher_id].strip
-    
-    teacher = Teacher.find(teacher_id)
-    if teacher.school_id.to_s == @school_id
-      teacher.destroy
-      
-      return render(:layout => false, :text => "true")
-    end
-    
-    render :nothing => true
   end
   
   
@@ -107,6 +99,24 @@ class SchoolsController < ApplicationController
     
   def inhibit_teacher_statistic
     adjust_teacher(:statistic, false)
+  end
+  
+  
+  def allow_teacher_resume
+    adjust_teacher(:resume, true)
+  end
+  
+  def inhibit_teacher_resume
+    adjust_teacher(:resume, false)
+  end
+  
+  
+  def allow_teacher_revision
+    adjust_teacher(:revision, true)
+  end
+  
+  def inhibit_teacher_revision
+    adjust_teacher(:revision, false)
   end
   
   

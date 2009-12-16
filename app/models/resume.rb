@@ -95,9 +95,6 @@ class Resume < ActiveRecord::Base
   validates_presence_of :student_id, :domain_id
   
   
-  named_scope :online, :conditions => { :online => true }
-  
-  
   include Utils::NotDeletable
   
   

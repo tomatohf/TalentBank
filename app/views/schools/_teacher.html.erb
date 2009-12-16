@@ -10,17 +10,22 @@
 	</td>
 	
 	<td>
-		<%= render :partial => "admin_field", :locals => {:teacher => teacher} %>
+		<%= render :partial => "resume_field", :locals => {:teacher => teacher} %>
+	</td>
+	
+	<td>
+		<%= render :partial => "revision_field", :locals => {:teacher => teacher} %>
 	</td>
 	
 	<td>
 		<%= render :partial => "statistic_field", :locals => {:teacher => teacher} %>
 	</td>
 	
-	<td align="right">
-		<a href="#" title="删除" class="none" onclick="del_teacher(<%= teacher.id %>, '<%= a(uid) %>'); return false;">
-			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
-			删除</a>
+	<td>
+		<%= render :partial => "admin_field", :locals => {:teacher => teacher} %>
 	</td>
+	
+	
+	<td></td>
 </tr>
 	

@@ -44,14 +44,14 @@
 		<table border="0" cellspacing="10" cellpadding="0" style="font-size: 14px; color: #FFFFFF; margin: 132px 0px 0px 281px;">
 			<tr>
 				<td colspan="2" align="right" style="font-size: 13px; padding-right: 5px;">
-					<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
-					<label for="user_type_school" style="margin-right: 20px;">
-						总管理员
-					</label>
-
 					<input type="radio" value="teacher" name="user_type" id="user_type_teacher"<%= %Q! checked="checked"! if @user_type == "teacher" %> />
-					<label for="user_type_teacher">
+					<label for="user_type_teacher" style="margin-right: 20px;">
 						学校老师
+					</label>
+					
+					<input type="radio" value="school" name="user_type" id="user_type_school"<%= %Q! checked="checked"! if @user_type == "school" %> />
+					<label for="user_type_school">
+						管理员
 					</label>
 				</td>
 			</tr>

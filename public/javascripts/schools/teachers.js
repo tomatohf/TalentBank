@@ -1,34 +1,3 @@
-function del_teacher(teacher_id, uid) {
-	if(confirm("确定要删除老师 " + uid + " 么 ?")) {
-		show_loading("destroy");
-
-		$.ajax(
-			{
-				type: "POST",
-				url: "/schools/" + SCHOOL_ID + "/destroy_teacher",
-				dataType: "text",
-				data: {
-					teacher_id: teacher_id
-				},
-				complete: function() {
-					hide_loading("destroy");
-				},
-				success: function(data, text_status) {
-					if(data != null && data.substr(0, 4) == "true") {
-						$("#teacher_row_" + teacher_id).fadeOut(
-							"slow",
-							function() {
-								$(this).remove();
-							}
-						);
-					}
-				}
-			}
-		);
-	}
-}
-
-
 function allow_teacher(teacher_id, allow_what) {
 	var url = "/schools/" + SCHOOL_ID + "/allow_teacher_" + allow_what;
 	adjust_teacher(url, teacher_id, allow_what);

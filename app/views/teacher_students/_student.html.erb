@@ -36,24 +36,26 @@
 	</td>
 	
 	
-	<td>
-		<a href="#" title="查看<%= student_name %>的数据统计" class="none operation_link">
-			<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
-			统计</a>
+	<% if @teacher.statistic %>
+		<td>
+			<a href="#" title="查看<%= student_name %>的数据统计" class="none operation_link">
+				<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
+				统计</a>
 
-		<div class="dropdown_menu" style="font-size: 12px;">
-			<ul class="dropdown_sub_menu">
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics?student=<%= student.id %>&q=f">
-						时段统计</a>
-				</li>
-				<li>
-					<a href="/teachers/<%= @teacher.id %>/statistics/viewing_domain?student=<%= student.id %>">
-						求职方向统计</a>
-				</li>
-			</ul>
-		</div>
-	</td>
+			<div class="dropdown_menu" style="font-size: 12px;">
+				<ul class="dropdown_sub_menu">
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics?student=<%= student.id %>&q=f">
+							时段统计</a>
+					</li>
+					<li>
+						<a href="/teachers/<%= @teacher.id %>/statistics/viewing_domain?student=<%= student.id %>">
+							求职方向统计</a>
+					</li>
+				</ul>
+			</div>
+		</td>
+	<% end %>
 	
 	
 	<td>
