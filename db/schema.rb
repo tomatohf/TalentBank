@@ -158,6 +158,19 @@ ActiveRecord::Schema.define(:version => 12) do
 
   add_index "resume_awards", ["resume_id"], :name => "index_resume_awards_on_resume_id", :unique => true
 
+  create_table "resume_comments", :force => true do |t|
+    t.integer  "resume_id"
+    t.integer  "part_type_id", :limit => 2
+    t.integer  "part_id"
+    t.integer  "account_type", :limit => 1
+    t.integer  "account_id"
+    t.string   "content",      :limit => 1000
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resume_comments", ["resume_id"], :name => "index_resume_comments_on_resume_id"
+
   create_table "resume_exp_sections", :force => true do |t|
     t.integer  "resume_id"
     t.string   "title",      :limit => 25
@@ -225,6 +238,20 @@ ActiveRecord::Schema.define(:version => 12) do
   end
 
   add_index "resume_list_skills", ["resume_id"], :name => "index_resume_list_skills_on_resume_id"
+
+  create_table "resume_revisions", :force => true do |t|
+    t.integer  "resume_id"
+    t.integer  "teacher_id"
+    t.integer  "part_type_id", :limit => 2
+    t.integer  "part_id"
+    t.integer  "action",       :limit => 1
+    t.string   "data",         :limit => 1000
+    t.boolean  "applied",                      :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resume_revisions", ["resume_id"], :name => "index_resume_revisions_on_resume_id"
 
   create_table "resume_skills", :force => true do |t|
     t.integer  "resume_id"

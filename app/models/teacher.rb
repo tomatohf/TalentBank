@@ -5,6 +5,8 @@ class Teacher < ActiveRecord::Base
   
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
+  has_many :resume_revisions, :class_name => "ResumeRevision", :foreign_key => "teacher_id", :dependent => :destroy
+  
   
   validates_presence_of :school_id
   

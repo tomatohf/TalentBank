@@ -17,6 +17,9 @@ class Resume < ActiveRecord::Base
   
   has_many :exp_taggers, :class_name => "ResumeExpTagger", :foreign_key => "resume_id", :dependent => :destroy
   
+  has_many :revisions, :class_name => "ResumeRevision", :foreign_key => "resume_id", :dependent => :destroy
+  has_many :comments, :class_name => "ResumeComment", :foreign_key => "resume_id", :dependent => :destroy
+  
   
   include Utils::Searchable
   
