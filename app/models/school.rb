@@ -36,14 +36,14 @@ class School < ActiveRecord::Base
   end
   
   
-  CKP_school_info = :school_info
+  CKP_school_info = "school_info"
   
   def self.school_info_key(abbr)
-    "#{CKP_school_info}_#{abbr}".to_sym
+    "#{CKP_school_info}_#{abbr}"
   end
   
   def self.get_school_info(abbr)
-    school_info = Cache.get(self.school_info_key(abbr))
+    school_info = Rails.cache.read(self.school_info_key(abbr))
     
     unless school_info
       school = self.get_from_abbr(abbr)
@@ -55,12 +55,12 @@ class School < ActiveRecord::Base
   
   def self.set_school_info_cache(abbr, school)
     school_info = [school.id, school.abbr, school.active]
-    Cache.set(self.school_info_key(abbr), school_info, Cache_TTL)
+    Rails.cache.write(self.school_info_key(abbr), school_info, :expires_in => Cache_TTL[:never])
     school_info
   end
   
   def self.clear_school_info_cache(abbr)
-    Cache.delete(self.school_info_key(abbr))
+    Rails.cache.delete(self.school_info_key(abbr))
   end
   
 end

@@ -113,35 +113,35 @@ module Utils
     def self.included(including_model)
       
       def including_model.get_count(group_field_id)
-        c = Cache.get("#{self::CKP_count}_#{group_field_id}".to_sym)
+        c = Rails.cache.read("#{self::CKP_count}_#{group_field_id}")
         unless c
           c = self.count(:conditions => self::Count_Cache_Group_Field ? ["#{self::Count_Cache_Group_Field} = ?", group_field_id] : [])
 
-          Cache.set("#{self::CKP_count}_#{group_field_id}".to_sym, c, Cache_TTL)
+          Rails.cache.write("#{self::CKP_count}_#{group_field_id}", c, :expires_in => Cache_TTL[:long])
         end
         c
       end
 
       def including_model.increase_count_cache(group_field_id, count = 1)
-        c = Cache.get("#{self::CKP_count}_#{group_field_id}".to_sym)
+        c = Rails.cache.read("#{self::CKP_count}_#{group_field_id}")
         if c
           updated_c = c.to_i + count
 
-          Cache.set("#{self::CKP_count}_#{group_field_id}".to_sym, updated_c, Cache_TTL)
+          Rails.cache.write("#{self::CKP_count}_#{group_field_id}", updated_c, :expires_in => Cache_TTL[:long])
         end
       end
 
       def including_model.decrease_count_cache(group_field_id, count = 1)
-        c = Cache.get("#{self::CKP_count}_#{group_field_id}".to_sym)
+        c = Rails.cache.read("#{self::CKP_count}_#{group_field_id}")
         if c
           updated_c = c.to_i - count
 
-          Cache.set("#{self::CKP_count}_#{group_field_id}".to_sym, updated_c, Cache_TTL)
+          Rails.cache.write("#{self::CKP_count}_#{group_field_id}", updated_c, :expires_in => Cache_TTL[:long])
         end
       end
 
       def including_model.clear_count_cache(group_field_id)
-        Cache.delete("#{self::CKP_count}_#{group_field_id}".to_sym)
+        Rails.cache.delete("#{self::CKP_count}_#{group_field_id}")
       end
       
       

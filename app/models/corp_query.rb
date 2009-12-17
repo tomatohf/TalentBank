@@ -121,10 +121,10 @@ class CorpQuery < ActiveRecord::Base
   
   
   
-  CKP_synchronized_query_id = :synchronized_corp_query_id
+  CKP_synchronized_query_id = "synchronized_corp_query_id"
   
   def self.get_synchronized_query_id
-    query_id = Cache.get(CKP_synchronized_query_id)
+    query_id = Rails.cache.read(CKP_synchronized_query_id)
     
     unless query_id
       last_tag = CorpQueryExpTag.find(:last)
@@ -141,7 +141,7 @@ class CorpQuery < ActiveRecord::Base
   end
   
   def self.set_synchronized_query_id_cache(query_id)
-    Cache.set(CKP_synchronized_query_id, query_id)
+    Rails.cache.write(CKP_synchronized_query_id, query_id, :expires_in => Cache_TTL[:never])
   end
   
 end
