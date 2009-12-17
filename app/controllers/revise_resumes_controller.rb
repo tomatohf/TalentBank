@@ -6,6 +6,8 @@ class ReviseResumesController < ApplicationController
   
   before_filter :check_account
   
+  before_filter :check_resume
+  
   
   def show
     
@@ -25,6 +27,7 @@ class ReviseResumesController < ApplicationController
     end
   end
   
+  
   def check_account
     # check student belong to school
     # check resume belong to student
@@ -33,6 +36,11 @@ class ReviseResumesController < ApplicationController
     # check teacher can revision
     
     # check teacher and student of resume are in same school
+  end
+  
+  
+  def check_resume
+    
   end
   
 end
