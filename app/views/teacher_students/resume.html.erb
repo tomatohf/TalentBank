@@ -10,16 +10,32 @@
 <h2>查看 <%= student_name %> 的 <%= domain %> 的简历</h2>
 
 
+<div class="align_r" style="margin: 0px 50px 0px 0px; font-size: 14px;">
+	<% if @teacher.revision %>
+		<a href="/teachers/<%= @teacher.id %>/revise_resumes/<%= @resume.id %>" class="none">
+			<img src="/images/revise_resumes/revise_resume_icon.gif" border="0" alt="简历修改" style="margin-bottom: -2px;" />
+			进入简历修改模式</a>
+	<% end %>
+</div>
+
 <% if @taggers.size > 0 %>
 	<div class="resume_exp_tags_bar">
-		<font color="#888888">经历标签:</font>
-		<% @taggers.each do |tagger| %>
-			<% tag = ResumeExpTag.find_by_id(tagger.tag_id) %>
-			<span><%= tag[:name] %></span>
-		<% end %>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td valign="top" style="width: 70px; color: #888888;">
+					经历标签:
+				</td>
+				
+				<td>
+					<% @taggers.each do |tagger| %>
+						<% tag = ResumeExpTag.find_by_id(tagger.tag_id) %>
+						<span><%= tag[:name] %></span>
+					<% end %>
+				</td>
+			</tr>
+		</table>
 	</div>
 <% end %>
-
 
 <div>
 	<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => false} %>

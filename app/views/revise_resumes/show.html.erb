@@ -1,1 +1,53 @@
-TBD ~
+<%
+	domain = ResumeDomain.find(@resume.domain_id)[:name]
+	
+	page_title = "修改"
+	if @teacher
+		page_title += " "
+		page_title += h(@resume.student.name)
+	end
+	page_title += " #{domain} 的简历"
+	
+	talent_page_title(page_title)
+%>
+
+
+<h2><%= page_title %></h2>
+
+
+<div class="align_r" style="margin: 0px 50px 0px 0px; font-size: 14px;">
+	<% if @student %>
+		<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>" class="none">
+			<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
+			返回预览简历</a>
+	<% end %>
+	
+	<% if @teacher %>
+		<a href="/teachers/<%= @teacher.id %>/students/<%= @resume.id %>/resume" class="none">
+			<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
+			返回查看简历</a>
+	<% end %>
+</div>
+
+<% if @taggers.size > 0 %>
+	<div class="resume_exp_tags_bar">
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td valign="top" style="width: 70px; color: #888888;">
+					经历标签:
+				</td>
+				
+				<td>
+					<% @taggers.each do |tagger| %>
+						<% tag = ResumeExpTag.find_by_id(tagger.tag_id) %>
+						<span><%= tag[:name] %></span>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+<% end %>
+
+<div>
+	<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => false} %>
+</div>

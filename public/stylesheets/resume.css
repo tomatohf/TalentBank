@@ -68,9 +68,8 @@ ul.no_bullet {
 
 
 .resume_exp_tags_bar {
-	text-align:right;
 	font-size: 14px;
-	margin: 5px 40px 10px 20px;
+	margin: 0px 40px 10px 20px;
 }
 
 .resume_exp_tags_bar span {

@@ -12,7 +12,15 @@ class ReviseResumesController < ApplicationController
   
   
   def show
+    @taggers = ResumeExpTagger.find(
+      :all,
+      :conditions => ["resume_id = ?", @resume.id]
+    )
     
+    @comments
+    @revisions
+    
+    render :layout => @account_type
   end
   
   
@@ -32,12 +40,21 @@ class ReviseResumesController < ApplicationController
   
   def check_account
     account_id = params[:account_id] && params[:account_id].strip
-    jump_to("/errors/forbidden") unless (session[:account_id].to_s == account_id) && ((@account = @account_type.classify.constantize.find(account_id)).school_id == School.get_school_info(@school.abbr)[0])
+    jump_to("/errors/forbidden") unless (
+      session[:account_id].to_s == account_id
+    ) && (
+      (
+        self.instance_variable_set(
+          "@#{@account_type.singularize}",
+          @account_type.classify.constantize.find(account_id)
+        )
+      ).school_id == School.get_school_info(@school.abbr)[0]
+    )
   end
   
   
   def check_revision
-    jump_to("/errors/unauthorized") if (@account_type == "teachers") && (!@account.revision)
+    jump_to("/errors/unauthorized") if @teacher && (!@teacher.revision)
   end
   
   
@@ -46,14 +63,16 @@ class ReviseResumesController < ApplicationController
     
     return jump_to("/errors/forbidden") if @resume.hidden
     
-    if @account_type == "students"
-      if @resume.student_id == @account.id
-        @resume.student = @account
+    if @student
+      if @resume.student_id == @student.id
+        @resume.student = @student
       else
-        jump_to("/errors/forbidden")
+        return jump_to("/errors/forbidden")
       end
-    elsif @account_type == "teachers"
-      jump_to("/errors/forbidden") unless @resume.student.school_id == @account.school_id
+    end
+    
+    if @teacher
+      return jump_to("/errors/forbidden") unless @resume.student.school_id == @teacher.school_id
     end
   end
   

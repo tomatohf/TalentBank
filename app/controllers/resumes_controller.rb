@@ -41,7 +41,6 @@ class ResumesController < ApplicationController
 
         if resume.save
           flash[:success_msg] = "操作成功, 已添加 #{ResumeDomain.find(resume.domain_id)[:name]} 的简历"
-          # return jump_to("/students/#{@student.id}/resumes/#{resume.id}/edit_job_intention")
         else
           flash[:error_msg] = "操作失败, 再试一次吧"
         end

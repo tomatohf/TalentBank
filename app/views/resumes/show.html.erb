@@ -8,7 +8,11 @@
 <h2>预览 <%= domain %> 的简历</h2>
 
 <div class="align_r" style="margin: 0px 50px 10px 0px; font-size: 14px;">
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>.pdf?token=<%= Time.now.to_i %>">
+	<a href="/students/<%= @student.id %>/revise_resumes/<%= @resume.id %>" style="margin-right: 30px;" class="none">
+		<img src="/images/revise_resumes/revise_resume_icon.gif" border="0" alt="简历修改" style="margin-bottom: -2px;" />
+		进入简历修改模式</a>
+	
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>.pdf?token=<%= Time.now.to_i %>" class="none">
 		<img src="/images/students/pdf_icon.png" border="0" alt="PDF" style="margin-bottom: -2px;" />
 		导出为 PDF</a>
 </div>
