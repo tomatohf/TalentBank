@@ -32,6 +32,8 @@ sphinx max_match
 
 提交疑问建议,错误反馈的功能
 
+模块化, 只显示和允许访问该学校拥有的模块
+
 Database index
 set up 备份的脚本
 

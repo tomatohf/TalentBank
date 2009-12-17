@@ -6,6 +6,8 @@ class ReviseResumesController < ApplicationController
   
   before_filter :check_account
   
+  before_filter :check_revision
+  
   before_filter :check_resume
   
   
@@ -29,18 +31,30 @@ class ReviseResumesController < ApplicationController
   
   
   def check_account
-    # check student belong to school
-    # check resume belong to student
-    
-    # check teacher belong to school
-    # check teacher can revision
-    
-    # check teacher and student of resume are in same school
+    account_id = params[:account_id] && params[:account_id].strip
+    jump_to("/errors/forbidden") unless (session[:account_id].to_s == account_id) && ((@account = @account_type.classify.constantize.find(account_id)).school_id == School.get_school_info(@school.abbr)[0])
+  end
+  
+  
+  def check_revision
+    jump_to("/errors/unauthorized") if (@account_type == "teachers") && (!@account.revision)
   end
   
   
   def check_resume
+    @resume = Resume.find(params[:id])
     
+    return jump_to("/errors/forbidden") if @resume.hidden
+    
+    if @account_type == "students"
+      if @resume.student_id == @account.id
+        @resume.student = @account
+      else
+        jump_to("/errors/forbidden")
+      end
+    elsif @account_type == "teachers"
+      jump_to("/errors/forbidden") unless @resume.student.school_id == @account.school_id
+    end
   end
   
 end
