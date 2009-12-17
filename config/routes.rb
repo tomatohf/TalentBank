@@ -149,6 +149,18 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   
+  map.resources :revise_resumes, :path_prefix => "/:account_type/:account_id", :requirements => {
+    :account_type => /(students|teachers)/,
+    :account_id => /\d+/
+  }, :only => [:show] do |revise_resumes|
+    revise_resumes.resources :resume_revisions, :as => :revisions, :member => {
+    }
+    
+    revise_resumes.resources :resume_comments, :as => :comments, :member => {
+    }
+  end
+  
+  
   
   # The priority is based upon order of creation: first created -> highest priority.
 

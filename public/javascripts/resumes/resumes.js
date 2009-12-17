@@ -186,6 +186,26 @@ $(document).ready(
 		setup_domain_select();
 		
 		setup_resume_mouse_over();
+		
+		
+		// make success msg disappear some time later
+		$(".success_msg").animate(
+			{
+				opacity: 90
+			},
+			5000,
+			function() {
+				$(".success_msg").animate(
+					{
+						opacity: 0
+					},
+					3000,
+					function() {
+						$(this).remove();
+					}
+				);
+			}
+		);
 	}
 );
 
