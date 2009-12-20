@@ -84,7 +84,7 @@
 							求职意向
 						</div>
 
-						<div class="resume_section">
+						<div id="job_intention_<%= resume.job_intention.id %>" class="resume_section">
 							<%= h(resume.job_intention.content) %>
 						</div>
 					</div>
@@ -123,7 +123,7 @@
 					<div class="resume_section">
 						<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 							<% edus.each do |edu| %>
-								<tr>
+								<tr id="edu_<%= edu.id %>">
 									<td class="edu_exp_period">
 										<%= h(edu.period) %>
 									</td>
@@ -189,7 +189,7 @@
 								end
 							%>
 							<% if exp %>
-								<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_exp_section">
+								<table id="<%= exp.class.name.underscore %>_<%= exp.id %>" border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_exp_section">
 									<tr>
 										<td valign="top" class="resume_exp_period">
 											<%= h(exp.period) %>

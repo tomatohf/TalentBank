@@ -29,6 +29,10 @@
 	<% end %>
 </div>
 
+
+<div id="highlighter" class="ui-state-default" style="display: none; position: absolute; -moz-border-radius: 6px; -webkit-border-radius: 5px;"></div>
+
+
 <% if @taggers.size > 0 %>
 	<div class="resume_exp_tags_bar">
 		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
@@ -48,6 +52,22 @@
 	</div>
 <% end %>
 
+
 <div>
 	<%= render :partial => "/resumes/resume", :object => @resume, :locals => {:protective => false} %>
 </div>
+
+
+<div>
+	所有评论和修订
+</div>
+
+
+
+<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
+<script language="JavaScript">
+	var RESUME_TYPES = [<%= ResumePartType.data.collect{|type| %Q!{id:#{type[:id]}, name:"#{type[:name]}"}!}.join(",") %>]
+</script>
+<script src="/javascripts/resumes/revision.js" type="text/javascript" language="JavaScript"></script>

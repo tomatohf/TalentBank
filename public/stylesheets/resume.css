@@ -7,6 +7,9 @@
 	line-height: 1.5;
 	font-size: 13px;
 	border: 1px dashed #EAEAEA;
+	
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 5px;
 }
 
 .resume_name {

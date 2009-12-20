@@ -6,8 +6,11 @@ class ResumePartType < HashModel::Simple
     # ]
     
     [
-      {:id => 10, :name => "exp_section"},
-      {:id => 20, :name => "exp"}
+      {:id => 10, :name => "job_intention"},
+      {:id => 20, :name => "edu"},
+      {:id => 30, :name => "exp_section"},
+      {:id => 40, :name => "student_exp"},
+      {:id => 50, :name => "resume_exp"}
     ]
   end
   
