@@ -30,9 +30,6 @@
 </div>
 
 
-<div id="highlighter" class="ui-state-default" style="display: none; position: absolute; -moz-border-radius: 6px; -webkit-border-radius: 5px;"></div>
-
-
 <% if @taggers.size > 0 %>
 	<div class="resume_exp_tags_bar">
 		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
@@ -58,15 +55,41 @@
 </div>
 
 
-<div>
-	所有评论和修订
+<div class="resume_wrap" style="margin-top: 50px;">
+	<div class="tabs" style="display: none;">
+		<ul>
+			<li>
+				<a href="#all_comments">简历评注</a>
+			</li>
+			<li>
+				<a href="#all_revisions">修改建议</a>
+			</li>
+		</ul>
+		
+		<div id="all_comments">
+			<div>
+				Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
+			</div>
+		</div>
+		
+		<div id="all_revisions">
+			<div>
+				Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
+			</div>
+		</div>
+	</div>
 </div>
+
+
+<div id="highlighter" class="ui-state-default" style="display: none; position: absolute; -moz-border-radius: 6px; -webkit-border-radius: 5px;"></div>
+
+<div id="dialog"></div>
 
 
 
 <link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
-<script src="/lib/jquery/ui/jquery-ui.datepicker.min.js" type="text/javascript" language="JavaScript"></script>
+<script src="/lib/jquery/ui/jquery-ui.dialog_tabs.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	var RESUME_TYPES = [<%= ResumePartType.data.collect{|type| %Q!{id:#{type[:id]}, name:"#{type[:name]}"}!}.join(",") %>]
 </script>

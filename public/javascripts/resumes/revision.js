@@ -1,3 +1,13 @@
+function setup_tabs() {
+	$(".tabs").css(
+		{
+			border: "none",
+			background: "transparent"
+		}
+	).tabs().show();
+}
+
+
 function setup_resume_parts() {
 	$.each(
 		RESUME_TYPES,
@@ -28,7 +38,9 @@ function setup_resume_parts() {
 				function() {
 					var part_id = $(this).attr("id").substr(type_name.length + 1);
 					
-					alert(type_name + ": " + part_id);
+					$("#dialog")
+						.html("专业课Top5")
+						.dialog("open");
 				}
 			).css(
 				{
@@ -40,8 +52,40 @@ function setup_resume_parts() {
 }
 
 
+function setup_dialog() {
+	$("#dialog").dialog(
+		{
+			autoOpen: false,
+			closeOnEscape: true,
+			
+			title: "title",
+			buttons: {
+				ok: function() {
+					$(this).dialog("close");
+				}
+			},
+			
+			draggable: true,
+			resizable: true,
+			
+			show: "fade",
+			hide: "fade",
+			
+			maxHeight: 450,
+			position: ["center", 100],
+			
+			modal: false
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
+		setup_tabs();
+		
 		setup_resume_parts();
+		
+		setup_dialog();
 	}
 );
