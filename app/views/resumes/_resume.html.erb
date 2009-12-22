@@ -226,6 +226,7 @@
 					:conditions => ["resume_skills.resume_id = ?", resume.id]
 				)
 				resume_list_skills = resume.list_skills
+				resume_list_skills.to_s # for eager loading ...
 			%>
 			<% if student_skills.size + resume_list_skills.size > 0 %>
 				<div>

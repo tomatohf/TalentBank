@@ -77,10 +77,8 @@ class TeacherStudentsController < ApplicationController
   
   
   def resume
-    @taggers = ResumeExpTagger.find(
-      :all,
-      :conditions => ["resume_id = ?", @resume.id]
-    )
+    @taggers = @resume.exp_taggers
+    @taggers.to_s # for eager loading ...
   end
   
   

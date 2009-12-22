@@ -24,6 +24,7 @@ module PdfExport
 				]
 			)
 			exp_sections = resume.exp_sections
+			exp_sections.to_s # for eager loading ...
 			draw_exps(doc, exp_sections) if exp_sections.size > 0
 			
 			
@@ -33,6 +34,7 @@ module PdfExport
 				:conditions => ["resume_skills.resume_id = ?", resume.id]
 			)
 			resume_list_skills = resume.list_skills
+			resume_list_skills.to_s # for eager loading ...
 			draw_skills(doc, student_skills, resume_list_skills) if student_skills.size + resume_list_skills.size > 0
 			
 			

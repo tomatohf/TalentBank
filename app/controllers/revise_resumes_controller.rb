@@ -12,13 +12,11 @@ class ReviseResumesController < ApplicationController
   
   
   def show
-    @taggers = ResumeExpTagger.find(
-      :all,
-      :conditions => ["resume_id = ?", @resume.id]
-    )
+    @taggers = @resume.exp_taggers
+    @taggers.to_s # for eager loading ...
     
-    @comments
-    @revisions
+    @revisions = @resume.revisions
+    @comments = @resume.comments
     
     render :layout => @account_type
   end

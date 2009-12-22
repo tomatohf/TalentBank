@@ -25,10 +25,7 @@ class ResumeExpSectionsController < ApplicationController
     
     @tags = ResumeExpTag.data[@resume.domain_id] || []
     
-    @taggers = ResumeExpTagger.find(
-      :all,
-      :conditions => ["resume_id = ?", @resume.id]
-    )
+    @taggers = @resume.exp_taggers
   end
   
   
