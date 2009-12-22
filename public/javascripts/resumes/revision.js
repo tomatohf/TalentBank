@@ -31,28 +31,12 @@ function setup_resume_parts() {
 					
 					var section = ancestor_with_class(this, "resume_section");
 					if(section != null) {
-						var sub_title = "";
-						if(type_name.indexOf("edu") >= 0) {
-							var edu_info = [];
-							$.each(
-								$(this).find("td"),
-								function(i, td) {
-									var td_html = $.trim($(td).html());
-									if(td_html != "") {
-										edu_info.push(td_html);
-									}
-								}
-							)
-							sub_title = edu_info.join(" / ");
-						}
-						else if(type_name.indexOf("_exp") >= 0) {
-							sub_title = $.trim($(this).find("td div.resume_exp_title").html()) +
-										" (" + $.trim($(this).find("td.resume_exp_period").html()) + ")";
-						}
-						else if(type_name.indexOf("_skill") >= 0) {
-							sub_title = $(this).find("td:first").html();
-						}
-						set_dialog_title(section.prev(".resume_section_title").html(), sub_title);
+						set_dialog_title(
+							section.prev(".resume_section_title").html(),
+							get_dialog_sub_title(type_name, this)
+						);
+						
+						prepare_dialog_content(type.id, part_id);
 
 						open_dialog(this);
 					}
@@ -156,6 +140,33 @@ function set_dialog_title(title, sub_title) {
 }
 
 
+function get_dialog_sub_title(type_name, part) {
+	var sub_title = "";
+	if(type_name.indexOf("edu") >= 0) {
+		var edu_info = [];
+		$.each(
+			$(part).find("td"),
+			function(i, td) {
+				var td_html = $.trim($(td).html());
+				if(td_html != "") {
+					edu_info.push(td_html);
+				}
+			}
+		)
+		sub_title = edu_info.join(" / ");
+	}
+	else if(type_name.indexOf("_exp") >= 0) {
+		sub_title = $.trim($(part).find("td div.resume_exp_title").html()) +
+					" (" + $.trim($(part).find("td.resume_exp_period").html()) + ")";
+	}
+	else if(type_name.indexOf("_skill") >= 0) {
+		sub_title = $(part).find("td:first").html();
+	}
+	
+	return sub_title;
+}
+
+
 function open_dialog(part) {
 	// $("#dialog").dialog("close");
 	
@@ -184,6 +195,79 @@ function open_dialog(part) {
 		$("#dialog").dialog("option", "position", calculate_dialog_position());
 		$("#dialog").dialog("open");
 	}
+}
+
+
+function setup_dialog_buttons() {
+	var btn_padding = "0.4em 1em 0.5em";
+	
+	$("#new_revision_actions").html(
+		'建议:' +
+		'<button id="action_update">修改内容</button>' +
+		'<button id="action_destroy">删除这段</button>' +
+		'<button id="action_add">添加内容</button>'
+	);
+	
+	$("#new_revision_actions button").css(
+		{
+			cursor: "pointer",
+			padding: btn_padding,
+			margin: "0px 0px 0px 10px"
+		}
+	)
+	.addClass("ui-state-default ui-corner-all")
+	.unbind("mouseenter mouseleave").hover(
+		function() {
+			$(this).addClass("ui-state-hover");
+		},
+		function() {
+			$(this).removeClass("ui-state-hover");
+		}
+	)
+	.unbind("click").click(
+		function() {
+			$(this).addClass("ui-state-active");
+			
+			var revision_action = $(this).attr("id").substr("action_".length);
+			var btn_label = $(this).html();
+			var btn_left = $(this).position().left;
+			
+			$.get(
+				"/teachers/" + TEACHER_ID + "/revise_resumes/" + RESUME_ID + "/revisions/new",
+				{
+					revision_action: revision_action
+				},
+				function(data) {
+					$("#new_revision_actions")
+						.html('<button>' + btn_label + '</button>')
+						.find("button")
+							.addClass("ui-state-active ui-corner-all")
+							.css(
+								{
+									padding: btn_padding,
+									position: "relative",
+									left: btn_left
+								}
+							)
+							.animate(
+								{
+									left: 0
+								}
+							);
+					
+					$("#new_revision_form").html(data);
+				},
+				"html"
+			);
+		}
+	);
+}
+
+
+function prepare_dialog_content(type_id, part_id) {
+	setup_dialog_buttons();
+	
+	$("#new_revision_form").html("");
 }
 
 

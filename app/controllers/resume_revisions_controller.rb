@@ -6,10 +6,19 @@ class ResumeRevisionsController < ApplicationController
   
   before_filter :check_teacher
   
-  before_filter :check_revision
+  before_filter :check_teacher_revision
   
   before_filter :check_resume
   
+  before_filter :check_revision, :except => [:new, :create]
+  
+  # to improve performance, since the new action does NOT change any data
+  skip_before_filter :check_teacher, :check_teacher_revision, :check_resume, :only => [:new]
+  
+  
+  def new
+    render :text => "AAAA"
+  end
   
   def create
     
@@ -33,7 +42,7 @@ class ResumeRevisionsController < ApplicationController
   end
   
   
-  def check_revision
+  def check_teacher_revision
     jump_to("/errors/unauthorized") unless @teacher.revision
   end
   
@@ -41,6 +50,12 @@ class ResumeRevisionsController < ApplicationController
   def check_resume
     @resume = Resume.find(params[:revise_resume_id])
     jump_to("/errors/forbidden") if @resume.hidden || @resume.student.school_id != @teacher.school_id
+  end
+  
+  
+  def check_revision
+    @revision = ResumeRevision.find(params[:id])
+    jump_to("/errors/forbidden") unless @revision.resume_id == @resume.id
   end
   
 end

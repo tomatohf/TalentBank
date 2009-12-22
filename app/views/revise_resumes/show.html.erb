@@ -123,49 +123,13 @@
 		</div>
 		<% if @teacher %>
 			<div id="new_revision">
-				<% form_tag "/teachers/#{@teacher.id}/revise_resumes/#{@resume.id}/revisions", :method => :post do %>
-					<table border="0" cellspacing="10" cellpadding="0" style="font-size: 14px;">
-						<tr>
-							<td style="width: 100px;">
-								<label for="revision_action">
-									操作<%= required_mark %>
-								</label>
-							</td>
-
-							<td>
-								<input type="radio" value="update" name="revision_action" id="revision_action_update" />
-								<label for="revision_action_update">
-									修改
-								</label>
-
-								<span style="margin: 0px 20px;">
-									<input type="radio" value="delete" name="revision_action" id="revision_action_delete" />
-									<label for="revision_action_delete">
-										删除
-									</label>
-								</span>
-								
-								<input type="radio" value="add" name="revision_action" id="revision_action_add" />
-								<label for="revision_action_add">
-									添加
-								</label>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-
-							</td>
-
-							<td>
-								<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="#">
-									重置</a>
-							</td>
-						</tr>
-					</table>
-				<% end %>
+				<div id="new_revision_actions">
+					
+				</div>
+				
+				<div id="new_revision_form">
+					
+				</div>
 			</div>
 		<% end %>
 	</div>
@@ -177,6 +141,9 @@
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script src="/lib/jquery/ui/jquery-ui.dialog_tabs.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
+	var TEACHER_ID = <%= @teacher.id %>;
+	var RESUME_ID = <%= @resume.id %>;
+
 	var RESUME_TYPES = [<%= ResumePartType.data.collect{|type| %Q!{id:#{type[:id]}, name:"#{type[:name]}"}!}.join(",") %>]
 </script>
 <script src="/javascripts/resumes/revision.js" type="text/javascript" language="JavaScript"></script>
