@@ -31,7 +31,28 @@ function setup_resume_parts() {
 					
 					var section = ancestor_with_class(this, "resume_section");
 					if(section != null) {
-						set_dialog_title(section.prev(".resume_section_title").html());
+						var sub_title = "";
+						if(type_name.indexOf("edu") >= 0) {
+							var edu_info = [];
+							$.each(
+								$(this).find("td"),
+								function(i, td) {
+									var td_html = $.trim($(td).html());
+									if(td_html != "") {
+										edu_info.push(td_html);
+									}
+								}
+							)
+							sub_title = edu_info.join(" / ");
+						}
+						else if(type_name.indexOf("_exp") >= 0) {
+							sub_title = $.trim($(this).find("td div.resume_exp_title").html()) +
+										" (" + $.trim($(this).find("td.resume_exp_period").html()) + ")";
+						}
+						else if(type_name.indexOf("_skill") >= 0) {
+							sub_title = $(this).find("td:first").html();
+						}
+						set_dialog_title(section.prev(".resume_section_title").html(), sub_title);
 
 						open_dialog(this);
 					}
@@ -125,8 +146,13 @@ function calculate_dialog_position() {
 }
 
 
-function set_dialog_title(title) {
-	$("#dialog").dialog("option", "title", $.trim(title));
+function set_dialog_title(title, sub_title) {
+	var dialog_title = $.trim(title);
+	sub_title = $.trim(sub_title);
+	if(sub_title != "") {
+		dialog_title += " - " + sub_title;
+	}
+	$("#dialog").dialog("option", "title", dialog_title);
 }
 
 
