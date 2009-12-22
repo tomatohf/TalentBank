@@ -55,14 +55,18 @@
 </div>
 
 
-<div class="resume_wrap" style="margin-top: 50px;">
+<div class="resume_wrap overflow_hidden" style="margin-top: 50px;">
 	<div class="tabs" style="display: none;">
 		<ul>
 			<li>
-				<a href="#all_revisions">修改建议</a>
+				<a href="#all_revisions">全部修改建议</a>
 			</li>
 			<li>
-				<a href="#all_comments">简历评注</a>
+				<a href="#all_comments">全部简历评注</a>
+			</li>
+			
+			<li style="margin-left: 30px;">
+				<a href="#new_comment">添加整份简历的评注</a>
 			</li>
 		</ul>
 		
@@ -71,20 +75,101 @@
 				Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
 			</div>
 		</div>
-		
 		<div id="all_comments">
 			<div>
 				Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
 			</div>
 		</div>
+		
+		<div id="new_overall_comment">
+			
+		</div>
 	</div>
 </div>
 
 
-<div id="highlighter_1" class="ui-state-hover" style="display: none; position: absolute; -moz-border-radius: 6px; -webkit-border-radius: 5px;"></div>
-<div id="highlighter_2" class="ui-state-default" style="display: none; position: absolute; -moz-border-radius: 6px; -webkit-border-radius: 5px;"></div>
+<div id="highlighter_1" class="ui-state-hover ui-corner-all" style="display: none; position: absolute;"></div>
+<div id="highlighter_2" class="ui-state-default ui-corner-all" style="display: none; position: absolute;"></div>
 
-<div id="dialog"></div>
+<div id="dialog" style="display: none;">
+	<div class="tabs">
+		<ul>
+			<li>
+				<a href="#part_revisions">修改建议</a>
+			</li>
+			<li>
+				<a href="#part_comments">简历评注</a>
+			</li>
+			
+			<li style="margin-left: 30px;">
+				<a href="#new_comment">添加评注</a>
+			</li>
+			<% if @teacher %>
+				<li>
+					<a href="#new_revision">添加建议</a>
+				</li>
+			<% end %>
+		</ul>
+		
+		<div id="part_revisions">
+			
+		</div>
+		<div id="part_comments">
+			
+		</div>
+		
+		<div id="new_comment">
+			
+		</div>
+		<% if @teacher %>
+			<div id="new_revision">
+				<% form_tag "/teachers/#{@teacher.id}/revise_resumes/#{@resume.id}/revisions", :method => :post do %>
+					<table border="0" cellspacing="10" cellpadding="0" style="font-size: 14px;">
+						<tr>
+							<td style="width: 100px;">
+								<label for="revision_action">
+									操作<%= required_mark %>
+								</label>
+							</td>
+
+							<td>
+								<input type="radio" value="update" name="revision_action" id="revision_action_update" />
+								<label for="revision_action_update">
+									修改
+								</label>
+
+								<span style="margin: 0px 20px;">
+									<input type="radio" value="delete" name="revision_action" id="revision_action_delete" />
+									<label for="revision_action_delete">
+										删除
+									</label>
+								</span>
+								
+								<input type="radio" value="add" name="revision_action" id="revision_action_add" />
+								<label for="revision_action_add">
+									添加
+								</label>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+
+							</td>
+
+							<td>
+								<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="#">
+									重置</a>
+							</td>
+						</tr>
+					</table>
+				<% end %>
+			</div>
+		<% end %>
+	</div>
+</div>
 
 
 

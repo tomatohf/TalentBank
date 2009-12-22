@@ -1,5 +1,5 @@
 var DIALOG_INIT_WIDTH = 500;
-var DIALOG_INIT_HEIGHT = "auto";
+var DIALOG_INIT_HEIGHT = 350;
 
 
 function setup_tabs() {
@@ -29,9 +29,12 @@ function setup_resume_parts() {
 				function() {
 					var part_id = $(this).attr("id").substr(type_name.length + 1);
 					
-					set_dialog_title(type_name + " : " + part_id);
-					set_dialog_content(type_name + " : " + part_id);
-					open_dialog(this);
+					var section = ancestor_with_class(this, "resume_section");
+					if(section != null) {
+						set_dialog_title(section.prev(".resume_section_title").html());
+
+						open_dialog(this);
+					}
 				}
 			).css(
 				{
@@ -40,6 +43,20 @@ function setup_resume_parts() {
 			);
 		}
 	);
+}
+
+
+function ancestor_with_class(part, class_name) {
+	var element = $(part);
+	while(!element.hasClass(class_name)) {
+		element = element.parent();
+		
+		if(element.length <= 0) {
+			return null;
+		}
+	}
+	
+	return element;
 }
 
 
@@ -84,6 +101,7 @@ function setup_dialog() {
 			height: DIALOG_INIT_HEIGHT,
 			maxWidth: 950,
 			maxHeight: 600,
+			minWidth: 400,
 			position: calculate_dialog_position(),
 			
 			modal: false,
@@ -92,7 +110,7 @@ function setup_dialog() {
 				hide_highlighter(1);
 			}
 		}
-	);
+	).show();
 }
 
 
@@ -108,12 +126,7 @@ function calculate_dialog_position() {
 
 
 function set_dialog_title(title) {
-	$("#dialog").dialog("option", "title", title);
-}
-
-
-function set_dialog_content(content) {
-	$("#dialog").html(content);
+	$("#dialog").dialog("option", "title", $.trim(title));
 }
 
 
