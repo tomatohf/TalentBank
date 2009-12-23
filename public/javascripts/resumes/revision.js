@@ -321,45 +321,32 @@ function get_new_revision_inputs(type, part, modify) {
 	
 	var type_name = type.name;
 	if(type_name == "edu") {
-		var table = '<table border="0" cellspacing="0" cellpadding="5"></table>';
-		table = $(table).addClass("main_part_w");
-		$.each(
+		var table = table_form_for_text_fields(
 			[
-				["period", "时间段" + required_mark],
-				["university", "大学"],
-				["college", "学院"],
-				["major", "专业"],
+				["edu_period", "时间段" + required_mark],
+				["edu_university", "大学"],
+				["edu_college", "学院"],
+				["edu_major", "专业"],
 				["edu_type", "教育类型"]
 			],
-			function(i, field) {
-				var field_id = "edu_" + field[0];
-				
-				var label_column = $('<td></td>');
-				if(i <= 0) { label_column.css("width", "60px"); }
-				$('<label></label>').attr("for", field_id).html(field[1]).appendTo(label_column);
-				
-				var input_column = $('<td></td>');
-				$('<input type="text" />')
-					.attr("id", field_id)
-					.addClass("text_field ui-corner-all")
-					.css(
-						{
-							width: "95%"
-						}
-					)
-					.val(modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "")
-					.appendTo(input_column);
-				
-				$('<tr></tr>').append(label_column).append(input_column).appendTo(table);
-			}
-		);
+			part,
+			modify
+		)
 		$('<div></div>').append(table).appendTo(inputs_container);
 	}
 	else if(type_name.indexOf("_exp") >= 0) {
 		
 	}
 	else if(type_name.indexOf("_skill") >= 0) {
-		
+		var table = table_form_for_text_fields(
+			[
+				["skill_name", "名称" + required_mark],
+				["skill_level", "程度"]
+			],
+			part,
+			modify
+		)
+		$('<div></div>').append(table).appendTo(inputs_container);
 	}
 	else if(
 		type_name == "job_intention" ||
@@ -386,7 +373,11 @@ function get_new_revision_inputs(type, part, modify) {
 				).val(modify ? get_section_title(part) : "");
 				$('<div></div>')
 					.css("marginBottom", "10px")
-					.html('标题' + required_mark + ':')
+					.append(
+						$('<label></label>')
+							.attr("for", "list_section_title")
+							.html('标题' + required_mark + ':')
+					)
 					.append(input).appendTo(inputs_container);
 			}
 			
@@ -416,6 +407,37 @@ function get_new_revision_inputs(type, part, modify) {
 	);
 	
 	return inputs_container;
+}
+
+
+function table_form_for_text_fields(fields, part, modify) {
+	var table = '<table border="0" cellspacing="0" cellpadding="5"></table>';
+	table = $(table).addClass("main_part_w");
+	
+	$.each(
+		fields,
+		function(i, field) {
+			var label_column = $('<td></td>');
+			if(i <= 0) { label_column.css("width", "60px"); }
+			$('<label></label>').attr("for", field[0]).html(field[1]).appendTo(label_column);
+			
+			var input_column = $('<td></td>');
+			$('<input type="text" />')
+				.attr("id", field[0])
+				.addClass("text_field ui-corner-all")
+				.css(
+					{
+						width: "95%"
+					}
+				)
+				.val(modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "")
+				.appendTo(input_column);
+			
+			$('<tr></tr>').append(label_column).append(input_column).appendTo(table);
+		}
+	);
+	
+	return table;
 }
 
 

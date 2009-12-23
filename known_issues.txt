@@ -1,5 +1,7 @@
 简历修改功能
 	- setup action buttons 不要显示不适用的 action
+		* job_intention/award/hobby/list_section 不能 add
+		* student_skill 不能 update
 
 人才库与乔布圈帐号互联
 
