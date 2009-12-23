@@ -104,8 +104,8 @@ function setup_dialog() {
 			draggable: true,
 			resizable: true,
 			
-			show: "fade",
-			hide: "fade",
+			show: null,
+			hide: null,
 			
 			width: DIALOG_INIT_WIDTH,
 			height: DIALOG_INIT_HEIGHT,
