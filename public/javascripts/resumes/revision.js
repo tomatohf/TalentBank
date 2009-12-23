@@ -1,5 +1,5 @@
 var DIALOG_INIT_WIDTH = 500;
-var DIALOG_INIT_HEIGHT = 350;
+var DIALOG_INIT_HEIGHT = 360;
 
 var BTN_PADDING_BIG = "0.4em 1em 0.5em";
 var BTN_PADDING_SMALL = "0.2em 0.6em 0.3em";
@@ -121,6 +121,16 @@ function setup_dialog() {
 			}
 		}
 	).show();
+	
+	
+	// make dialog title NOT wrap, and hide too long text
+	$("span#ui-dialog-title-dialog").css(
+		{
+			width: "95%",
+			overflow: "hidden",
+			whiteSpace: "nowrap"
+		}
+	);
 }
 
 
@@ -226,7 +236,7 @@ function setup_dialog_buttons(type, part) {
 	$("#new_revision_actions").html(
 		'建议:' +
 		'<button id="action_update">修改内容</button>' +
-		'<button id="action_destroy">删除这段</button>' +
+		'<button id="action_delete">删除这段</button>' +
 		'<button id="action_add">添加内容</button>'
 	);
 	
@@ -275,15 +285,27 @@ function draw_new_revision_form(action, type, part) {
 	
 	form_container = $(form_container).css(
 		{
-			padding: "20px 30px 10px 20px",
+			padding: "20px 30px 0px 20px",
 			display: "none"
 		}
 	)
 	.append($(type_id_input).val(type.id))
 	.append($(part_id_input).val(part_id));
 	
-	if(action == "destroy") {
+	if(action == "delete") {
+		form_container.append('<div>确定要添加删除这段的建议么?</div>');
 		
+		add_submit_button(
+			form_container,
+			function() {
+				alert("submit delete");
+			},
+			function() {
+				prepare_dialog_content(type, part);
+				
+				return false;
+			}
+		);
 	}
 	else {
 		form_container.append(get_new_revision_inputs(type, part, action == "update"));
@@ -299,7 +321,39 @@ function get_new_revision_inputs(type, part, modify) {
 	
 	var type_name = type.name;
 	if(type_name == "edu") {
-		
+		var table = '<table border="0" cellspacing="0" cellpadding="5"></table>';
+		table = $(table).addClass("main_part_w");
+		$.each(
+			[
+				["period", "时间段" + required_mark],
+				["university", "大学"],
+				["college", "学院"],
+				["major", "专业"],
+				["edu_type", "教育类型"]
+			],
+			function(i, field) {
+				var field_id = "edu_" + field[0];
+				
+				var label_column = $('<td></td>');
+				if(i <= 0) { label_column.css("width", "60px"); }
+				$('<label></label>').attr("for", field_id).html(field[1]).appendTo(label_column);
+				
+				var input_column = $('<td></td>');
+				$('<input type="text" />')
+					.attr("id", field_id)
+					.addClass("text_field ui-corner-all")
+					.css(
+						{
+							width: "100%"
+						}
+					)
+					.val(modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "")
+					.appendTo(input_column);
+				
+				$('<tr></tr>').append(label_column).append(input_column).appendTo(table);
+			}
+		);
+		$('<div></div>').append(table).appendTo(inputs_container);
 	}
 	else if(type_name.indexOf("_exp") >= 0) {
 		
@@ -330,7 +384,7 @@ function get_new_revision_inputs(type, part, modify) {
 						margin: "0px 0px 10px 16px"
 					}
 				).val(modify ? get_section_title(part) : "");
-				$('<div>标题:</div>').append(input).appendTo(inputs_container);
+				$('<div>标题' + required_mark + ':</div>').append(input).appendTo(inputs_container);
 			}
 			
 			var textarea = '<textarea rows="5"></textarea>';
@@ -346,30 +400,37 @@ function get_new_revision_inputs(type, part, modify) {
 		}
 	}
 	
-	var submit_button = '<button>提交内容</button>';
-	submit_button = beautify_buttons(
-		$(submit_button),
-		BTN_PADDING_SMALL
-	).unbind("click").click(
+	add_submit_button(
+		inputs_container,
 		function() {
 			alert("submit");
-		}
-	)
-	var reset_link = '<a href="#">取消</a>';
-	reset_link = $(reset_link).addClass("none").css(
-		{
-			marginLeft: "20px"
-		}
-	).unbind("click").click(
+		},
 		function() {
 			prepare_dialog_content(type, part);
 			
 			return false;
 		}
 	);
-	$('<div style="margin-top: 15px;"></div>').append(submit_button).append(reset_link).appendTo(inputs_container);
 	
 	return inputs_container;
+}
+
+
+function add_submit_button(container, submit_func, reset_func) {
+	var submit_button = '<button>提交</button>';
+	submit_button = beautify_buttons(
+		$(submit_button),
+		BTN_PADDING_SMALL
+	).unbind("click").click(submit_func);
+	
+	var reset_link = '<a href="#">取消</a>';
+	reset_link = $(reset_link).addClass("none").css(
+		{
+			marginLeft: "25px"
+		}
+	).unbind("click").click(reset_func);
+	
+	$('<div style="margin-top: 15px;"></div>').append(submit_button).append(reset_link).appendTo(container);
 }
 
 
