@@ -1,8 +1,8 @@
 var DIALOG_INIT_WIDTH = 500;
 var DIALOG_INIT_HEIGHT = 360;
 
-var BTN_PADDING_BIG = "0.4em 1em 0.5em";
-var BTN_PADDING_SMALL = "0.2em 0.6em 0.3em";
+var BTN_PADDING_BIG = "6px 10px 5px";
+var BTN_PADDING_SMALL = "3px 6px 2px";
 
 
 function setup_tabs() {
