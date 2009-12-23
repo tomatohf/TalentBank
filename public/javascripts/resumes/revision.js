@@ -1,5 +1,5 @@
 var DIALOG_INIT_WIDTH = 500;
-var DIALOG_INIT_HEIGHT = 360;
+var DIALOG_INIT_HEIGHT = 385;
 
 var BTN_PADDING_BIG = "6px 10px 5px";
 var BTN_PADDING_SMALL = "3px 6px 2px";
@@ -344,7 +344,7 @@ function get_new_revision_inputs(type, part, modify) {
 					.addClass("text_field ui-corner-all")
 					.css(
 						{
-							width: "100%"
+							width: "95%"
 						}
 					)
 					.val(modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "")
@@ -370,7 +370,7 @@ function get_new_revision_inputs(type, part, modify) {
 			var input = '<input type="text" id="job_intention_content" />';
 			input = $(input).addClass("text_field ui-corner-all").css(
 				{
-					width: "100%"
+					width: "95%"
 				}
 			).val(modify ? $.trim($(part).html()) : "");
 			$('<div></div>').append(input).appendTo(inputs_container);
@@ -381,10 +381,13 @@ function get_new_revision_inputs(type, part, modify) {
 				input = $(input).addClass("text_field ui-corner-all").css(
 					{
 						width: "75%",
-						margin: "0px 0px 10px 16px"
+						marginLeft: "16px"
 					}
 				).val(modify ? get_section_title(part) : "");
-				$('<div>标题' + required_mark + ':</div>').append(input).appendTo(inputs_container);
+				$('<div></div>')
+					.css("marginBottom", "10px")
+					.html('标题' + required_mark + ':')
+					.append(input).appendTo(inputs_container);
 			}
 			
 			var textarea = '<textarea rows="5"></textarea>';
@@ -393,7 +396,7 @@ function get_new_revision_inputs(type, part, modify) {
 				.addClass("text_field ui-corner-all")
 				.css(
 					{
-						width: "100%"
+						width: "95%"
 					}
 				).val(modify ? items_to_text($(part).find("ul")) : "");
 			$('<div></div>').append(textarea).appendTo(inputs_container);
