@@ -1,6 +1,9 @@
 var DIALOG_INIT_WIDTH = 500;
 var DIALOG_INIT_HEIGHT = 350;
 
+var BTN_PADDING_BIG = "0.4em 1em 0.5em";
+var BTN_PADDING_SMALL = "0.2em 0.6em 0.3em";
+
 
 function setup_tabs() {
 	$(".tabs").css(
@@ -27,16 +30,11 @@ function setup_resume_parts() {
 				}
 			).unbind("click").click(
 				function() {
-					var part_id = $(this).attr("id").substr(type_name.length + 1);
-					
-					var section = ancestor_with_class(this, "resume_section");
-					if(section != null) {
-						set_dialog_title(
-							section.prev(".resume_section_title").html(),
-							get_dialog_sub_title(type_name, this)
-						);
-						
-						prepare_dialog_content(type.id, part_id);
+					var section_title = get_section_title(this);
+					if(section_title) {
+						set_dialog_title(section_title, get_dialog_sub_title(type_name, this));
+
+						prepare_dialog_content(type, this);
 
 						open_dialog(this);
 					}
@@ -48,6 +46,13 @@ function setup_resume_parts() {
 			);
 		}
 	);
+}
+
+
+function get_section_title(part) {
+	var section = ancestor_with_class(part, "resume_section");
+	
+	return section && $.trim(section.prev(".resume_section_title").html());
 }
 
 
@@ -131,18 +136,17 @@ function calculate_dialog_position() {
 
 
 function set_dialog_title(title, sub_title) {
-	var dialog_title = $.trim(title);
 	sub_title = $.trim(sub_title);
 	if(sub_title != "") {
-		dialog_title += " - " + sub_title;
+		title += " - " + sub_title;
 	}
-	$("#dialog").dialog("option", "title", dialog_title);
+	$("#dialog").dialog("option", "title", title);
 }
 
 
 function get_dialog_sub_title(type_name, part) {
 	var sub_title = "";
-	if(type_name.indexOf("edu") >= 0) {
+	if(type_name == "edu") {
 		var edu_info = [];
 		$.each(
 			$(part).find("td"),
@@ -198,21 +202,12 @@ function open_dialog(part) {
 }
 
 
-function setup_dialog_buttons() {
-	var btn_padding = "0.4em 1em 0.5em";
-	
-	$("#new_revision_actions").html(
-		'建议:' +
-		'<button id="action_update">修改内容</button>' +
-		'<button id="action_destroy">删除这段</button>' +
-		'<button id="action_add">添加内容</button>'
-	);
-	
-	$("#new_revision_actions button").css(
+function beautify_buttons(buttons, padding) {
+	return buttons.css(
 		{
 			cursor: "pointer",
-			padding: btn_padding,
-			margin: "0px 0px 0px 10px"
+			padding: padding,
+			marginLeft: "10px"
 		}
 	)
 	.addClass("ui-state-default ui-corner-all")
@@ -224,49 +219,172 @@ function setup_dialog_buttons() {
 			$(this).removeClass("ui-state-hover");
 		}
 	)
-	.unbind("click").click(
+}
+
+
+function setup_dialog_buttons(type, part) {
+	$("#new_revision_actions").html(
+		'建议:' +
+		'<button id="action_update">修改内容</button>' +
+		'<button id="action_destroy">删除这段</button>' +
+		'<button id="action_add">添加内容</button>'
+	);
+	
+	beautify_buttons(
+		$("#new_revision_actions button"),
+		BTN_PADDING_BIG
+	).unbind("click").click(
 		function() {
-			$(this).addClass("ui-state-active");
+			var action = $(this).attr("id").substr("action_".length);
 			
-			var revision_action = $(this).attr("id").substr("action_".length);
 			var btn_label = $(this).html();
-			var btn_left = $(this).position().left;
+			var btn_left = $(this).position().left
+							- parseFloat($(this).parent().parent().css("paddingLeft"))
+							- parseFloat($("#dialog").css("paddingLeft"))
+							+ parseFloat($(this).css("marginLeft"));
 			
-			$.get(
-				"/teachers/" + TEACHER_ID + "/revise_resumes/" + RESUME_ID + "/revisions/new",
-				{
-					revision_action: revision_action
-				},
-				function(data) {
-					$("#new_revision_actions")
-						.html('<button>' + btn_label + '</button>')
-						.find("button")
-							.addClass("ui-state-active ui-corner-all")
-							.css(
-								{
-									padding: btn_padding,
-									position: "relative",
-									left: btn_left
-								}
-							)
-							.animate(
-								{
-									left: 0
-								}
-							);
-					
-					$("#new_revision_form").html(data);
-				},
-				"html"
-			);
+			$("#new_revision_actions")
+				.html('<button>' + btn_label + '</button>')
+				.find("button")
+					.addClass("ui-state-active ui-corner-all")
+					.css(
+						{
+							padding: BTN_PADDING_BIG,
+							position: "relative",
+							left: btn_left
+						}
+					)
+					.animate(
+						{
+							left: 0
+						}
+					);
+			
+			draw_new_revision_form(action, type, part);
 		}
 	);
 }
 
 
-function prepare_dialog_content(type_id, part_id) {
-	setup_dialog_buttons();
+function draw_new_revision_form(action, type, part) {
+	var form_container = '<div></div>';
 	
+	var type_id_input = '<input type="hidden" id="type_id" />';
+	var part_id_input = '<input type="hidden" id="part_id" />';
+	var part_id = $(part).attr("id").substr(type.name.length + 1);
+	
+	form_container = $(form_container).css(
+		{
+			padding: "20px 30px 10px 20px",
+			display: "none"
+		}
+	)
+	.append($(type_id_input).val(type.id))
+	.append($(part_id_input).val(part_id));
+	
+	if(action == "destroy") {
+		
+	}
+	else {
+		form_container.append(get_new_revision_inputs(type, part, action == "update"));
+	}
+	
+	$("#new_revision_form").html(form_container);
+	form_container.fadeIn("slow").find(".text_field:first").focus();
+}
+
+
+function get_new_revision_inputs(type, part, modify) {
+	var inputs_container = $('<div></div>');
+	
+	var type_name = type.name;
+	if(type_name == "edu") {
+		
+	}
+	else if(type_name.indexOf("_exp") >= 0) {
+		
+	}
+	else if(type_name.indexOf("_skill") >= 0) {
+		
+	}
+	else if(
+		type_name == "job_intention" ||
+		type_name == "award" || type_name == "hobby" ||
+		type_name == "list_section"
+	) {
+		if(type_name == "job_intention") {
+			var input = '<input type="text" id="job_intention_content" />';
+			input = $(input).addClass("text_field ui-corner-all").css(
+				{
+					width: "100%"
+				}
+			).val(modify ? $.trim($(part).html()) : "");
+			$('<div></div>').append(input).appendTo(inputs_container);
+		}
+		else {
+			if(type_name == "list_section") {
+				var input = '<input type="text" id="list_section_title" />';
+				input = $(input).addClass("text_field ui-corner-all").css(
+					{
+						width: "75%",
+						margin: "0px 0px 10px 16px"
+					}
+				).val(modify ? get_section_title(part) : "");
+				$('<div>标题:</div>').append(input).appendTo(inputs_container);
+			}
+			
+			var textarea = '<textarea rows="5"></textarea>';
+			textarea = $(textarea)
+				.attr("id", type_name + "_content")
+				.addClass("text_field ui-corner-all")
+				.css(
+					{
+						width: "100%"
+					}
+				).val(modify ? items_to_text($(part).find("ul")) : "");
+			$('<div></div>').append(textarea).appendTo(inputs_container);
+		}
+	}
+	
+	var submit_button = '<button>提交内容</button>';
+	submit_button = beautify_buttons(
+		$(submit_button),
+		BTN_PADDING_SMALL
+	).unbind("click").click(
+		function() {
+			alert("submit");
+		}
+	)
+	var reset_link = '<a href="#">取消</a>';
+	reset_link = $(reset_link).addClass("none").css(
+		{
+			marginLeft: "20px"
+		}
+	).unbind("click").click(
+		function() {
+			prepare_dialog_content(type, part);
+			
+			return false;
+		}
+	);
+	$('<div style="margin-top: 15px;"></div>').append(submit_button).append(reset_link).appendTo(inputs_container);
+	
+	return inputs_container;
+}
+
+
+function items_to_text(ul) {
+	return $.map(
+		$(ul).find("li"),
+		function(li, i) {
+			return $(li).html();
+		}
+	).join("\n");
+}
+
+
+function prepare_dialog_content(type, part) {
+	setup_dialog_buttons(type, part);
 	$("#new_revision_form").html("");
 }
 

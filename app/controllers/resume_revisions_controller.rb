@@ -12,13 +12,6 @@ class ResumeRevisionsController < ApplicationController
   
   before_filter :check_revision, :except => [:new, :create]
   
-  # to improve performance, since the new action does NOT change any data
-  skip_before_filter :check_teacher, :check_teacher_revision, :check_resume, :only => [:new]
-  
-  
-  def new
-    render :text => "AAAA"
-  end
   
   def create
     

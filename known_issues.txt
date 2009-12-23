@@ -1,4 +1,5 @@
 简历修改功能
+	- setup action buttons 不要显示不适用的 action
 
 人才库与乔布圈帐号互联
 
