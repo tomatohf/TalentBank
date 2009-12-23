@@ -161,14 +161,7 @@ form {
 	border-style: inset;
 }
 
-.text_field:active {
-	border-style: inset;
-	
-	border-color: #878787;
-	background-color: #FFFFD8;
-}
-
-.text_field:focus {
+.text_field:active, .text_field:focus {
 	border-style: inset;
 	
 	border-color: #878787;

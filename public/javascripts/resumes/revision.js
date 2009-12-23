@@ -1,5 +1,5 @@
 var DIALOG_INIT_WIDTH = 500;
-var DIALOG_INIT_HEIGHT = 385;
+var DIALOG_INIT_HEIGHT = 400;
 
 var BTN_PADDING_BIG = "6px 10px 5px";
 var BTN_PADDING_SMALL = "3px 6px 2px";
@@ -321,7 +321,7 @@ function get_new_revision_inputs(type, part, modify) {
 	
 	var type_name = type.name;
 	if(type_name == "edu") {
-		var table = table_form_for_text_fields(
+		table_for_text_fields(
 			[
 				["edu_period", "时间段" + required_mark],
 				["edu_university", "大学"],
@@ -331,27 +331,79 @@ function get_new_revision_inputs(type, part, modify) {
 			],
 			part,
 			modify
-		)
-		$('<div></div>').append(table).appendTo(inputs_container);
+		).appendTo(inputs_container);
 	}
 	else if(type_name.indexOf("_exp") >= 0) {
-		
+		$('<table border="0" cellspacing="0" cellpadding="5"></table>')
+			.addClass("main_part_w")
+			.append(
+				table_row_for_text_field(
+					"exp_period",
+					"时间段" + required_mark,
+					modify ? $.trim($(part).find(".resume_exp_period").html()) : "",
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_title",
+					"标题" + required_mark,
+					modify ? $.trim($(part).find(".resume_exp_title").html()) : "",
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_sub_title",
+					"子标题",
+					modify ? $.trim($(part).find(".resume_exp_sub_title").html()) : "",
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_content",
+					"内容" + required_mark,
+					modify ? items_to_text($(part).find("ul")) : "",
+					true
+				)
+			)
+			.appendTo(inputs_container);
 	}
 	else if(type_name.indexOf("_skill") >= 0) {
-		var table = table_form_for_text_fields(
+		table_for_text_fields(
 			[
 				["skill_name", "名称" + required_mark],
 				["skill_level", "程度"]
 			],
 			part,
 			modify
-		)
-		$('<div></div>').append(table).appendTo(inputs_container);
+		).appendTo(inputs_container);
+	}
+	else if(type_name == "list_section") {
+		$('<table border="0" cellspacing="0" cellpadding="5"></table>')
+			.addClass("main_part_w")
+			.append(
+				table_row_for_text_field(
+					"section_title",
+					"标题" + required_mark,
+					modify ? get_section_title(part) : "",
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"section_content",
+					"内容" + required_mark,
+					modify ? items_to_text($(part).find("ul")) : "",
+					true
+				)
+			)
+			.appendTo(inputs_container);
 	}
 	else if(
 		type_name == "job_intention" ||
-		type_name == "award" || type_name == "hobby" ||
-		type_name == "list_section"
+		type_name == "award" || type_name == "hobby"
 	) {
 		if(type_name == "job_intention") {
 			var input = '<input type="text" id="job_intention_content" />';
@@ -363,27 +415,9 @@ function get_new_revision_inputs(type, part, modify) {
 			$('<div></div>').append(input).appendTo(inputs_container);
 		}
 		else {
-			if(type_name == "list_section") {
-				var input = '<input type="text" id="list_section_title" />';
-				input = $(input).addClass("text_field ui-corner-all").css(
-					{
-						width: "75%",
-						marginLeft: "16px"
-					}
-				).val(modify ? get_section_title(part) : "");
-				$('<div></div>')
-					.css("marginBottom", "10px")
-					.append(
-						$('<label></label>')
-							.attr("for", "list_section_title")
-							.html('标题' + required_mark + ':')
-					)
-					.append(input).appendTo(inputs_container);
-			}
-			
 			var textarea = '<textarea rows="5"></textarea>';
 			textarea = $(textarea)
-				.attr("id", type_name + "_content")
+				.attr("id", type_name)
 				.addClass("text_field ui-corner-all")
 				.css(
 					{
@@ -410,34 +444,44 @@ function get_new_revision_inputs(type, part, modify) {
 }
 
 
-function table_form_for_text_fields(fields, part, modify) {
-	var table = '<table border="0" cellspacing="0" cellpadding="5"></table>';
-	table = $(table).addClass("main_part_w");
+function table_for_text_fields(fields, part, modify) {
+	var table = $('<table border="0" cellspacing="0" cellpadding="5"></table>').addClass("main_part_w");
 	
 	$.each(
 		fields,
 		function(i, field) {
-			var label_column = $('<td></td>');
-			if(i <= 0) { label_column.css("width", "60px"); }
-			$('<label></label>').attr("for", field[0]).html(field[1]).appendTo(label_column);
-			
-			var input_column = $('<td></td>');
-			$('<input type="text" />')
-				.attr("id", field[0])
-				.addClass("text_field ui-corner-all")
-				.css(
-					{
-						width: "95%"
-					}
+			table.append(
+				table_row_for_text_field(
+					field[0],
+					field[1],
+					modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "",
+					false
 				)
-				.val(modify ? $.trim($(part).find("td:nth-child(" + (i+1) + ")").html()) : "")
-				.appendTo(input_column);
-			
-			$('<tr></tr>').append(label_column).append(input_column).appendTo(table);
+			);
 		}
 	);
 	
 	return table;
+}
+
+
+function table_row_for_text_field(field_id, field_label, field_value, multi_line) {
+	var label_column = $('<td></td>').css("width", "60px");
+	$('<label></label>').attr("for", field_id).html(field_label).appendTo(label_column);
+	
+	var input_column = $('<td></td>');
+	$(multi_line ? '<textarea rows="5"></textarea>' : '<input type="text" />')
+		.attr("id", field_id)
+		.addClass("text_field ui-corner-all")
+		.css(
+			{
+				width: "95%"
+			}
+		)
+		.val(field_value)
+		.appendTo(input_column);
+	
+	return $('<tr></tr>').append(label_column).append(input_column);
 }
 
 
