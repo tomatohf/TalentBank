@@ -540,7 +540,7 @@ function create_revision() {
 	$.ajax(
 		{
 			type: "POST",
-			url: "/teachers/" + TEACHER_ID + "/revise_resumes/" + RESUME_ID + "/revisions",
+			url: "/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions",
 			dataType: "html",
 			data: collect_form_data($("#new_revision_form").find("input:hidden, input:text, textarea")),
 			error: function() {
@@ -551,6 +551,8 @@ function create_revision() {
 			},
 			success: function(data, text_status) {
 				enable_submit_button("#new_revision_form");
+				
+				alert("revision created");
 			}
 		}
 	);

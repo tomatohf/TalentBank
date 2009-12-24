@@ -1,48 +1,47 @@
-class ResumeRevisionsController < ApplicationController
+class ResumeRevisionsController < ReviseResumesController
   
-  before_filter :check_login_for_account
+  insert_before_filter(
+    :check_account,
+    :check_active,
+    :only => [:create]
+  )
   
-  before_filter :check_active, :only => [:create]
+  insert_before_filter(
+    :check_login_for_account,
+    :check_account_type_student,
+    :only => []
+  )
   
-  before_filter :check_teacher
-  
-  before_filter :check_teacher_revision
-  
-  before_filter :check_resume
+  insert_before_filter(
+    :check_login_for_account,
+    :check_account_type_teacher,
+    :only => [:create]
+  )
   
   before_filter :check_revision, :except => [:create]
   
   
   def create
-    
+    type_id = params[:type_id] && params[:type_id].strip
+    part_id = params[:part_id] && params[:part_id].strip
+    revision_action = params[:revision_action] && params[:revision_action].strip
+  end
+  
+  
+  def show
+    raise "Not Implemented"
   end
   
   
   private
   
-  def check_login_for_account
-    if params[:account_type] == "teachers"
-      check_login_for_teacher
-    else
-      jump_to("/errors/forbidden")
-    end
+  def check_account_type_student
+    jump_to("/errors/forbidden") unless params[:account_type] == "students"
   end
   
   
-  def check_teacher
-    teacher_id = params[:account_id] && params[:account_id].strip
-    jump_to("/errors/forbidden") unless (session[:account_id].to_s == teacher_id) && ((@teacher = Teacher.find(teacher_id)).school_id == School.get_school_info(@school.abbr)[0])
-  end
-  
-  
-  def check_teacher_revision
-    jump_to("/errors/unauthorized") unless @teacher.revision
-  end
-  
-  
-  def check_resume
-    @resume = Resume.find(params[:revise_resume_id])
-    jump_to("/errors/forbidden") if @resume.hidden || @resume.student.school_id != @teacher.school_id
+  def check_account_type_teacher
+    jump_to("/errors/forbidden") unless params[:account_type] == "teachers"
   end
   
   

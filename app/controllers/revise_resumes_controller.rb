@@ -2,11 +2,9 @@ class ReviseResumesController < ApplicationController
   
   before_filter :check_login_for_account
   
-  # before_filter :check_active, :only => []
-  
   before_filter :check_account
   
-  before_filter :check_revision
+  before_filter :check_teacher_revision
   
   before_filter :check_resume
   
@@ -51,7 +49,7 @@ class ReviseResumesController < ApplicationController
   end
   
   
-  def check_revision
+  def check_teacher_revision
     jump_to("/errors/unauthorized") if @teacher && (!@teacher.revision)
   end
   

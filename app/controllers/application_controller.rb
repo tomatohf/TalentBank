@@ -166,6 +166,16 @@ class ApplicationController < ActionController::Base
       redirect_to(url)
     end
   end
+  
+  
+  def self.insert_before_filter(position, *filters)
+    index = filter_chain.map(&:method).index(position)
+    
+    filter_chain.insert(
+      index,
+      filter_chain.create_filters(filters, :before)
+    ).flatten!
+  end
 
 
   def img_code_correct?
