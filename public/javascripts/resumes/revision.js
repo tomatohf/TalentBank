@@ -217,7 +217,7 @@ function beautify_buttons(buttons, padding) {
 		{
 			cursor: "pointer",
 			padding: padding,
-			marginLeft: "10px"
+			marginLeft: "15px"
 		}
 	)
 	.addClass("ui-state-default ui-corner-all")
@@ -232,13 +232,17 @@ function beautify_buttons(buttons, padding) {
 }
 
 
-function setup_dialog_buttons(type, part) {
-	$("#new_revision_actions").html(
-		'建议:' +
-		'<button id="action_update">修改内容</button>' +
-		'<button id="action_delete">删除这段</button>' +
-		'<button id="action_add">添加内容</button>'
-	);
+function setup_new_revision_buttons(type, part) {
+	var type_name = type.name;
+	var buttons_html = '建议:';
+	if(type_name != "student_skill") {
+		buttons_html += '<button id="action_update">修改内容</button>';
+	}
+	buttons_html += '<button id="action_delete">删除这段</button>';
+	if(type_name != "job_intention" && type_name != "award" && type_name != "hobby") {
+		buttons_html += '<button id="action_add">添加内容</button>';
+	}
+	$("#new_revision_actions").html(buttons_html);
 	
 	beautify_buttons(
 		$("#new_revision_actions button"),
@@ -281,6 +285,7 @@ function draw_new_revision_form(action, type, part) {
 	
 	var type_id_input = '<input type="hidden" id="type_id" />';
 	var part_id_input = '<input type="hidden" id="part_id" />';
+	var revision_action_input = '<input type="hidden" id="revision_action" />';
 	var part_id = $(part).attr("id").substr(type.name.length + 1);
 	
 	form_container = $(form_container).css(
@@ -290,7 +295,8 @@ function draw_new_revision_form(action, type, part) {
 		}
 	)
 	.append($(type_id_input).val(type.id))
-	.append($(part_id_input).val(part_id));
+	.append($(part_id_input).val(part_id))
+	.append($(revision_action_input).val(action));
 	
 	if(action == "delete") {
 		form_container.append('<div>确定要添加删除这段的建议么?</div>');
@@ -298,10 +304,10 @@ function draw_new_revision_form(action, type, part) {
 		add_submit_button(
 			form_container,
 			function() {
-				alert("submit delete");
+				create_revision();
 			},
 			function() {
-				prepare_dialog_content(type, part);
+				prepare_new_revision_content(type, part);
 				
 				return false;
 			}
@@ -431,10 +437,10 @@ function get_new_revision_inputs(type, part, modify) {
 	add_submit_button(
 		inputs_container,
 		function() {
-			alert("submit");
+			create_revision();
 		},
 		function() {
-			prepare_dialog_content(type, part);
+			prepare_new_revision_content(type, part);
 			
 			return false;
 		}
@@ -486,20 +492,24 @@ function table_row_for_text_field(field_id, field_label, field_value, multi_line
 
 
 function add_submit_button(container, submit_func, reset_func) {
-	var submit_button = '<button>提交</button>';
-	submit_button = beautify_buttons(
-		$(submit_button),
-		BTN_PADDING_SMALL
-	).unbind("click").click(submit_func);
-	
-	var reset_link = '<a href="#">取消</a>';
-	reset_link = $(reset_link).addClass("none").css(
-		{
-			marginLeft: "25px"
-		}
-	).unbind("click").click(reset_func);
-	
-	$('<div style="margin-top: 15px;"></div>').append(submit_button).append(reset_link).appendTo(container);
+	$('<div style="margin-top: 15px;"></div>')
+		.append(
+			beautify_buttons(
+				$('<input type="submit" value="提交" />'),
+				BTN_PADDING_SMALL
+			).unbind("click").click(submit_func)
+		)
+		.append(
+			$('<a href="#">取消</a>').addClass("none").css(
+				{
+					margin: "0px 25px"
+				}
+			).unbind("click").click(reset_func)
+		)
+		.append(
+			$('<span></span>').css("color", "#CD0A0A")
+		)
+		.appendTo(container);
 }
 
 
@@ -509,13 +519,90 @@ function items_to_text(ul) {
 		function(li, i) {
 			return $(li).html();
 		}
-	).join("\n");
+	).join("\r\n");
 }
 
 
 function prepare_dialog_content(type, part) {
-	setup_dialog_buttons(type, part);
+	prepare_new_revision_content(type, part);
+}
+
+
+function prepare_new_revision_content(type, part) {
+	setup_new_revision_buttons(type, part);
 	$("#new_revision_form").html("");
+}
+
+
+function create_revision() {
+	disable_submit_button("#new_revision_form");
+	
+	$.ajax(
+		{
+			type: "POST",
+			url: "/teachers/" + TEACHER_ID + "/revise_resumes/" + RESUME_ID + "/revisions",
+			dataType: "html",
+			data: collect_form_data($("#new_revision_form").find("input:hidden, input:text, textarea")),
+			error: function() {
+				show_error_msg(
+					enable_submit_button("#new_revision_form")
+						.siblings("span:first")
+				);
+			},
+			success: function(data, text_status) {
+				enable_submit_button("#new_revision_form");
+			}
+		}
+	);
+}
+
+
+function disable_submit_button(container) {
+	return $(container + " input:submit")
+		.attr("disabled", true)
+		.addClass("ui-state-disabled")
+		.val("正在提交 ...");
+}
+
+
+function enable_submit_button(container) {
+	return $(container + " input:submit")
+		.val("提交")
+		.removeClass("ui-state-disabled")
+		.attr("disabled", false);
+}
+
+
+function show_error_msg(container) {
+	return container
+		.html("( 操作失败, 再试一次吧 ")
+		.append(
+			$('<a href="#"></a>')
+				.addClass("none")
+				.attr("title", "知道了, 让它消失吧")
+				.html("x")
+				.unbind("click").click(
+					function() {
+						$(this).parent().fadeOut();
+					}
+				)
+		)
+		.append(" )")
+		.fadeIn();
+}
+
+
+function collect_form_data(inputs) {
+	var data = {};
+	
+	$.each(
+		inputs,
+		function(i, input) {
+			data[$(input).attr("id")] = $(input).val()
+		}
+	);
+	
+	return data;
 }
 
 

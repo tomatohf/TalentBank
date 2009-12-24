@@ -141,7 +141,12 @@
 <script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
 <script src="/lib/jquery/ui/jquery-ui.dialog_tabs.min.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
-	var TEACHER_ID = <%= @teacher.id %>;
+	<% if @teacher %>
+		var TEACHER_ID = <%= @teacher.id %>;
+	<% end %>
+	<% if @student %>
+		var STUDENT_ID = <%= @student.id %>;
+	<% end %>
 	var RESUME_ID = <%= @resume.id %>;
 
 	var RESUME_TYPES = [<%= ResumePartType.data.collect{|type| %Q!{id:#{type[:id]}, name:"#{type[:name]}"}!}.join(",") %>]

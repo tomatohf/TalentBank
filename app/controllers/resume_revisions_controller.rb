@@ -10,7 +10,7 @@ class ResumeRevisionsController < ApplicationController
   
   before_filter :check_resume
   
-  before_filter :check_revision, :except => [:new, :create]
+  before_filter :check_revision, :except => [:create]
   
   
   def create
