@@ -601,5 +601,9 @@ a.filter_item_link:hover {
 
 
 .resume_revision {
+	margin-bottom: 10px;
+	padding: 0px 0px 10px 20px;
+	background: transparent url(/images/revise_resumes/revision_icon.gif) no-repeat scroll left 3px;
 	
+	border-bottom:1px solid #DEDEDE;
 }

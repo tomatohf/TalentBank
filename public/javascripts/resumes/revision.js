@@ -518,12 +518,18 @@ function items_to_text(ul) {
 
 function prepare_dialog_content(type, part) {
 	prepare_new_revision_content(type, part);
+	prepare_part_revisions_content(part);
 }
 
 
 function prepare_new_revision_content(type, part) {
 	setup_new_revision_buttons(type, part);
 	$("#new_revision_form").html("");
+}
+
+
+function prepare_part_revisions_content(part) {
+	alert("find revision of part: " + part.attr("id"));
 }
 
 
