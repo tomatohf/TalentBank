@@ -9,7 +9,6 @@ class ResumeComment < ActiveRecord::Base
   validates_length_of :content, :maximum => 1000, :message => "内容 超过长度限制", :allow_nil => false
   
   
-  
   Account_Types = [
     {:id => 10, :name => "students"},
     {:id => 20, :name => "teachers"}

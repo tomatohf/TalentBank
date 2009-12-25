@@ -10,11 +10,14 @@ class ResumeRevision < ActiveRecord::Base
   validates_length_of :data, :maximum => 1000, :message => "修改数据 超过长度限制", :allow_nil => true
   
   
-  
   Actions = [
     {:id => 10, :name => "add"},
     {:id => 20, :name => "delete"},
     {:id => 30, :name => "update"}
   ]
+  
+  
+  include Utils::FieldHashable
+  hash_field :data
   
 end

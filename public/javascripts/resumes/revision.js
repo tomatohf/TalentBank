@@ -304,7 +304,7 @@ function draw_new_revision_form(action, type, part) {
 		add_submit_button(
 			form_container,
 			function() {
-				create_revision();
+				create_revision(type, part);
 			},
 			function() {
 				prepare_new_revision_content(type, part);
@@ -411,33 +411,18 @@ function get_new_revision_inputs(type, part, modify) {
 		type_name == "job_intention" ||
 		type_name == "award" || type_name == "hobby"
 	) {
-		if(type_name == "job_intention") {
-			var input = '<input type="text" id="job_intention_content" />';
-			input = $(input).addClass("text_field ui-corner-all").css(
-				{
-					width: "95%"
-				}
-			).val(modify ? $.trim($(part).html()) : "");
-			$('<div></div>').append(input).appendTo(inputs_container);
-		}
-		else {
-			var textarea = '<textarea rows="5"></textarea>';
-			textarea = $(textarea)
-				.attr("id", type_name)
-				.addClass("text_field ui-corner-all")
-				.css(
-					{
-						width: "95%"
-					}
-				).val(modify ? items_to_text($(part).find("ul")) : "");
-			$('<div></div>').append(textarea).appendTo(inputs_container);
-		}
+		var multi_line = (type_name != "job_intention");
+		div_for_text_field(
+			type_name,
+			modify ? (multi_line ? items_to_text($(part).find("ul")) : $.trim($(part).html())) : "",
+			multi_line
+		).appendTo(inputs_container);
 	}
 	
 	add_submit_button(
 		inputs_container,
 		function() {
-			create_revision();
+			create_revision(type, part);
 		},
 		function() {
 			prepare_new_revision_content(type, part);
@@ -472,22 +457,30 @@ function table_for_text_fields(fields, part, modify) {
 
 
 function table_row_for_text_field(field_id, field_label, field_value, multi_line) {
-	var label_column = $('<td></td>').css("width", "60px");
-	$('<label></label>').attr("for", field_id).html(field_label).appendTo(label_column);
+	var label_column = $('<td></td>').css("width", "60px").append(
+		$('<label></label>').attr("for", field_id).html(field_label)
+	);
 	
-	var input_column = $('<td></td>');
-	$(multi_line ? '<textarea rows="5"></textarea>' : '<input type="text" />')
-		.attr("id", field_id)
-		.addClass("text_field ui-corner-all")
-		.css(
-			{
-				width: "95%"
-			}
-		)
-		.val(field_value)
-		.appendTo(input_column);
+	var input_column = $('<td></td>').append(
+		div_for_text_field(field_id, field_value, multi_line)
+	);
 	
 	return $('<tr></tr>').append(label_column).append(input_column);
+}
+
+
+function div_for_text_field(field_id, field_value, multi_line) {
+	return $('<div></div>').append(
+		$(multi_line ? '<textarea rows="5"></textarea>' : '<input type="text" />')
+			.attr("id", field_id)
+			.addClass("text_field ui-corner-all")
+			.css(
+				{
+					width: "95%"
+				}
+			)
+			.val(field_value)
+	);
 }
 
 
@@ -534,7 +527,7 @@ function prepare_new_revision_content(type, part) {
 }
 
 
-function create_revision() {
+function create_revision(type, part) {
 	disable_submit_button("#new_revision_form");
 	
 	$.ajax(
@@ -550,9 +543,18 @@ function create_revision() {
 				);
 			},
 			success: function(data, text_status) {
-				enable_submit_button("#new_revision_form");
+				// switch tab
+				$("#dialog .tabs").tabs("select", "#part_revisions");
 				
-				alert("revision created");
+				// append revision html
+				$("#all_revisions").append($(data))
+					.find(".resume_revision:last").clone()
+						.appendTo($("#part_revisions"))
+						.hide().fadeIn("slow");
+				// $("#dialog").animate({scrollTop: $("#dialog")[0].scrollHeight});
+				$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
+				
+				prepare_new_revision_content(type, part);
 			}
 		}
 	);
@@ -586,6 +588,8 @@ function show_error_msg(container) {
 				.unbind("click").click(
 					function() {
 						$(this).parent().fadeOut();
+						
+						return false;
 					}
 				)
 		)

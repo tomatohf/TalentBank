@@ -187,6 +187,29 @@ module Utils
   end
   
   
+  module FieldHashable
+    def self.included(including_model)
+      
+      def including_model.hash_field(*fields)
+        fields.each do |field|
+          define_method("get_#{field}") {
+            eval(self.send(field) || "") || {}
+          }
+          
+          define_method("fill_#{field}") { |value|
+            self.send("#{field}=", value.inspect)
+          }
+          
+          define_method("update_#{field}") { |value|
+            self.send("fill_#{field}", self.send("get_#{field}").merge(value))
+          }
+        end
+      end
+      
+    end
+  end
+  
+  
   module NotDeletable
     def self.included(including_model)
       

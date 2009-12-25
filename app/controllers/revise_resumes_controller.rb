@@ -55,7 +55,7 @@ class ReviseResumesController < ApplicationController
   
   
   def check_resume
-    @resume = Resume.find(params[:id])
+    @resume = Resume.find(params[:revise_resume_id] || params[:id])
     
     return jump_to("/errors/forbidden") if @resume.hidden
     
