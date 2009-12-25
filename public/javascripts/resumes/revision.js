@@ -236,11 +236,11 @@ function setup_new_revision_buttons(type, part) {
 	var type_name = type.name;
 	var buttons_html = '建议:';
 	if(type_name != "student_skill") {
-		buttons_html += '<button id="action_update">修改内容</button>';
+		buttons_html += '<button id="action_update"><span class="ui-icon ui-icon-pencil float_l" style="margin-right: 3px;"></span>修改内容</button>';
 	}
-	buttons_html += '<button id="action_delete">删除这段</button>';
+	buttons_html += '<button id="action_delete"><span class="ui-icon ui-icon-trash float_l" style="margin-right: 3px;"></span>删除这段</button>';
 	if(type_name != "job_intention" && type_name != "award" && type_name != "hobby") {
-		buttons_html += '<button id="action_add">添加内容</button>';
+		buttons_html += '<button id="action_add"><span class="ui-icon ui-icon-circle-plus float_l" style="margin-right: 3px;"></span>添加内容</button>';
 	}
 	$("#new_revision_actions").html(buttons_html);
 	
