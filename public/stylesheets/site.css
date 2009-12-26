@@ -602,8 +602,26 @@ a.filter_item_link:hover {
 
 .resume_revision {
 	margin-bottom: 10px;
-	padding: 0px 0px 10px 20px;
-	background: transparent url(/images/revise_resumes/revision_icon.gif) no-repeat scroll left 3px;
-	
-	border-bottom:1px solid #DEDEDE;
+	padding: 5px 10px 5px 5px;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_revision .datetime {
+	font-size: 10px;
+	font-weight: normal;
+	margin: 0px 10px;
+}
+
+.resume_revision_title {
+	font-weight: bold;
+}
+
+.resume_revision_content {
+	padding: 5px 20px;
+}
+
+
+.resume_comment {
+	padding: 10px 25px;
+	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 13px;
 }

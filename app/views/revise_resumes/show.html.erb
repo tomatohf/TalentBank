@@ -71,10 +71,22 @@
 		</ul>
 		
 		<div id="all_revisions">
-			<%= render :partial => "/revise_resumes/revision", :collection => @revisions %>
+			<%=
+				render(
+					:partial => "/revise_resumes/revision",
+					:collection => @revisions,
+					:locals => {:teachers => @teachers}
+				)
+			%>
 		</div>
 		<div id="all_comments">
-			<%#= render :partial => "/revise_resumes/comment", :collection => @comments %>
+			<%#=
+				render(
+					:partial => "/revise_resumes/comment",
+					:collection => @comments,
+					:locals => {:teachers => @teachers, :students => @students}
+				)
+			%>
 		</div>
 		
 		<div id="new_overall_comment">

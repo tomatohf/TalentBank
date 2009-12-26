@@ -1,7 +1,70 @@
 <%
 	part_type = ResumePartType.find(revision.part_type_id)
+	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
+
+	target_part = "#{part_type[:name]}_#{revision.part_id}"
 %>
 
-<div class="resume_revision">
-	<%= h revision.inspect %>
+<div id="revision_<%= revision.id %>" class="resume_revision <%= target_part %><%= %Q! ui-widget-content ui-corner-all! unless revision.applied %>">
+	<input type="hidden" value="<%= target_part %>" />
+	
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_title">
+		<tr>
+			<td>
+				<% action_icon, action_label = case revision_action[:name]
+					when "update"
+						"ui-icon-pencil"
+					when "delete"
+						"ui-icon-trash"
+					when "add"
+						"ui-icon-circle-plus"
+					else
+						""
+					end
+				%>
+				<span class="ui-icon <%= action_icon %> float_l" style="margin-right: 5px;"></span>
+				<%= revision_action[:label] %>
+				<%= part_type[:label] %>
+			</td>
+			
+			<td align="right">
+				<%= h(teachers[revision.teacher_id].get_name) %>
+
+				<span class="datetime">
+					<%= format_datetime(revision.created_at) %>
+				</span>
+
+				<a href="#" title="展开/收起 修改建议" class="toggle_revision_link">
+					<img src="/images/corporations/<%= revision.applied ? "expand" : "collapse" %>_icon.gif" border="0" alt="展开/收起 修改建议" style="margin-bottom: -2px;" /></a>
+			</td>
+		</tr>
+	</table>
+	
+	
+	<div class="resume_revision_content"<%= %Q! style="display: none;"! if revision.applied %>>
+		<div class="target_part_title">
+			目标段落:
+			<span></span>
+		</div>
+		
+		
+		<div>
+			
+		</div>
+		
+		
+		<div class="align_r">
+			<% if @student %>
+				<a href="#">
+					应用</a>
+			<% end %>
+			
+			<% if @teacher && @teacher.id == revision.teacher_id %>
+				<button class="delete_revision_button">
+					<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+					删除
+				</button>
+			<% end %>
+		</div>
+	</div>
 </div>

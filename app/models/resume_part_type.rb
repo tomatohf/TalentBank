@@ -6,16 +6,16 @@ class ResumePartType < HashModel::Simple
     # ]
     
     [
-      {:id => 10, :name => "job_intention"},
-      {:id => 20, :name => "edu"},
-      {:id => 30, :name => "exp_section"},
-      {:id => 40, :name => "student_exp"},
-      {:id => 50, :name => "resume_exp"},
-      {:id => 60, :name => "student_skill"},
-      {:id => 70, :name => "resume_skill"},
-      {:id => 80, :name => "award"},
-      {:id => 90, :name => "hobby"},
-      {:id => 100, :name => "list_section"}
+      {:id => 10, :name => "job_intention", :label => "求职意向"},
+      {:id => 20, :name => "edu", :label => "教育经历"},
+      {:id => 30, :name => "exp_section", :label => "经历块"},
+      {:id => 40, :name => "student_exp", :label => "经历"},
+      {:id => 50, :name => "resume_exp", :label => "经历"},
+      {:id => 60, :name => "student_skill", :label => "技能和证书"},
+      {:id => 70, :name => "resume_skill", :label => "技能和证书"},
+      {:id => 80, :name => "award", :label => "荣誉和奖励"},
+      {:id => 90, :name => "hobby", :label => "特长和爱好"},
+      {:id => 100, :name => "list_section", :label => "附加信息"}
     ]
   end
   

@@ -30,14 +30,11 @@ function setup_resume_parts() {
 				}
 			).unbind("click").click(
 				function() {
-					var section_title = get_section_title(this);
-					if(section_title) {
-						set_dialog_title(section_title, get_dialog_sub_title(type_name, this));
+					$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
 
-						prepare_dialog_content(type, this);
+					prepare_dialog_content(type, this);
 
-						open_dialog(this);
-					}
+					open_dialog(this);
 				}
 			).css(
 				{
@@ -52,7 +49,7 @@ function setup_resume_parts() {
 function get_section_title(part) {
 	var section = ancestor_with_class(part, "resume_section");
 	
-	return section && $.trim(section.prev(".resume_section_title").html());
+	return section ? $.trim(section.prev(".resume_section_title").html()) : "";
 }
 
 
@@ -111,7 +108,7 @@ function setup_dialog() {
 			height: DIALOG_INIT_HEIGHT,
 			maxWidth: 950,
 			maxHeight: 600,
-			minWidth: 400,
+			minWidth: 460,
 			position: calculate_dialog_position(),
 			
 			modal: false,
@@ -145,12 +142,15 @@ function calculate_dialog_position() {
 }
 
 
-function set_dialog_title(title, sub_title) {
-	sub_title = $.trim(sub_title);
+function get_dialog_title(part, type_name) {
+	var title = get_section_title(part);
+	
+	var sub_title = get_dialog_sub_title(type_name, part);
 	if(sub_title != "") {
 		title += " - " + sub_title;
 	}
-	$("#dialog").dialog("option", "title", title);
+	
+	return title;
 }
 
 
@@ -177,7 +177,7 @@ function get_dialog_sub_title(type_name, part) {
 		sub_title = $(part).find("td:first").html();
 	}
 	
-	return sub_title;
+	return $.trim(sub_title);
 }
 
 
@@ -232,15 +232,32 @@ function beautify_buttons(buttons, padding) {
 }
 
 
+function get_action_icon(action) {
+	var icon = null;
+	
+	if(action == "update") {
+		icon = "ui-icon-pencil";
+	}
+	else if(action == "delete") {
+		icon = "ui-icon-trash";
+	}
+	else if(action == "add") {
+		icon = "ui-icon-circle-plus";
+	}
+	
+	return icon ? '<span class="ui-icon ' + icon + ' float_l" style="margin-right: 3px;"></span>' : '';
+}
+
+
 function setup_new_revision_buttons(type, part) {
 	var type_name = type.name;
 	var buttons_html = '建议:';
 	if(type_name != "student_skill") {
-		buttons_html += '<button id="action_update"><span class="ui-icon ui-icon-pencil float_l" style="margin-right: 3px;"></span>修改内容</button>';
+		buttons_html += '<button id="action_update">' + get_action_icon("update") + '修改内容</button>';
 	}
-	buttons_html += '<button id="action_delete"><span class="ui-icon ui-icon-trash float_l" style="margin-right: 3px;"></span>删除这段</button>';
+	buttons_html += '<button id="action_delete">' + get_action_icon("delete") + '删除这段</button>';
 	if(type_name != "job_intention" && type_name != "award" && type_name != "hobby") {
-		buttons_html += '<button id="action_add"><span class="ui-icon ui-icon-circle-plus float_l" style="margin-right: 3px;"></span>添加内容</button>';
+		buttons_html += '<button id="action_add">' + get_action_icon("add") + '添加内容</button>';
 	}
 	$("#new_revision_actions").html(buttons_html);
 	
@@ -518,7 +535,8 @@ function items_to_text(ul) {
 
 function prepare_dialog_content(type, part) {
 	prepare_new_revision_content(type, part);
-	prepare_part_revisions_content(part);
+	// prepare part revisions content
+	fill_part_revisions($("#all_revisions ." + $(part).attr("id")), true);
 }
 
 
@@ -528,8 +546,32 @@ function prepare_new_revision_content(type, part) {
 }
 
 
-function prepare_part_revisions_content(part) {
-	alert("find revision of part: " + part.attr("id"));
+function fill_part_revisions(revisions, replace) {
+	var copied_revisions = $(revisions).clone();
+	
+	$.each(
+		copied_revisions,
+		function(i, copied_revision) {
+			$(copied_revision).attr(
+				"id",
+				compute_id_for_part_revision($(copied_revision).attr("id"))
+			).find(".target_part_title").remove();
+		}
+	);
+	
+	if(replace) {
+		$("#part_revisions").html(setup_revisions(copied_revisions));
+	}
+	else {
+		$("#part_revisions").append(setup_revisions(copied_revisions));
+	}
+	
+	return copied_revisions;
+}
+
+
+function compute_id_for_part_revision(id) {
+	return id + "_part";
 }
 
 
@@ -553,10 +595,10 @@ function create_revision(type, part) {
 				$("#dialog .tabs").tabs("select", "#part_revisions");
 				
 				// append revision html
-				$("#all_revisions").append($(data))
-					.find(".resume_revision:last").clone()
-						.appendTo($("#part_revisions"))
-						.hide().fadeIn("slow");
+				fill_part_revisions(
+					$("#all_revisions").append(setup_revisions($(data))).find(".resume_revision:last"),
+					false
+				).hide().fadeIn("slow");
 				// $("#dialog").animate({scrollTop: $("#dialog")[0].scrollHeight});
 				$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
 				
@@ -618,8 +660,108 @@ function collect_form_data(inputs) {
 }
 
 
+function setup_revisions(revisions) {
+	$.each(
+		revisions,
+		function(i, revision) {
+			$(revision).find(".toggle_revision_link").unbind("click").click(
+				function() {
+					toggle_revision(revision);
+					
+					return false;
+				}
+			);
+			
+			
+			beautify_buttons(
+				$(revision).find(".delete_revision_button"),
+				BTN_PADDING_SMALL
+			).unbind("click").click(
+				function() {
+					delete_revision(revision);
+				}
+			);
+			
+			
+			var part_title_field = $(revision).find(".target_part_title span:first");
+			if(part_title_field.length > 0) {
+				var target_part_id = $(revision).find("input:hidden:first").val();
+				var target_part = $("#" + target_part_id);
+				if(target_part.length > 0) {
+					var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+					part_title_field.html(get_dialog_title(target_part, type_name));
+				}
+				else {
+					part_title_field.html($('<i></i>').html("(已被删除)"));
+			
+					$(revision).find("td, div, span").addClass("info");
+					toggle_revision(revision, false, false);
+				}
+			}
+		}
+	);
+	
+	return revisions;
+}
+
+
+function toggle_revision(revision, show, animation) {
+	var revision_content = $(revision).find(".resume_revision_content");
+	if(show == null) { show = !revision_content.is(":visible") }
+	
+	if(show) {
+		if(animation == false) {
+			revision_content.show();
+		}
+		else {
+			revision_content.slideDown("fast");
+		}
+
+		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/collapse_icon.gif");
+	}
+	else {
+		if(animation == false) {
+			revision_content.hide();
+		}
+		else {
+			revision_content.slideUp("fast");
+		}
+
+		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/expand_icon.gif");
+	}
+}
+
+
+function delete_revision(revision) {
+	if(!confirm("确定要删除这条修改建议么 ?")) {
+		return;
+	}
+	
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	$.post(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
+		{
+			_method: "delete", // simulate HTTP delete request in rails
+		},
+		function(data) {
+			var revision_attr_id = "revision_" + revision_id;
+			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part_revision(revision_attr_id));
+			removed_revisions.fadeOut(
+				"slow",
+				function() {
+					removed_revisions.remove();
+				}
+			);
+		},
+		"html"
+	);
+}
+
+
 $(document).ready(
 	function() {
+		setup_revisions($(".resume_revision"));
+		
 		setup_tabs();
 		
 		setup_resume_parts();

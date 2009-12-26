@@ -16,6 +16,25 @@ class ReviseResumesController < ApplicationController
     @revisions = @resume.revisions
     @comments = @resume.comments
     
+    teachers_id = @revisions.map(&:teacher_id)
+    students_id = []
+    @comments.each { |comment| eval("#{comment.account_type}_id") << comment.account_id }
+    
+    @teachers = (teachers_id.size > 0) && Teacher.find(
+      :all,
+      :conditions => ["id in (?)", teachers_id]
+    ).inject({}) do |hash, teacher|
+			hash[teacher.id] = teacher
+			hash
+		end
+		@students = (students_id.size > 0) && Student.find(
+		  :all,
+		  :conditions => ["id in (?)", students_id]).inject({}
+		) do |hash, student|
+			hash[student.id] = student
+			hash
+		end
+    
     render :layout => @account_type
   end
   

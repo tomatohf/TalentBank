@@ -3,7 +3,7 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create]
+    :only => [:create, :destroy]
   )
   
   insert_before_filter(
@@ -15,10 +15,15 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_teacher,
-    :only => [:create]
+    :only => [:create, :destroy]
   )
   
   before_filter :check_revision, :except => [:create]
+  
+  
+  def show
+    raise "Not Implemented"
+  end
   
   
   def create
@@ -70,16 +75,24 @@ class ResumeRevisionsController < ReviseResumesController
         param_key = part_type[:name].to_sym
         {:content => params[param_key] && params[param_key].strip}
       end
-    )
+    ) unless revision_action[:name] == "delete"
     
-    return render(:partial => "/revise_resumes/revision", :object => revision) if revision.save!
+    return render(
+      :partial => "/revise_resumes/revision",
+      :object => revision,
+      :locals => {:teachers => {@teacher.id => @teacher}}
+    ) if revision.save!
     
     render :nothing => true
   end
   
   
-  def show
-    raise "Not Implemented"
+  def destroy
+    return jump_to("/errors/forbidden") unless @revision.teacher_id == @teacher.id
+    
+    @revision.destroy
+    
+    render :nothing => true
   end
   
   
