@@ -10,8 +10,8 @@ class ResumeComment < ActiveRecord::Base
   
   
   Account_Types = [
-    {:id => 10, :name => "students"},
-    {:id => 20, :name => "teachers"}
+    {:id => 10, :name => "students", :label => "学生"},
+    {:id => 20, :name => "teachers", :label => "老师"}
   ]
   
 end

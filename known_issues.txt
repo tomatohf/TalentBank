@@ -1,22 +1,8 @@
 简历修改功能
 	- handle exp_section
-	==========
-	- edu => all
-	- job_intention/award/hobby => no add
-	- _exp
-		* student_exp => all
-		* resume_exp => all
-	- _skill
-		* student_skill => no update
-		* resume_skill => all
-	- list_section => all
-	==========
-	- no add
-		* job_intention
-		* award
-		* hobby
-	- no update
-		* student_skill
+	- comment_16, comment_18 target_part bug
+	- delete action
+	- content format/layout
 
 
 人才库与乔布圈帐号互联
@@ -29,6 +15,10 @@ sphinx max_match
 		* 简历搜索结果的排序
 
 简历对比功能
+
+发布公告功能
+
+发布招聘信息功能
 
 支持英文简历
 	- 从查询的目的来看并不需要英文简历

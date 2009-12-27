@@ -83,4 +83,9 @@ class Student < ActiveRecord::Base
     end
   end
   
+  
+  def get_name
+    self.name
+  end
+  
 end

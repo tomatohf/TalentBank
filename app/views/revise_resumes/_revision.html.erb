@@ -1,4 +1,6 @@
 <%
+	teachers ||= {}
+
 	part_type = ResumePartType.find(revision.part_type_id)
 	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
 

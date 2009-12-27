@@ -18,18 +18,21 @@ class ReviseResumesController < ApplicationController
     
     teachers_id = @revisions.map(&:teacher_id)
     students_id = []
-    @comments.each { |comment| eval("#{comment.account_type}_id") << comment.account_id }
+    @comments.each do |comment|
+      account_type_info = ResumeComment::Account_Types.detect{|a| a[:id] == comment.account_type} || {}
+      eval("#{account_type_info[:name]}_id") << comment.account_id
+    end
     
     @teachers = (teachers_id.size > 0) && Teacher.find(
       :all,
-      :conditions => ["id in (?)", teachers_id]
+      :conditions => ["id in (?)", teachers_id.uniq]
     ).inject({}) do |hash, teacher|
 			hash[teacher.id] = teacher
 			hash
 		end
 		@students = (students_id.size > 0) && Student.find(
 		  :all,
-		  :conditions => ["id in (?)", students_id]).inject({}
+		  :conditions => ["id in (?)", students_id.uniq]).inject({}
 		) do |hash, student|
 			hash[student.id] = student
 			hash

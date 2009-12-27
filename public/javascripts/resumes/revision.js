@@ -300,8 +300,8 @@ function setup_new_revision_buttons(type, part) {
 function draw_new_revision_form(action, type, part) {
 	var form_container = '<div></div>';
 	
-	var type_id_input = '<input type="hidden" id="type_id" />';
-	var part_id_input = '<input type="hidden" id="part_id" />';
+	var type_id_input = '<input type="hidden" id="revision_type_id" />';
+	var part_id_input = '<input type="hidden" id="revision_part_id" />';
 	var revision_action_input = '<input type="hidden" id="revision_action" />';
 	var part_id = $(part).attr("id").substr(type.name.length + 1);
 	
@@ -537,6 +537,13 @@ function prepare_dialog_content(type, part) {
 	prepare_new_revision_content(type, part);
 	// prepare part revisions content
 	fill_part_revisions($("#all_revisions ." + $(part).attr("id")), true);
+	
+	// prepare new comment content
+	var part_id = $(part).attr("id").substr(type.name.length + 1);
+	$("input#comment_type_id").val(type.id);
+	$("input#comment_part_id").val(part_id);
+	// prepare part comment content
+	fill_part_comments($("#all_comments ." + $(part).attr("id")), true);
 }
 
 
@@ -554,7 +561,7 @@ function fill_part_revisions(revisions, replace) {
 		function(i, copied_revision) {
 			$(copied_revision).attr(
 				"id",
-				compute_id_for_part_revision($(copied_revision).attr("id"))
+				compute_id_for_part($(copied_revision).attr("id"))
 			).find(".target_part_title").remove();
 		}
 	);
@@ -570,7 +577,31 @@ function fill_part_revisions(revisions, replace) {
 }
 
 
-function compute_id_for_part_revision(id) {
+function fill_part_comments(comments, replace) {
+	var copied_comments = $(comments).clone();
+	
+	$.each(
+		copied_comments,
+		function(i, copied_comment) {
+			$(copied_comment).attr(
+				"id",
+				compute_id_for_part($(copied_comment).attr("id"))
+			).find(".target_part_title").remove();
+		}
+	);
+	
+	if(replace) {
+		$("#part_comments").html(setup_comments(copied_comments));
+	}
+	else {
+		$("#part_comments").append(setup_comments(copied_comments));
+	}
+	
+	return copied_comments;
+}
+
+
+function compute_id_for_part(id) {
 	return id + "_part";
 }
 
@@ -591,18 +622,22 @@ function create_revision(type, part) {
 				);
 			},
 			success: function(data, text_status) {
+				// clear form inputs
+				prepare_new_revision_content(type, part);
+				
+				// append revision html
+				var revision_attr_id = setup_revisions($(data)).appendTo($("#all_revisions")).attr("id");
+				$(part).click();
+				
 				// switch tab
 				$("#dialog .tabs").tabs("select", "#part_revisions");
 				
-				// append revision html
-				fill_part_revisions(
-					$("#all_revisions").append(setup_revisions($(data))).find(".resume_revision:last"),
-					false
-				).hide().fadeIn("slow");
-				// $("#dialog").animate({scrollTop: $("#dialog")[0].scrollHeight});
 				$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
 				
-				prepare_new_revision_content(type, part);
+				// fade in effect
+				$("#" + revision_attr_id)
+				.add("#" + compute_id_for_part(revision_attr_id))
+					.css("opacity", 0).animate({opacity: 1}, "slow");
 			}
 		}
 	);
@@ -610,7 +645,7 @@ function create_revision(type, part) {
 
 
 function disable_submit_button(container) {
-	return $(container + " input:submit")
+	return $(container).find("input:submit")
 		.attr("disabled", true)
 		.addClass("ui-state-disabled")
 		.val("正在提交 ...");
@@ -618,7 +653,7 @@ function disable_submit_button(container) {
 
 
 function enable_submit_button(container) {
-	return $(container + " input:submit")
+	return $(container).find("input:submit")
 		.val("提交")
 		.removeClass("ui-state-disabled")
 		.attr("disabled", false);
@@ -652,7 +687,7 @@ function collect_form_data(inputs) {
 	$.each(
 		inputs,
 		function(i, input) {
-			data[$(input).attr("id")] = $(input).val()
+			data[$(input).attr("id")] = $(input).val();
 		}
 	);
 	
@@ -745,7 +780,174 @@ function delete_revision(revision) {
 		},
 		function(data) {
 			var revision_attr_id = "revision_" + revision_id;
-			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part_revision(revision_attr_id));
+			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+			removed_revisions.fadeOut(
+				"slow",
+				function() {
+					removed_revisions.remove();
+				}
+			);
+		},
+		"html"
+	);
+}
+
+
+function setup_new_comment_form() {
+	$.each(
+		beautify_buttons(
+			$("#new_overall_comment, #new_comment").find("input:submit:first"),
+			BTN_PADDING_SMALL
+		),
+		function(i, button) {
+			$(button).unbind("click").click(
+				function() {
+					var data = {};
+					$.each(
+						$(this).parent().siblings("input:hidden"),
+						function(i, input) {
+							data[$(input).attr("id")] = $(input).val();
+						}
+					);
+
+					create_comment(
+						$(this).parent().parent().find("textarea:first"),
+						$(this).siblings("span:first"),
+						data
+					);
+				}
+			).siblings("a:first").unbind("click").click(
+				function() {
+					$(this).parent().parent().find("textarea:first").val("");
+
+					return false;
+				}
+			);
+		}
+	);
+}
+
+
+function create_comment(text_field, error_container, data) {
+	if($.trim(text_field.val()).length > 1000) {
+		return alert("内容超过字数限制 ...");
+	}
+	if($.trim(text_field.val()).length <= 0) {
+		return alert("请输入内容 ...");
+	}
+	
+	var button_container = error_container.parent();
+	disable_submit_button(button_container);
+	
+	$.ajax(
+		{
+			type: "POST",
+			url: "/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/comments",
+			dataType: "html",
+			data: $.extend(
+				{
+					content: text_field.val()
+				},
+				data
+			),
+			error: function() {
+				enable_submit_button(button_container);
+				show_error_msg(error_container);
+			},
+			success: function(data, text_status) {
+				// clear form inputs
+				enable_submit_button(button_container);
+				text_field.val("");
+				
+				// append comment html
+				var comment_attr_id = $(data).attr("id");
+				var target_part_id = setup_comments($(data)).appendTo($("#all_comments"))
+										.find("input:hidden:first").val();
+				$("#" + target_part_id).click();
+				
+				// switch tab
+				$("#dialog .tabs").tabs("select", "#part_comments");
+				$("#overall_tabs.tabs").tabs("select", "#all_comments");
+				
+				if($("#" + target_part_id).length > 0) {
+					$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
+				}
+				else {
+					$(document).scrollTop($(document).height());
+				}
+				
+				// fade in effect
+				$("#" + comment_attr_id)
+				.add("#" + compute_id_for_part(comment_attr_id))
+					.css("opacity", 0).animate({opacity: 1}, "slow");
+			}
+		}
+	);
+}
+
+
+function setup_comments(comments) {
+	$.each(
+		comments,
+		function(i, comment) {
+			$(comment).find(".toggle_revision_link").unbind("click").click(
+				function() {
+					toggle_revision(comment);
+					
+					return false;
+				}
+			);
+			
+			beautify_buttons(
+				$(comment).find(".delete_comment_button"),
+				BTN_PADDING_SMALL
+			).unbind("click").click(
+				function() {
+					return alert("AAAAAAA");
+					delete_comment(comment);
+				}
+			);
+			
+			
+			var part_title_field = $(comment).find(".target_part_title span:first");
+			if(part_title_field.length > 0) {
+				var target_part_id = $(comment).find("input:hidden:first").val();
+				var target_part = $("#" + target_part_id);
+				if(target_part.length > 0) {
+					var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+					part_title_field.html(get_dialog_title(target_part, type_name));
+				}
+				else {
+					if($.trim(target_part_id) == "_") {
+						part_title_field.html("(整份简历)");
+					}
+					else {
+						part_title_field.html($('<i></i>').addClass("info").html("(已被删除)"));
+						toggle_revision(comment, false, false);
+					}
+				}
+			}
+		}
+	);
+	
+	return comments;
+}
+
+
+function delete_comment(comment) {
+	if(!confirm("确定要删除这条修改建议么 ?")) {
+		return;
+	}
+	
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	$.post(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
+		{
+			_method: "delete", // simulate HTTP delete request in rails
+		},
+		function(data) {
+			var revision_attr_id = "revision_" + revision_id;
+			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
 			removed_revisions.fadeOut(
 				"slow",
 				function() {
@@ -761,11 +963,14 @@ function delete_revision(revision) {
 $(document).ready(
 	function() {
 		setup_revisions($(".resume_revision"));
+		setup_comments($(".resume_comment"));
 		
 		setup_tabs();
 		
 		setup_resume_parts();
 		
 		setup_dialog();
+		
+		setup_new_comment_form();
 	}
 );

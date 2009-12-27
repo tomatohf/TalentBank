@@ -606,7 +606,7 @@ a.filter_item_link:hover {
 	border-bottom: 1px solid #DEDEDE;
 }
 
-.resume_revision .datetime {
+.resume_revision .datetime, .resume_comment .datetime {
 	font-size: 10px;
 	font-weight: normal;
 	margin: 0px 10px;
@@ -622,6 +622,7 @@ a.filter_item_link:hover {
 
 
 .resume_comment {
-	padding: 10px 25px;
-	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 13px;
+	padding: 5px 23px;
+	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 8px;
+	border-bottom: 1px solid #AED0EA;
 }

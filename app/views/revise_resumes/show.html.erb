@@ -56,7 +56,7 @@
 
 
 <div class="resume_wrap overflow_hidden" style="margin-top: 50px;">
-	<div class="tabs" style="display: none;">
+	<div id="overall_tabs" class="tabs" style="display: none;">
 		<ul>
 			<li>
 				<a href="#all_revisions"><img src="/images/revise_resumes/revision_icon.gif" border="0" style="margin: 0px 3px -3px 0px;" />全部修改建议</a>
@@ -80,7 +80,7 @@
 			%>
 		</div>
 		<div id="all_comments">
-			<%#=
+			<%=
 				render(
 					:partial => "/revise_resumes/comment",
 					:collection => @comments,
@@ -90,7 +90,21 @@
 		</div>
 		
 		<div id="new_overall_comment">
-			
+			<div style="padding: 20px 30px 0px 20px;">
+				<div class="align_r info" style="margin: 0px 50px 5px;">
+					1000 字以内
+				</div>
+				
+				<div>
+					<textarea rows="10" name="comment" class="text_field ui-corner-all" style="width: 95%;"></textarea>
+				</div>
+				
+				<div style="margin-top: 15px;">
+					<input type="submit" value="提交" />
+					<a href="#" class="none" style="margin: 0px 25px;">清空</a>
+					<span style="color: #CD0A0A;"></span>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -127,7 +141,24 @@
 		</div>
 		
 		<div id="new_comment">
-			
+			<div style="padding: 5px 30px 0px 20px;">
+				<input type="hidden" id="comment_type_id" value="" />
+				<input type="hidden" id="comment_part_id" value="" />
+				
+				<div class="align_r info" style="margin: 0px 50px 5px;">
+					1000 字以内
+				</div>
+				
+				<div>
+					<textarea rows="10" name="comment" class="text_field ui-corner-all" style="width: 95%;"></textarea>
+				</div>
+				
+				<div style="margin-top: 15px;">
+					<input type="submit" value="提交" />
+					<a href="#" class="none" style="margin: 0px 25px;">清空</a>
+					<span style="color: #CD0A0A;"></span>
+				</div>
+			</div>
 		</div>
 		<% if @teacher %>
 			<div id="new_revision">
