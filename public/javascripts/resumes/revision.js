@@ -261,6 +261,18 @@ function setup_new_revision_buttons(type, part) {
 	}
 	$("#new_revision_actions").html(buttons_html);
 	
+	
+	// IE 6 ...
+	if(is_ie6()) {
+		$.each(
+			$("#new_revision_actions").find("button"),
+			function(i, button) {
+				$(button).css("width", 105);
+			}
+		);
+	}
+	
+	
 	beautify_buttons(
 		$("#new_revision_actions button"),
 		BTN_PADDING_BIG
@@ -282,7 +294,8 @@ function setup_new_revision_buttons(type, part) {
 						{
 							padding: BTN_PADDING_BIG,
 							position: "relative",
-							left: btn_left
+							left: btn_left,
+							width: (is_ie6() ? 105 :  null)
 						}
 					)
 					.animate(
@@ -954,6 +967,11 @@ function delete_comment(comment) {
 		},
 		"html"
 	);
+}
+
+
+function is_ie6() {
+	return (typeof document.body.style.maxHeight === "undefined")
 }
 
 
