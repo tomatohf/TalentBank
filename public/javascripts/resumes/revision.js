@@ -761,7 +761,7 @@ function toggle_revision(revision, show, animation) {
 			revision_content.show();
 		}
 		else {
-			revision_content.slideDown("fast");
+			revision_content.slideDown();
 		}
 
 		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/collapse_icon.gif");
@@ -771,7 +771,7 @@ function toggle_revision(revision, show, animation) {
 			revision_content.hide();
 		}
 		else {
-			revision_content.slideUp("fast");
+			revision_content.slideUp();
 		}
 
 		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/expand_icon.gif");

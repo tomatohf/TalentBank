@@ -616,13 +616,48 @@ a.filter_item_link:hover {
 	font-weight: bold;
 }
 
-.resume_revision_content {
+.resume_revision .resume_revision_content {
 	padding: 5px 20px;
 }
 
 
 .resume_comment {
+	margin-bottom: 10px;
 	padding: 5px 23px;
 	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 8px;
-	border-bottom: 1px solid #AED0EA;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_comment .resume_revision_content {
+	padding: 0px;
+}
+
+.resume_comment .resume_comment_text {
+	color: #000000;
+	margin: 10px 0px;
+	padding: 10px 20px;
+}
+
+
+pre.preformatted_content {
+	width: 100%;
+	margin: 0px;
+	line-height: 1.6;
+	overflow: hidden;
+	
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
+
+pre.preformatted_content a {
+	color: #1B75BB;
+	text-decoration: none;
+}
+
+pre.preformatted_content a:hover {
+	color: #0B559B;
+	text-decoration: underline;
 }
