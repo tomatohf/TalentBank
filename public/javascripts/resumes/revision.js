@@ -775,7 +775,7 @@ function delete_revision(revision) {
 	$.post(
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
 		{
-			_method: "delete", // simulate HTTP delete request in rails
+			_method: "delete" // simulate HTTP delete request in rails
 		},
 		function(data) {
 			var revision_attr_id = "revision_" + revision_id;
@@ -940,7 +940,7 @@ function delete_comment(comment) {
 	$.post(
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/comments/" + comment_id,
 		{
-			_method: "delete", // simulate HTTP delete request in rails
+			_method: "delete" // simulate HTTP delete request in rails
 		},
 		function(data) {
 			var comment_attr_id = "comment_" + comment_id;
