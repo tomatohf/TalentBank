@@ -25,14 +25,14 @@ class ReviseResumesController < ApplicationController
     
     @teachers = (teachers_id.size > 0) && Teacher.find(
       :all,
-      :conditions => ["id in (?)", teachers_id.uniq]
+      :conditions => ["id in (?)", teachers_id.uniq.compact]
     ).inject({}) do |hash, teacher|
 			hash[teacher.id] = teacher
 			hash
 		end
 		@students = (students_id.size > 0) && Student.find(
 		  :all,
-		  :conditions => ["id in (?)", students_id.uniq]).inject({}
+		  :conditions => ["id in (?)", students_id.uniq.compact]).inject({}
 		) do |hash, student|
 			hash[student.id] = student
 			hash

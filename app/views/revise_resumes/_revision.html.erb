@@ -55,18 +55,19 @@
 		</div>
 		
 		
-		<div class="align_r">
-			<% if @student %>
-				<a href="#">
+		
+		<% if @student %>
+			<div class="align_r" style="margin: 5px 20px 0px;">
+				<a href="#" class="none">
 					应用</a>
-			<% end %>
+			</div>
+		<% end %>
 			
-			<% if @teacher && @teacher.id == revision.teacher_id %>
-				<button class="delete_revision_button">
-					<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
-					删除
-				</button>
-			<% end %>
-		</div>
+		<% if @teacher && @teacher.id == revision.teacher_id %>
+			<div class="align_r" style="margin: 5px 20px 0px;">
+				<a href="#" class="delete_revision_link none">
+					删除</a>
+			</div>
+		<% end %>
 	</div>
 </div>

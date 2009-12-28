@@ -25,6 +25,11 @@
 			</td>
 			
 			<td align="right">
+				<% if @account_type == account_type_info[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
+					<a href="#" class="delete_comment_link none" style="margin: 0px 20px; font-weight: normal;">
+						删除</a>
+				<% end %>
+				
 				<a href="#" title="展开/收起 评注内容" class="toggle_revision_link">
 					<img src="/images/corporations/collapse_icon.gif" border="0" alt="展开/收起 评注内容" style="margin-bottom: -2px;" /></a>
 			</td>
@@ -42,15 +47,5 @@
 		<div>
 			<%= h(comment.content) %>
 		</div>
-		
-		
-		<% if @account_type == account_type_info[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
-			<div class="align_r">
-				<button class="delete_comment_button">
-					<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
-					删除
-				</button>
-			</div>
-		<% end %>
 	</div>
 </div>

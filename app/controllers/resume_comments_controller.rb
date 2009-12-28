@@ -43,7 +43,14 @@ class ResumeCommentsController < ReviseResumesController
   
   
   def destroy
+    unless @account_type == (ResumeComment::Account_Types.detect{|a| a[:id] == @comment.account_type} || {})[:name] &&
+            self.instance_variable_get("@#{@account_type.singularize}").id == @comment.account_id
+      return jump_to("/errors/forbidden")
+    end
     
+    @comment.destroy
+    
+    render :nothing => true
   end
   
   

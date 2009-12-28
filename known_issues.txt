@@ -1,8 +1,5 @@
 简历修改功能
 	- handle exp_section
-	- comment_16, comment_18 target_part bug
-	- delete action
-	- content format/layout
 
 
 人才库与乔布圈帐号互联

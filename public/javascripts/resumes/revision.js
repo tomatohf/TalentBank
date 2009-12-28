@@ -708,12 +708,11 @@ function setup_revisions(revisions) {
 			);
 			
 			
-			beautify_buttons(
-				$(revision).find(".delete_revision_button"),
-				BTN_PADDING_SMALL
-			).unbind("click").click(
+			$(revision).find(".delete_revision_link").unbind("click").click(
 				function() {
 					delete_revision(revision);
+					
+					return false;
 				}
 			);
 			
@@ -898,13 +897,11 @@ function setup_comments(comments) {
 				}
 			);
 			
-			beautify_buttons(
-				$(comment).find(".delete_comment_button"),
-				BTN_PADDING_SMALL
-			).unbind("click").click(
+			$(comment).find(".delete_comment_link").unbind("click").click(
 				function() {
-					return alert("AAAAAAA");
 					delete_comment(comment);
+					
+					return false;
 				}
 			);
 			
@@ -935,23 +932,23 @@ function setup_comments(comments) {
 
 
 function delete_comment(comment) {
-	if(!confirm("确定要删除这条修改建议么 ?")) {
+	if(!confirm("确定要删除么 ?")) {
 		return;
 	}
 	
-	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	var comment_id = parseInt($(comment).attr("id").substr("comment_".length));
 	$.post(
-		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/comments/" + comment_id,
 		{
 			_method: "delete", // simulate HTTP delete request in rails
 		},
 		function(data) {
-			var revision_attr_id = "revision_" + revision_id;
-			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
-			removed_revisions.fadeOut(
+			var comment_attr_id = "comment_" + comment_id;
+			var removed_comments = $("#" + comment_attr_id).add("#" + compute_id_for_part(comment_attr_id));
+			removed_comments.fadeOut(
 				"slow",
 				function() {
-					removed_revisions.remove();
+					removed_comments.remove();
 				}
 			);
 		},
