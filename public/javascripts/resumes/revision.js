@@ -70,7 +70,9 @@ function setup_resume_parts() {
 							}
 							
 							var pop = pop_container.prepend(
-								$('<span></span>').addClass(class_name).html("" + count)
+								$('<span></span>')
+									.attr("id", compute_id_for_pop(part_attr_id, key))
+									.addClass(class_name).html(count)
 							).find("." + class_name + ":first");
 							
 							if(count <= 0) {
@@ -716,6 +718,11 @@ function compute_id_for_part(id) {
 }
 
 
+function compute_id_for_pop(part_attr_id, key) {
+	return part_attr_id + "_" + key + "_pop";
+}
+
+
 function create_revision(type, part) {
 	disable_submit_button("#new_revision_form");
 	
@@ -748,6 +755,12 @@ function create_revision(type, part) {
 				$("#" + revision_attr_id)
 				.add("#" + compute_id_for_part(revision_attr_id))
 					.css("opacity", 0).animate({opacity: 1}, "slow");
+				
+				
+				// adjust pop count
+				if($("#" + revision_attr_id).hasClass("ui-widget-content")) {
+					adjust_revision_pop_count($(part).attr("id"), 1);
+				}
 			}
 		}
 	);
@@ -889,6 +902,14 @@ function delete_revision(revision) {
 		},
 		function(data) {
 			var revision_attr_id = "revision_" + revision_id;
+			
+			
+			// adjust pop count
+			if($("#" + revision_attr_id).hasClass("ui-widget-content")) {
+				adjust_revision_pop_count($("#" + revision_attr_id).find("input:hidden:first").val(), -1);
+			}
+			
+			
 			var removed_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
 			removed_revisions.fadeOut(
 				"slow",
@@ -989,6 +1010,10 @@ function create_comment(text_field, error_container, data) {
 				$("#" + comment_attr_id)
 				.add("#" + compute_id_for_part(comment_attr_id))
 					.css("opacity", 0).animate({opacity: 1}, "slow");
+				
+				
+				// adjust pop count
+				adjust_comment_pop_count(target_part_id, 1);
 			}
 		}
 	);
@@ -1054,6 +1079,12 @@ function delete_comment(comment) {
 		},
 		function(data) {
 			var comment_attr_id = "comment_" + comment_id;
+			
+			
+			// adjust pop count
+			adjust_comment_pop_count($("#" + comment_attr_id).find("input:hidden:first").val(), -1);
+			
+			
 			var removed_comments = $("#" + comment_attr_id).add("#" + compute_id_for_part(comment_attr_id));
 			removed_comments.fadeOut(
 				"slow",
@@ -1064,6 +1095,30 @@ function delete_comment(comment) {
 		},
 		"html"
 	);
+}
+
+
+function adjust_pop_count(part_attr_id, key, n) {
+	var pop = $("#" + compute_id_for_pop(part_attr_id, key));
+	
+	var count = to_number(pop.html()) + n;
+	pop.html(count);
+	if(count > 0) {
+		pop.show();
+	}
+	else {
+		pop.hide();
+	}
+}
+
+
+function adjust_revision_pop_count(part_attr_id, n) {
+	adjust_pop_count(part_attr_id, "revision", n);
+}
+
+
+function adjust_comment_pop_count(part_attr_id, n) {
+	adjust_pop_count(part_attr_id, "comment", n);
 }
 
 
