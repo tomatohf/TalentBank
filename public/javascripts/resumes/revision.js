@@ -58,30 +58,32 @@ function setup_resume_parts() {
 							var count = info[1];
 							var key = info[0];
 							
-							if(count > 0) {
-								var class_name = "resume_" + key + "_pop";
-								
-								var pop_container = $(part);
-								var pop_container_tagname = pop_container.attr("tagName").toLowerCase();
-								if(pop_container_tagname == "tr") {
-									pop_container = pop_container.find("td:first");
-								}
-								else if(pop_container_tagname == "table") {
-									pop_container = pop_container.find("tr:first > td:first");
-								}
-								
-								var pop = pop_container.prepend(
-									$('<span></span>').addClass(class_name).html("" + count)
-								).find("." + class_name + ":first");
-								
-								if(key == "revision" && type_name == "job_intention") {
-									pop.css("marginLeft", "530px");
-								}
-								
-								
-								if(is_ie6()) {
-									pop.css("backgroundImage", "url(/images/revise_resumes/" + key + "_pop.gif)");
-								}
+							var class_name = "resume_" + key + "_pop";
+							
+							var pop_container = $(part);
+							var pop_container_tagname = pop_container.attr("tagName").toLowerCase();
+							if(pop_container_tagname == "tr") {
+								pop_container = pop_container.find("td:first");
+							}
+							else if(pop_container_tagname == "table") {
+								pop_container = pop_container.find("tr:first > td:first");
+							}
+							
+							var pop = pop_container.prepend(
+								$('<span></span>').addClass(class_name).html("" + count)
+							).find("." + class_name + ":first");
+							
+							if(count <= 0) {
+								pop.hide();
+							}
+							
+							if(key == "comment") {
+								pop.css("marginLeft", $(part).width() + "px");
+							}
+							
+							
+							if(is_ie6()) {
+								pop.css("backgroundImage", "url(/images/revise_resumes/" + key + "_pop.gif)");
 							}
 						}
 					);
@@ -242,6 +244,10 @@ function get_dialog_title(part, type_name) {
 
 
 function get_dialog_sub_title(type_name, part) {
+	part = $(part).clone();
+	$(part).find(".resume_revision_pop, .resume_comment_pop").remove();
+	
+	
 	var sub_title = "";
 	if(type_name == "edu") {
 		var edu_info = [];
@@ -440,6 +446,10 @@ function draw_new_revision_form(action, type, part) {
 
 
 function get_new_revision_inputs(type, part, modify) {
+	part = $(part).clone();
+	$(part).find(".resume_revision_pop, .resume_comment_pop").remove();
+	
+	
 	var inputs_container = $('<div></div>');
 	
 	var type_name = type.name;

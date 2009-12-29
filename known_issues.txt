@@ -1,5 +1,6 @@
 简历修改功能
 	- handle exp_section
+	- 点击 pop 打开相应的 tab
 
 
 人才库与乔布圈帐号互联
