@@ -1,5 +1,5 @@
 var DIALOG_INIT_WIDTH = 500;
-var DIALOG_INIT_HEIGHT = 400;
+var DIALOG_INIT_HEIGHT = 420;
 
 var BTN_PADDING_BIG = "6px 10px 5px";
 var BTN_PADDING_SMALL = "3px 6px 2px";
@@ -115,6 +115,13 @@ function setup_dialog() {
 			
 			close: function() {
 				hide_highlighter(1);
+			},
+			
+			resize: function(event, ui) {
+				adjust_tabs_content_height_by_dialog();
+			},
+			open: function(event, ui) {
+				adjust_tabs_content_height_by_dialog();
 			}
 		}
 	).show();
@@ -128,6 +135,35 @@ function setup_dialog() {
 			whiteSpace: "nowrap"
 		}
 	);
+}
+
+
+function adjust_tabs_content_height_by_dialog() {
+	$.each(
+		$("#dialog").css("overflow", "hidden").find(".tabs > div"),
+		function(i, div) {
+			var dialog_h = $("#dialog").innerHeight();
+			var tabs_nav_h = $("#dialog .tabs ul:first").outerHeight(true);
+			var div_margin = to_number($(div).css("marginTop")) + to_number($(div).css("marginBottom"));
+			var div_padding = to_number($(div).css("paddingTop")) + to_number($(div).css("paddingBottom"));
+			var fix_h = 20;
+			
+			var div_h = dialog_h - tabs_nav_h - div_margin - div_padding - fix_h;
+			
+			$(div).height(div_h).css("overflow", "auto");
+		}
+	);
+	
+	
+	if(is_ie6()) {
+		$("#dialog").width($("#dialog").parent().width() - 28);
+	}
+}
+
+
+function to_number(value) {
+	var number = parseFloat(value);
+	return isNaN(number) ? 0 : number;
 }
 
 
@@ -282,9 +318,9 @@ function setup_new_revision_buttons(type, part) {
 			
 			var btn_label = $(this).html();
 			var btn_left = $(this).position().left
-							- parseFloat($(this).parent().parent().css("paddingLeft"))
-							- parseFloat($("#dialog").css("paddingLeft"))
-							+ parseFloat($(this).css("marginLeft"));
+							- to_number($(this).parent().parent().css("paddingLeft"))
+							- to_number($("#dialog").css("paddingLeft"))
+							+ to_number($(this).css("marginLeft"));
 			
 			$("#new_revision_actions")
 				.html('<button>' + btn_label + '</button>')
