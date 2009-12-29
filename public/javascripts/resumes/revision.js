@@ -21,24 +21,70 @@ function setup_resume_parts() {
 		function(i, type) {
 			var type_name = type.name;
 			
-			$("[id^='" + type_name + "_']").unbind("mouseenter mouseleave").hover(
-				function() {
-					show_highlighter(2, this);
-				},
-				function() {
-					hide_highlighter(2);
-				}
-			).unbind("click").click(
-				function() {
-					$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
+			$.each(
+				$("[id^='" + type_name + "_']"),
+				function(i, part) {
+					var part_attr_id = $(part).unbind("mouseenter mouseleave").hover(
+						function() {
+							show_highlighter(2, this);
+						},
+						function() {
+							hide_highlighter(2);
+						}
+					).unbind("click").click(
+						function() {
+							$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
 
-					prepare_dialog_content(type, this);
+							prepare_dialog_content(type, this);
 
-					open_dialog(this);
-				}
-			).css(
-				{
-					cursor: "pointer"
+							open_dialog(this);
+						}
+					).css(
+						{
+							cursor: "pointer"
+						}
+					)
+					.attr("id");
+					
+					
+					var revision_count = $("#all_revisions .ui-widget-content." + part_attr_id).length;
+					var comment_count = $("#all_comments ." + part_attr_id).length;
+					$.each(
+						[
+							["revision", revision_count],
+							["comment", comment_count]
+						],
+						function(i, info) {
+							var count = info[1];
+							var key = info[0];
+							
+							if(count > 0) {
+								var class_name = "resume_" + key + "_pop";
+								
+								var pop_container = $(part);
+								var pop_container_tagname = pop_container.attr("tagName").toLowerCase();
+								if(pop_container_tagname == "tr") {
+									pop_container = pop_container.find("td:first");
+								}
+								else if(pop_container_tagname == "table") {
+									pop_container = pop_container.find("tr:first > td:first");
+								}
+								
+								var pop = pop_container.prepend(
+									$('<span></span>').addClass(class_name).html("" + count)
+								).find("." + class_name + ":first");
+								
+								if(key == "revision" && type_name == "job_intention") {
+									pop.css("marginLeft", "530px");
+								}
+								
+								
+								if(is_ie6()) {
+									pop.css("backgroundImage", "url(/images/revise_resumes/" + key + "_pop.gif)");
+								}
+							}
+						}
+					);
 				}
 			);
 		}
@@ -71,6 +117,11 @@ function show_highlighter(index, part) {
 	var padding_x = 5;
 	var padding_y = 1;
 	
+	var width = $(".resume").width() - (padding_x*2);
+	if($(part).attr("id").indexOf("job_intention") >= 0) {
+		width = $(part).outerWidth() - (padding_x*2);
+	}
+	
 	$("#highlighter_" + index)
 		.css(
 			{
@@ -80,7 +131,7 @@ function show_highlighter(index, part) {
 			}
 		)
 		.height($(part).height() + (padding_y*2))
-		.width($(".resume").width() - (padding_x*2))
+		.width(width)
 		.fadeIn("fast");
 }
 

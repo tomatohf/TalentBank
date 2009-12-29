@@ -80,3 +80,28 @@ ul.no_bullet {
 	padding-left: 16px;
 	background: transparent url(/images/students/tag_icon.gif) no-repeat scroll left center;
 }
+
+
+.resume_revision_pop, .resume_comment_pop {
+	position: absolute;
+	text-align: center;
+	font-size: 11px;
+}
+
+.resume_revision_pop {
+	width: 30px;
+	height: 30px;
+	background: transparent url(/images/revise_resumes/revision_pop.png) no-repeat scroll left top;
+	
+	margin-top: -15px;
+	margin-left: 650px;
+}
+
+.resume_comment_pop {
+	width: 25px;
+	height: 25px;
+	background: transparent url(/images/revise_resumes/comment_pop.png) no-repeat scroll left top;
+	
+	margin-top: -10px;
+	margin-left: -30px;
+}
