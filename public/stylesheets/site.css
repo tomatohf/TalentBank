@@ -83,6 +83,7 @@ form {
 	display: none;
 	background-color: #F8F8F8;
 	border: 1px solid #B2B2B2;
+	width: 130px;
 }
 .dropdown_menu ul.dropdown_sub_menu li {
 	margin: 0px;
@@ -92,7 +93,6 @@ form {
 	display: block;
 	margin: 0px;
 	padding: 3px 20px;
-	width: 85px;
 	text-decoration: none;
 }
 .dropdown_menu ul.dropdown_sub_menu li a:hover {

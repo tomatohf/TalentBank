@@ -349,7 +349,7 @@ function get_action_icon(action) {
 		icon = "ui-icon-circle-plus";
 	}
 	
-	return icon ? '<span class="ui-icon ' + icon + ' float_l" style="margin-right: 3px;"></span>' : '';
+	return icon ? '<span class="ui-icon ' + icon + ' float_l"></span>' : '';
 }
 
 
@@ -366,15 +366,12 @@ function setup_new_revision_buttons(type, part) {
 	$("#new_revision_actions").html(buttons_html);
 	
 	
-	// IE 6 ...
-	if(is_ie6()) {
-		$.each(
-			$("#new_revision_actions").find("button"),
-			function(i, button) {
-				$(button).css("width", 105);
-			}
-		);
-	}
+	$.each(
+		$("#new_revision_actions").find("button"),
+		function(i, button) {
+			$(button).css("width", "100px");
+		}
+	);
 	
 	
 	beautify_buttons(
@@ -389,6 +386,7 @@ function setup_new_revision_buttons(type, part) {
 							- to_number($(this).parent().parent().css("paddingLeft"))
 							- to_number($("#dialog").css("paddingLeft"))
 							+ to_number($(this).css("marginLeft"));
+			var btn_width = $(this).css("width");
 			
 			$("#new_revision_actions")
 				.html('<button>' + btn_label + '</button>')
@@ -399,7 +397,7 @@ function setup_new_revision_buttons(type, part) {
 							padding: BTN_PADDING_BIG,
 							position: "relative",
 							left: btn_left,
-							width: (is_ie6() ? 105 :  null)
+							width: btn_width
 						}
 					)
 					.animate(
