@@ -32,12 +32,21 @@ function setup_resume_parts() {
 							hide_highlighter(2);
 						}
 					).unbind("click").click(
-						function() {
+						function(event) {
 							$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
 
 							prepare_dialog_content(type, this);
 
 							open_dialog(this);
+							
+							
+							// switch tab
+							if($(event.target).hasClass("resume_revision_pop")) {
+								$("#dialog .tabs").tabs("select", "#part_revisions");
+							}
+							if($(event.target).hasClass("resume_comment_pop")) {
+								$("#dialog .tabs").tabs("select", "#part_comments");
+							}
 						}
 					).css(
 						{

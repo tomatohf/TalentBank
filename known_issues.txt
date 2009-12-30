@@ -3,7 +3,6 @@
 	- 改变 revision applied 后需要调整 pop count
 		* 直接设置 applied 为 true or false
 		* 应用 revision 后 applied 改变为 true
-	- 点击 pop 打开相应的 tab
 
 
 人才库与乔布圈帐号互联
