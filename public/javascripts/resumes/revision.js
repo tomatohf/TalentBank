@@ -214,14 +214,16 @@ function adjust_tabs_content_height_by_dialog() {
 			
 			var div_h = dialog_h - tabs_nav_h - div_margin - div_padding - fix_h;
 			
-			$(div).height(div_h).css("overflow", "auto");
+			$(div).height(div_h)
+				.css("overflow", "auto")
+				.css("overflow-x", "hidden");
+			
+			
+			if(is_ie6()) {
+				$(div).width($("#dialog .tabs").width() - 35);
+			}
 		}
 	);
-	
-	
-	if(is_ie6()) {
-		$("#dialog").width($("#dialog").parent().width() - 28);
-	}
 }
 
 

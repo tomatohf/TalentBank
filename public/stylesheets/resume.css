@@ -82,6 +82,45 @@ ul.no_bullet {
 }
 
 
+.resume_revision {
+	margin-bottom: 10px;
+	padding: 5px 10px 5px 5px;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_revision .datetime, .resume_comment .datetime {
+	font-size: 10px;
+	font-weight: normal;
+	margin: 0px 10px;
+}
+
+.resume_revision_title {
+	font-weight: bold;
+}
+
+.resume_revision .resume_revision_content {
+	padding: 5px 20px;
+}
+
+
+.resume_comment {
+	margin-bottom: 10px;
+	padding: 5px 23px;
+	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 8px;
+	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_comment .resume_revision_content {
+	padding: 0px;
+}
+
+.resume_comment .resume_comment_text {
+	color: #000000;
+	margin: 10px 0px;
+	padding: 10px 20px;
+}
+
+
 .resume_revision_pop, .resume_comment_pop {
 	position: absolute;
 	text-align: center;
