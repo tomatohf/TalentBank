@@ -4,6 +4,8 @@
 		* 应用 revision 后 applied 改变为 true
 	- 修改建议内容的完整性验证, 非空, 长度限制 等等 ...
 	- 美化 revision data 的 UI
+	- when /_skill$/ 时的 revision data diff
+	- 处理 add/delete 时的 diff
 
 
 人才库与乔布圈帐号互联

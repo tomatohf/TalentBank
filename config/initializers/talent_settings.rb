@@ -37,9 +37,6 @@ require "redcloth"
 # require "xmpp4r-simple"
 # require "system_timer"
 
-
-require "differ"
-
 ##################################################
 ### END
 ##################################################
