@@ -13,7 +13,7 @@
 <div id="comment_<%= comment.id %>" class="resume_comment <%= target_part %>">
 	<input type="hidden" value="<%= target_part %>" />
 	
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_title">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_head">
 		<tr>
 			<td>
 				<%= h(account && account.get_name) %>
@@ -26,7 +26,7 @@
 			
 			<td align="right">
 				<% if @account_type == account_type_info[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
-					<a href="#" class="delete_comment_link none" style="margin: 0px 20px; font-weight: normal;">
+					<a href="#" class="delete_comment_link">
 						删除</a>
 				<% end %>
 				
@@ -37,7 +37,7 @@
 	</table>
 	
 	
-	<div class="resume_revision_content">
+	<div class="resume_revision_body">
 		<div class="target_part_title">
 			<img src="/images/revise_resumes/target_icon.gif" border="0" alt="目标" style="margin-bottom: -3px;" />
 			目标段落:
@@ -45,7 +45,7 @@
 		</div>
 		
 		
-		<div class="resume_comment_text ui-widget-content ui-corner-all">
+		<div class="ui-widget-content ui-corner-all resume_comment_content">
 			<pre class="preformatted_content"><%= auto_link(h(comment.content), :urls, :target => "_blank") %></pre>
 		</div>
 	</div>

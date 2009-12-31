@@ -614,11 +614,9 @@ pre.preformatted_content {
 }
 
 pre.preformatted_content a {
-	color: #1B75BB;
 	text-decoration: none;
 }
 
 pre.preformatted_content a:hover {
-	color: #0B559B;
 	text-decoration: underline;
 }

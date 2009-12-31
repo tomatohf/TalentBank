@@ -94,12 +94,30 @@ ul.no_bullet {
 	margin: 0px 10px;
 }
 
-.resume_revision_title {
+.resume_revision_head {
 	font-weight: bold;
 }
 
-.resume_revision .resume_revision_content {
-	padding: 5px 20px;
+.resume_revision .resume_revision_body {
+	padding: 0px 20px;
+}
+
+.resume_revision_content {
+	color: #000000;
+	padding: 10px 20px;
+}
+
+.resume_revision_actions {
+	margin: 5px 20px 0px;
+}
+
+.resume_revision_actions td.links {
+	width: 125px;
+	padding-left: 4px;
+}
+
+.resume_revision_actions td.links a {
+	margin: 0px 5px;
 }
 
 
@@ -110,14 +128,28 @@ ul.no_bullet {
 	border-bottom: 1px solid #DEDEDE;
 }
 
-.resume_comment .resume_revision_content {
+.resume_comment .resume_revision_body {
 	padding: 0px;
 }
 
-.resume_comment .resume_comment_text {
+.resume_comment_content {
 	color: #000000;
 	margin: 10px 0px;
 	padding: 10px 20px;
+}
+
+.resume_comment a.delete_comment_link {
+	margin: 0px 20px;
+	font-weight: normal;
+}
+
+
+.resume_revision a, .resume_comment a {
+	text-decoration: none;
+}
+
+.resume_revision a:hover, .resume_comment a:hover {
+	text-decoration: underline;
 }
 
 

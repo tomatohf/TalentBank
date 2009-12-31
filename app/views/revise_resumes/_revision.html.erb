@@ -10,7 +10,7 @@
 <div id="revision_<%= revision.id %>" class="resume_revision <%= target_part %><%= %Q! ui-widget-content ui-corner-all! unless revision.applied %>">
 	<input type="hidden" value="<%= target_part %>" />
 	
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_title">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_head">
 		<tr>
 			<td>
 				<% action_icon, action_label = case revision_action[:name]
@@ -43,7 +43,7 @@
 	</table>
 	
 	
-	<div class="resume_revision_content"<%= %Q! style="display: none;"! if revision.applied %>>
+	<div class="resume_revision_body"<%= %Q! style="display: none;"! if revision.applied %>>
 		<div class="target_part_title">
 			<img src="/images/revise_resumes/target_icon.gif" border="0" alt="目标" style="margin-bottom: -3px;" />
 			目标段落:
@@ -51,24 +51,53 @@
 		</div>
 		
 		
-		<div>
-			
-		</div>
-		
-		
-		
-		<% if @student %>
-			<div class="align_r" style="margin: 5px 20px 0px;">
-				<a href="#" class="none">
-					应用</a>
+		<% unless revision_action[:name] == "delete" %>
+			<div class="resume_revision_content">
+
 			</div>
 		<% end %>
-			
-		<% if @teacher && @teacher.id == revision.teacher_id %>
-			<div class="align_r" style="margin: 5px 20px 0px;">
-				<a href="#" class="delete_revision_link none">
+		
+		
+		
+		<div class="resume_revision_actions">
+			<% if @teacher && @teacher.id == revision.teacher_id %>
+				<a href="#" class="delete_revision_link">
 					删除</a>
-			</div>
-		<% end %>
+			<% end %>
+			
+			<% if @student && @student.id == @resume.student_id %>
+				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<tr>
+						<td>&nbsp;</td>
+						
+						<td style="width: 45px;">
+							<a href="#" class="dropdown_menu_link">
+								标记为</a>
+
+							<div class="dropdown_menu">
+								<ul class="dropdown_sub_menu">
+									<li>
+										<a href="#" class="update_applied_link"></a>
+									</li>
+								</ul>
+							</div>
+						</td>
+						
+						<td align="center" style="width: 10px;" class="info">|</td>
+						
+						<td class="links">
+							<a href="#" class="preview_revision_link">
+								预览</a>
+
+							<a href="#" class="differ_revision_link">
+								对比</a>
+
+							<a href="#" class="apply_revision_link">
+								应用</a>
+						</td>
+					</tr>
+				</table>
+			<% end %>
+		</div>
 	</div>
 </div>

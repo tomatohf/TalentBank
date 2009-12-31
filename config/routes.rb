@@ -154,10 +154,10 @@ ActionController::Routing::Routes.draw do |map|
     :account_id => /\d+/
   }, :only => [:show] do |revise_resumes|
     revise_resumes.resources :resume_revisions, :as => :revisions, :member => {
+      :update_applied => :post
     }
     
-    revise_resumes.resources :resume_comments, :as => :comments, :member => {
-    }
+    revise_resumes.resources :resume_comments, :as => :comments
   end
   
   

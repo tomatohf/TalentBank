@@ -831,7 +831,7 @@ function setup_revisions(revisions) {
 	$.each(
 		revisions,
 		function(i, revision) {
-			$(revision).find(".toggle_revision_link").unbind("click").click(
+			$(revision).find("a.toggle_revision_link").unbind("click").click(
 				function() {
 					toggle_revision(revision);
 					
@@ -840,13 +840,31 @@ function setup_revisions(revisions) {
 			);
 			
 			
-			$(revision).find(".delete_revision_link").unbind("click").click(
+			$(revision).find("a.delete_revision_link").unbind("click").click(
 				function() {
 					delete_revision(revision);
 					
 					return false;
 				}
 			);
+			
+			
+			$(revision).find("a.dropdown_menu_link").unbind("click").click(
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+					$(this).parent().hover(
+						function() {
+						},
+						function() {
+							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+						}
+					);
+
+					return false;
+				}
+			);
+			setup_update_applied_link(revision);
 			
 			
 			var part_title_field = $(revision).find(".target_part_title span:first");
@@ -864,6 +882,37 @@ function setup_revisions(revisions) {
 					toggle_revision(revision, false, false);
 				}
 			}
+			
+			
+			$(revision).find("a").css("color", "#3B5998");
+		}
+	);
+	
+	return revisions;
+}
+
+
+function setup_update_applied_link(revisions) {
+	$.each(
+		$(revisions),
+		function(i, revision) {
+			var applied = !$(revision).hasClass("ui-widget-content");
+			$(revision).find("a.update_applied_link")
+				.html(applied ? "尚未应用" : "已被应用")
+				.unbind("click").click(
+					function() {
+						update_revision_applied(revision, !applied);
+
+						return false;
+					}
+				);
+			
+			if(applied) {
+				$(revision).find("a.preview_revision_link, a.apply_revision_link").hide();
+			}
+			else {
+				$(revision).find("a.preview_revision_link, a.apply_revision_link").show();
+			}
 		}
 	);
 	
@@ -872,7 +921,7 @@ function setup_revisions(revisions) {
 
 
 function toggle_revision(revision, show, animation) {
-	var revision_content = $(revision).find(".resume_revision_content");
+	var revision_content = $(revision).find(".resume_revision_body");
 	if(show == null) { show = !revision_content.is(":visible") }
 	
 	if(show) {
@@ -883,7 +932,7 @@ function toggle_revision(revision, show, animation) {
 			revision_content.slideDown();
 		}
 
-		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/collapse_icon.gif");
+		$(revision).find("a.toggle_revision_link img:first").attr("src", "/images/corporations/collapse_icon.gif");
 	}
 	else {
 		if(animation == false) {
@@ -893,7 +942,7 @@ function toggle_revision(revision, show, animation) {
 			revision_content.slideUp();
 		}
 
-		$(revision).find(".toggle_revision_link img:first").attr("src", "/images/corporations/expand_icon.gif");
+		$(revision).find("a.toggle_revision_link img:first").attr("src", "/images/corporations/expand_icon.gif");
 	}
 }
 
@@ -926,6 +975,35 @@ function delete_revision(revision) {
 					removed_revisions.remove();
 				}
 			);
+		},
+		"html"
+	);
+}
+
+
+function update_revision_applied(revision, applied) {
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	$.post(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/update_applied",
+		{
+			applied: applied ? 1 : 0
+		},
+		function(data) {
+			var applied_class = "ui-widget-content ui-corner-all";
+			var revision_attr_id = "revision_" + revision_id;
+			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+			if(applied) {
+				update_revisions.removeClass(applied_class);
+			}
+			else {
+				update_revisions.addClass(applied_class);
+			}
+			
+			setup_update_applied_link(update_revisions);
+			
+			
+			// adjust pop count
+			adjust_revision_pop_count($(revision).find("input:hidden:first").val(), (applied ? -1 : 1));
 		},
 		"html"
 	);
@@ -1033,7 +1111,7 @@ function setup_comments(comments) {
 	$.each(
 		comments,
 		function(i, comment) {
-			$(comment).find(".toggle_revision_link").unbind("click").click(
+			$(comment).find("a.toggle_revision_link").unbind("click").click(
 				function() {
 					toggle_revision(comment);
 					
@@ -1041,7 +1119,7 @@ function setup_comments(comments) {
 				}
 			);
 			
-			$(comment).find(".delete_comment_link").unbind("click").click(
+			$(comment).find("a.delete_comment_link").unbind("click").click(
 				function() {
 					delete_comment(comment);
 					
@@ -1068,6 +1146,9 @@ function setup_comments(comments) {
 					}
 				}
 			}
+			
+			
+			$(comment).find("a").css("color", "#3B5998");
 		}
 	);
 	

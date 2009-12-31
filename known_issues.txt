@@ -3,6 +3,7 @@
 	- 改变 revision applied 后需要调整 pop count
 		* 直接设置 applied 为 true or false
 		* 应用 revision 后 applied 改变为 true
+	- Differ.diff_by_char(target, source).format_as(:html)
 
 
 人才库与乔布圈帐号互联
@@ -53,6 +54,7 @@ Denpendencies besides CareerCommunity's:
 
 -----
 	prawn
+	differ
 
 
 ========== Function Modules ==========

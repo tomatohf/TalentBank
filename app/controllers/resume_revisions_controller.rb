@@ -3,13 +3,13 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy]
+    :only => [:create, :destroy, :update_applied]
   )
   
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_student,
-    :only => []
+    :only => [:update_applied]
   )
   
   insert_before_filter(
@@ -91,6 +91,15 @@ class ResumeRevisionsController < ReviseResumesController
     return jump_to("/errors/forbidden") unless @revision.teacher_id == @teacher.id
     
     @revision.destroy
+    
+    render :nothing => true
+  end
+  
+  
+  def update_applied
+    @revision.applied = (params[:applied].to_i > 0)
+    
+    @revision.save!
     
     render :nothing => true
   end
