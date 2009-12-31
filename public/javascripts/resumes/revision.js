@@ -457,7 +457,8 @@ function draw_new_revision_form(action, type, part) {
 
 
 function get_new_revision_inputs(type, part, modify) {
-	part = $(part).clone();
+	var original_part = part;
+	part = $(original_part).clone();
 	$(part).find(".resume_revision_pop, .resume_comment_pop").remove();
 	
 	
@@ -531,7 +532,7 @@ function get_new_revision_inputs(type, part, modify) {
 				table_row_for_text_field(
 					"section_title",
 					"标题" + required_mark,
-					modify ? get_section_title(part) : "",
+					modify ? get_section_title(original_part) : "",
 					false
 				)
 			)
@@ -560,10 +561,10 @@ function get_new_revision_inputs(type, part, modify) {
 	add_submit_button(
 		inputs_container,
 		function() {
-			create_revision(type, part);
+			create_revision(type, original_part);
 		},
 		function() {
-			prepare_new_revision_content(type, part);
+			prepare_new_revision_content(type, original_part);
 			
 			return false;
 		}
@@ -865,6 +866,38 @@ function setup_revisions(revisions) {
 				}
 			);
 			setup_update_applied_link(revision);
+			beautify_buttons(
+				$(revision).find(".resume_revision_actions button"),
+				"1px 2px"
+			);
+			$(revision).find("button.diff_revision_btn").unbind("click").click(
+				function() {
+					var content_container = $(revision).find(".resume_revision_content:first");
+					
+					var diff = $(revision).find(".resume_revision_diff:first");
+					if(diff.length > 0) {
+						if(diff.is(":visible")) {
+							content_container.find(".resume_revision_diff").hide();
+							content_container.find(".resume_revision_data").show();
+							$(this).removeClass("ui-state-active");
+						}
+						else {
+							content_container.find(".resume_revision_diff").show();
+							content_container.find(".resume_revision_data").hide();
+							$(this).addClass("ui-state-active");
+						}
+					}
+					else {
+						diff_revision(revision);
+					}
+				}
+			);
+			$(revision).find("button.preview_revision_btn").unbind("click").click(
+				function() {
+					// TO BE MODIFIED
+					clear_resume_revision_diff(revision);
+				}
+			);
 			
 			
 			var part_title_field = $(revision).find(".target_part_title span:first");
@@ -877,6 +910,9 @@ function setup_revisions(revisions) {
 				}
 				else {
 					part_title_field.html($('<i></i>').html("(已被删除)"));
+					
+					$(revision).removeClass("ui-widget-content ui-corner-all");
+					$(revision).find(".resume_revision_actions table").remove();
 			
 					$(revision).find("td, div, span").addClass("info");
 					toggle_revision(revision, false, false);
@@ -908,10 +944,10 @@ function setup_update_applied_link(revisions) {
 				);
 			
 			if(applied) {
-				$(revision).find("a.preview_revision_link, a.apply_revision_link").hide();
+				$(revisions).find("img.unapplied_icon").hide();
 			}
 			else {
-				$(revision).find("a.preview_revision_link, a.apply_revision_link").show();
+				$(revisions).find("img.unapplied_icon").show();
 			}
 		}
 	);
@@ -1007,6 +1043,40 @@ function update_revision_applied(revision, applied) {
 		},
 		"html"
 	);
+}
+
+
+function diff_revision(revision) {
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	$.get(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/diff",
+		{},
+		function(data) {
+			var revision_attr_id = "revision_" + revision_id;
+			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+			
+			update_revisions.find(".resume_revision_content")
+				.append(
+					$('<div class="resume_revision_diff"></div>').html(data)
+				)
+				.find(".resume_revision_data").hide();
+			
+			update_revisions.find("button.diff_revision_btn").addClass("ui-state-active");
+		},
+		"html"
+	);
+}
+
+
+function clear_resume_revision_diff(revision) {
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	var revision_attr_id = "revision_" + revision_id;
+	var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+	
+	update_revisions.find(".resume_revision_diff").remove();
+	update_revisions.find(".resume_revision_data").show();
+	
+	update_revisions.find("button.diff_revision_btn").removeClass("ui-state-active");
 }
 
 
@@ -1219,14 +1289,12 @@ function is_ie6() {
 
 $(document).ready(
 	function() {
+		setup_tabs();
+		setup_dialog();
+		
 		setup_revisions($(".resume_revision"));
 		setup_comments($(".resume_comment"));
-		
-		setup_tabs();
-		
 		setup_resume_parts();
-		
-		setup_dialog();
 		
 		setup_new_comment_form();
 	}

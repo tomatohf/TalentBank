@@ -1,9 +1,9 @@
 简历修改功能
-	- handle exp_section
 	- 改变 revision applied 后需要调整 pop count
 		* 直接设置 applied 为 true or false
 		* 应用 revision 后 applied 改变为 true
-	- Differ.diff_by_char(target, source).format_as(:html)
+	- 修改建议内容的完整性验证, 非空, 长度限制 等等 ...
+	- 美化 revision data 的 UI
 
 
 人才库与乔布圈帐号互联

@@ -2,9 +2,9 @@
 	students ||= {}
 	teachers ||= {}
 
-	part_type = ResumePartType.find(comment.part_type_id)
+	part_type = ResumePartType.find(comment.part_type_id) || {}
 
-	target_part = "#{part_type && part_type[:name]}_#{comment.part_id}"
+	target_part = "#{part_type[:name]}_#{comment.part_id}"
 	
 	account_type_info = ResumeComment::Account_Types.detect{|a| a[:id] == comment.account_type} || {}
 	account = (eval(account_type_info[:name]) || {})[comment.account_id]

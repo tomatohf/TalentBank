@@ -9,7 +9,7 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_student,
-    :only => [:update_applied]
+    :only => [:update_applied, :diff]
   )
   
   insert_before_filter(
@@ -102,6 +102,11 @@ class ResumeRevisionsController < ReviseResumesController
     @revision.save!
     
     render :nothing => true
+  end
+  
+  
+  def diff
+    render :partial => "/revise_resumes/revision_data", :locals => {:revision => @revision, :diff => true}
   end
   
   

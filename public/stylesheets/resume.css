@@ -108,16 +108,11 @@ ul.no_bullet {
 }
 
 .resume_revision_actions {
-	margin: 5px 20px 0px;
+	margin: 5px 5px 0px;
 }
 
-.resume_revision_actions td.links {
-	width: 125px;
-	padding-left: 4px;
-}
-
-.resume_revision_actions td.links a {
-	margin: 0px 5px;
+.resume_revision .unapplied_icon {
+	margin-right: 8px;
 }
 
 
@@ -183,4 +178,11 @@ ul.no_bullet {
 	
 	padding-top: 4px;
 	padding-left: 1px;
+}
+
+
+.resume_revision ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: disc;
 }

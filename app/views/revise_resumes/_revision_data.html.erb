@@ -1,0 +1,109 @@
+<%
+	part_type = ResumePartType.find(revision.part_type_id) || {}
+	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
+	
+	data = revision.get_data
+	
+	diff &&= part_type[:model] && part_type[:model].find(revision.part_id)
+%>
+
+<div>
+	<% unless revision_action[:name] == "delete" %>
+		<%
+			case part_type[:name]
+			when "job_intention"
+		%>
+			<div>
+				<% if diff %>
+					<%= Differ.diff_by_char(h(data[:content]), h(diff.content)).format_as(:html) %>
+				<% else %>
+					<%= h(data[:content]) %>
+				<% end %>
+			</div>
+		<% when "edu" %>
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<tr>
+					<td style="width: 100px;">时间段</td>
+					<td><%= h(data[:period]) %></td>
+				</tr>
+				<tr>
+					<td>大学</td>
+					<td><%= h(data[:university]) %></td>
+				</tr>
+				<tr>
+					<td>学院</td>
+					<td><%= h(data[:college]) %></td>
+				</tr>
+				<tr>
+					<td>专业</td>
+					<td><%= h(data[:major]) %></td>
+				</tr>
+				<tr>
+					<td>教育类型</td>
+					<td><%= h(data[:edu_type]) %></td>
+				</tr>
+			</table>
+		<% when /_exp$/ %>
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<tr>
+					<td style="width: 100px;">时间段</td>
+					<td><%= h(data[:period]) %></td>
+				</tr>
+				<tr>
+					<td>标题</td>
+					<td><%= h(data[:title]) %></td>
+				</tr>
+				<tr>
+					<td>子标题</td>
+					<td><%= h(data[:sub_title]) %></td>
+				</tr>
+				<tr>
+					<td>内容</td>
+					<td>
+						<ul>
+							<% Utils.lines(h(data[:content])).each do |line| %>
+								<li><%= line %></li>
+							<% end %>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		<% when /_skill$/ %>
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<tr>
+					<td style="width: 100px;">名称</td>
+					<td><%= h(data[:name]) %></td>
+				</tr>
+				<tr>
+					<td>程度</td>
+					<td><%= h(data[:level]) %></td>
+				</tr>
+			</table>
+		<% when /^(award|hobby)$/ %>
+			<div>
+				<ul class="no_bullet">
+					<% Utils.lines(h(data[:content])).each do |line| %>
+						<li><%= line %></li>
+					<% end %>
+				</ul>
+			</div>
+		<% when "list_section" %>
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<tr>
+					<td style="width: 100px;">标题</td>
+					<td><%= h(data[:title]) %></td>
+				</tr>
+				<tr>
+					<td>内容</td>
+					<td>
+						<ul class="no_bullet">
+							<% Utils.lines(h(data[:content])).each do |line| %>
+								<li><%= line %></li>
+							<% end %>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		<% end %>
+	<% end %>
+</div>

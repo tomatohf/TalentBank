@@ -1,7 +1,7 @@
 <%
 	teachers ||= {}
 
-	part_type = ResumePartType.find(revision.part_type_id)
+	part_type = ResumePartType.find(revision.part_type_id) || {}
 	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
 
 	target_part = "#{part_type[:name]}_#{revision.part_id}"
@@ -51,24 +51,31 @@
 		</div>
 		
 		
-		<% unless revision_action[:name] == "delete" %>
-			<div class="resume_revision_content">
-
+		<div class="resume_revision_content">
+			<div class="resume_revision_data">
+				<%= render :partial => "/revise_resumes/revision_data", :locals => {:revision => revision} %>
 			</div>
-		<% end %>
+		</div>
 		
 		
 		
 		<div class="resume_revision_actions">
 			<% if @teacher && @teacher.id == revision.teacher_id %>
-				<a href="#" class="delete_revision_link">
-					删除</a>
+				<div class="align_r">
+					<a href="#" class="delete_revision_link">
+						删除</a>
+				</div>
 			<% end %>
 			
 			<% if @student && @student.id == @resume.student_id %>
 				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 					<tr>
-						<td>&nbsp;</td>
+						<td align="right">
+							&nbsp;
+							<% unless revision.applied %>
+								<img src="/images/revise_resumes/unapplied_icon.gif" class="unapplied_icon" border="0" alt="尚未应用" />
+							<% end %>
+						</td>
 						
 						<td style="width: 45px;">
 							<a href="#" class="dropdown_menu_link">
@@ -85,15 +92,12 @@
 						
 						<td align="center" style="width: 10px;" class="info">|</td>
 						
-						<td class="links">
-							<a href="#" class="preview_revision_link">
-								预览</a>
+						<td style="width: 200px;">
+							<button class="preview_revision_btn">预览</button>
 
-							<a href="#" class="differ_revision_link">
-								对比</a>
+							<button class="diff_revision_btn">对比</button>
 
-							<a href="#" class="apply_revision_link">
-								应用</a>
+							<button class="apply_revision_btn">应用</button>
 						</td>
 					</tr>
 				</table>
