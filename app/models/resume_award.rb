@@ -1,5 +1,7 @@
 class ResumeAward < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :resume, :class_name => "Resume", :foreign_key => "resume_id"
   
   

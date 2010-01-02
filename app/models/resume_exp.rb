@@ -1,5 +1,7 @@
 class ResumeExp < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :section, :class_name => "ResumeExpSection", :foreign_key => "section_id"
   
   

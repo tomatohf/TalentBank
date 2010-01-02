@@ -734,30 +734,32 @@ function compute_id_for_pop(part_attr_id, key) {
 
 
 function create_revision(type, part) {
-	var type_name = type.name;
-	if(type_name == "edu" && $.trim($("#edu_period").val()).length <= 0) {
-		return fail_msg("请输入时间段 ...");
-	}
-	if(type_name.indexOf("_exp") >= 0) {
-		if($.trim($("#exp_period").val()).length <= 0) {
+	if($("#new_revision_form").find("input#revision_action").val() != "delete") {
+		var type_name = type.name;
+		if(type_name == "edu" && $.trim($("#edu_period").val()).length <= 0) {
 			return fail_msg("请输入时间段 ...");
 		}
-		if($.trim($("#exp_title").val()).length <= 0) {
-			return fail_msg("请输入标题 ...");
+		if(type_name.indexOf("_exp") >= 0) {
+			if($.trim($("#exp_period").val()).length <= 0) {
+				return fail_msg("请输入时间段 ...");
+			}
+			if($.trim($("#exp_title").val()).length <= 0) {
+				return fail_msg("请输入标题 ...");
+			}
+			if($.trim($("#exp_content").val()).length <= 0) {
+				return fail_msg("请输入内容 ...");
+			}
 		}
-		if($.trim($("#exp_content").val()).length <= 0) {
-			return fail_msg("请输入内容 ...");
+		if(type_name.indexOf("_skill") >= 0 && $.trim($("#skill_name").val()).length <= 0) {
+			return fail_msg("请输入名称 ...");
 		}
-	}
-	if(type_name.indexOf("_skill") >= 0 && $.trim($("#skill_name").val()).length <= 0) {
-		return fail_msg("请输入名称 ...");
-	}
-	if(type_name == "list_section") {
-		if($.trim($("#section_title").val()).length <= 0) {
-			return fail_msg("请输入标题 ...");
-		}
-		if($.trim($("#section_content").val()).length <= 0) {
-			return fail_msg("请输入内容 ...");
+		if(type_name == "list_section") {
+			if($.trim($("#section_title").val()).length <= 0) {
+				return fail_msg("请输入标题 ...");
+			}
+			if($.trim($("#section_content").val()).length <= 0) {
+				return fail_msg("请输入内容 ...");
+			}
 		}
 	}
 	
@@ -787,7 +789,7 @@ function create_revision(type, part) {
 				// switch tab
 				$("#dialog .tabs").tabs("select", "#part_revisions");
 				
-				$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
+				$("#part_revisions").scrollTop($("#part_revisions")[0].scrollHeight);
 				
 				// fade in effect
 				$("#" + revision_attr_id)
@@ -1187,7 +1189,7 @@ function create_comment(text_field, error_container, data) {
 				$("#overall_tabs.tabs").tabs("select", "#all_comments");
 				
 				if($("#" + target_part_id).length > 0) {
-					$("#dialog").scrollTop($("#dialog")[0].scrollHeight);
+					$("#part_comments").scrollTop($("#part_comments")[0].scrollHeight);
 				}
 				else {
 					$(document).scrollTop($(document).height());

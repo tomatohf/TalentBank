@@ -1,5 +1,7 @@
 class EduExp < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :student, :class_name => "Student", :foreign_key => "student_id"
   
   

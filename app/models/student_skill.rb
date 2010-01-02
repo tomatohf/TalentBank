@@ -1,5 +1,7 @@
 class StudentSkill < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :student, :class_name => "Student", :foreign_key => "student_id"
   
   has_many :resume_skills, :class_name => "ResumeSkill", :foreign_key => "student_skill_id", :dependent => :destroy

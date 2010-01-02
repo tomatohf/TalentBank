@@ -1,5 +1,7 @@
 class ResumeExpSection < ActiveRecord::Base
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :resume, :class_name => "Resume", :foreign_key => "resume_id"
   
   has_many :exps, :class_name => "ResumeExp", :foreign_key => "section_id", :dependent => :destroy

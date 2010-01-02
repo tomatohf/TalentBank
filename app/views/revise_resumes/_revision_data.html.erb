@@ -2,9 +2,9 @@
 	part_type = ResumePartType.find(revision.part_type_id) || {}
 	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
 	
-	data = revision.get_data
+	data = (revision_action[:name] == "delete") ? {} : revision.get_data
 	
-	diff &&= part_type[:model] && part_type[:model].find(revision.part_id)
+	diff &&= revision_diff_with(revision_action[:name], part_type, revision.part_id)
 %>
 
 <div>
@@ -123,30 +123,29 @@
 			</tr>
 		</table>
 	<% when /_skill$/ %>
-		<% if part_type[:name] == "resume_skill" %>
-			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-				<tr>
-					<td style="width: 100px;">名称</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:name]), h(diff.name)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:name]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>程度</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:level]), h(diff.level)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:level]) %>
-						<% end %>
-					</td>
-				</tr>
-			</table>
-		<% end %>
+		<% skill_name, skill_level = skill_name_and_level(diff) %>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td style="width: 100px;">名称</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:name]), h(skill_name)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:name]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>程度</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:level]), h(skill_level)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:level]) %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
 	<% when /^(award|hobby)$/ %>
 		<div>
 			<%
