@@ -7,7 +7,7 @@
 	target_part = "#{part_type[:name]}_#{revision.part_id}"
 %>
 
-<div id="revision_<%= revision.id %>" class="resume_revision <%= target_part %><%= %Q! ui-widget-content ui-corner-all! unless revision.applied %>">
+<div id="revision_<%= revision.id %>" class="resume_revision <%= target_part %><%= %Q! resume_revision_unapplied! unless revision.applied %>">
 	<input type="hidden" value="<%= target_part %>" />
 	
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_head">
@@ -51,7 +51,7 @@
 		</div>
 		
 		
-		<div class="resume_revision_content">
+		<div class="resume_revision_content ui-widget-content ui-corner-all">
 			<div class="resume_revision_data">
 				<%= render :partial => "/revise_resumes/revision_data", :locals => {:revision => revision} %>
 			</div>

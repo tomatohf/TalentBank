@@ -56,7 +56,7 @@ function setup_resume_parts() {
 					.attr("id");
 					
 					
-					var revision_count = $("#all_revisions .ui-widget-content." + part_attr_id).length;
+					var revision_count = $("#all_revisions .resume_revision_unapplied." + part_attr_id).length;
 					var comment_count = $("#all_comments ." + part_attr_id).length;
 					$.each(
 						[
@@ -798,7 +798,7 @@ function create_revision(type, part) {
 				
 				
 				// adjust pop count
-				if($("#" + revision_attr_id).hasClass("ui-widget-content")) {
+				if($("#" + revision_attr_id).hasClass("resume_revision_unapplied")) {
 					adjust_revision_pop_count($(part).attr("id"), 1);
 				}
 			}
@@ -946,7 +946,7 @@ function setup_revisions(revisions) {
 				else {
 					part_title_field.html($('<i></i>').html("(已被删除)"));
 					
-					$(revision).removeClass("ui-widget-content ui-corner-all");
+					$(revision).removeClass("resume_revision_unapplied");
 					$(revision).find(".resume_revision_actions table").remove();
 			
 					$(revision).find("td, div, span").addClass("info");
@@ -967,7 +967,7 @@ function setup_update_applied_link(revisions) {
 	$.each(
 		$(revisions),
 		function(i, revision) {
-			var applied = !$(revision).hasClass("ui-widget-content");
+			var applied = !$(revision).hasClass("resume_revision_unapplied");
 			$(revision).find("a.update_applied_link")
 				.html(applied ? "尚未应用" : "已被应用")
 				.unbind("click").click(
@@ -1030,7 +1030,7 @@ function delete_revision(revision) {
 			
 			
 			// adjust pop count
-			if($("#" + revision_attr_id).hasClass("ui-widget-content")) {
+			if($("#" + revision_attr_id).hasClass("resume_revision_unapplied")) {
 				adjust_revision_pop_count($("#" + revision_attr_id).find("input:hidden:first").val(), -1);
 			}
 			
@@ -1056,7 +1056,7 @@ function update_revision_applied(revision, applied) {
 			applied: applied ? 1 : 0
 		},
 		function(data) {
-			var applied_class = "ui-widget-content ui-corner-all";
+			var applied_class = "resume_revision_unapplied";
 			var revision_attr_id = "revision_" + revision_id;
 			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
 			if(applied) {
@@ -1085,6 +1085,8 @@ function diff_revision(revision) {
 		function(data) {
 			var revision_attr_id = "revision_" + revision_id;
 			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+			
+			update_revisions.find(".resume_revision_diff").remove();
 			
 			update_revisions.find(".resume_revision_content")
 				.append(

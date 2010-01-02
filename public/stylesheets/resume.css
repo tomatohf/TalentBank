@@ -86,9 +86,21 @@ ul.no_bullet {
 
 
 .resume_revision {
-	margin-bottom: 10px;
-	padding: 5px 10px 5px 5px;
+	margin-bottom: 20px;
+	padding: 5px 10px 8px 5px;
 	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_revision_unapplied {
+	border-left: 5px solid #3BAAE3;
+}
+
+.resume_revision ins {
+	color: #CD0A0A;
+}
+
+.resume_revision del {
+	color: #888888;
 }
 
 .resume_revision .datetime, .resume_comment .datetime {
@@ -106,10 +118,8 @@ ul.no_bullet {
 }
 
 .resume_revision_content {
-	color: #000000;
-	margin: 5px 0px 0px 5px;
-	padding: 10px 0px;
-	border-top: 1px dashed #DEDEDE;
+	margin: 10px 0px;
+	padding: 10px;
 }
 
 .resume_revision_actions {
@@ -129,7 +139,6 @@ ul.no_bullet {
 }
 
 .resume_comment_content {
-	color: #000000;
 	margin: 10px 0px;
 	padding: 10px 20px;
 }
