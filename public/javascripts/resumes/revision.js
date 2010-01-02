@@ -734,6 +734,34 @@ function compute_id_for_pop(part_attr_id, key) {
 
 
 function create_revision(type, part) {
+	var type_name = type.name;
+	if(type_name == "edu" && $.trim($("#edu_period").val()).length <= 0) {
+		return fail_msg("请输入时间段 ...");
+	}
+	if(type_name.indexOf("_exp") >= 0) {
+		if($.trim($("#exp_period").val()).length <= 0) {
+			return fail_msg("请输入时间段 ...");
+		}
+		if($.trim($("#exp_title").val()).length <= 0) {
+			return fail_msg("请输入标题 ...");
+		}
+		if($.trim($("#exp_content").val()).length <= 0) {
+			return fail_msg("请输入内容 ...");
+		}
+	}
+	if(type_name.indexOf("_skill") >= 0 && $.trim($("#skill_name").val()).length <= 0) {
+		return fail_msg("请输入名称 ...");
+	}
+	if(type_name == "list_section") {
+		if($.trim($("#section_title").val()).length <= 0) {
+			return fail_msg("请输入标题 ...");
+		}
+		if($.trim($("#section_content").val()).length <= 0) {
+			return fail_msg("请输入内容 ...");
+		}
+	}
+	
+	
 	disable_submit_button("#new_revision_form");
 	
 	$.ajax(
@@ -843,7 +871,12 @@ function setup_revisions(revisions) {
 			
 			$(revision).find("a.delete_revision_link").unbind("click").click(
 				function() {
-					delete_revision(revision);
+					confirm_msg(
+						"确定要删除这条修改建议么 ?",
+						function() {
+							delete_revision(revision);
+						}
+					);
 					
 					return false;
 				}
@@ -984,10 +1017,6 @@ function toggle_revision(revision, show, animation) {
 
 
 function delete_revision(revision) {
-	if(!confirm("确定要删除这条修改建议么 ?")) {
-		return;
-	}
-	
 	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
 	$.post(
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
@@ -1117,11 +1146,12 @@ function setup_new_comment_form() {
 
 function create_comment(text_field, error_container, data) {
 	if($.trim(text_field.val()).length > 1000) {
-		return alert("内容超过字数限制 ...");
+		return fail_msg("内容超过长度限制 ...");
 	}
 	if($.trim(text_field.val()).length <= 0) {
-		return alert("请输入内容 ...");
+		return fail_msg("请输入内容 ...");
 	}
+	
 	
 	var button_container = error_container.parent();
 	disable_submit_button(button_container);
@@ -1191,7 +1221,12 @@ function setup_comments(comments) {
 			
 			$(comment).find("a.delete_comment_link").unbind("click").click(
 				function() {
-					delete_comment(comment);
+					confirm_msg(
+						"确定要删除么 ?",
+						function() {
+							delete_comment(comment);
+						}
+					);
 					
 					return false;
 				}
@@ -1227,10 +1262,6 @@ function setup_comments(comments) {
 
 
 function delete_comment(comment) {
-	if(!confirm("确定要删除么 ?")) {
-		return;
-	}
-	
 	var comment_id = parseInt($(comment).attr("id").substr("comment_".length));
 	$.post(
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/comments/" + comment_id,
@@ -1279,6 +1310,66 @@ function adjust_revision_pop_count(part_attr_id, n) {
 
 function adjust_comment_pop_count(part_attr_id, n) {
 	adjust_pop_count(part_attr_id, "comment", n);
+}
+
+
+function fail_msg(msg) {
+	$('<div></div>')
+		.css(
+			{
+				padding: "20px",
+				color: "#CD0A0A"
+			}
+		)
+		.html('<span class="ui-icon ui-icon-alert" style="margin: 2px 8px 0px 0px; float: left;"></span>')
+		.append(msg)
+		.dialog(
+			{
+				title: "操作失败",
+				minWidth: 300,
+				modal: true,
+				close: function() {
+					$(this).dialog("destroy").remove();
+				},
+				buttons: {
+					"确定": function() {
+						$(this).dialog("destroy").remove();
+					}
+				}
+			}
+		);
+}
+
+
+function confirm_msg(msg, func) {
+	$('<div></div>')
+		.css(
+			{
+				padding: "20px",
+				color: "#111111"
+			}
+		)
+		.html('<span class="ui-icon ui-icon-alert" style="margin: 2px 8px 0px 0px; float: left;"></span>')
+		.append(msg)
+		.dialog(
+			{
+				title: "操作确认",
+				minWidth: 300,
+				modal: true,
+				close: function() {
+					$(this).dialog("destroy").remove();
+				},
+				buttons: {
+					"确定": function() {
+						$(this).dialog("destroy").remove();
+						func.call();
+					},
+					"取消": function() {
+						$(this).dialog("destroy").remove();
+					}
+				}
+			}
+		);
 }
 
 
