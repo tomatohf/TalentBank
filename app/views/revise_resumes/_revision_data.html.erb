@@ -12,7 +12,7 @@
 		case part_type[:name]
 		when "job_intention"
 	%>
-		<div>
+		<div class="resume_section">
 			<% if diff %>
 				<%= Differ.diff_by_char(h(data[:content]), h(diff.content)).format_as(:html) %>
 			<% else %>
@@ -22,7 +22,6 @@
 	<% when "edu" %>
 		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 			<tr>
-				<td style="width: 100px;">时间段</td>
 				<td>
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
@@ -30,9 +29,8 @@
 						<%= h(data[:period]) %>
 					<% end %>
 				</td>
-			</tr>
-			<tr>
-				<td>大学</td>
+
+
 				<td>
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:university]), h(diff.university)).format_as(:html) %>
@@ -40,9 +38,8 @@
 						<%= h(data[:university]) %>
 					<% end %>
 				</td>
-			</tr>
-			<tr>
-				<td>学院</td>
+
+
 				<td>
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:college]), h(diff.college)).format_as(:html) %>
@@ -50,9 +47,8 @@
 						<%= h(data[:college]) %>
 					<% end %>
 				</td>
-			</tr>
-			<tr>
-				<td>专业</td>
+
+
 				<td>
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:major]), h(diff.major)).format_as(:html) %>
@@ -60,9 +56,8 @@
 						<%= h(data[:major]) %>
 					<% end %>
 				</td>
-			</tr>
-			<tr>
-				<td>教育类型</td>
+
+
 				<td>
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:edu_type]), h(diff.edu_type)).format_as(:html) %>
@@ -75,38 +70,32 @@
 	<% when /_exp$/ %>
 		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 			<tr>
-				<td style="width: 100px;">时间段</td>
-				<td>
+				<td valign="top">
 					<% if diff %>
 						<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
 					<% else %>
 						<%= h(data[:period]) %>
 					<% end %>
 				</td>
-			</tr>
-			<tr>
-				<td>标题</td>
-				<td>
-					<% if diff %>
-						<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
-					<% else %>
-						<%= h(data[:title]) %>
-					<% end %>
-				</td>
-			</tr>
-			<tr>
-				<td>子标题</td>
-				<td>
-					<% if diff %>
-						<%= Differ.diff_by_char(h(data[:sub_title]), h(diff.sub_title)).format_as(:html) %>
-					<% else %>
-						<%= h(data[:sub_title]) %>
-					<% end %>
-				</td>
-			</tr>
-			<tr>
-				<td>内容</td>
-				<td>
+
+				<td valign="top">
+					<div class="float_r">
+						<% if diff %>
+							<%= Differ.diff_by_char(h(data[:sub_title]), h(diff.sub_title)).format_as(:html) %>
+						<% else %>
+							<%= h(data[:sub_title]) %>
+						<% end %>
+					</div>
+
+					<div class="resume_exp_title">
+						<% if diff %>
+							<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+						<% else %>
+							<%= h(data[:title]) %>
+						<% end %>
+					</div>
+
+
 					<%
 						content = if diff
 							diff_content_list(h(data[:content]), h(diff.content))
@@ -124,30 +113,29 @@
 		</table>
 	<% when /_skill$/ %>
 		<% skill_name, skill_level = skill_name_and_level(diff) %>
-		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-			<tr>
-				<td style="width: 100px;">名称</td>
-				<td>
-					<% if diff %>
-						<%= Differ.diff_by_char(h(data[:name]), h(skill_name)).format_as(:html) %>
-					<% else %>
-						<%= h(data[:name]) %>
-					<% end %>
-				</td>
-			</tr>
-			<tr>
-				<td>程度</td>
-				<td>
-					<% if diff %>
-						<%= Differ.diff_by_char(h(data[:level]), h(skill_level)).format_as(:html) %>
-					<% else %>
-						<%= h(data[:level]) %>
-					<% end %>
-				</td>
-			</tr>
-		</table>
+		<div class="resume_section">
+			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+				<tr>
+					<td>
+						<% if diff %>
+							<%= Differ.diff_by_char(h(data[:name]), h(skill_name)).format_as(:html) %>
+						<% else %>
+							<%= h(data[:name]) %>
+						<% end %>
+					</td>
+
+					<td align="right">
+						<% if diff %>
+							<%= Differ.diff_by_char(h(data[:level]), h(skill_level)).format_as(:html) %>
+						<% else %>
+							<%= h(data[:level]) %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		</div>
 	<% when /^(award|hobby)$/ %>
-		<div>
+		<div class="resume_section">
 			<%
 				content = if diff
 					diff_content_list(h(data[:content]), h(diff.content))
@@ -162,34 +150,29 @@
 			</ul>
 		</div>
 	<% when "list_section" %>
-		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-			<tr>
-				<td style="width: 100px;">标题</td>
-				<td>
-					<% if diff %>
-						<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
-					<% else %>
-						<%= h(data[:title]) %>
+		<div class="resume_section">
+			<div>
+				<% if diff %>
+					<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+				<% else %>
+					<%= h(data[:title]) %>
+				<% end %>
+			</div>
+
+			<div class="resume_section">
+				<%
+					content = if diff
+						diff_content_list(h(data[:content]), h(diff.content))
+					else
+						h(data[:content])
+					end
+				%>
+				<ul class="no_bullet">
+					<% Utils.lines(content).each do |line| %>
+						<li><%= line %></li>
 					<% end %>
-				</td>
-			</tr>
-			<tr>
-				<td>内容</td>
-				<td>
-					<%
-						content = if diff
-							diff_content_list(h(data[:content]), h(diff.content))
-						else
-							h(data[:content])
-						end
-					%>
-					<ul class="no_bullet">
-						<% Utils.lines(content).each do |line| %>
-							<li><%= line %></li>
-						<% end %>
-					</ul>
-				</td>
-			</tr>
-		</table>
+				</ul>
+			</div>
+		</div>
 	<% end %>
 </div>
