@@ -62,6 +62,8 @@ class ResumeRevisionsController < ReviseResumesController
           :content => params[:exp_content] && params[:exp_content].strip
         }
       when /_skill$/
+        return jump_to("/errors/forbidden") if part_type[:name] == "student_skill" && revision_action[:name] == "update"
+        
         {
           :name => params[:skill_name] && params[:skill_name].strip,
           :level => params[:skill_level] && params[:skill_level].strip
@@ -72,6 +74,8 @@ class ResumeRevisionsController < ReviseResumesController
           :content => params[:section_content] && params[:section_content].strip
         }
       else
+        return jump_to("/errors/forbidden") if revision_action[:name] == "add"
+        
         param_key = part_type[:name].to_sym
         {:content => params[param_key] && params[param_key].strip}
       end

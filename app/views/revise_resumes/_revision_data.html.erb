@@ -8,177 +8,189 @@
 %>
 
 <div>
-	<% unless revision_action[:name] == "delete" %>
-		<%
-			case part_type[:name]
-			when "job_intention"
-		%>
-			<div>
-				<% if diff %>
-					<%= Differ.diff_by_char(h(data[:content]), h(diff.content)).format_as(:html) %>
-				<% else %>
-					<%= h(data[:content]) %>
-				<% end %>
-			</div>
-		<% when "edu" %>
-			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-				<tr>
-					<td style="width: 100px;">时间段</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:period]) %>
+	<%
+		case part_type[:name]
+		when "job_intention"
+	%>
+		<div>
+			<% if diff %>
+				<%= Differ.diff_by_char(h(data[:content]), h(diff.content)).format_as(:html) %>
+			<% else %>
+				<%= h(data[:content]) %>
+			<% end %>
+		</div>
+	<% when "edu" %>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td style="width: 100px;">时间段</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:period]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>大学</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:university]), h(diff.university)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:university]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>学院</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:college]), h(diff.college)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:college]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>专业</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:major]), h(diff.major)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:major]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>教育类型</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:edu_type]), h(diff.edu_type)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:edu_type]) %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	<% when /_exp$/ %>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td style="width: 100px;">时间段</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:period]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>标题</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:title]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>子标题</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:sub_title]), h(diff.sub_title)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:sub_title]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>内容</td>
+				<td>
+					<%
+						content = if diff
+							diff_content_list(h(data[:content]), h(diff.content))
+						else
+							h(data[:content])
+						end
+					%>
+					<ul class="disc_bullet">
+						<% Utils.lines(content).each do |line| %>
+							<li><%= line %></li>
 						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>大学</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:university]), h(diff.university)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:university]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>学院</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:college]), h(diff.college)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:college]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>专业</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:major]), h(diff.major)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:major]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>教育类型</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:edu_type]), h(diff.edu_type)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:edu_type]) %>
-						<% end %>
-					</td>
-				</tr>
-			</table>
-		<% when /_exp$/ %>
-			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-				<tr>
-					<td style="width: 100px;">时间段</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:period]), h(diff.period)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:period]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>标题</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:title]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>子标题</td>
-					<td>
-						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:sub_title]), h(diff.sub_title)).format_as(:html) %>
-						<% else %>
-							<%= h(data[:sub_title]) %>
-						<% end %>
-					</td>
-				</tr>
-				<tr>
-					<td>内容</td>
-					<td>
-						<%
-							content = if diff
-								diff_content_list(h(data[:content]), h(diff.content))
-							else
-								h(data[:content])
-							end
-						%>
-						<ul>
-							<% Utils.lines(content).each do |line| %>
-								<li><%= line %></li>
-							<% end %>
-						</ul>
-					</td>
-				</tr>
-			</table>
-		<% when /_skill$/ %>
+					</ul>
+				</td>
+			</tr>
+		</table>
+	<% when /_skill$/ %>
+		<% if part_type[:name] == "resume_skill" %>
 			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 				<tr>
 					<td style="width: 100px;">名称</td>
-					<td><%= h(data[:name]) %></td>
-				</tr>
-				<tr>
-					<td>程度</td>
-					<td><%= h(data[:level]) %></td>
-				</tr>
-			</table>
-		<% when /^(award|hobby)$/ %>
-			<div>
-				<%
-					content = if diff
-						diff_content_list(h(data[:content]), h(diff.content))
-					else
-						h(data[:content])
-					end
-				%>
-				<ul class="no_bullet">
-					<% Utils.lines(content).each do |line| %>
-						<li><%= line %></li>
-					<% end %>
-				</ul>
-			</div>
-		<% when "list_section" %>
-			<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
-				<tr>
-					<td style="width: 100px;">标题</td>
 					<td>
 						<% if diff %>
-							<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+							<%= Differ.diff_by_char(h(data[:name]), h(diff.name)).format_as(:html) %>
 						<% else %>
-							<%= h(data[:title]) %>
+							<%= h(data[:name]) %>
 						<% end %>
 					</td>
 				</tr>
 				<tr>
-					<td>内容</td>
+					<td>程度</td>
 					<td>
-						<%
-							content = if diff
-								diff_content_list(h(data[:content]), h(diff.content))
-							else
-								h(data[:content])
-							end
-						%>
-						<ul class="no_bullet">
-							<% Utils.lines(content).each do |line| %>
-								<li><%= line %></li>
-							<% end %>
-						</ul>
+						<% if diff %>
+							<%= Differ.diff_by_char(h(data[:level]), h(diff.level)).format_as(:html) %>
+						<% else %>
+							<%= h(data[:level]) %>
+						<% end %>
 					</td>
 				</tr>
 			</table>
 		<% end %>
+	<% when /^(award|hobby)$/ %>
+		<div>
+			<%
+				content = if diff
+					diff_content_list(h(data[:content]), h(diff.content))
+				else
+					h(data[:content])
+				end
+			%>
+			<ul class="no_bullet">
+				<% Utils.lines(content).each do |line| %>
+					<li><%= line %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% when "list_section" %>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td style="width: 100px;">标题</td>
+				<td>
+					<% if diff %>
+						<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+					<% else %>
+						<%= h(data[:title]) %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td>内容</td>
+				<td>
+					<%
+						content = if diff
+							diff_content_list(h(data[:content]), h(diff.content))
+						else
+							h(data[:content])
+						end
+					%>
+					<ul class="no_bullet">
+						<% Utils.lines(content).each do |line| %>
+							<li><%= line %></li>
+						<% end %>
+					</ul>
+				</td>
+			</tr>
+		</table>
 	<% end %>
 </div>
