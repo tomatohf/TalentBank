@@ -86,13 +86,18 @@ ul.no_bullet {
 
 
 .resume_revision {
-	margin-bottom: 20px;
-	padding: 5px 10px 8px 5px;
+	margin-bottom: 10px;
+	padding: 5px 10px 8px 0px;
 	border-bottom: 1px solid #DEDEDE;
 }
 
-.resume_revision_unapplied {
-	border-left: 5px solid #3BAAE3;
+.resume_revision .resume_revision_head {
+	padding-left: 15px;
+}
+
+.resume_revision_unapplied .resume_revision_head {
+	font-weight: bold;
+	background: transparent url(/images/revise_resumes/unapplied_icon.gif) no-repeat scroll left center;
 }
 
 .resume_revision ins {
@@ -109,10 +114,6 @@ ul.no_bullet {
 	margin: 0px 10px;
 }
 
-.resume_revision_head {
-	font-weight: bold;
-}
-
 .resume_revision .target_part_title {
 	padding: 0px 20px;
 }
@@ -126,16 +127,16 @@ ul.no_bullet {
 	margin: 0px 5px;
 }
 
-.resume_revision .unapplied_icon {
-	margin-right: 8px;
-}
-
 
 .resume_comment {
 	margin-bottom: 10px;
 	padding: 5px 23px;
 	background: transparent url(/images/revise_resumes/comment_icon.gif) no-repeat scroll left 8px;
 	border-bottom: 1px solid #DEDEDE;
+}
+
+.resume_comment .resume_revision_head {
+	font-weight: bold;
 }
 
 .resume_comment_content {

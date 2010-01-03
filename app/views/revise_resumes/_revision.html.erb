@@ -13,18 +13,6 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_head">
 		<tr>
 			<td>
-				<% action_icon, action_label = case revision_action[:name]
-					when "update"
-						"ui-icon-pencil"
-					when "delete"
-						"ui-icon-trash"
-					when "add"
-						"ui-icon-circle-plus"
-					else
-						""
-					end
-				%>
-				<span class="ui-icon <%= action_icon %> float_l" style="margin-right: 5px;"></span>
 				<%= revision_action[:label] %>
 				<%= part_type[:label] %>
 			</td>
@@ -45,7 +33,18 @@
 	
 	<div class="resume_revision_body"<%= %Q! style="display: none;"! if revision.applied %>>
 		<div class="target_part_title">
-			<img src="/images/revise_resumes/target_icon.gif" border="0" alt="目标" style="margin-bottom: -3px;" />
+			<% action_icon, action_label = case revision_action[:name]
+				when "update"
+					"ui-icon-pencil"
+				when "delete"
+					"ui-icon-trash"
+				when "add"
+					"ui-icon-circle-plus"
+				else
+					""
+				end
+			%>
+			<span class="ui-icon <%= action_icon %> float_l" style="margin-right: 5px;"></span>
 			目标段落:
 			<span></span>
 		</div>
@@ -72,9 +71,6 @@
 					<tr>
 						<td align="right">
 							&nbsp;
-							<% unless revision.applied %>
-								<img src="/images/revise_resumes/unapplied_icon.gif" class="unapplied_icon" border="0" alt="尚未应用" />
-							<% end %>
 						</td>
 						
 						<td style="width: 45px;">
@@ -93,7 +89,7 @@
 						<td align="center" style="width: 10px;" class="info">|</td>
 						
 						<td style="width: 200px;">
-							<button class="preview_revision_btn">预览</button>
+							<button class="ignore_revision_btn">忽略</button>
 
 							<button class="diff_revision_btn">对比</button>
 

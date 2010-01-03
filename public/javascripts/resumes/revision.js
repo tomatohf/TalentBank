@@ -56,7 +56,7 @@ function setup_resume_parts() {
 					.attr("id");
 					
 					
-					var revision_count = $("#all_revisions .resume_revision_unapplied." + part_attr_id).length;
+					var revision_count = $("#all_revisions ." + unapplied_class_name() + "." + part_attr_id).length;
 					var comment_count = $("#all_comments ." + part_attr_id).length;
 					$.each(
 						[
@@ -798,7 +798,7 @@ function create_revision(type, part) {
 				
 				
 				// adjust pop count
-				if($("#" + revision_attr_id).hasClass("resume_revision_unapplied")) {
+				if(is_revision_unapplied($("#" + revision_attr_id))) {
 					adjust_revision_pop_count($(part).attr("id"), 1);
 				}
 			}
@@ -927,15 +927,14 @@ function setup_revisions(revisions) {
 					}
 				}
 			);
-			$(revision).find("button.preview_revision_btn").unbind("click").click(
+			$(revision).find("button.ignore_revision_btn").unbind("click").click(
 				function() {
-					// TO BE MODIFIED
-					clear_resume_revision_diff(revision);
+					update_revision_applied(revision, true, true);
 				}
 			);
 			
 			
-			var part_title_field = $(revision).find(".target_part_title span:first");
+			var part_title_field = $(revision).find(".target_part_title span:last");
 			if(part_title_field.length > 0) {
 				var target_part_id = $(revision).find("input:hidden:first").val();
 				var target_part = $("#" + target_part_id);
@@ -946,7 +945,7 @@ function setup_revisions(revisions) {
 				else {
 					part_title_field.html($('<i></i>').html("(已被删除)"));
 					
-					$(revision).removeClass("resume_revision_unapplied");
+					set_revision_applied(revision, true);
 					$(revision).find(".resume_revision_actions table").remove();
 			
 					$(revision).find("td, div, span").addClass("info");
@@ -967,22 +966,22 @@ function setup_update_applied_link(revisions) {
 	$.each(
 		$(revisions),
 		function(i, revision) {
-			var applied = !$(revision).hasClass("resume_revision_unapplied");
+			var applied = !is_revision_unapplied(revision);
 			$(revision).find("a.update_applied_link")
 				.html(applied ? "尚未应用" : "已被应用")
 				.unbind("click").click(
 					function() {
-						update_revision_applied(revision, !applied);
+						update_revision_applied(revision, !applied, false);
 
 						return false;
 					}
 				);
-			
+
 			if(applied) {
-				$(revisions).find("img.unapplied_icon").hide();
+				$(revisions).find(".ignore_revision_btn, .apply_revision_btn").hide();
 			}
 			else {
-				$(revisions).find("img.unapplied_icon").show();
+				$(revisions).find(".ignore_revision_btn, .apply_revision_btn").show();
 			}
 		}
 	);
@@ -1030,7 +1029,7 @@ function delete_revision(revision) {
 			
 			
 			// adjust pop count
-			if($("#" + revision_attr_id).hasClass("resume_revision_unapplied")) {
+			if(is_revision_unapplied($("#" + revision_attr_id))) {
 				adjust_revision_pop_count($("#" + revision_attr_id).find("input:hidden:first").val(), -1);
 			}
 			
@@ -1048,7 +1047,7 @@ function delete_revision(revision) {
 }
 
 
-function update_revision_applied(revision, applied) {
+function update_revision_applied(revision, applied, toggle) {
 	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
 	$.post(
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/update_applied",
@@ -1056,24 +1055,44 @@ function update_revision_applied(revision, applied) {
 			applied: applied ? 1 : 0
 		},
 		function(data) {
-			var applied_class = "resume_revision_unapplied";
 			var revision_attr_id = "revision_" + revision_id;
 			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
-			if(applied) {
-				update_revisions.removeClass(applied_class);
-			}
-			else {
-				update_revisions.addClass(applied_class);
-			}
+			
+			set_revision_applied(update_revisions, applied);
 			
 			setup_update_applied_link(update_revisions);
 			
 			
 			// adjust pop count
 			adjust_revision_pop_count($(revision).find("input:hidden:first").val(), (applied ? -1 : 1));
+			
+			
+			if(toggle) {
+				toggle_revision(revision, !applied, true);
+			}
 		},
 		"html"
 	);
+}
+
+
+function unapplied_class_name() {
+	return "resume_revision_unapplied";
+}
+
+
+function is_revision_unapplied(revision) {
+	return $(revision).hasClass(unapplied_class_name());
+}
+
+
+function set_revision_applied(revisions, applied) {
+	if(applied) {
+		return $(revisions).removeClass(unapplied_class_name());
+	}
+	else {
+		return $(revisions).addClass(unapplied_class_name());
+	}
 }
 
 
@@ -1237,7 +1256,7 @@ function setup_comments(comments) {
 			);
 			
 			
-			var part_title_field = $(comment).find(".target_part_title span:first");
+			var part_title_field = $(comment).find(".target_part_title span:last");
 			if(part_title_field.length > 0) {
 				var target_part_id = $(comment).find("input:hidden:first").val();
 				var target_part = $("#" + target_part_id);
