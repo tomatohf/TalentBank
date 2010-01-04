@@ -4,6 +4,8 @@ var DIALOG_INIT_HEIGHT = 420;
 var BTN_PADDING_BIG = "6px 10px 5px";
 var BTN_PADDING_SMALL = "3px 6px 2px";
 
+var UNAPPLIED_PART_DELETED_REVISIONS = [];
+
 
 function setup_tabs() {
 	$(".tabs").css(
@@ -945,11 +947,15 @@ function setup_revisions(revisions) {
 				else {
 					part_title_field.html($('<i></i>').html("(已被删除)"));
 					
-					set_revision_applied(revision, true);
 					$(revision).find(".resume_revision_actions table").remove();
 			
 					$(revision).find("td, div, span").addClass("info");
 					toggle_revision(revision, false, false);
+					
+					if(is_revision_unapplied(revision)) {
+						set_revision_applied(revision, true);
+						UNAPPLIED_PART_DELETED_REVISIONS.push(revision);
+					}
 				}
 			}
 			
@@ -1411,5 +1417,27 @@ $(document).ready(
 		setup_resume_parts();
 		
 		setup_new_comment_form();
+		
+		
+		if(ACCOUNT_TYPE == "students" && UNAPPLIED_PART_DELETED_REVISIONS.length > 0) {
+			set_revisions_to_applied(UNAPPLIED_PART_DELETED_REVISIONS);
+		}
 	}
 );
+
+
+function set_revisions_to_applied(revisions) {
+	$.post(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/set_applied",
+		$.map(
+			revisions,
+			function(revision, i) {
+				return "revisions[]=" + parseInt($(revision).attr("id").substr("revision_".length));
+			}
+		).join("&"),
+		function(data) {
+			
+		},
+		"html"
+	);
+}

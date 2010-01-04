@@ -156,6 +156,8 @@ ActionController::Routing::Routes.draw do |map|
     revise_resumes.resources :resume_revisions, :as => :revisions, :member => {
       :update_applied => :post,
       :diff => :any
+    }, :collection => {
+      :set_applied => :post
     }
     
     revise_resumes.resources :resume_comments, :as => :comments

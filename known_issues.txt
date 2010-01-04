@@ -3,7 +3,6 @@
 		* 直接设置 applied 为 true or false
 		* 应用 revision 后 applied 改变为 true
 	- 应用 删除 建议时给出提示, 无法应用其他附着在此段落上的建议
-	- target part 被删除后, applied 必然为 true , 但是数据库并没有改变
 
 
 人才库与乔布圈帐号互联

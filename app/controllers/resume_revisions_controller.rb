@@ -3,13 +3,13 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy, :update_applied]
+    :only => [:create, :destroy, :update_applied, :set_applied]
   )
   
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_student,
-    :only => [:update_applied, :diff]
+    :only => [:update_applied, :diff, :set_applied]
   )
   
   insert_before_filter(
@@ -18,7 +18,7 @@ class ResumeRevisionsController < ReviseResumesController
     :only => [:create, :destroy]
   )
   
-  before_filter :check_revision, :except => [:create]
+  before_filter :check_revision, :except => [:create, :set_applied]
   
   
   def show
@@ -104,6 +104,26 @@ class ResumeRevisionsController < ReviseResumesController
     @revision.applied = (params[:applied].to_i > 0)
     
     @revision.save!
+    
+    render :nothing => true
+  end
+  
+  
+  def set_applied
+    ids = params[:revisions] || []
+    ids.uniq!
+    ids.compact!
+    
+    ResumeRevision.find(
+      :all,
+      :conditions => ["id in (?)", ids]
+    ).each { |revision|
+      if revision.resume_id == @resume.id
+        revision.applied = true
+
+        revision.save!
+      end
+    } if ids.size > 0
     
     render :nothing => true
   end
