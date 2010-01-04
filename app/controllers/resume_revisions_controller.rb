@@ -3,13 +3,13 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy, :update_applied, :set_applied]
+    :only => [:create, :destroy, :update_applied, :set_applied, :apply]
   )
   
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_student,
-    :only => [:update_applied, :diff, :set_applied]
+    :only => [:update_applied, :diff, :set_applied, :apply]
   )
   
   insert_before_filter(
@@ -109,6 +109,11 @@ class ResumeRevisionsController < ReviseResumesController
   end
   
   
+  def diff
+    render :partial => "/revise_resumes/revision_data", :locals => {:revision => @revision, :diff => true}
+  end
+  
+  
   def set_applied
     ids = params[:revisions] || []
     ids.uniq!
@@ -129,8 +134,78 @@ class ResumeRevisionsController < ReviseResumesController
   end
   
   
-  def diff
-    render :partial => "/revise_resumes/revision_data", :locals => {:revision => @revision, :diff => true}
+  def apply
+    revision_action = ResumeRevision::Actions.detect{|a| a[:id] == @revision.action}
+    part_type = ResumePartType.find(@revision.part_type_id)
+    
+    part = if revision_action == "add"
+      model_class = part_type[:add_as] || part_type[:model]
+      model_class && model_class.new
+    else
+      part_type[:model] && part_type[:model].try_find(@revision.part_id)
+    end
+    
+    revision_data = {}
+    if revision_action[:name] == "delete"
+      case part_type[:name]
+      when /^(job_intention|award|hobby)$/
+        part.content = ""
+        part.save!
+      when /_exp$/
+        section = ResumeExpSection.find(params[:section])
+        return jump_to("/errors/forbidden") unless section.resume_id == @resume.id
+        
+        exp, exp_type = if part_type[:name] == "student_exp"
+          [
+            ResumeStudentExp.get_record(section.id, part.id),
+            ResumeExpSection::Student_Exp
+          ]
+        else
+          [part, ResumeExpSection::Resume_Exp]
+        end
+        
+        ActiveRecord::Base.transaction do
+          exp.destroy
+
+          section.remove_exp_order(exp_type, exp.id)
+          section.save!
+        end
+      when "student_skill"
+        ResumeStudentExp.get_record(@resume.id, part.id).destroy
+      else
+        part.destroy
+      end
+    else
+      revision_data = @revision.get_data.each { |key, value| part.send("#{key}=", value) }
+      
+      if part_type[:name] =~ /_exp$/
+        section = ResumeExpSection.find(params[:section])
+        return jump_to("/errors/forbidden") unless section.resume_id == @resume.id
+        
+        if revision_action[:name] == "add"
+          ActiveRecord::Base.transaction do
+            part.save!
+
+            section.add_exp_order(ResumeExpSection::Resume_Exp, part.id)
+            section.save!
+          end
+        else
+          part.save!
+        end
+      else
+        part.save!
+      end
+    end
+    @resume.renew_updated_at(Time.now)
+    
+    @revision.applied = true
+    @revision.save!
+    
+    render :json => {
+      :action => revision_action[:name],
+      :target => "#{part_type[:name]}_#{@revision.part_id}",
+      :data => revision_data
+    }
   end
   
   

@@ -160,7 +160,7 @@ class Resumes < ActiveRecord::Migration
       
       t.column :updated_at, :datetime
     end
-    add_index :resume_student_exps, :section_id
+    add_index :resume_student_exps, [:section_id, :exp_id], :unique => true
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO resume_student_exps (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM resume_student_exps WHERE id = 10000")

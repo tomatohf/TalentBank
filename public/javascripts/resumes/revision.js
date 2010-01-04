@@ -23,6 +23,8 @@ function setup_resume_parts() {
 		function(i, type) {
 			var type_name = type.name;
 			
+			if(type_name == "exp_section") { return; }
+			
 			$.each(
 				$("[id^='" + type_name + "_']"),
 				function(i, part) {
@@ -934,6 +936,30 @@ function setup_revisions(revisions) {
 					update_revision_applied(revision, true, true);
 				}
 			);
+			$(revision).find("button.apply_revision_btn").unbind("click").click(
+				function() {
+					var question = "确定要应用这条修改建议么 ? 简历内容将被相应地改变";
+					var action = $(revision).find("input:hidden:nth-child(2)").val();
+					
+					if(action == "delete") {
+						question = "删除段落后, 所有针对此段落的其他修改建议都将失效, 建议先应用针对此段落的其他修改建议. 确定要应用这条修改建议么 ?";
+					}
+					else if(action == "update") {
+						var target_part_id = $(revision).find("input:hidden:first").val();
+						var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+						if(type_name == "student_exp") {
+							question = "这条修改建议将修改一条经历库中的经历, 所有包含此经历的简历都将被改变 ! 确定要应用这条修改建议么 ?";
+						}
+					}
+					
+					confirm_msg(
+						question,
+						function() {
+							apply_revision(revision);
+						}
+					);
+				}
+			);
 			
 			
 			var part_title_field = $(revision).find(".target_part_title span:last");
@@ -1061,24 +1087,29 @@ function update_revision_applied(revision, applied, toggle) {
 			applied: applied ? 1 : 0
 		},
 		function(data) {
-			var revision_attr_id = "revision_" + revision_id;
-			var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
-			
-			set_revision_applied(update_revisions, applied);
-			
-			setup_update_applied_link(update_revisions);
-			
-			
-			// adjust pop count
-			adjust_revision_pop_count($(revision).find("input:hidden:first").val(), (applied ? -1 : 1));
-			
-			
-			if(toggle) {
-				toggle_revision(revision, !applied, true);
-			}
+			update_revision_applied_locally(revision, applied, toggle);
 		},
 		"html"
 	);
+}
+
+
+function update_revision_applied_locally(revision, applied, toggle) {
+	var revision_attr_id = "revision_" + parseInt($(revision).attr("id").substr("revision_".length));
+	var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+	
+	set_revision_applied(update_revisions, applied);
+	
+	setup_update_applied_link(update_revisions);
+	
+	
+	// adjust pop count
+	adjust_revision_pop_count($(revision).find("input:hidden:first").val(), (applied ? -1 : 1));
+	
+	
+	if(toggle) {
+		toggle_revision(revision, !applied, true);
+	}
 }
 
 
@@ -1135,6 +1166,38 @@ function clear_resume_revision_diff(revision) {
 	update_revisions.find(".resume_revision_data").show();
 	
 	update_revisions.find("button.diff_revision_btn").removeClass("ui-state-active");
+}
+
+
+function apply_revision(revision) {
+	var params = {};
+	
+	var target_part_id = $(revision).find("input:hidden:first").val();
+	var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+	if(type_name.indexOf("_exp") >= 0) {
+		params["section"] = $("#" + target_part_id).parent().parent().attr("id").substr("exp_section_".length);
+	}
+	
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	$.post(
+		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/apply",
+		params,
+		function(result) {
+			apply_revision_locally(revision, result.action, result.target, result.data);
+			
+			update_revision_applied_locally(revision, true, true);
+			
+			clear_resume_revision_diff(revision);
+		},
+		"json"
+	);
+}
+
+
+function apply_revision_locally(revision, action, target, data) {
+	if(action == "delete") {
+		
+	}
 }
 
 
@@ -1384,6 +1447,7 @@ function confirm_msg(msg, func) {
 			{
 				title: "操作确认",
 				minWidth: 300,
+				width: 400,
 				modal: true,
 				close: function() {
 					$(this).dialog("destroy").remove();

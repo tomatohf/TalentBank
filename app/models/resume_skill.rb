@@ -6,4 +6,8 @@ class ResumeSkill < ActiveRecord::Base
   
   validates_presence_of :resume_id, :student_skill_id
   
+  
+  Belongs_To_Keys = [:resume_id, :student_skill_id]
+  include Utils::UniqueBelongs
+  
 end

@@ -269,7 +269,7 @@ ActiveRecord::Schema.define(:version => 12) do
   end
 
   add_index "resume_student_exps", ["exp_id"], :name => "index_resume_student_exps_on_exp_id"
-  add_index "resume_student_exps", ["section_id"], :name => "index_resume_student_exps_on_section_id"
+  add_index "resume_student_exps", ["section_id", "exp_id"], :name => "index_resume_student_exps_on_section_id_and_exp_id", :unique => true
 
   create_table "resumes", :force => true do |t|
     t.integer  "student_id"

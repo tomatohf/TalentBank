@@ -6,4 +6,8 @@ class ResumeStudentExp < ActiveRecord::Base
   
   validates_presence_of :section_id, :exp_id
   
+  
+  Belongs_To_Keys = [:section_id, :exp_id]
+  include Utils::UniqueBelongs
+  
 end

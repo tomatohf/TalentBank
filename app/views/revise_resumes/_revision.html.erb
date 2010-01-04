@@ -9,6 +9,7 @@
 
 <div id="revision_<%= revision.id %>" class="resume_revision <%= target_part %><%= %Q! resume_revision_unapplied! unless revision.applied %>">
 	<input type="hidden" value="<%= target_part %>" />
+	<input type="hidden" value="<%= revision_action[:name] %>" />
 	
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w resume_revision_head">
 		<tr>
