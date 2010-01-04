@@ -138,7 +138,7 @@ class ResumeRevisionsController < ReviseResumesController
     revision_action = ResumeRevision::Actions.detect{|a| a[:id] == @revision.action}
     part_type = ResumePartType.find(@revision.part_type_id)
     
-    part = if revision_action == "add"
+    part = if revision_action[:name] == "add"
       model_class = part_type[:add_as] || part_type[:model]
       model_class && model_class.new
     else
@@ -200,6 +200,12 @@ class ResumeRevisionsController < ReviseResumesController
     
     @revision.applied = true
     @revision.save!
+    
+    revision_data[:id] = part.id if revision_action[:name] == "add"
+    
+    if part_type[:name] =~ /_exp$/ || part_type[:name] =~ /^(award|hobby|list_section)$/
+      revision_data[:content] = Utils.lines(revision_data[:content])
+    end
     
     render :json => {
       :action => revision_action[:name],

@@ -1183,7 +1183,7 @@ function apply_revision(revision) {
 		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/apply",
 		params,
 		function(result) {
-			apply_revision_locally(revision, result.action, result.target, result.data);
+			apply_revision_locally(result.action, result.target, result.data);
 			
 			update_revision_applied_locally(revision, true, true);
 			
@@ -1194,10 +1194,93 @@ function apply_revision(revision) {
 }
 
 
-function apply_revision_locally(revision, action, target, data) {
+function apply_revision_locally(action, target, data) {
+	var part = $("#" + target);
+	var type_name = target.substring(0, target.lastIndexOf("_"));
+	
 	if(action == "delete") {
-		
+		if(part.hasClass("resume_section")) {
+			part.parent().remove();
+		}
+		else {
+			if(part.siblings().length > 0) {
+				part.remove();
+			}
+			else {
+				var section = ancestor_with_class(part, "resume_section");
+				if(section) {
+					section.parent().remove();
+				}
+			}
+		}
 	}
+	else {
+		var part_template = part;
+		if(action == "add") {
+			if(type_name == "list_section") {
+				part_template = part_template.parent().clone();
+				part_template.find(".resume_section").attr("id", type_name + "_" + data.id);
+			}
+			else {
+				part_template = part_template.clone().attr("id", type_name + "_" + data.id);
+			}
+		}
+		
+		// fill contents
+		fill_resume_part(type_name, part_template, data);
+		
+		if(action == "add") {
+			if(part.hasClass("resume_section")) {
+				part.parent().after(part_template);
+			}
+			else {
+				part.after(part_template);
+			}
+		}
+	}
+}
+
+
+function fill_resume_part(type_name, part, data) {
+	if(type_name == "edu") {
+		$(part).find("td:nth-child(1)").text(data.period);
+		$(part).find("td:nth-child(2)").text(data.university);
+		$(part).find("td:nth-child(3)").text(data.college);
+		$(part).find("td:nth-child(4)").text(data.major);
+		$(part).find("td:nth-child(5)").text(data.edu_type);
+	}
+	else if(type_name.indexOf("_exp") >= 0) {
+		$(part).find(".resume_exp_period").text(data.period);
+		$(part).find(".resume_exp_title").text(data.title);
+		$(part).find(".resume_exp_sub_title").text(data.sub_title);
+		fill_list_content(part, data.content);
+	}
+	else if(type_name.indexOf("_skill") >= 0) {
+		$(part).find("td:nth-child(1)").text(data.name);
+		$(part).find("td:nth-child(2)").text(data.level);
+	}
+	else if(type_name == "list_section") {
+		$(part).find(".resume_section_title").text(data.title);
+		fill_list_content(part, data.content);
+	}
+	else if(type_name == "award" || type_name == "hobby") {
+		fill_list_content(part, data.content);
+	}
+	else {
+		$(part).text(data.content);
+	}
+}
+
+
+function fill_list_content(part, content) {
+	$(part).find("ul").html(
+		$.map(
+			content,
+			function(line, i) {
+				return $('<li></li>').text(line);
+			}
+		).join("")
+	);
 }
 
 

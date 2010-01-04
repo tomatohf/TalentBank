@@ -1,5 +1,7 @@
 简历修改功能
 	- record as comment when apply revision
+	- setup added resume part
+	- more test ...
 
 
 人才库与乔布圈帐号互联
