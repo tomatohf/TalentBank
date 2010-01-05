@@ -1170,26 +1170,40 @@ function clear_resume_revision_diff(revision) {
 
 
 function apply_revision(revision) {
-	var params = {};
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	var revision_attr_id = "revision_" + revision_id;
+	var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+	update_revisions.find("button.apply_revision_btn")
+		.attr("disabled", true)
+		.addClass("ui-state-disabled");
 	
+	
+	var params = {};
 	var target_part_id = $(revision).find("input:hidden:first").val();
 	var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
 	if(type_name.indexOf("_exp") >= 0) {
 		params["section"] = $("#" + target_part_id).parent().parent().attr("id").substr("exp_section_".length);
 	}
 	
-	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
-	$.post(
-		"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/apply",
-		params,
-		function(result) {
-			apply_revision_locally(result.action, result.target, result.data);
-			
-			update_revision_applied_locally(revision, true, true);
-			
-			clear_resume_revision_diff(revision);
-		},
-		"json"
+	$.ajax(
+		{
+			type: "POST",
+			url: "/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id + "/apply",
+			dataType: "json",
+			data: params,
+			success: function(result, text_status) {
+				apply_revision_locally(result.action, result.target, result.data);
+
+				update_revision_applied_locally(revision, true, true);
+
+				clear_resume_revision_diff(revision);
+			},
+			complete: function() {
+				update_revisions.find("button.apply_revision_btn")
+					.removeClass("ui-state-disabled")
+					.attr("disabled", false);
+			}
+		}
 	);
 }
 
@@ -1219,7 +1233,9 @@ function apply_revision_locally(action, target, data) {
 		if(action == "add") {
 			if(type_name == "list_section") {
 				part_template = part_template.parent().clone();
-				part_template.find(".resume_section").attr("id", type_name + "_" + data.id);
+				part_template.find(".resume_section")
+					.attr("id", type_name + "_" + data.id)
+					.find("span.resume_comment_pop, span.resume_revision_pop").remove();
 			}
 			else {
 				part_template = part_template.clone().attr("id", type_name + "_" + data.id);
@@ -1231,10 +1247,10 @@ function apply_revision_locally(action, target, data) {
 		
 		if(action == "add") {
 			if(part.hasClass("resume_section")) {
-				part.parent().after(part_template);
+				part.parent().parent().append(part_template);
 			}
 			else {
-				part.after(part_template);
+				part.parent().append(part_template);
 			}
 		}
 	}

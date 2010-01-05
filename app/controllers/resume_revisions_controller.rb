@@ -140,7 +140,10 @@ class ResumeRevisionsController < ReviseResumesController
     
     part = if revision_action[:name] == "add"
       model_class = part_type[:add_as] || part_type[:model]
-      model_class && model_class.new
+      ins = model_class && model_class.new
+      ins.student_id = @student.id if ins.respond_to?(:student_id=)
+      ins.resume_id = @resume.id if ins.respond_to?(:resume_id=)
+      ins
     else
       part_type[:model] && part_type[:model].try_find(@revision.part_id)
     end
@@ -179,10 +182,12 @@ class ResumeRevisionsController < ReviseResumesController
       revision_data = @revision.get_data.each { |key, value| part.send("#{key}=", value) }
       
       if part_type[:name] =~ /_exp$/
-        section = ResumeExpSection.find(params[:section])
-        return jump_to("/errors/forbidden") unless section.resume_id == @resume.id
-        
         if revision_action[:name] == "add"
+          section = ResumeExpSection.find(params[:section])
+          return jump_to("/errors/forbidden") unless section.resume_id == @resume.id
+          
+          part.section_id = section.id
+          
           ActiveRecord::Base.transaction do
             part.save!
 
@@ -203,7 +208,7 @@ class ResumeRevisionsController < ReviseResumesController
     
     revision_data[:id] = part.id if revision_action[:name] == "add"
     
-    if part_type[:name] =~ /_exp$/ || part_type[:name] =~ /^(award|hobby|list_section)$/
+    unless revision_data[:content].blank? || part_type[:name] == "job_intention"
       revision_data[:content] = Utils.lines(revision_data[:content])
     end
     
