@@ -993,13 +993,17 @@ function setup_revisions(revisions) {
 				if(target_part.length > 0) {
 					var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
 					part_title_field.html(get_dialog_title(target_part, type_name));
+					
+					$(revision).find(".resume_revision_actions table").show();
+					
+					$(revision).removeClass("info");
 				}
 				else {
 					part_title_field.html($('<i></i>').html("(已被删除)"));
 					
-					$(revision).find(".resume_revision_actions table").remove();
+					$(revision).find(".resume_revision_actions table").hide();
 			
-					$(revision).find("td, div, span").addClass("info");
+					$(revision).addClass("info");
 					toggle_revision(revision, false, false);
 					
 					if(is_revision_unapplied(revision)) {

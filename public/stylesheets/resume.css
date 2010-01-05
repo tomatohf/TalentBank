@@ -196,3 +196,8 @@ ul.no_bullet {
 	margin: 0px;
 	padding: 0px;
 }
+
+
+.info .ui-widget-content {
+	color: #AAAAAA;
+}

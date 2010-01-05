@@ -1,10 +1,13 @@
+发布公告功能
+
+发布招聘信息功能
+
+
+
 简历修改功能
 	- record as comment when apply revision
-	- add info to 目标段落已删除的 revision
-
 
 人才库与乔布圈帐号互联
-
 
 sphinx max_match
 	- 对数据统计的影响
@@ -13,10 +16,6 @@ sphinx max_match
 		* 简历搜索结果的排序
 
 简历对比功能
-
-发布公告功能
-
-发布招聘信息功能
 
 支持英文简历
 	- 从查询的目的来看并不需要英文简历
@@ -55,11 +54,6 @@ Denpendencies besides CareerCommunity's:
 
 
 ========== Function Modules ==========
-- 数据检索的统计与分析模块
-	* 通过搜索关键词分析企业人才需求偏好
-	* 支持对学生被检索量的统计
-	* 通过学生被浏览数分析核心竞争力
-	* 提供数据分析报告
 - 初级网络互动功能模块
 	* 支持企业直接向学生发送内部信息
 	* 支持学校向学生发布通知
