@@ -34,7 +34,7 @@
 				%>
 				
 				<td style="width: 400px;">
-					<% form_tag "/students/#{@student.id}/resumes", :method => :post do %>
+					<% form_tag "/students/#{@student.id}/resumes", :method => :post, :onsubmit => "if(!confirm('确定要添加新简历么 ?')){ return false; }" do %>
 						<select id="domain_category" class="dropdown_list" style="font-size: 14px;">
 							<% categories.each do |category| %>
 								<option value="<%= category[:id] %>"><%= category[:name] %></option>
