@@ -1,7 +1,8 @@
 简历修改功能
 	- record as comment when apply revision
 	- setup added resume part
-	- more test ...
+	- 改变内容后 part size will change, 需要重新 highlight
+	- new resume part fill require values like resume_id
 
 
 人才库与乔布圈帐号互联

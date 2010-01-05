@@ -13,23 +13,29 @@ module Differ
 
       private
         def as_insert(change)
-          Utils.lines(change.insert).map { |line|
+          list(change.insert).map { |line|
             %Q{<ins class="differ">#{line}</ins>}
           }.join(newline)
         end
 
         def as_delete(change)
-          Utils.lines(change.delete).map { |line|
+          list(change.delete).map { |line|
             %Q{<del class="differ">#{line}</del>}
           }.join(newline)
         end
 
         def as_change(change)
-          as_delete(change) << newline << as_insert(change)
+          as_delete(change) << as_insert(change)
         end
         
         def newline
           "\n"
+        end
+        
+        def list(change)
+          lines = Utils.lines(change, false)
+          lines << "" if change[-1, 1] == newline
+          lines
         end
       end
     end

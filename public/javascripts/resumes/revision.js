@@ -1273,13 +1273,12 @@ function fill_resume_part(type_name, part, data) {
 
 
 function fill_list_content(part, content) {
-	$(part).find("ul").html(
-		$.map(
-			content,
-			function(line, i) {
-				return $('<li></li>').text(line);
-			}
-		).join("")
+	var ul = $(part).find("ul").html("");
+	$.each(
+		content,
+		function(i, line) {
+			$('<li></li>').text(line).appendTo(ul);
+		}
 	);
 }
 
