@@ -174,7 +174,7 @@ class ResumeRevisionsController < ReviseResumesController
           section.save!
         end
       when "student_skill"
-        ResumeStudentExp.get_record(@resume.id, part.id).destroy
+        ResumeSkill.get_record(@resume.id, part.id).destroy
       else
         part.destroy
       end

@@ -1,9 +1,6 @@
 简历修改功能
 	- record as comment when apply revision
-	- setup added/updated resume part
-	- 改变内容后 part size will change, 需要重新 highlight
-	- 删除后, where to highlight, and if highlight nothing, then need to close dialog
-	- 删除后, 一些 comment and revision 可能会变成 目标段落 已删除
+	- add info to 目标段落已删除的 revision
 
 
 人才库与乔布圈帐号互联

@@ -28,82 +28,90 @@ function setup_resume_parts() {
 			$.each(
 				$("[id^='" + type_name + "_']"),
 				function(i, part) {
-					var part_attr_id = $(part).unbind("mouseenter mouseleave").hover(
-						function() {
-							show_highlighter(2, this);
-						},
-						function() {
-							hide_highlighter(2);
-						}
-					).unbind("click").click(
-						function(event) {
-							$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
-
-							prepare_dialog_content(type, this);
-
-							open_dialog(this);
-							
-							
-							// switch tab
-							if($(event.target).hasClass("resume_revision_pop")) {
-								$("#dialog .tabs").tabs("select", "#part_revisions");
-							}
-							if($(event.target).hasClass("resume_comment_pop")) {
-								$("#dialog .tabs").tabs("select", "#part_comments");
-							}
-						}
-					).css(
-						{
-							cursor: "pointer"
-						}
-					)
-					.attr("id");
-					
-					
-					var revision_count = $("#all_revisions ." + unapplied_class_name() + "." + part_attr_id).length;
-					var comment_count = $("#all_comments ." + part_attr_id).length;
-					$.each(
-						[
-							["revision", revision_count],
-							["comment", comment_count]
-						],
-						function(i, info) {
-							var count = info[1];
-							var key = info[0];
-							
-							var class_name = "resume_" + key + "_pop";
-							
-							var pop_container = $(part);
-							var pop_container_tagname = pop_container.attr("tagName").toLowerCase();
-							if(pop_container_tagname == "tr") {
-								pop_container = pop_container.find("td:first");
-							}
-							else if(pop_container_tagname == "table") {
-								pop_container = pop_container.find("tr:first > td:first");
-							}
-							
-							var pop = pop_container.prepend(
-								$('<span></span>')
-									.attr("id", compute_id_for_pop(part_attr_id, key))
-									.addClass(class_name).html(count)
-							).find("." + class_name + ":first");
-							
-							if(count <= 0) {
-								pop.hide();
-							}
-							
-							if(key == "comment") {
-								pop.css("marginLeft", $(part).width() + "px");
-							}
-							
-							
-							if(is_ie6()) {
-								pop.css("backgroundImage", "url(/images/revise_resumes/" + key + "_pop.gif)");
-							}
-						}
-					);
+					setup_resume_part(type_name, part);
 				}
 			);
+		}
+	);
+}
+
+
+function setup_resume_part(type_name, part) {
+	var type = get_type_from_name(type_name);
+	
+	var part_attr_id = $(part).unbind("mouseenter mouseleave").hover(
+		function() {
+			show_highlighter(2, this);
+		},
+		function() {
+			hide_highlighter(2);
+		}
+	).unbind("click").click(
+		function(event) {
+			$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
+
+			prepare_dialog_content(type, this);
+
+			open_dialog(this);
+			
+			
+			// switch tab
+			if($(event.target).hasClass("resume_revision_pop")) {
+				$("#dialog .tabs").tabs("select", "#part_revisions");
+			}
+			if($(event.target).hasClass("resume_comment_pop")) {
+				$("#dialog .tabs").tabs("select", "#part_comments");
+			}
+		}
+	).css(
+		{
+			cursor: "pointer"
+		}
+	)
+	.attr("id");
+	
+	
+	var revision_count = $("#all_revisions ." + unapplied_class_name() + "." + part_attr_id).length;
+	var comment_count = $("#all_comments ." + part_attr_id).length;
+	$.each(
+		[
+			["revision", revision_count],
+			["comment", comment_count]
+		],
+		function(i, info) {
+			var count = info[1];
+			var key = info[0];
+			
+			var class_name = "resume_" + key + "_pop";
+			
+			var pop_container = $(part);
+			var pop_container_tagname = pop_container.attr("tagName").toLowerCase();
+			if(pop_container_tagname == "tr") {
+				pop_container = pop_container.find("td:first");
+			}
+			else if(pop_container_tagname == "table") {
+				pop_container = pop_container.find("tr:first > td:first");
+			}
+			
+			pop_container.find("." + class_name).remove();
+			var pop = pop_container.prepend(
+				$('<span></span>')
+					.attr("id", compute_id_for_pop(part_attr_id, key))
+					.addClass(class_name).html(count)
+			).find("." + class_name + ":first");
+			
+			if(count <= 0) {
+				pop.hide();
+			}
+			
+			if(key == "comment") {
+				pop.css("marginLeft", $(part).width() + "px");
+			}
+			
+			
+			if(is_ie6()) {
+				pop.css("backgroundImage", "url(/images/revise_resumes/" + key + "_pop.gif)");
+			}
 		}
 	);
 }
@@ -127,6 +135,22 @@ function ancestor_with_class(part, class_name) {
 	}
 	
 	return element;
+}
+
+
+function get_type_from_name(name) {
+	var type = null
+	
+	$.each(
+		RESUME_TYPES,
+		function(i, resume_type) {
+			if(resume_type.name == name) {
+				type = resume_type;
+			}
+		}
+	);
+	
+	return type;
 }
 
 
@@ -1192,9 +1216,19 @@ function apply_revision(revision) {
 			dataType: "json",
 			data: params,
 			success: function(result, text_status) {
-				apply_revision_locally(result.action, result.target, result.data);
+				var action = result.action;
+				var target = result.target;
+				
+				apply_revision_locally(action, target, result.data);
 
 				update_revision_applied_locally(revision, true, true);
+				
+				if(action == "delete") {
+					$("#dialog").dialog("close");
+				}
+				
+				setup_revisions($(".resume_revision." + target));
+				setup_comments($(".resume_comment." + target));
 
 				clear_resume_revision_diff(revision);
 			},
@@ -1232,18 +1266,19 @@ function apply_revision_locally(action, target, data) {
 		var part_template = part;
 		if(action == "add") {
 			if(type_name == "list_section") {
-				part_template = part_template.parent().clone();
-				part_template.find(".resume_section")
-					.attr("id", type_name + "_" + data.id)
-					.find("span.resume_comment_pop, span.resume_revision_pop").remove();
+				part_template = part.parent().clone();
+				part_template.find(".resume_section").attr("id", type_name + "_" + data.id);
 			}
 			else {
-				part_template = part_template.clone().attr("id", type_name + "_" + data.id);
+				part_template = part.clone().attr("id", type_name + "_" + data.id);
 			}
 		}
 		
 		// fill contents
 		fill_resume_part(type_name, part_template, data);
+		
+		// resize the highlighter
+		show_highlighter(1, part);
 		
 		if(action == "add") {
 			if(part.hasClass("resume_section")) {
@@ -1252,6 +1287,14 @@ function apply_revision_locally(action, target, data) {
 			else {
 				part.parent().append(part_template);
 			}
+		}
+		
+		
+		if(type_name == "list_section") {
+			setup_resume_part(type_name, part_template.find(".resume_section"));
+		}
+		else {
+			setup_resume_part(type_name, part_template);
 		}
 	}
 }
