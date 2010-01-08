@@ -187,6 +187,9 @@ module Utils
   end
   
   
+  # ActiveRecord::Base.serialize method leverages YAML
+  # While YAML will translate Chinese to unicode,
+  # which make the serialized string too long
   module FieldHashable
     def self.included(including_model)
       

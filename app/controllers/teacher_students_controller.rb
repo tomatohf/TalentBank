@@ -77,6 +77,18 @@ class TeacherStudentsController < ApplicationController
   
   
   def resume
+    if @resume.hidden
+      return render(
+        :layout => true,
+        :inline => %Q!
+          <div style="font-size: 14px; padding-top: 30px;">
+            <div class="warn_msg">简历已被删除 ...</div>
+          </div>
+        !
+      )
+    end
+    
+    
     @taggers = @resume.exp_taggers
     @taggers.to_s # for eager loading ...
   end
@@ -103,7 +115,7 @@ class TeacherStudentsController < ApplicationController
   
   def check_resume
     @resume = Resume.find(params[:id])
-    jump_to("/errors/forbidden") if @resume.hidden || @resume.student.school_id != @teacher.school_id
+    jump_to("/errors/forbidden") unless @resume.student.school_id == @teacher.school_id
   end
   
 end

@@ -193,6 +193,18 @@ class ResumesController < ApplicationController
   
   
   def show
+    if @resume.hidden
+      return render(
+        :layout => @account_type,
+        :inline => %Q!
+          <div style="font-size: 14px; padding-top: 30px;">
+            <div class="warn_msg">简历已被删除 ...</div>
+          </div>
+        !
+      )
+    end
+    
+    
     @resume.student = @student
     
     respond_to do |format|
