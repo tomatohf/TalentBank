@@ -2,7 +2,7 @@
 	teachers ||= {}
 
 	part_type = ResumePartType.find(revision.part_type_id) || {}
-	revision_action = ResumeRevision::Actions.detect{|a| a[:id] == revision.action} || {}
+	revision_action = ResumeRevision::Action.find(revision.action_id) || {}
 
 	target_part = "#{part_type[:name]}_#{revision.part_id}"
 %>

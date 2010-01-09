@@ -6,12 +6,9 @@ module HashModel
     end
     
     def self.select_one(array, field, value)
-      (array || []).each do |record|
-        return record if record[field] == value
+      (array || []).detect do |record|
+        record[field] == value
       end
-      
-      # NOT found
-      nil
     end
   end
   

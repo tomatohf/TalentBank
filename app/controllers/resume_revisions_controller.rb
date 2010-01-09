@@ -32,7 +32,7 @@ class ResumeRevisionsController < ReviseResumesController
     # and the checks would NOT be used by other action
     part_type = ResumePartType.find(params[:revision_type_id].to_i)
     return jump_to("/errors/forbidden") unless part_type
-    revision_action = ResumeRevision::Actions.detect{|a| a[:name] == params[:revision_action]}
+    revision_action = ResumeRevision::Action.find_by(:name, params[:revision_action])
     return jump_to("/errors/forbidden") unless revision_action
     
     
@@ -41,7 +41,7 @@ class ResumeRevisionsController < ReviseResumesController
       :teacher_id => @teacher.id,
       :part_type_id => part_type[:id],
       :part_id => params[:revision_part_id],
-      :action => revision_action[:id],
+      :action_id => revision_action[:id],
       :applied => false
     )
     revision.fill_data(
@@ -135,7 +135,7 @@ class ResumeRevisionsController < ReviseResumesController
   
   
   def apply
-    revision_action = ResumeRevision::Actions.detect{|a| a[:id] == @revision.action}
+    revision_action = ResumeRevision::Action.find(@revision.action_id)
     part_type = ResumePartType.find(@revision.part_type_id)
     
     part = if revision_action[:name] == "add"

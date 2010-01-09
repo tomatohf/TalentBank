@@ -16,7 +16,7 @@ class Revisions < ActiveRecord::Migration
       t.column :part_type_id, :integer, :limit => 2
       t.column :part_id, :integer
       
-      t.column :action, :integer, :limit => 1
+      t.column :action_id, :integer, :limit => 1
       
       t.column :data, :string, :limit => 1000
       
