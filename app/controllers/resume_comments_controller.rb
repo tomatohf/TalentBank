@@ -15,8 +15,8 @@ class ResumeCommentsController < ReviseResumesController
   
   
   def create
-    account_type_info = ResumeComment::Account_Types.detect{|a| a[:name] == @account_type}
-    return jump_to("/errors/forbidden") unless account_type_info
+    account_type = AccountType.find_by(:name, @account_type)
+    return jump_to("/errors/forbidden") unless account_type
     
     part_type = ResumePartType.find(params[:comment_type_id].to_i)
     
@@ -25,7 +25,7 @@ class ResumeCommentsController < ReviseResumesController
     
     comment = ResumeComment.new(
       :resume_id => @resume.id,
-      :account_type => account_type_info[:id],
+      :account_type_id => account_type[:id],
       :account_id => account.id,
       :part_type_id => part_type && part_type[:id],
       :part_id => params[:comment_part_id],
@@ -43,7 +43,7 @@ class ResumeCommentsController < ReviseResumesController
   
   
   def destroy
-    unless @account_type == (ResumeComment::Account_Types.detect{|a| a[:id] == @comment.account_type} || {})[:name] &&
+    unless @account_type == (AccountType.find(@comment.account_type_id) || {})[:name] &&
             self.instance_variable_get("@#{@account_type.singularize}").id == @comment.account_id
       return jump_to("/errors/forbidden")
     end

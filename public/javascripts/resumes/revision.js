@@ -793,6 +793,7 @@ function create_revision(type, part) {
 	
 	
 	disable_submit_button("#new_revision_form");
+	$("#new_revision_form").find("input:submit").siblings("span:first").hide();
 	
 	$.ajax(
 		{
@@ -1392,6 +1393,7 @@ function create_comment(text_field, error_container, data) {
 	
 	var button_container = error_container.parent();
 	disable_submit_button(button_container);
+	error_container.hide();
 	
 	$.ajax(
 		{

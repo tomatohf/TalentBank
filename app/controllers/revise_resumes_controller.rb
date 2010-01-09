@@ -31,8 +31,8 @@ class ReviseResumesController < ApplicationController
     teachers_id = @revisions.map(&:teacher_id)
     students_id = []
     @comments.each do |comment|
-      account_type_info = ResumeComment::Account_Types.detect{|a| a[:id] == comment.account_type} || {}
-      eval("#{account_type_info[:name]}_id") << comment.account_id
+      account_type = AccountType.find(comment.account_type_id) || {}
+      eval("#{account_type[:name]}_id") << comment.account_id
     end
     
     @teachers = (teachers_id.size > 0) && Teacher.find(

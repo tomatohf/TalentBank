@@ -6,8 +6,8 @@
 
 	target_part = "#{part_type[:name]}_#{comment.part_id}"
 	
-	account_type_info = ResumeComment::Account_Types.detect{|a| a[:id] == comment.account_type} || {}
-	account = (eval(account_type_info[:name]) || {})[comment.account_id]
+	account_type = AccountType.find(comment.account_type_id) || {}
+	account = (eval(account_type[:name]) || {})[comment.account_id]
 %>
 
 <div id="comment_<%= comment.id %>" class="resume_comment <%= target_part %>">
@@ -17,7 +17,7 @@
 		<tr>
 			<td>
 				<%= h(account && account.get_name) %>
-				(<%= account_type_info[:label] %>)
+				(<%= account_type[:label] %>)
 
 				<span class="datetime">
 					<%= format_datetime(comment.created_at) %>
@@ -25,7 +25,7 @@
 			</td>
 			
 			<td align="right">
-				<% if @account_type == account_type_info[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
+				<% if @account_type == account_type[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
 					<a href="#" class="delete_comment_link">
 						删除</a>
 				<% end %>
