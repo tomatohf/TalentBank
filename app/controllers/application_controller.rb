@@ -67,6 +67,35 @@ class ApplicationController < ActionController::Base
   end
   
   
+  def check_login_for_account
+    case (@account_type = params[:account_type])
+    when "students"
+      check_login_for_student
+    when "teachers"
+      check_login_for_teacher
+    when "corporations"
+      check_login_for_corporation
+    else
+      jump_to("/errors/forbidden")
+    end
+  end
+  
+  
+  def check_account
+    account_id = params[:account_id] && params[:account_id].strip
+    jump_to("/errors/forbidden") unless (
+      session[:account_id].to_s == account_id
+    ) && (
+      (
+        self.instance_variable_set(
+          "@#{@account_type.singularize}",
+          @account_type.classify.constantize.find(account_id)
+        )
+      ).school_id == School.get_school_info(@school.abbr)[0]
+    )
+  end
+  
+  
   def check_corporation_allow_query
     jump_to("/errors/unauthorized") unless @corporation.allow_query
   end

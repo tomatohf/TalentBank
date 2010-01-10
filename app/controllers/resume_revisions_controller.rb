@@ -22,7 +22,7 @@ class ResumeRevisionsController < ReviseResumesController
   
   
   def show
-    raise "Not Implemented"
+    jump_to("/errors/forbidden")
   end
   
   

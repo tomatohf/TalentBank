@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 12) do
+ActiveRecord::Schema.define(:version => 13) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -149,6 +149,31 @@ ActiveRecord::Schema.define(:version => 12) do
 
   add_index "job_photos", ["student_id"], :name => "index_job_photos_on_student_id", :unique => true
 
+  create_table "notices", :force => true do |t|
+    t.integer  "account_type_id", :limit => 1
+    t.integer  "account_id"
+    t.integer  "type_id",         :limit => 2
+    t.boolean  "unread",                       :default => false
+    t.string   "content"
+    t.datetime "updated_at"
+  end
+
+  add_index "notices", ["account_type_id", "account_id", "unread", "updated_at"], :name => "index_notices_on_account_and_unread_and_updated_at"
+
+  create_table "requests", :force => true do |t|
+    t.integer  "account_type_id",   :limit => 1
+    t.integer  "account_id"
+    t.integer  "requester_type_id", :limit => 1
+    t.integer  "requester_id"
+    t.integer  "type_id",           :limit => 2
+    t.integer  "target_id"
+    t.string   "data"
+    t.datetime "updated_at"
+  end
+
+  add_index "requests", ["account_type_id", "account_id", "type_id", "target_id"], :name => "index_requests_on_account_and_type_and_target"
+  add_index "requests", ["requester_type_id", "requester_id", "type_id", "target_id"], :name => "index_requests_on_requester_and_type_and_target"
+
   create_table "resume_awards", :force => true do |t|
     t.integer  "resume_id"
     t.string   "content"
@@ -160,11 +185,11 @@ ActiveRecord::Schema.define(:version => 12) do
 
   create_table "resume_comments", :force => true do |t|
     t.integer  "resume_id"
-    t.integer  "part_type_id", :limit => 2
+    t.integer  "part_type_id",    :limit => 2
     t.integer  "part_id"
-    t.integer  "account_type", :limit => 1
+    t.integer  "account_type_id", :limit => 1
     t.integer  "account_id"
-    t.string   "content",      :limit => 1000
+    t.string   "content",         :limit => 1000
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -244,7 +269,7 @@ ActiveRecord::Schema.define(:version => 12) do
     t.integer  "teacher_id"
     t.integer  "part_type_id", :limit => 2
     t.integer  "part_id"
-    t.integer  "action",       :limit => 1
+    t.integer  "action_id",    :limit => 1
     t.string   "data",         :limit => 1000
     t.boolean  "applied",                      :default => false
     t.datetime "created_at"

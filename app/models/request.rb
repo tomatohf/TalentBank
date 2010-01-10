@@ -5,10 +5,6 @@ class Request < ActiveRecord::Base
   
   class Type < HashModel::Simple
     def self.data
-      # [
-      #   {:id => type_id, :name => type_name}
-      # ]
-
       [
         {:id => 10, :name => "revise_resume"}
       ]

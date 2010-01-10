@@ -165,6 +165,14 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   
+  map.resource :notifications, :path_prefix => "/:account_type/:account_id", :requirements => {
+    :account_type => /(students|teachers|corporations)/,
+    :account_id => /\d+/
+  }, :only => [:show] do |notifications|
+    notifications.resources :notices, :only => [:index]
+  end
+  
+  
   
   # The priority is based upon order of creation: first created -> highest priority.
 

@@ -1,0 +1,13 @@
+<% talent_page_title("通知") %>
+
+
+<h2>通知</h2>
+
+
+<div style="padding: 20px;">
+	<%= render :partial => "notice", :collection => @notices %>
+	
+	<div>
+		<%= paging_buttons(@notices) %>
+	</div>
+</div>

@@ -6,13 +6,14 @@ class Notices < ActiveRecord::Migration
       t.column :account_id, :integer
       
       t.column :type_id, :integer, :limit => 2
-      t.column :read, :boolean, :default => false
+      t.column :unread, :boolean, :default => false
       
       t.column :content, :string
       
       t.column :updated_at, :datetime
     end
-    add_index :notices, [:account_type_id, :account_id, :read]
+    add_index :notices, [:account_type_id, :account_id, :unread, :updated_at],
+              :name => :index_notices_on_account_and_unread_and_updated_at
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO notices (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM notices WHERE id = 10000")
@@ -31,8 +32,10 @@ class Notices < ActiveRecord::Migration
       
       t.column :updated_at, :datetime
     end
-    add_index :requests, [:account_type_id, :account_id, :type_id, :target_id]
-    add_index :requests, [:requester_type_id, :requester_id, :type_id, :target_id]
+    add_index :requests, [:account_type_id, :account_id, :type_id, :target_id],
+              :name => :index_requests_on_account_and_type_and_target
+    add_index :requests, [:requester_type_id, :requester_id, :type_id, :target_id],
+              :name => :index_requests_on_requester_and_type_and_target
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO requests (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM requests WHERE id = 10000")

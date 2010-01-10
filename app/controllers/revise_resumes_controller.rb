@@ -63,33 +63,6 @@ class ReviseResumesController < ApplicationController
   
   private
   
-  def check_login_for_account
-    case (@account_type = params[:account_type])
-    when "students"
-      check_login_for_student
-    when "teachers"
-      check_login_for_teacher
-    else
-      jump_to("/errors/forbidden")
-    end
-  end
-  
-  
-  def check_account
-    account_id = params[:account_id] && params[:account_id].strip
-    jump_to("/errors/forbidden") unless (
-      session[:account_id].to_s == account_id
-    ) && (
-      (
-        self.instance_variable_set(
-          "@#{@account_type.singularize}",
-          @account_type.classify.constantize.find(account_id)
-        )
-      ).school_id == School.get_school_info(@school.abbr)[0]
-    )
-  end
-  
-  
   def check_teacher_revision
     jump_to("/errors/unauthorized") if @teacher && (!@teacher.revision)
   end
