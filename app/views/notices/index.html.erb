@@ -4,10 +4,27 @@
 <h2>通知</h2>
 
 
-<div style="padding: 20px;">
-	<%= render :partial => "notice", :collection => @notices %>
-	
-	<div>
-		<%= paging_buttons(@notices) %>
-	</div>
+<div style="padding: 5px 20px;">
+	<% unless @notices.size > 0 %>
+		<div class="info_with_icon">
+			没有近期收到的通知
+		</div>
+	<% else %>
+		<% current_group_date = nil %>
+		<% @notices.each do |notice| %>
+			<% 
+				notice_date = format_date(notice.updated_at)
+				if notice_date != current_group_date
+					current_group_date = notice_date
+			%>
+					<div class="notice_date"><%= notice_date %></div>
+				<% end %>
+				
+			<%= render :partial => "notice", :object => notice %>
+		<% end %>
+
+		<div>
+			<%= paging_buttons(@notices) %>
+		</div>
+	<% end %>
 </div>

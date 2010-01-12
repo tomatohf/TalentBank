@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(:version => 13) do
     t.integer  "account_type_id", :limit => 1
     t.integer  "account_id"
     t.integer  "type_id",         :limit => 2
-    t.boolean  "unread",                       :default => false
-    t.string   "content"
+    t.boolean  "unread",                         :default => true
+    t.string   "content",         :limit => 300
     t.datetime "updated_at"
   end
 
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(:version => 13) do
     t.integer  "requester_id"
     t.integer  "type_id",           :limit => 2
     t.integer  "target_id"
-    t.string   "data"
+    t.string   "data",              :limit => 300
     t.datetime "updated_at"
   end
 

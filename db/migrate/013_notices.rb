@@ -6,9 +6,9 @@ class Notices < ActiveRecord::Migration
       t.column :account_id, :integer
       
       t.column :type_id, :integer, :limit => 2
-      t.column :unread, :boolean, :default => false
+      t.column :unread, :boolean, :default => true
       
-      t.column :content, :string
+      t.column :content, :string, :limit => 300
       
       t.column :updated_at, :datetime
     end
@@ -28,7 +28,7 @@ class Notices < ActiveRecord::Migration
       
       t.column :type_id, :integer, :limit => 2
       t.column :target_id, :integer
-      t.column :data, :string
+      t.column :data, :string, :limit => 300
       
       t.column :updated_at, :datetime
     end

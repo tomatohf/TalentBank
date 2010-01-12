@@ -1,3 +1,10 @@
-<div>
+<%
+	type = Notice::Type.find(notice.type_id)
+%>
+
+<div class="notice<%= %Q! unread_notice! if notice.unread %>">
+	<span class="notice_time"><%= format_time(notice.updated_at) %></span>
 	
+	<img class="notice_icon" src="/images/notifications/notices/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
+	<%= notice.content %>
 </div>

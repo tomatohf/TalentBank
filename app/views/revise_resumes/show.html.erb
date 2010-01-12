@@ -188,5 +188,7 @@
 	var RESUME_TYPES = [<%= ResumePartType.data.collect{|type| %Q!{id:#{type[:id]}, name:"#{type[:name]}"}!}.join(",") %>]
 	
 	var required_mark = '<%= required_mark(false).strip %>';
+	
+	var involved_teachers = "<%= @teachers.keys.join(",") %>";
 </script>
 <script src="/javascripts/resumes/revision.js" type="text/javascript" language="JavaScript"></script>

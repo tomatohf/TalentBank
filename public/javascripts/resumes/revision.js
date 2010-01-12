@@ -1402,7 +1402,8 @@ function create_comment(text_field, error_container, data) {
 			dataType: "html",
 			data: $.extend(
 				{
-					content: text_field.val()
+					content: text_field.val(),
+					involved_teachers: involved_teachers
 				},
 				data
 			),

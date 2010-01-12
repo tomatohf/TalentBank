@@ -620,3 +620,42 @@ pre.preformatted_content a {
 pre.preformatted_content a:hover {
 	text-decoration: underline;
 }
+
+
+.notice_date {
+	font-weight: bold;
+	color: #666666;
+	padding: 2px 1px;
+	margin-top: 10px;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.notice {
+	padding: 10px 0px 10px 18px;
+	border-bottom: 1px dashed #E3EEF8;
+	color: #111111;
+}
+
+.unread_notice {
+	background: transparent url(/images/notifications/unread_notice.gif) no-repeat scroll left center;
+}
+
+.notice a {
+	text-decoration: none;
+}
+
+.notice a:hover {
+	text-decoration: underline;
+}
+
+.notice_time {
+	float: right;
+	font-size: 11px;
+	color: #888888;
+	margin-right: 5px;
+}
+
+img.notice_icon {
+	vertical-align: middle;
+	margin-right: 3px;
+}
