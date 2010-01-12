@@ -81,11 +81,15 @@ class ResumeRevisionsController < ReviseResumesController
       end
     ) unless revision_action[:name] == "delete"
     
-    return render(
-      :partial => "/revise_resumes/revision",
-      :object => revision,
-      :locals => {:teachers => {@teacher.id => @teacher}}
-    ) if revision.save!
+    if revision.save!
+      generate_notice(@teacher)
+
+      return render(
+        :partial => "/revise_resumes/revision",
+        :object => revision,
+        :locals => {:teachers => {@teacher.id => @teacher}}
+      )
+    end
     
     render :nothing => true
   end
@@ -235,6 +239,20 @@ class ResumeRevisionsController < ReviseResumesController
   def check_revision
     @revision = ResumeRevision.find(params[:id])
     jump_to("/errors/forbidden") unless @revision.resume_id == @resume.id
+  end
+  
+  
+  def generate_notice(teacher)
+    teacher_account_type = AccountType.find_by(:name, "teachers")
+    student_account_type = AccountType.find_by(:name, "students")
+    domain = ResumeDomain.find(@resume.domain_id)
+    
+    Notice.generate(
+      student_account_type[:id], @resume.student_id, "add_resume_revision",
+      :teacher => "#{teacher.get_name}(#{teacher_account_type[:label]})",
+      :resume => "#{domain[:name]}的简历",
+      :url => "/#{student_account_type[:name]}/#{@resume.student_id}/revise_resumes/#{@resume.id}"
+    )
   end
   
 end

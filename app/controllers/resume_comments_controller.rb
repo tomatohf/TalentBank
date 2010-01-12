@@ -84,7 +84,7 @@ class ResumeCommentsController < ReviseResumesController
       Notice.generate(
         noticed_account_type[:id], noticed_account_id, "add_resume_comment",
         :account => "#{account.get_name}(#{account_type[:label]})",
-        :resume => domain[:name],
+        :resume => "#{domain[:name]}的简历",
         :url => "/#{noticed_account_type[:name]}/#{noticed_account_id}/revise_resumes/#{@resume.id}"
       )
     end
