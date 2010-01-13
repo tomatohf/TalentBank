@@ -1,0 +1,17 @@
+<% talent_page_title("收到的等待处理的请求") %>
+
+
+<h2>收到的等待处理的请求</h2>
+
+
+<% unless @requests.size > 0 %>
+	<div class="info_with_icon">
+		没有等待处理的请求
+	</div>
+<% else %>
+	<%= render :partial => "request", :collection => @requests %>
+
+	<div>
+		<%= paging_buttons(@requests) %>
+	</div>
+<% end %>

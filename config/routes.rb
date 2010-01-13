@@ -170,6 +170,12 @@ ActionController::Routing::Routes.draw do |map|
     :account_id => /\d+/
   }, :only => [:show] do |notifications|
     notifications.resources :notices, :only => [:index]
+    
+    notifications.resources :requests, :only => [:index, :destroy], :member => {
+      #:accept => :post
+    }, :collection => {
+      #:sent => :get
+    }
   end
   
   

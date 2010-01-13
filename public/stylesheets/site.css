@@ -638,6 +638,7 @@ pre.preformatted_content a:hover {
 
 .unread_notice {
 	background: transparent url(/images/notifications/unread_notice.gif) no-repeat scroll left center;
+	font-weight: bold;
 }
 
 .notice a {
