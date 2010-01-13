@@ -10,9 +10,15 @@
 			没有近期收到的通知
 		</div>
 	<% else %>
-		<% current_group_date = nil %>
+		<%
+			unread_ids = []
+			
+			current_group_date = nil
+		%>
 		<% @notices.each do |notice| %>
-			<% 
+			<%
+				unread_ids << notice.id if notice.unread
+				
 				notice_date = format_date(notice.updated_at)
 				if notice_date != current_group_date
 					current_group_date = notice_date
@@ -26,5 +32,15 @@
 		<div>
 			<%= paging_buttons(@notices) %>
 		</div>
+		
+		
+		<%
+			if unread_ids.size > 0
+				updated_count = Notice.update_all(
+					["unread = ?", false],
+					["id in (?)", unread_ids]
+				)
+			end
+		%>
 	<% end %>
 </div>

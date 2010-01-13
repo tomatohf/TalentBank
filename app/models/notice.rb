@@ -11,11 +11,24 @@ class Notice < ActiveRecord::Base
       binding
     end
     
+    content = ERB.new(type[:template]).result(template_binding(locals))
+    
+    # avoid generate repeat notices with same content
+    self.find(
+      :all,
+      :conditions => [
+        "account_type_id = ? and account_id = ? and unread = ? and updated_at > ?",
+        account_type_id, account_id, true, 10.minutes.ago
+      ]
+    ).each do |n|
+      return false if n.content == content
+    end
+    
     self.new(
       :account_type_id => account_type_id,
       :account_id => account_id,
       :type_id => type[:id],
-      :content => ERB.new(type[:template]).result(template_binding(locals))
+      :content => content
     ).save!
   end
   
