@@ -2,6 +2,12 @@ class RequestsController < NotificationsController
   
   Request_Page_Size = 15
   
+  insert_before_filter(
+    :check_account,
+    :check_active,
+    :only => [:create, :destroy]
+  )
+  
   
   def show
     jump_to("/errors/forbidden")
@@ -24,6 +30,11 @@ class RequestsController < NotificationsController
     )
     
     render :layout => @account_type
+  end
+  
+  
+  def destroy
+    
   end
   
   

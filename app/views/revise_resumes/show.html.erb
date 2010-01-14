@@ -15,17 +15,50 @@
 <h2><%= page_title %></h2>
 
 
-<div class="align_r" style="margin: 0px 50px 0px 0px; font-size: 14px;">
+<div id="requests">
+	
+</div>
+
+
+<div style="margin: 0px 50px; font-size: 14px;">
 	<% if @student %>
-		<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>" class="none">
-			<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
-			返回预览简历</a>
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td>&nbsp;</td>
+				
+				<td style="width: 165px;">
+					<a href="#" class="none dropdown_menu_trigger">
+						<img src="/images/revise_resumes/reviser_icon.gif" border="0" alt="请老师帮助" style="margin-bottom: -2px;" />
+						请老师帮助修改简历</a>
+
+					<div class="dropdown_menu" style="font-size: 12px;">
+						<ul class="dropdown_sub_menu">
+							<% @revisers.each do |reviser| %>
+								<% reviser_name = h(reviser.get_name) %>
+								<li>
+									<a href="#" onclick="request_revise_resume(<%= reviser.id %>, '<%= a(reviser_name) %>'); return false;">
+										<%= reviser_name %></a>
+								</li>
+							<% end %>
+						</ul>
+					</div>
+				</td>
+				
+				<td align="right" style="width: 125px;">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>" class="none">
+						<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
+						返回预览简历</a>
+				</td>
+			</tr>
+		</table>
 	<% end %>
 	
 	<% if @teacher %>
-		<a href="/teachers/<%= @teacher.id %>/students/<%= @resume.id %>/resume" class="none">
-			<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
-			返回查看简历</a>
+		<div class="align_r">
+			<a href="/teachers/<%= @teacher.id %>/students/<%= @resume.id %>/resume" class="none">
+				<img src="/images/revise_resumes/return_icon.gif" border="0" alt="返回" style="margin-bottom: -2px;" />
+				返回查看简历</a>
+		</div>
 	<% end %>
 </div>
 

@@ -1619,8 +1619,29 @@ function is_ie6() {
 }
 
 
+function setup_dropdown_menus() {
+	$(".dropdown_menu_trigger").unbind("click").click(
+		function() {
+			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
+
+			$(this).parent().hover(
+				function() {
+				},
+				function() {
+					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
+				}
+			);
+			
+			return false;
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
+		setup_dropdown_menus();
+		
 		setup_tabs();
 		setup_dialog();
 		
@@ -1648,8 +1669,27 @@ function set_revisions_to_applied(revisions) {
 			}
 		).join("&"),
 		function(data) {
-			
+			// do nothing ...
 		},
 		"html"
+	);
+}
+
+
+function request_revise_resume(teacher_id, teacher_name) {
+	confirm_msg(
+		"确定要请" + teacher_name + "(老师)来帮助修改简历么 ?",
+		function() {
+			$.post(
+				"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/request_teacher",
+				{
+					teacher: teacher_id
+				},
+				function(data) {
+					$("#requests").append(data);
+				},
+				"html"
+			);
+		}
 	);
 }

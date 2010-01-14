@@ -3,11 +3,16 @@ class Request < ActiveRecord::Base
   validates_presence_of :account_type_id, :account_id, :requester_type_id, :requester_id, :type_id
   
   
+  def requests_of_target
+    
+  end
+  
+  
   def self.generate(account_type_id, account_id, requester_type_id, requester_id, type_name, options = {})
     type = Type.find_by(:name, type_name)
     data = options[:data] || ""
     
-    self.new(
+    self.create!(
       :account_type_id => account_type_id,
       :account_id => account_id,
       :requester_type_id => requester_type_id,
@@ -15,7 +20,7 @@ class Request < ActiveRecord::Base
       :type_id => type[:id],
       :target_id => options[:target_id],
       :data => data.kind_of?(Hash) ? data.inspect : data
-    ).save!
+    )
   end
   
   

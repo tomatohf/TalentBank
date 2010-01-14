@@ -2,6 +2,8 @@ class ReviseResumesController < ApplicationController
   
   before_filter :check_login_for_account
   
+  before_filter :check_active, :only => [:request_teacher]
+  
   before_filter :check_account
   
   before_filter :check_teacher_revision
@@ -57,7 +59,29 @@ class ReviseResumesController < ApplicationController
       {@resume.student_id => @resume.student}
     end
     
+    
+    @revisers = Teacher.revisers(@student.school_id) if @student
+    
     render :layout => @account_type
+  end
+  
+  
+  def request_teacher
+    return jump_to("/errors/forbidden") unless @student
+    
+    teacher = Teacher.find(params[:teacher])
+    return jump_to("/errors/forbidden") unless teacher.school_id == @student.school_id
+    
+    request = Request.generate(
+      "teachers",
+      teacher.id,
+      "students",
+      @student.id,
+      "revise_resume",
+      :target_id => @resume_id
+    )
+    
+    render :partial => "/requests/request", :object => request, :locals => {:sent => true}
   end
   
   

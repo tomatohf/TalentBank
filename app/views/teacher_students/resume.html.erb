@@ -10,7 +10,7 @@
 <h2>查看 <%= student_name %> 的 <%= domain %> 的简历</h2>
 
 
-<div class="align_r" style="margin: 0px 50px 0px 0px; font-size: 14px;">
+<div class="align_r" style="margin: 0px 50px; font-size: 14px;">
 	<% if @teacher.revision %>
 		<a href="/teachers/<%= @teacher.id %>/revise_resumes/<%= @resume.id %>" class="none">
 			<img src="/images/revise_resumes/revise_resume_icon.gif" border="0" alt="简历修改" style="margin-bottom: -2px;" />

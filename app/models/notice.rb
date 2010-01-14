@@ -24,12 +24,12 @@ class Notice < ActiveRecord::Base
       return false if n.content == content
     end
     
-    self.new(
+    self.create!(
       :account_type_id => account_type_id,
       :account_id => account_id,
       :type_id => type[:id],
       :content => content
-    ).save!
+    )
   end
   
   

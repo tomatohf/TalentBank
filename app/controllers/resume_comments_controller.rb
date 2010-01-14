@@ -1,5 +1,6 @@
 class ResumeCommentsController < ReviseResumesController
   
+  skip_before_filter :check_active
   insert_before_filter(
     :check_account,
     :check_active,
@@ -67,6 +68,8 @@ class ResumeCommentsController < ReviseResumesController
   
   
   def generate_notice(account_type, account, involved_teachers)
+    # SHOULD: check the school_id of involved_teachers
+    
     noticed_account_type, noticed_account_ids = if account_type[:name] == "students"
       [
         AccountType.find_by(:name, "teachers"),
