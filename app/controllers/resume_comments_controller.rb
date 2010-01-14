@@ -79,13 +79,12 @@ class ResumeCommentsController < ReviseResumesController
     else
       ["students", [@resume.student_id]]
     end
-    domain = ResumeDomain.find(@resume.domain_id)
     
     noticed_account_ids.each do |noticed_account_id|
       Notice.generate(
         noticed_account_type, noticed_account_id, "add_resume_comment",
         :account => "#{account.get_name}(#{account_type[:label]})",
-        :resume => "#{domain[:name]}的简历",
+        :resume => "#{ResumeDomain.find(@resume.domain_id)[:name]}的简历",
         :url => "/#{noticed_account_type}/#{noticed_account_id}/revise_resumes/#{@resume.id}"
       )
     end

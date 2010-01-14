@@ -2,6 +2,18 @@
 	type = Request::Type.find(request.type_id)
 %>
 
-<div>
-	<%= h(request.inspect) %>
+<div class="request">
+	<div>
+		<button class="button float_r">现在就去修改</button>
+		
+		<img class="request_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
+		小乔请求帮助修改<a href="#">销售的简历</a>
+		请求Rick帮助修改<a href="#">销售的简历</a>
+	</div>
+	
+	<div class="request_actions clear_r">
+		<a class="float_r" href="#">忽略这个请求</a>
+		
+		<span class="request_time"><%= format_datetime(request.updated_at) %></span>
+	</div>
 </div>

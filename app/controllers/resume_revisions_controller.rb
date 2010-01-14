@@ -244,12 +244,10 @@ class ResumeRevisionsController < ReviseResumesController
   
   
   def generate_notice(teacher)
-    domain = ResumeDomain.find(@resume.domain_id)
-    
     Notice.generate(
       "students", @resume.student_id, "add_resume_revision",
       :teacher => "#{teacher.get_name}(#{AccountType.find_by(:name, "teachers")[:label]})",
-      :resume => "#{domain[:name]}的简历",
+      :resume => "#{ResumeDomain.find(@resume.domain_id)[:name]}的简历",
       :url => "/students/#{@resume.student_id}/revise_resumes/#{@resume.id}"
     )
   end

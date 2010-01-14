@@ -73,13 +73,13 @@ class ReviseResumesController < ApplicationController
     return jump_to("/errors/forbidden") unless teacher.school_id == @student.school_id
     
     request = Request.generate(
-      "teachers",
-      teacher.id,
-      "students",
-      @student.id,
+      "teachers", teacher.id,
+      "students", @student.id,
       "revise_resume",
       :target_id => @resume.id,
-      :data => {}
+      :data => {
+        :resume => "#{ResumeDomain.find(@resume.domain_id)[:name]}的简历"
+      }
     )
     
     render :partial => "/requests/request", :object => request, :locals => {:sent => true}
