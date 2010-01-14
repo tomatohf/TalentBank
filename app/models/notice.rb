@@ -3,8 +3,9 @@ class Notice < ActiveRecord::Base
   validates_presence_of :type_id, :account_type_id, :account_id, :content
   
   
-  def self.generate(account_type_id, account_id, type_name, locals = {})
+  def self.generate(account_type, account_id, type_name, locals = {})
     type = Type.find_by(:name, type_name)
+    account_type_id = AccountType.find_by(:name, account_type)[:id]
     
     def self.template_binding(locals)
       eval(locals.keys.map { |key| "#{key} = locals[:#{key}];" }.join)

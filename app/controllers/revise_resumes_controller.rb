@@ -78,7 +78,8 @@ class ReviseResumesController < ApplicationController
       "students",
       @student.id,
       "revise_resume",
-      :target_id => @resume_id
+      :target_id => @resume.id,
+      :data => {}
     )
     
     render :partial => "/requests/request", :object => request, :locals => {:sent => true}

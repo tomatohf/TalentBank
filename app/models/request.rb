@@ -3,24 +3,31 @@ class Request < ActiveRecord::Base
   validates_presence_of :account_type_id, :account_id, :requester_type_id, :requester_id, :type_id
   
   
+  include Utils::FieldHashable
+  hash_field :data
+  
+  
   def requests_of_target
     
   end
   
   
-  def self.generate(account_type_id, account_id, requester_type_id, requester_id, type_name, options = {})
+  def self.generate(account_type, account_id, requester_type, requester_id, type_name, options = {})
     type = Type.find_by(:name, type_name)
-    data = options[:data] || ""
     
-    self.create!(
-      :account_type_id => account_type_id,
+    request = self.new(
+      :account_type_id => AccountType.find_by(:name, account_type)[:id],
       :account_id => account_id,
-      :requester_type_id => requester_type_id,
+      :requester_type_id => AccountType.find_by(:name, requester_type)[:id],
       :requester_id => requester_id,
       :type_id => type[:id],
-      :target_id => options[:target_id],
-      :data => data.kind_of?(Hash) ? data.inspect : data
+      :target_id => options[:target_id]
     )
+    request.fill_data(options[:data] || {})
+    
+    request.save!
+    
+    request
   end
   
   

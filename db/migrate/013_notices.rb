@@ -28,7 +28,7 @@ class Notices < ActiveRecord::Migration
       
       t.column :type_id, :integer, :limit => 2
       t.column :target_id, :integer
-      t.column :data, :string, :limit => 300
+      t.column :data, :string, :limit => 600
       
       t.column :updated_at, :datetime
     end

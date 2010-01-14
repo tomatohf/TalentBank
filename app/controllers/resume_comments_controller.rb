@@ -68,27 +68,25 @@ class ResumeCommentsController < ReviseResumesController
   
   
   def generate_notice(account_type, account, involved_teachers)
-    # SHOULD: check the school_id of involved_teachers
-    
-    noticed_account_type, noticed_account_ids = if account_type[:name] == "students"
-      [
-        AccountType.find_by(:name, "teachers"),
-        involved_teachers.split(",")
-      ]
+    noticed_account_type, noticed_account_ids = if @student
+      # check the school_id of involved_teachers
+      teacher_ids = involved_teachers.split(",")
+      teacher_ids = Teacher.find(:all, :conditions => ["id in (?)", teacher_ids]).select{ |teacher|
+        teacher.school_id = @student.school_id
+      }.map(&:id) if teacher_ids.size > 0
+      
+      ["teachers", teacher_ids]
     else
-      [
-        AccountType.find_by(:name, "students"),
-        [@resume.student_id]
-      ]
+      ["students", [@resume.student_id]]
     end
     domain = ResumeDomain.find(@resume.domain_id)
     
     noticed_account_ids.each do |noticed_account_id|
       Notice.generate(
-        noticed_account_type[:id], noticed_account_id, "add_resume_comment",
+        noticed_account_type, noticed_account_id, "add_resume_comment",
         :account => "#{account.get_name}(#{account_type[:label]})",
         :resume => "#{domain[:name]}的简历",
-        :url => "/#{noticed_account_type[:name]}/#{noticed_account_id}/revise_resumes/#{@resume.id}"
+        :url => "/#{noticed_account_type}/#{noticed_account_id}/revise_resumes/#{@resume.id}"
       )
     end
   end

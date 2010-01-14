@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(:version => 13) do
     t.integer  "requester_id"
     t.integer  "type_id",           :limit => 2
     t.integer  "target_id"
-    t.string   "data",              :limit => 300
+    t.string   "data",              :limit => 600
     t.datetime "updated_at"
   end
 
