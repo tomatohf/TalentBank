@@ -1681,9 +1681,11 @@ function request_revise_resume(teacher_id, teacher_name) {
 		"确定要请" + teacher_name + "(老师)来帮助修改简历么 ?",
 		function() {
 			$.post(
-				"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/request_teacher",
+				"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/notifications/requests",
 				{
-					teacher: teacher_id
+					type: "revise_resume",
+					teacher: teacher_id,
+					resume: RESUME_ID
 				},
 				function(data) {
 					$("#requests").append(data);

@@ -1,6 +1,5 @@
 class ResumeRevisionsController < ReviseResumesController
   
-  skip_before_filter :check_active
   insert_before_filter(
     :check_account,
     :check_active,

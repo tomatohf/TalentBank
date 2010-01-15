@@ -43,6 +43,26 @@ class RequestsController < NotificationsController
   end
   
   
+  def create
+    request_data = Request.generate(
+      @account_type, self.instance_variable_get("@#{@account_type.singularize}"),
+      params[:type] && params[:type].strip,
+      params
+    )
+    
+    return jump_to("/errors/forbidden") unless request_data
+    
+    render(
+      :partial => "/requests/request",
+      :object => request_data[0],
+      :locals => {
+        :accounts => request_data[1],
+        :sent => true
+      }
+    )
+  end
+  
+  
   def destroy
     
   end

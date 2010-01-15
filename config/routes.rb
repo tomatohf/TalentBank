@@ -152,9 +152,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :revise_resumes, :path_prefix => "/:account_type/:account_id", :requirements => {
     :account_type => /(students|teachers)/,
     :account_id => /\d+/
-  }, :only => [:show], :member => {
-    :request_teacher => :post
-  } do |revise_resumes|
+  }, :only => [:show] do |revise_resumes|
     revise_resumes.resources :resume_revisions, :only => [:create, :destroy], :as => :revisions, :member => {
       :update_applied => :post,
       :diff => :any,
@@ -173,7 +171,7 @@ ActionController::Routing::Routes.draw do |map|
   }, :only => [:show] do |notifications|
     notifications.resources :notices, :only => [:index]
     
-    notifications.resources :requests, :only => [:index, :destroy], :member => {
+    notifications.resources :requests, :only => [:index, :create, :destroy], :member => {
       #:accept => :post
     }, :collection => {
       :sent => :get
