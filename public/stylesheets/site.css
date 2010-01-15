@@ -675,12 +675,18 @@ img.notice_icon {
 	text-decoration: underline;
 }
 
+.request button {
+	font-weight: normal;
+}
+
 .request_time {
 	font-size: 10px;
 	color: #999999;
+	margin-right: 30px;
 }
 
 .request_actions {
+	text-align: right;
 	padding: 5px 0px 0px 25px;
 }
 

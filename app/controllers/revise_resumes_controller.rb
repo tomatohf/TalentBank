@@ -82,7 +82,14 @@ class ReviseResumesController < ApplicationController
       }
     )
     
-    render :partial => "/requests/request", :object => request, :locals => {:sent => true}
+    render(
+      :partial => "/requests/request",
+      :object => request,
+      :locals => {
+        :accounts => {"teachers" => {teacher.id => teacher}},
+        :sent => true
+      }
+    )
   end
   
   

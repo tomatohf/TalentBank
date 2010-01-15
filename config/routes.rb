@@ -176,7 +176,7 @@ ActionController::Routing::Routes.draw do |map|
     notifications.resources :requests, :only => [:index, :destroy], :member => {
       #:accept => :post
     }, :collection => {
-      #:sent => :get
+      :sent => :get
     }
   end
   
