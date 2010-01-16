@@ -65,10 +65,10 @@
 		</thead>
 		
 		<tbody>
-			<% @dots.each_index do |i| %>
+			<% @dots.each_with_index do |dot, i| %>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<td align="center">
-						<% first, last = @dots[i] %>
+						<% first, last = dot %>
 						
 						<%= first.strftime("%y.%m.%d") %>
 						<% unless first == last %>

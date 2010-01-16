@@ -70,11 +70,11 @@
 					graph_rowspan += 1 if lack_h > 0
 				end
 			%>
-			<% @counts.each_index do |i| %>
+			<% @counts.each_with_index do |count_item, i| %>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<%
-						group = @counts[i][1]["@groupby"]
-						count = @counts[i][1]["@count"]
+						group = count_item[1]["@groupby"]
+						count = count_item[1]["@count"]
 						percent_label = Utils.percent(count, @total_count, 1)
 						
 						color = get_pie_chart_color(i)

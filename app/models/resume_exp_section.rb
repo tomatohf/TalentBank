@@ -43,8 +43,8 @@ class ResumeExpSection < ActiveRecord::Base
     order = get_exp_order
     
     position = -1
-    order.each_index do |i|
-      if order[i][0] == exp_type.to_s && order[i][1] == exp_id.to_s
+    order.each_with_index do |o, i|
+      if o[0] == exp_type.to_s && o[1] == exp_id.to_s
         position = i
         break
       end

@@ -173,8 +173,8 @@ module Utils
         
         unless record
           init = {}
-          self::Belongs_To_Keys.each_index do |i|
-            init[self::Belongs_To_Keys[i]] = belongs_to_ids[i]
+          self::Belongs_To_Keys.each_with_index do |key, i|
+            init[key] = belongs_to_ids[i]
           end
           
           record = self.new(init)
