@@ -6,9 +6,9 @@ function add_skill(skill_id, skill_link) {
 		},
 		function(data) {
 			// add form input
-			var row = document.getElementById("skill_row_" + skill_id);
-			if(row) {
-				$(row).replaceWith(data);
+			var row = $("#skill_row_" + skill_id);
+			if(row.length > 0) {
+				row.replaceWith(data);
 			}
 			else {
 				$("#skill_rows").prepend(data);
@@ -18,9 +18,9 @@ function add_skill(skill_id, skill_link) {
 			// adjust list
 			var selected_skill_id = "selected_skill_" + skill_id;
 			var selected_skill_html = "<div class='selected_skill' id='" + selected_skill_id + "'>" + $(skill_link).html() + "</div>";
-			var selected_skill = document.getElementById(selected_skill_id);
-			if(selected_skill) {
-				$(selected_skill).replaceWith(selected_skill_html);
+			var selected_skill = $("#" + selected_skill_id);
+			if(selected_skill.length > 0) {
+				selected_skill.replaceWith(selected_skill_html);
 			}
 			else {
 				$(".skill_pool_sep_line:first").before(selected_skill_html);

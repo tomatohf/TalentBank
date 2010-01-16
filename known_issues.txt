@@ -1,3 +1,5 @@
+application.js, include jquery.min.js and common js codes for all pages ...
+
 dropdown menu 太长 或 太宽 的 处理?
 
 请求功能

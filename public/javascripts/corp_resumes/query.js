@@ -60,9 +60,9 @@ function add_skill(skill_id) {
 		},
 		function(data) {
 			// add skill input
-			var query_skill = document.getElementById("query_skill_" + skill_id);
-			if(query_skill) {
-				$(query_skill).replaceWith(data);
+			var query_skill = $("#query_skill_" + skill_id);
+			if(query_skill.length > 0) {
+				query_skill.replaceWith(data);
 			}
 			else {
 				$("#skills").append(data);
@@ -90,9 +90,9 @@ function remove_skill(skill_id) {
 	// adjust skill list
 	var skill_option_id = "skill_" + skill_id;
 	var option = "<option value='" + skill_id + "' id='" + skill_option_id + "'>" + skill_name + "</option>";
-	var skill_option = document.getElementById(skill_option_id);
-	if(skill_option) {
-		$(skill_option).replaceWith(option);
+	var skill_option = $("#" + skill_option_id);
+	if(skill_option.length > 0) {
+		skill_option.replaceWith(option);
 	}
 	else {
 		$("#skill_list").append(option);
