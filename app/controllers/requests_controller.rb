@@ -5,7 +5,7 @@ class RequestsController < NotificationsController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy]
+    :only => [:create, :destroy, :accept]
   )
   
   
@@ -19,10 +19,10 @@ class RequestsController < NotificationsController
     
     account_key = @sent ? "requester" : "account"
     
-    page = params[:page]
-    page = 1 unless page =~ /\d+/
+    @page = params[:page]
+    @page = 1 unless @page =~ /\d+/
     @requests = Request.paginate(
-      :page => page,
+      :page => @page,
       :per_page => Request_Page_Size,
       :conditions => [
         "#{account_key}_type_id = ? and #{account_key}_id = ?",
@@ -63,8 +63,40 @@ class RequestsController < NotificationsController
   end
   
   
-  def destroy
+  def accept
+    page = params[:page]
+    request = Request.find(params[:id])
     
+    account_type = AccountType.find_by(:name, @account_type)
+    account_id = self.instance_variable_get("@#{@account_type.singularize}").id
+    
+    #request.destroy if request.account_type_id == account_type[:id] && request.account_id == account_id
+
+    if page.blank?
+      
+    else
+      jump_to(%Q!/#{@account_type}/#{account_id}/notifications/requests!)
+    end
+  end
+  
+  
+  def destroy
+    page = params[:page]
+    request = Request.find(params[:id])
+    
+    account_type = AccountType.find_by(:name, @account_type)
+    account_id = self.instance_variable_get("@#{@account_type.singularize}").id
+    
+    is_account = request.account_type_id == account_type[:id] && request.account_id == account_id
+    is_requester = request.requester_type_id == account_type[:id] && request.requester_id == account_id
+    
+    #request.destroy if is_account || is_requester
+
+    if page.blank?
+      
+    else
+      jump_to(%Q!/#{@account_type}/#{account_id}/notifications/requests#{"/sent" if is_requester}!)
+    end
   end
   
   

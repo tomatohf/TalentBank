@@ -31,7 +31,8 @@
 						:collection => @requests,
 						:locals => {
 							:accounts => @accounts,
-							:sent => @sent
+							:sent => @sent,
+							:page => @page
 						}
 					)
 				%>
@@ -44,7 +45,7 @@
 		
 		<td valign="top" style="width: 150px;">
 			<% type = Request::Type.find(10) %>
-			<img class="request_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
+			<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
 			2个修改简历的请求
 		</td>
 	</tr>

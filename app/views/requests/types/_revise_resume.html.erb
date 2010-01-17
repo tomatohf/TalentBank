@@ -1,26 +1,16 @@
 <%
+	account_name = requester_name = nil
 	if sent
 		account_type = AccountType.find(request.account_type_id)
-		account = accounts[account_type[:name]][request.account_id]
+		account_name = h(accounts[account_type[:name]][request.account_id].get_name) +
+						"(#{account_type[:label]})"
 	else
 		requester_type = AccountType.find(request.requester_type_id)
-		requester = accounts[requester_type[:name]][request.requester_id]
+		requester_name = h(accounts[requester_type[:name]][request.requester_id].get_name) +
+						"(#{requester_type[:label]})"
 	end
 %>
 
 <div>
-	<% unless sent %>
-		<button class="button float_r">现在就去修改</button>
-	<% end %>
-	
-	<img class="request_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
-	
-	<% if sent %>
-		请求
-		<%= h(account.get_name) %>(<%= account_type[:label] %>)
-	<% else %>
-		<%= h(requester.get_name) %>(<%= requester_type[:label] %>)
-		请求
-	<% end %>
-	帮助修改<%= request.get_data[:resume] %>
+	<%= requester_name %>请求<%= account_name %>帮助修改<%= request.get_data[:resume] %>
 </div>

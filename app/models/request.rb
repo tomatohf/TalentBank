@@ -25,7 +25,10 @@ class Request < ActiveRecord::Base
   class Type < HashModel::Simple
     def self.data
       [
-        {:id => 10, :name => "revise_resume", :label => "修改简历", :icon => "revise_resume.gif"}
+        {
+          :id => 10, :name => "revise_resume", :icon => "revise_resume.gif",
+          :label => "修改简历", :accept_label => "现在就去修改"
+        }
       ]
     end
   end

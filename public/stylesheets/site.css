@@ -622,6 +622,12 @@ pre.preformatted_content a:hover {
 }
 
 
+img.notification_icon {
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
+
 .notice_date {
 	font-weight: bold;
 	color: #666666;
@@ -656,15 +662,14 @@ pre.preformatted_content a:hover {
 	margin: 0px 5px;
 }
 
-img.notice_icon {
-	vertical-align: middle;
-	margin-right: 3px;
-}
-
 
 .request {
-	padding: 10px 5px;
+	padding: 10px 5px 10px 25px;
 	border-bottom: 1px solid #DCDCDC;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: left 11px;
 }
 
 .request a {
@@ -675,22 +680,18 @@ img.notice_icon {
 	text-decoration: underline;
 }
 
-.request button {
-	font-weight: normal;
-}
-
 .request_time {
 	font-size: 10px;
 	color: #999999;
-	margin-right: 30px;
+	margin-left: 15px;
 }
 
 .request_actions {
 	text-align: right;
-	padding: 5px 0px 0px 25px;
+	padding-top: 3px;
 }
 
-img.request_icon {
-	vertical-align: middle;
-	margin-right: 3px;
+.request_actions button {
+	margin: 0px 3px;
+	font-weight: normal;
 }
