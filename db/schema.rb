@@ -166,13 +166,13 @@ ActiveRecord::Schema.define(:version => 13) do
     t.integer  "requester_type_id", :limit => 1
     t.integer  "requester_id"
     t.integer  "type_id",           :limit => 2
-    t.integer  "target_id"
+    t.integer  "reference_id"
     t.string   "data",              :limit => 600
     t.datetime "updated_at"
   end
 
-  add_index "requests", ["account_type_id", "account_id", "type_id", "target_id"], :name => "index_requests_on_account_and_type_and_target"
-  add_index "requests", ["requester_type_id", "requester_id", "type_id", "target_id"], :name => "index_requests_on_requester_and_type_and_target"
+  add_index "requests", ["account_type_id", "account_id", "type_id", "reference_id"], :name => "index_requests_on_account_and_type_and_target"
+  add_index "requests", ["requester_type_id", "requester_id", "type_id", "reference_id"], :name => "index_requests_on_requester_and_type_and_target"
 
   create_table "resume_awards", :force => true do |t|
     t.integer  "resume_id"

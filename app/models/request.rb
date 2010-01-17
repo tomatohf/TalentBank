@@ -58,7 +58,7 @@ class Request < ActiveRecord::Base
         :requester_type_id => account_type[:id],
         :requester_id => account.id,
         :type_id => type[:id],
-        :target_id => resume.id
+        :reference_id => resume.id
       )
       request.fill_data(:resume => "#{ResumeDomain.find(resume.domain_id)[:name]}的简历")
 

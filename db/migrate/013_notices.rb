@@ -27,14 +27,14 @@ class Notices < ActiveRecord::Migration
       t.column :requester_id, :integer
       
       t.column :type_id, :integer, :limit => 2
-      t.column :target_id, :integer
+      t.column :reference_id, :integer
       t.column :data, :string, :limit => 600
       
       t.column :updated_at, :datetime
     end
-    add_index :requests, [:account_type_id, :account_id, :type_id, :target_id],
+    add_index :requests, [:account_type_id, :account_id, :type_id, :reference_id],
               :name => :index_requests_on_account_and_type_and_target
-    add_index :requests, [:requester_type_id, :requester_id, :type_id, :target_id],
+    add_index :requests, [:requester_type_id, :requester_id, :type_id, :reference_id],
               :name => :index_requests_on_requester_and_type_and_target
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO requests (id) VALUES (10000)")

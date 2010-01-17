@@ -1,4 +1,4 @@
-application.js, include jquery.min.js and common js codes for all pages ...
+调整 jump_to("/") with success_msg
 
 dropdown menu 太长 或 太宽 的 处理?
 
