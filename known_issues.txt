@@ -5,6 +5,7 @@ dropdown menu 太长 或 太宽 的 处理?
 请求功能
 	- requests_of_target 的返回数量
 请求修改意见
+	- 提交后要重新定位 highlighter
 请求简历查询权限
 
 发布公告功能

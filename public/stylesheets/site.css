@@ -695,3 +695,23 @@ img.notification_icon {
 	margin: 0px 3px;
 	font-weight: normal;
 }
+
+
+.request_type {
+	padding: 3px 5px 2px;
+}
+
+.request_type a {
+	text-decoration: none;
+}
+
+.request_type a:hover {
+	text-decoration: underline;
+}
+
+.selected_request_type {
+	background-color: #EEEEEE;
+	border: 1px solid #E2E2E2;
+	padding: 5px 5px 4px;
+	font-weight: bold;
+}

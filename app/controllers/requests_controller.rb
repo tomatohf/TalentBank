@@ -16,11 +16,23 @@ class RequestsController < NotificationsController
   
   def index
     account_type = AccountType.find_by(:name, @account_type) || {}
-    account_id = self.instance_variable_get("@#{@account_type.singularize}").id
+    @account_id = self.instance_variable_get("@#{@account_type.singularize}").id
     
-    @counts = Request.send(@sent ? "count_sent_by_type" : "count_by_type", @account_type, account_id)
+    @counts = Request.send(@sent ? "count_sent_by_type" : "count_by_type", @account_type, @account_id)
     
+    @type = Request::Type.find_by(:name, params[:type])
     account_key = @sent ? "requester" : "account"
+    conditions = if @type
+      [
+        "#{account_key}_type_id = ? and #{account_key}_id = ? and type_id = ?",
+        account_type[:id], @account_id, @type[:id]
+      ]
+    else
+      [
+        "#{account_key}_type_id = ? and #{account_key}_id = ?",
+        account_type[:id], @account_id
+      ]
+    end
     
     @page = params[:page].to_i
     total_count = @counts.values.sum
@@ -32,7 +44,7 @@ class RequestsController < NotificationsController
         :page => @page,
         :per_page => Request_Page_Size,
         :total_entries => total_count,
-        :conditions => ["#{account_key}_type_id = ? and #{account_key}_id = ?", account_type[:id], account_id]
+        :conditions => conditions
       )
     else
       []
@@ -71,7 +83,8 @@ class RequestsController < NotificationsController
   
   
   def accept
-    page = params[:page]
+    current_page = params[:current_page]
+    current_type = params[:current_type]
     request = Request.find(params[:id])
     
     account_type = AccountType.find_by(:name, @account_type)
@@ -83,14 +96,17 @@ class RequestsController < NotificationsController
       request.destroy
     end
     
-    url ||= "/#{@account_type}/#{account_id}/notifications/requests" +
-            (page.blank? ? "" : "?page=#{page}")
+    url ||= build_url(
+      "/#{@account_type}/#{account_id}/notifications/requests",
+      current_page, current_type
+    )
     jump_to(url)
   end
   
   
   def destroy
-    page = params[:page]
+    current_page = params[:current_page]
+    current_type = params[:current_type]
     request = Request.find(params[:id])
     
     account_type = AccountType.find_by(:name, @account_type)
@@ -100,12 +116,17 @@ class RequestsController < NotificationsController
     is_requester = request.requester_type_id == account_type[:id] && request.requester_id == account_id
     
     request.destroy if is_account || is_requester
+    
+    url = if current_page.blank?
+      Request::TypeAdapter.new(Request::Type.find(request.type_id)[:name]).reference_url(request, is_requester)
+    else
+      build_url(
+        "/#{@account_type}/#{account_id}/notifications/requests" + (is_requester ? "/sent" : ""),
+        current_page, current_type
+      )
+    end
 
-    jump_to(
-      "/#{@account_type}/#{account_id}/notifications/requests" +
-      (is_requester ? "/sent" : "") +
-      (page.blank? ? "" : "?page=#{page}")
-    )
+    jump_to(url)
   end
   
   
@@ -140,6 +161,14 @@ class RequestsController < NotificationsController
     end
     
     accounts
+  end
+  
+  
+  def build_url(base, current_page, current_type)
+    url_params = []
+    url_params << "page=#{current_page}" unless current_page.blank?
+    url_params << "type=#{current_type}" unless current_type.blank?
+    base + (url_params.size > 0 ? ("?" + url_params.join("&")) : "")
   end
   
 end

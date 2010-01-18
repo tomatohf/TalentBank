@@ -1,5 +1,5 @@
 <%
-	page_title = %Q!#{@sent ? "发出" : "收到"}的等待处理的请求!
+	page_title = %Q!#{@sent ? "发出" : "收到"}的等待处理的#{@type && @type[:label]+"的"}请求!
 	
 	talent_page_title(page_title)
 %>
@@ -9,20 +9,20 @@
 
 
 <div class="horizontal_nav">
-	<a href="/<%= @account_type %>/<%= self.instance_variable_get("@#{@account_type.singularize}").id %>/notifications/requests"<%= %Q! class="selected_link"! unless @sent %>>
+	<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests"<%= %Q! class="selected_link"! unless @sent %>>
 		收到的请求</a>
 		
-	<a href="/<%= @account_type %>/<%= self.instance_variable_get("@#{@account_type.singularize}").id %>/notifications/requests/sent"<%= %Q! class="selected_link"! if @sent %>>
+	<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests/sent"<%= %Q! class="selected_link"! if @sent %>>
 		发出的请求</a>
 </div>
 
 
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 	<tr>
-		<td valign="top" style="padding-right: 30px;">
+		<td valign="top" style="padding-right: 20px;">
 			<% unless @requests.size > 0 %>
 				<div class="info_with_icon">
-					没有等待处理的请求
+					没有等待处理的<%= @type && @type[:label]+"的" %>请求
 				</div>
 			<% else %>
 				<%=
@@ -32,7 +32,8 @@
 						:locals => {
 							:accounts => @accounts,
 							:sent => @sent,
-							:page => @page
+							:current_page => @page,
+							:current_type => @type && @type[:name]
 						}
 					)
 				%>
@@ -43,12 +44,16 @@
 			<% end %>
 		</td>
 		
-		<td valign="top" style="width: 150px;">
+		<td valign="top" style="width: 180px;">
+			<div class="request_type<%= " selected_request_type" unless @type %>">
+				<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>" style="margin-left: 25px; font-size: 13px;">
+					全部请求</a>
+			</div>
 			<% @counts.each do |type_id, count| %>
-				<div>
-					<% type = Request::Type.find(type_id) %>
+				<% type = Request::Type.find(type_id) %>
+				<div class="request_type<%= " selected_request_type" if @type && @type[:id] == type[:id] %>">
 					<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
-					<a href="#" class="none">
+					<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>?type=<%= type[:name] %>">
 						<strong><%= count %></strong>
 						个<%= type[:label] %>的请求</a>
 				</div>

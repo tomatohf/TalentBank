@@ -1,7 +1,8 @@
 <%
 	accounts ||= {}
 	sent &&= true
-	page ||= false
+	current_page ||= false
+	current_type ||= false
 	
 	type = Request::Type.find(request.type_id)
 	
@@ -28,8 +29,11 @@
 			:id => "accept_request_form_#{request.id}"
 		) do
 	%>
-		<% if page %>
-			<input type="hidden" name="page" value="<%= page %>" />
+		<% if current_page %>
+			<input type="hidden" name="current_page" value="<%= current_page %>" />
+		<% end %>
+		<% if current_type %>
+			<input type="hidden" name="current_type" value="<%= current_type %>" />
 		<% end %>
 	<% end %>
 	
@@ -40,8 +44,11 @@
 			:id => "del_request_form_#{request.id}"
 		) do
 	%>
-		<% if page %>
-			<input type="hidden" name="page" value="<%= page %>" />
+		<% if current_page %>
+			<input type="hidden" name="current_page" value="<%= current_page %>" />
+		<% end %>
+		<% if current_type %>
+			<input type="hidden" name="current_type" value="<%= current_type %>" />
 		<% end %>
 	<% end %>
 	

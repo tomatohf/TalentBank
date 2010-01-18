@@ -44,7 +44,10 @@ class Request < ActiveRecord::Base
   
   
   def accept(options = {})
-    TypeAdapter.new(Type.find(self.type_id)[:name]).accept(self, options)
+    adapter = TypeAdapter.new(Type.find(self.type_id)[:name])
+    
+    adapter.accept(self, options)
+    adapter.reference_url(self, false)
   end
   
   
@@ -71,6 +74,10 @@ class Request < ActiveRecord::Base
     
     def accept(request, options = {})
       # do nothing ...
+    end
+    
+    def reference_url(request, is_requester)
+      ""
     end
   end
   
@@ -101,9 +108,10 @@ class Request < ActiveRecord::Base
     end
     
     
-    def accept(request, options = {})
-      account_type = AccountType.find(request.account_type_id)
-      "/#{account_type[:name]}/#{request.account_id}/revise_resumes/#{request.reference_id}"
+    def reference_url(request, is_requester)
+      account_key = is_requester ? "requester" : "account"
+      account_type = AccountType.find(request.send("#{account_key}_type_id"))
+      "/#{account_type[:name]}/#{request.send(account_key+"_id")}/revise_resumes/#{request.reference_id}"
     end
   end
   
