@@ -22,6 +22,11 @@ class Request < ActiveRecord::Base
   end
   
   
+  def accept(options = {})
+    TypeAdapter.new(Type.find(self.type_id)[:name]).accept(self, options)
+  end
+  
+  
   class Type < HashModel::Simple
     def self.data
       [
@@ -41,6 +46,10 @@ class Request < ActiveRecord::Base
     
     def generate(account_type, account, type, options = {})
       raise "Not Implemented"
+    end
+    
+    def accept(request, options = {})
+      # do nothing ...
     end
   end
   
@@ -68,6 +77,12 @@ class Request < ActiveRecord::Base
       request.save!
 
       [request, {"teachers" => {teacher.id => teacher}}]
+    end
+    
+    
+    def accept(request, options = {})
+      account_type = AccountType.find(request.account_type_id)
+      "/#{account_type[:name]}/#{request.account_id}/revise_resumes/#{request.reference_id}"
     end
   end
   

@@ -70,13 +70,15 @@ class RequestsController < NotificationsController
     account_type = AccountType.find_by(:name, @account_type)
     account_id = self.instance_variable_get("@#{@account_type.singularize}").id
     
-    #request.destroy if request.account_type_id == account_type[:id] && request.account_id == account_id
-
-    if page.blank?
+    if request.account_type_id == account_type[:id] && request.account_id == account_id
+      url = request.accept
       
-    else
-      jump_to(%Q!/#{@account_type}/#{account_id}/notifications/requests!)
+      request.destroy
     end
+    
+    url ||= "/#{@account_type}/#{account_id}/notifications/requests" +
+            (page.blank? ? "" : "?page=#{page}")
+    jump_to(url)
   end
   
   
@@ -90,13 +92,13 @@ class RequestsController < NotificationsController
     is_account = request.account_type_id == account_type[:id] && request.account_id == account_id
     is_requester = request.requester_type_id == account_type[:id] && request.requester_id == account_id
     
-    #request.destroy if is_account || is_requester
+    request.destroy if is_account || is_requester
 
-    if page.blank?
-      
-    else
-      jump_to(%Q!/#{@account_type}/#{account_id}/notifications/requests#{"/sent" if is_requester}!)
-    end
+    jump_to(
+      "/#{@account_type}/#{account_id}/notifications/requests" +
+      (is_requester ? "/sent" : "") +
+      (page.blank? ? "" : "?page=#{page}")
+    )
   end
   
   
