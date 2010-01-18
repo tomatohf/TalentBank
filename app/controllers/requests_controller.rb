@@ -16,20 +16,27 @@ class RequestsController < NotificationsController
   
   def index
     account_type = AccountType.find_by(:name, @account_type) || {}
+    account_id = self.instance_variable_get("@#{@account_type.singularize}").id
+    
+    @counts = Request.send(@sent ? "count_sent_by_type" : "count_by_type", @account_type, account_id)
     
     account_key = @sent ? "requester" : "account"
     
-    @page = params[:page]
-    @page = 1 unless @page =~ /\d+/
-    @requests = Request.paginate(
-      :page => @page,
-      :per_page => Request_Page_Size,
-      :conditions => [
-        "#{account_key}_type_id = ? and #{account_key}_id = ?",
-        account_type[:id],
-        self.instance_variable_get("@#{@account_type.singularize}").id
-      ]
-    )
+    @page = params[:page].to_i
+    total_count = @counts.values.sum
+    @page = [@page, (total_count.to_f / Request_Page_Size).ceil].min
+    @page = [@page, 1].max
+    
+    @requests = if total_count > 0
+      Request.paginate(
+        :page => @page,
+        :per_page => Request_Page_Size,
+        :total_entries => total_count,
+        :conditions => ["#{account_key}_type_id = ? and #{account_key}_id = ?", account_type[:id], account_id]
+      )
+    else
+      []
+    end
     
     @accounts = prepare_accounts(@requests, @sent)
     

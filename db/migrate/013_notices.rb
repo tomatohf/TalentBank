@@ -33,9 +33,9 @@ class Notices < ActiveRecord::Migration
       t.column :updated_at, :datetime
     end
     add_index :requests, [:account_type_id, :account_id, :type_id, :reference_id],
-              :name => :index_requests_on_account_and_type_and_target
+              :name => :index_requests_on_account_and_type_and_reference
     add_index :requests, [:requester_type_id, :requester_id, :type_id, :reference_id],
-              :name => :index_requests_on_requester_and_type_and_target
+              :name => :index_requests_on_requester_and_type_and_reference
     # reserve first 10000 ID
     ActiveRecord::Base.connection.execute("INSERT INTO requests (id) VALUES (10000)")
     ActiveRecord::Base.connection.execute("DELETE FROM requests WHERE id = 10000")

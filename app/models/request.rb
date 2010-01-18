@@ -12,6 +12,27 @@ class Request < ActiveRecord::Base
   end
   
   
+  def self.count_by_type(account_type_name, account_id)
+    self.count(
+      :conditions => [
+        "account_type_id = ? and account_id = ?",
+        AccountType.find_by(:name, account_type_name)[:id], account_id
+      ],
+      :group => "type_id"
+    )
+  end
+  
+  def self.count_sent_by_type(requester_type_name, requester_id)
+    self.count(
+      :conditions => [
+        "requester_type_id = ? and requester_id = ?",
+        AccountType.find_by(:name, requester_type_name)[:id], requester_id
+      ],
+      :group => "type_id"
+    )
+  end
+  
+  
   def self.generate(account_type_name, account, type_name, options = {})
     type = Type.find_by(:name, type_name)
     

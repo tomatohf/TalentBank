@@ -44,9 +44,15 @@
 		</td>
 		
 		<td valign="top" style="width: 150px;">
-			<% type = Request::Type.find(10) %>
-			<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
-			2个修改简历的请求
+			<% @counts.each do |type_id, count| %>
+				<div>
+					<% type = Request::Type.find(type_id) %>
+					<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
+					<a href="#" class="none">
+						<strong><%= count %></strong>
+						个<%= type[:label] %>的请求</a>
+				</div>
+			<% end %>
 		</td>
 	</tr>
 </table>
