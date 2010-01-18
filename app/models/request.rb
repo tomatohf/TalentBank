@@ -7,8 +7,18 @@ class Request < ActiveRecord::Base
   hash_field :data
   
   
-  def requests_of_target
+  def self.requests_of_reference(account_type_name, account_id, type_name, reference_id, is_requester)
+    account_key = is_requester ? "requester" : "account"
     
+    self.paginate(
+      :page => 1,
+      :per_page => 3,
+      :conditions => [
+        "#{account_key}_type_id = ? and #{account_key}_id = ? and type_id = ? and reference_id = ?",
+        AccountType.find_by(:name, account_type_name)[:id], account_id,
+        Type.find_by(:name, type_name)[:id], reference_id
+      ]
+    )
   end
   
   

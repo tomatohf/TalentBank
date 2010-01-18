@@ -1688,7 +1688,7 @@ function request_revise_resume(teacher_id, teacher_name) {
 					resume: RESUME_ID
 				},
 				function(data) {
-					$("#requests").append(data);
+					$('<form method="get" action=""></form>').appendTo($("body")).submit();
 				},
 				"html"
 			);

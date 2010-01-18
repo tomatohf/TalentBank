@@ -15,11 +15,6 @@
 <h2><%= page_title %></h2>
 
 
-<div id="requests">
-	
-</div>
-
-
 <div style="margin: 0px 50px; font-size: 14px;">
 	<% if @student %>
 		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
@@ -61,6 +56,32 @@
 		</div>
 	<% end %>
 </div>
+
+
+<% if @requests.size > 0 %>
+	<% is_requester = !!@student %>
+	<div style="margin: 10px 60px 10px 30px; background-color: #F0F5F8; border: 1px solid #E3EEF8; padding: 0px 10px 5px;">
+		<%=
+			render(
+				:partial => "/requests/request",
+				:collection => @requests,
+				:locals => {
+					:accounts => {"teachers" => @teachers, "students" => @students},
+					:sent => is_requester
+				}
+			)
+		%>
+		
+		<div class="align_c" style="margin-top: 10px;">
+			<a href="/<%= @account_type %>/<%= self.instance_variable_get("@#{@account_type.singularize}").id %>/notifications/requests<%= "/sent" if is_requester %>?type=revise_resume" target="_blank" class="none">
+				当前显示<%= @requests.size %>条
+				/
+				共<%= is_requester ? "发出" : "收到" %><%= @requests.total_entries %>条
+				修改这份简历的请求
+			</a>
+		</div>
+	</div>
+<% end %>
 
 
 <div class="resume_exp_tags_bar">

@@ -58,6 +58,10 @@ class ReviseResumesController < ApplicationController
     end
     
     
+    @requests = Request.requests_of_reference(
+      @account_type, self.instance_variable_get("@#{@account_type.singularize}").id,
+      "revise_resume", @resume.id, !!@student
+    )
     @revisers = Teacher.revisers(@student.school_id) if @student
     
     render :layout => @account_type
