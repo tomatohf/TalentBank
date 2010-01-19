@@ -3,6 +3,11 @@
 
 <h2>修改信息</h2>
 
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
 <% if flash[:error_msg] %>
 	<p class="error_msg">
 	    <%= flash[:error_msg] %>

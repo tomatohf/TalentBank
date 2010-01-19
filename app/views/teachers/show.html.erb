@@ -4,13 +4,6 @@
 <h2>老师用户操作首页</h2>
 
 
-<% if flash[:success_msg] %>
-	<p class="success_msg">
-	    <%= flash[:success_msg] %>
-	</p>
-<% end %>
-
-
 <% unless @teacher.name? %>
 	<a href="/teachers/<%= @teacher.id %>/edit">
 		填写名称</a>

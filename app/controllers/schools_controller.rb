@@ -36,8 +36,7 @@ class SchoolsController < ApplicationController
       @s.password = password
       @s.password_confirmation = password_confirmation
       if @s.save
-        flash[:success_msg] = "修改成功, 密码已更新"
-        return jump_to("/schools/#{@school_id}")
+        flash.now[:success_msg] = "修改成功, 密码已更新"
       end
     else
       flash.now[:error_msg] = "修改失败, 当前密码 错误"

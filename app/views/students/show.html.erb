@@ -1,13 +1,6 @@
 <% talent_page_title("学生") %>
 
 
-<% if flash[:success_msg] %>
-	<p class="success_msg">
-	    <%= flash[:success_msg] %>
-	</p>
-<% end %>
-
-
 <h1>
 	<%= h(@student.name) %>
 	

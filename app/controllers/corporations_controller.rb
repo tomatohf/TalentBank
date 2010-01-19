@@ -24,7 +24,7 @@ class CorporationsController < ApplicationController
     
     if @corporation.name?
       if @corporation.save
-        flash[:success_msg] = "修改成功, 企业名称已更新"
+        # flash[:success_msg] = "修改成功, 企业名称已更新"
         return jump_to("/corporations/#{@corporation.id}")
       end
     else
@@ -50,8 +50,7 @@ class CorporationsController < ApplicationController
       @corporation.password = password
       @corporation.password_confirmation = password_confirmation
       if @corporation.save
-        flash[:success_msg] = "修改成功, 密码已更新"
-        return jump_to("/corporations/#{@corporation.id}")
+        flash.now[:success_msg] = "修改成功, 密码已更新"
       end
     else
       flash.now[:error_msg] = "修改失败, 当前密码 错误"
@@ -96,8 +95,9 @@ class CorporationsController < ApplicationController
     if @profile.save
       @corporation.renew_updated_at(@profile.updated_at)
       
-      flash[:success_msg] = "修改成功, 企业信息已更新"
-      return jump_to("/corporations/#{@corporation.id}")
+      flash.now[:success_msg] = "修改成功, 企业信息已更新"
+    else
+      flash.now[:error_msg] = "操作失败, 再试一次吧"
     end
     
     render :action => "edit_profile"
