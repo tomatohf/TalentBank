@@ -76,27 +76,40 @@ form {
 .dropdown_menu ul.dropdown_sub_menu {
 	list-style: none;
 	position: absolute;
+	display: none;
+	background-color: #F8F8F8;
+	border: 1px solid #D0D0D0;
+	
 	left: 0px;
 	top: 0px;
 	margin: 0px;
-	padding: 0px;
-	display: none;
-	background-color: #F8F8F8;
-	border: 1px solid #B2B2B2;
+	padding: 1px;
+	
 	width: 130px;
+	max-height: 300px;
+	
+	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	
+	-webkit-box-shadow: 1px 2px 5px rgba(0,0,0,0.5);
+	-moz-box-shadow: 1px 2px 5px rgba(0,0,0,0.5);
 }
 .dropdown_menu ul.dropdown_sub_menu li {
 	margin: 0px;
 	padding: 0px;
+	width: 100%;
 }
 .dropdown_menu ul.dropdown_sub_menu li a {
+	width: 100%;
 	display: block;
 	margin: 0px;
-	padding: 3px 20px;
+	padding: 4px 20px 3px;
 	text-decoration: none;
+	color: #333333;
 }
 .dropdown_menu ul.dropdown_sub_menu li a:hover {
-	background-color: #FFFFFF;
+	background-color: #BECDEE;
 }
 
 
