@@ -136,21 +136,7 @@ function setup_details_dialog_links(container, detail_type, detail_period, extra
 	);
 	
 	
-	$(".operation_link").unbind("click").click(
-		function() {
-			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-			$(this).parent().hover(
-				function() {
-				},
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-				}
-			);
-
-			return false;
-		}
-	);
+	APP.setup_dropdown_menu(".operation_link", 120);
 }
 
 
@@ -781,21 +767,7 @@ function setup_compare() {
 
 
 function setup_filters_dropdown_menu() {
-	$("#filters_link").unbind("click").click(
-		function() {
-			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-			$(this).parent().hover(
-				function() {
-				},
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-				}
-			);
-			
-			return false;
-		}
-	);
+	APP.setup_dropdown_menu("#filters_link", 120);
 }
 
 

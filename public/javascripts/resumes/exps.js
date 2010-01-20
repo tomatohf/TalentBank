@@ -129,21 +129,7 @@ function update_exp_order(exps_container, order) {
 
 $(document).ready(
 	function() {
-		$(".add_exp_link").click(
-			function() {
-				$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-				$(this).parent().hover(
-					function() {
-					},
-					function() {
-						$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-					}
-				);
-				
-				return false;
-			}
-		);
+		APP.setup_dropdown_menu(".add_exp_link", 120);
 		
 		$(".resume_list_section_content").hover(
 			function() {
@@ -155,21 +141,7 @@ $(document).ready(
 			}
 		);
 		
-		$(".tag_link").click(
-			function() {
-				$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-				$(this).parent().hover(
-					function() {
-					},
-					function() {
-						$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-					}
-				);
-				
-				return false;
-			}
-		);
+		APP.setup_dropdown_menu(".tag_link", 120);
 		
 		remove_exp_tag_icon_hover();
 		

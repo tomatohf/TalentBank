@@ -914,21 +914,7 @@ function setup_revisions(revisions) {
 			);
 			
 			
-			$(revision).find("a.dropdown_menu_link").unbind("click").click(
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-					$(this).parent().hover(
-						function() {
-						},
-						function() {
-							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-						}
-					);
-
-					return false;
-				}
-			);
+			APP.setup_dropdown_menu($(revision).find("a.dropdown_menu_link"), 100);
 			setup_update_applied_link(revision);
 			beautify_buttons(
 				$(revision).find(".resume_revision_actions button"),
@@ -1619,28 +1605,9 @@ function is_ie6() {
 }
 
 
-function setup_dropdown_menus() {
-	$(".dropdown_menu_trigger").unbind("click").click(
-		function() {
-			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-			$(this).parent().hover(
-				function() {
-				},
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-				}
-			);
-			
-			return false;
-		}
-	);
-}
-
-
 $(document).ready(
 	function() {
-		setup_dropdown_menus();
+		APP.setup_dropdown_menu(".dropdown_menu_trigger", 150);
 		
 		setup_tabs();
 		setup_dialog();

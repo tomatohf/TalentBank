@@ -8,25 +8,11 @@
 <%= render :partial => "queries_grid", :locals => {:records => @corp_queries} %>
 
 
-<script src="/lib/jquery/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
 <script language="JavaScript">
 	$(document).ready(
 		function() {
-			$(".operation_link").unbind("click").click(
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-					$(this).parent().hover(
-						function() {
-						},
-						function() {
-							$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-						}
-					);
-
-					return false;
-				}
-			);
+			APP.setup_dropdown_menu(".operation_link", 110);
 			
 			
 			$("a.query_keyword").unbind("click").click(

@@ -40,21 +40,8 @@ function hide_query_loading() {
 
 
 function setup_dropdown_menus() {
-	$(".operation_link").unbind("click").click(
-		function() {
-			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-			$(this).parent().hover(
-				function() {
-				},
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-				}
-			);
-			
-			return false;
-		}
-	);
+	APP.setup_dropdown_menu(".operation_link", 130);
+	APP.setup_dropdown_menu(".statistics_link", 120);
 }
 
 

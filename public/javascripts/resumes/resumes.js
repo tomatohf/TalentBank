@@ -54,25 +54,6 @@ function update_resume(resume_id, domain, online) {
 }
 
 
-function setup_dropdown_menus() {
-	$(".edit_link").unbind("click").click(
-		function() {
-			$(this).parent().find("ul.dropdown_sub_menu").slideDown("fast").show();
-
-			$(this).parent().hover(
-				function() {
-				},
-				function() {
-					$(this).parent().find("ul.dropdown_sub_menu").slideUp("slow");
-				}
-			);
-			
-			return false;
-		}
-	);
-}
-
-
 function setup_domain_select() {
 	$("#domain_category").unbind("change").change(
 		function() {
@@ -181,7 +162,8 @@ $(document).ready(
 	function() {
 		setup_trash_visible_ibutton();
 		
-		setup_dropdown_menus();
+		APP.setup_dropdown_menu(".edit_link", 110);
+		APP.setup_dropdown_menu(".copy_link", 130);
 		
 		setup_domain_select();
 		
