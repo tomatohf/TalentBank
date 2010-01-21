@@ -29,21 +29,13 @@ var APP = {
 		if(max_height == null) { max_height = 300; }
 		$(selector).unbind("click").click(
 			function() {
-				$(this).parent().unbind("mouseenter mouseleave").hover(
+				var menu = $(this).parent().unbind("mouseenter mouseleave").hover(
 					function() {},
 					function() { $(this).parent().find("ul.dropdown_sub_menu").slideUp("slow"); }
-				).find("ul.dropdown_sub_menu")
-					.css({width: width + "px", maxHeight: max_height + "px"})
-					.slideDown(
-						"fast",
-						function() {
-							// var  menu = $(this).parent().find("ul.dropdown_sub_menu");
-							// menu.css(
-							// 	"height",
-							// 	(menu[0].scrollHeight > max_height) ? (max_height+"px") : "auto"
-							// );
-						}
-					).show();
+				).find("ul.dropdown_sub_menu").css({width: width + "px", maxHeight: max_height + "px"});
+				// to work around IE6 NOT support max-height
+				menu.show().height((menu.height() > max_height) ? max_height : menu.height()).hide();
+				menu.slideDown("fast");
 				return false;
 			}
 		);

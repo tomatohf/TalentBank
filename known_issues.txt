@@ -1,5 +1,3 @@
-dropdown menu work around max-height on IE6
-
 请求简历查询权限
 
 发布公告功能
