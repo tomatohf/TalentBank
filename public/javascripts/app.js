@@ -29,7 +29,10 @@ var APP = {
 		if(max_height == null) { max_height = 300; }
 		$(selector).unbind("click").click(
 			function() {
-				$(this).parent().find("ul.dropdown_sub_menu")
+				$(this).parent().unbind("mouseenter mouseleave").hover(
+					function() {},
+					function() { $(this).parent().find("ul.dropdown_sub_menu").slideUp("slow"); }
+				).find("ul.dropdown_sub_menu")
 					.css({width: width + "px", maxHeight: max_height + "px"})
 					.slideDown(
 						"fast",
@@ -41,10 +44,6 @@ var APP = {
 							// );
 						}
 					).show();
-				$(this).parent().unbind("mouseenter mouseleave").hover(
-					function() {},
-					function() { $(this).parent().find("ul.dropdown_sub_menu").slideUp("slow"); }
-				);
 				return false;
 			}
 		);
