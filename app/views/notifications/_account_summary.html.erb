@@ -1,0 +1,27 @@
+<%
+	notice_count = Notice.count_unread(account_type_name, account_id)
+	request_counts = Request.count_by_type(account_type_name, account_id)
+%>
+
+<% if request_counts.values.sum + notice_count > 0 %>
+	<div class="side_section">
+		<% if notice_count > 0 %>
+			<div class="notification">
+				<img class="notification_icon" src="/images/notifications/notice_icon.gif" border="0" title="通知" alt="通知" />
+				<a href="/<%= account_type_name %>/<%= account_id %>/notifications/notices">
+					<strong><%= notice_count %></strong>
+					个通知</a>
+			</div>
+		<% end %>
+		
+		<% request_counts.each do |type_id, count| %>
+			<% type = Request::Type.find(type_id) %>
+			<div class="notification">
+				<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
+				<a href="/<%= account_type_name %>/<%= account_id %>/notifications/requests?type=<%= type[:name] %>">
+					<strong><%= count %></strong>
+					个<%= type[:label] %>的请求</a>
+			</div>
+		<% end %>
+	</div>
+<% end %>

@@ -1,4 +1,22 @@
 <% talent_page_title("企业") %>
 
 
-<h2>企业用户操作首页</h2>
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+	<tr>
+		<td valign="top" style="padding-right: 20px;">
+			<h2>企业用户操作首页</h2>
+		</td>
+		
+		<td valign="top" style="width: 180px;">
+			<%=
+				render(
+					:partial => "/notifications/account_summary",
+					:locals => {
+						:account_type_name => "corporations",
+						:account_id => @corporation.id
+					}
+				)
+			%>
+		</td>
+	</tr>
+</table>
