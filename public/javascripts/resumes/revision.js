@@ -49,7 +49,6 @@ function setup_resume_part(type_name, part) {
 	).unbind("click").click(
 		function(event) {
 			$("#dialog").dialog("option", "title", get_dialog_title(this, type_name));
-
 			prepare_dialog_content(type, this);
 
 			open_dialog(this);
@@ -286,7 +285,7 @@ function get_dialog_title(part, type_name) {
 
 function get_dialog_sub_title(type_name, part) {
 	part = $(part).clone();
-	$(part).find(".resume_revision_pop, .resume_comment_pop").remove();
+	$(part).find(".resume_revision_pop").add($(part).find(".resume_comment_pop")).remove();
 	
 	
 	var sub_title = "";
@@ -500,7 +499,7 @@ function draw_new_revision_form(action, type, part) {
 function get_new_revision_inputs(type, part, modify) {
 	var original_part = part;
 	part = $(original_part).clone();
-	$(part).find(".resume_revision_pop, .resume_comment_pop").remove();
+	$(part).find(".resume_revision_pop").add($(part).find(".resume_comment_pop")).remove();
 	
 	
 	var inputs_container = $('<div></div>');
@@ -1038,10 +1037,10 @@ function setup_update_applied_link(revisions) {
 				);
 
 			if(applied) {
-				$(revisions).find(".ignore_revision_btn, .apply_revision_btn").hide();
+				$(revisions).find(".ignore_revision_btn").add($(revisions).find(".apply_revision_btn")).hide();
 			}
 			else {
-				$(revisions).find(".ignore_revision_btn, .apply_revision_btn").show();
+				$(revisions).find(".ignore_revision_btn").add($(revisions).find(".apply_revision_btn")).show();
 			}
 		}
 	);
