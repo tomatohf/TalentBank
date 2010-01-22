@@ -316,33 +316,46 @@ function get_dialog_sub_title(type_name, part) {
 
 
 function open_dialog(part) {
-	// $("#dialog").dialog("close");
-	
 	show_highlighter(1, part);
 	
-	if($("#dialog").dialog("isOpen")) {
-		var padding = 20;
-		var top = $("#dialog").parent().position().top;
-		var height = $("#dialog").parent().height();
-		
-		if(top < $(document).scrollTop()) {
-			top = $(document).scrollTop() + padding;
-		}
-		
-		if(top + height > $(document).scrollTop() + $(window).height()) {
-			top = $(document).scrollTop() + $(window).height() - padding - height;
-		}
-		
-		$("#dialog").parent().animate(
-			{
-				top: top
+	var dialog_height = $("#dialog").dialog("option", "height");
+	var part_top = $(part).position().top;
+	var part_height = $(part).height();
+	var document_scroll = $(document).scrollTop();
+	
+	var spacing = 20;
+	var padding = ($(window).height() - part_height - spacing - dialog_height) / 2;
+	if(padding < 5) { padding = 5; }
+	
+	var part_align_top = true;
+ 	document_scroll = part_top - padding;
+	if(part_top + (part_height / 2) > $(document).height() / 2) {
+		part_align_top = false;
+		document_scroll = part_top + part_height + padding - $(window).height();
+	}
+	
+	$("html, body").animate(
+		{
+			scrollTop: document_scroll
+		},
+		function() {
+			if(!$("#dialog").dialog("isOpen")) {
+				$("#dialog").dialog("option", "position", calculate_dialog_position());
+				$("#dialog").dialog("open");
 			}
-		);
-	}
-	else {
-		$("#dialog").dialog("option", "position", calculate_dialog_position());
-		$("#dialog").dialog("open");
-	}
+			
+			var dialog_y = part_top - spacing - dialog_height;
+			if(part_align_top) {
+				dialog_y = part_top + part_height + spacing;
+			}
+
+			$("#dialog").parent().animate(
+				{
+					top: dialog_y
+				}
+			);
+		}
+	);
 }
 
 
