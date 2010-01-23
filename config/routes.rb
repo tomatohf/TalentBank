@@ -9,17 +9,7 @@ ActionController::Routing::Routes.draw do |map|
     :new_teacher => :get,
     :create_teacher => :post,
     
-    :allow_teacher_admin => :post,
-    :inhibit_teacher_admin => :post,
-    
-    :allow_teacher_statistic => :post,
-    :inhibit_teacher_statistic => :post,
-    
-    :allow_teacher_resume => :post,
-    :inhibit_teacher_resume => :post,
-    
-    :allow_teacher_revision => :post,
-    :inhibit_teacher_revision => :post
+    :adjust_teacher_permission => :post
   }
   
   
@@ -34,8 +24,7 @@ ActionController::Routing::Routes.draw do |map|
     :new_corporation => :get,
     :create_corporation => :post,
     
-    :allow_corporation_query => :post,
-    :inhibit_corporation_query => :post
+    :adjust_corporation_permission => :post
   } do |teachers|
     teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get

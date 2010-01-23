@@ -9,8 +9,10 @@
 
 
 <div style="margin: 5px 30px;">
-	<% form_tag "/teachers/#{@teacher.id}/#{@corporation.allow_query ? 'inhibit' : 'allow'}_corporation_query", :method => :post, :id => "adjust_allow_query_form" do %>
-		<input type="hidden" id="corporation_id" name="corporation_id" value="<%= @corporation.id %>" />
+	<% form_tag "/teachers/#{@teacher.id}/adjust_corporation_permission", :method => :post, :id => "adjust_allow_query_form" do %>
+		<input type="hidden" name="corporation_id" value="<%= @corporation.id %>" />
+		<input type="hidden" name="permission" value="query" />
+		<input type="hidden" name="allow" value="<%= !@corporation.allow_query %>" />
 	<% end %>
 	
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
@@ -41,8 +43,10 @@
 
 			<td>
 				<% if @corporation.allow_query %>
+					<img src="/images/teachers/yes_icon.gif" border="0" alt="允许" style="vertical-align: -3px;" />
 					<font color="green">允许查询简历</font>
 				<% else %>
+					<img src="/images/teachers/no_icon.gif" border="0" alt="禁止" style="vertical-align: -3px;" />
 					<font color="red">禁止查询简历</font>
 				<% end %>
 				

@@ -10,7 +10,7 @@
 	resumes = student.resumes.sort { |x, y| x.domain_id <=> y.domain_id }
 %>
 
-<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<tr<%= %Q! class="odd"! if student_counter.odd? %>>
 	<td>
 		<% if resumes.size > 0 %>
 			<a href="#" title="查看<%= student_name %>的简历" class="none operation_link">

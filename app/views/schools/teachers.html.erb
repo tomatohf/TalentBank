@@ -10,7 +10,7 @@
 	</p>
 <% end %>
 
-<div class="align_r">
+<div class="align_r" style="margin-right: 30px;">
 	<a href="/schools/<%= @school_id %>/new_teacher" class="button">
 		添加新的老师</a>
 </div>
@@ -20,25 +20,10 @@
 		<thead>
 			<tr>
 				<td>名称</td>
-				<td align="center" style="width: 85px;">
-					学生简历
-					<img src="/images/loading_icon.gif" id="resume_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
+				<td>
+					权限
+					<img src="/images/loading_icon.gif" id="permission_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
 				</td>
-				<td align="center" style="width: 85px;">
-					修改简历
-					<img src="/images/loading_icon.gif" id="revision_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
-				</td>
-				<td align="center" style="width: 85px;">
-					数据统计
-					<img src="/images/loading_icon.gif" id="statistic_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
-				</td>
-				<td align="center" style="width: 85px;">
-					管理企业
-					<img src="/images/loading_icon.gif" id="admin_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
-				</td>
-				
-				<% # the following td is used to avoid dropdown menu being out of page %>
-				<td style="width: 30px;"></td>
 			</tr>
 		</thead>
 		

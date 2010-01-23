@@ -1,56 +1,38 @@
-function allow_teacher(teacher_id, allow_what) {
-	var url = "/schools/" + SCHOOL_ID + "/allow_teacher_" + allow_what;
-	adjust_teacher(url, teacher_id, allow_what);
-}
-
-function inhibit_teacher(teacher_id, inhibit_what) {
-	var url = "/schools/" + SCHOOL_ID + "/inhibit_teacher_" + inhibit_what;
-	adjust_teacher(url, teacher_id, inhibit_what);
-}
-
-function adjust_teacher(url, teacher_id, adjust_what) {
-	show_loading(adjust_what);
+function adjust_permission(teacher, permission, allow) {
+	show_permission_loading();
 	
 	$.ajax(
 		{
 			type: "POST",
-			url: url,
+			url: "/schools/" + SCHOOL_ID + "/adjust_teacher_permission",
 			dataType: "html",
 			data: {
-				teacher_id: teacher_id
+				teacher: teacher,
+				permission: permission,
+				allow: allow
 			},
 			complete: function() {
-				hide_loading(adjust_what);
+				hide_permission_loading();
 			},
 			success: function(data, text_status) {
-				$("#" + adjust_what + "_field_" + teacher_id).replaceWith(data);
-				
-				setup_dropdown_menus();
+				$("#" + permission + "_field_" + teacher).replaceWith(data);
 			}
 		}
 	);
 }
 
 
-function show_loading(name) {
-	$("#" + name + "_loading").css("visibility", "visible");
+function show_permission_loading() {
+	$("#permission_loading").fadeIn("slow");
 }
 
-function hide_loading(name) {
-	$("#" + name + "_loading").css("visibility", "hidden");
-}
-
-
-function setup_dropdown_menus() {
-	APP.setup_dropdown_menu(".operation_link", 130);
+function hide_permission_loading() {
+	$("#permission_loading").fadeOut("slow");
 }
 
 
 $(document).ready(
 	function() {
-		setup_dropdown_menus();
-		
-		// make success msg disappear some time later
 		$(".success_msg").animate(
 			{
 				opacity: 90

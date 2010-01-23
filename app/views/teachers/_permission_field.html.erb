@@ -1,0 +1,14 @@
+<%
+	allow = corporation.send("allow_#{field}")
+	
+	name = {
+		"query" => "查询简历"
+	}[field]
+%>
+
+<div class="permission_field" id="<%= field %>_field_<%= corporation.id %>">
+	<a href="#" title="调整<%= name %>的权限" onclick="adjust_permission(<%= corporation.id %>, '<%= field %>', '<%= !allow %>'); return false;" class="none">
+		<img src="/images/teachers/<%= allow ? "yes" : "no" %>_icon.gif" border="0" alt="<%= allow ? "允许" : "禁止" %>" />
+		<font color="<%= allow ? "green" : "red" %>"><%= name %></font>
+	</a>
+</div>

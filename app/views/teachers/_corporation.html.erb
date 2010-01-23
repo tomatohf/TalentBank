@@ -1,20 +1,18 @@
-<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<tr<%= %Q! class="odd"! if corporation_counter.even? %>>
 	<td>
 		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
 			<%= h(corporation.uid) %></a>
-	</td>
-	
-	<td>
-		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-			<%= h(corporation.name) %></a>
-	</td>
-	
-	<td align="center">
-		<%= render :partial => "allow_query_field", :locals => {:corporation => corporation} %>
+		<br />
+		<% if corporation.name? %>
+			<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+				<%= h(corporation.name) %></a>
+		<% else %>
+			&nbsp;
+		<% end %>
 	</td>
 	
 	<% if @teacher.statistic %>
-		<td align="center">
+		<td>
 			<a href="#" title="查看企业的数据统计" class="none statistics_link">
 				<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
 				数据统计</a>
@@ -46,5 +44,11 @@
 		</td>
 	<% end %>
 	
-	<td></td>
+	<td>
+		<%
+			["query"].each do |field|
+		%>
+			<%= render :partial => "permission_field", :locals => {:corporation => corporation, :field => field} %>
+		<% end %>
+	</td>
 </tr>

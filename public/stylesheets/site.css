@@ -756,3 +756,12 @@ img.notification_icon {
 .list tbody tr.odd td {
 	background-color: #F8F8F8;
 }
+
+
+.permission_field {
+	float: left;
+	margin: 0px 10px;
+}
+.permission_field img {
+	vertical-align: -3px;
+}

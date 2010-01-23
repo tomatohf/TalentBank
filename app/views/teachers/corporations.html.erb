@@ -10,8 +10,9 @@
 	</p>
 <% end %>
 
-<div>
-	<a href="/teachers/<%= @teacher.id %>/new_corporation">添加企业帐号</a>
+<div class="align_r" style="margin-right: 30px;">
+	<a href="/teachers/<%= @teacher.id %>/new_corporation" class="button">
+		添加企业帐号</a>
 </div>
 
 <div>
@@ -76,21 +77,17 @@
 </div>
 
 <div>
-	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
+	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w list" style="font-size: 14px;">
 		<thead>
 			<tr>
-				<td>用户名</td>
 				<td>名称</td>
-				<td align="center" style="width: 85px;">
-					查询简历
-					<img src="/images/loading_icon.gif" id="query_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; visibility: hidden" />
-				</td>
 				<% if @teacher.statistic %>
-					<td style="width: 85px;"></td>
+					<td style="width: 85px;">数据统计</td>
 				<% end %>
-				
-				<% # the following td is used to avoid dropdown menu being out of page %>
-				<td style="width: 20px;"></td>
+				<td>
+					权限
+					<img src="/images/loading_icon.gif" id="permission_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
+				</td>
 			</tr>
 		</thead>
 		

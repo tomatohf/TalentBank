@@ -1,29 +1,21 @@
 <tr<%= %Q! class="odd"! if teacher_counter.even? %>>
-	<% uid = h(teacher.uid) %>
-	
 	<td>
-		<%= uid %>
+		<%= h(teacher.uid) %>
 		<br />
-		<%= h(teacher.name) %>&nbsp;
+		<% if teacher.name? %>
+			<%= h(teacher.name) %>
+		<% else %>
+			&nbsp;
+		<% end %>
 	</td>
+	
 	
 	<td>
-		<%= render :partial => "resume_field", :locals => {:teacher => teacher} %>
+		<%
+			["resume", "revision", "statistic", "admin"].each do |field|
+		%>
+			<%= render :partial => "permission_field", :locals => {:teacher => teacher, :field => field} %>
+		<% end %>
 	</td>
-	
-	<td>
-		<%= render :partial => "revision_field", :locals => {:teacher => teacher} %>
-	</td>
-	
-	<td>
-		<%= render :partial => "statistic_field", :locals => {:teacher => teacher} %>
-	</td>
-	
-	<td>
-		<%= render :partial => "admin_field", :locals => {:teacher => teacher} %>
-	</td>
-	
-	
-	<td></td>
 </tr>
 	

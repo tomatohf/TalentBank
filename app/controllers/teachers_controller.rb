@@ -3,17 +3,16 @@ class TeachersController < ApplicationController
   before_filter :check_login_for_teacher
   
   before_filter :check_active, :only => [:update, :update_password, :create_corporation,
-                                          :allow_corporation_query, :inhibit_corporation_query]
+                                          :adjust_corporation_permission]
   
   before_filter :check_teacher
   
   before_filter :check_teacher_admin, :only => [:corporations,
                                                 :new_corporation, :create_corporation,
-                                                :allow_corporation_query, :inhibit_corporation_query,
+                                                :adjust_corporation_permission,
                                                 :show_corporation]
   
-  before_filter :check_corporation, :only => [:allow_corporation_query, :inhibit_corporation_query,
-                                              :show_corporation]
+  before_filter :check_corporation, :only => [:adjust_corporation_permission, :show_corporation]
   
   
   def show
@@ -142,12 +141,18 @@ class TeachersController < ApplicationController
   end
   
   
-  def allow_corporation_query
-    adjust_corporation_permission(:allow_query, true)
-  end
-  
-  def inhibit_corporation_query
-    adjust_corporation_permission(:allow_query, false)
+  def adjust_corporation_permission
+    field = params[:permission] && params[:permission].strip
+    
+    @corporation.send("allow_#{field}=", params[:allow] == "true")
+    
+    if request.xhr?
+      @corporation.save!
+      render :partial => "permission_field", :locals => {:corporation => @corporation, :field => field}
+    else
+      @corporation.save
+      jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}")
+    end
   end
   
   
@@ -172,21 +177,6 @@ class TeachersController < ApplicationController
   def check_corporation
     @corporation = Corporation.find(params[:corporation_id])
     jump_to("/errors/forbidden") unless @corporation.school_id == @teacher.school_id
-  end
-  
-  
-  def adjust_corporation_permission(name, value)
-    @corporation.send("#{name}=", value)
-    
-    if @corporation.save
-      return render(:partial => "#{name}_field", :locals => {:corporation => @corporation}) if request.xhr?
-    end
-    
-    if request.xhr?
-      render :nothing => true
-    else
-      jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}")
-    end
   end
   
 end

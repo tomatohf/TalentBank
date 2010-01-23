@@ -5,13 +5,11 @@ class SchoolsController < ApplicationController
   
   before_filter :check_login_for_school
   
-  before_filter :check_active, :only => [:update, :create_teacher,
-                                          :allow_teacher_admin, :inhibit_teacher_admin,
-                                          :allow_teacher_statistic, :inhibit_teacher_statistic,
-                                          :allow_teacher_resume, :inhibit_teacher_resume,
-                                          :allow_teacher_revision, :inhibit_teacher_revision]
+  before_filter :check_active, :only => [:update, :create_teacher, :adjust_teacher_permission]
   
   before_filter :check_school
+  
+  before_filter :check_teacher, :only => [:adjust_teacher_permission]
   
   
   def show
@@ -83,39 +81,14 @@ class SchoolsController < ApplicationController
   end
   
   
-  def allow_teacher_admin
-    adjust_teacher(:admin, true)
-  end
+  def adjust_teacher_permission
+    field = params[:permission] && params[:permission].strip
     
-  def inhibit_teacher_admin
-    adjust_teacher(:admin, false)
-  end
-  
-  
-  def allow_teacher_statistic
-    adjust_teacher(:statistic, true)
-  end
+    @teacher.send("#{field}=", params[:allow] == "true")
     
-  def inhibit_teacher_statistic
-    adjust_teacher(:statistic, false)
-  end
-  
-  
-  def allow_teacher_resume
-    adjust_teacher(:resume, true)
-  end
-  
-  def inhibit_teacher_resume
-    adjust_teacher(:resume, false)
-  end
-  
-  
-  def allow_teacher_revision
-    adjust_teacher(:revision, true)
-  end
-  
-  def inhibit_teacher_revision
-    adjust_teacher(:revision, false)
+    @teacher.save!
+    
+    render :partial => "permission_field", :locals => {:teacher => @teacher, :field => field}
   end
   
   
@@ -127,15 +100,9 @@ class SchoolsController < ApplicationController
   end
   
   
-  def adjust_teacher(name, value)
-    teacher = Teacher.find(params[:teacher_id])
-    teacher.send("#{name}=", value)
-    
-    if teacher.save
-      return render(:partial => "#{name}_field", :locals => {:teacher => teacher})
-    end
-    
-    render :nothing => true
+  def check_teacher
+    @teacher = Teacher.find(params[:teacher])
+    jump_to("/errors/forbidden") unless @teacher.school_id.to_s == @school_id
   end
   
 end
