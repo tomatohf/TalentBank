@@ -562,7 +562,7 @@ a.corp_tag:hover {
 }
 
 .grid tbody tr.odd td {
-	background-color: #F9F9F9;
+	background-color: #F8F8F8;
 }
 
 .grid tbody td.datetime {
@@ -734,4 +734,23 @@ img.notification_icon {
 }
 .notification a:hover {
 	text-decoration: underline;
+}
+
+
+.list {
+	border-collapse: collapse;
+}
+
+.list thead td {
+	border-bottom: 1px solid #BBBBBB;
+	padding: 8px;
+}
+
+.list tbody td {
+	border-bottom: 1px solid #DDDDDD;
+	padding: 8px;
+}
+
+.list tbody tr.odd td {
+	background-color: #F8F8F8;
 }

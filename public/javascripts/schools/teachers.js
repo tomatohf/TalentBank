@@ -45,22 +45,10 @@ function setup_dropdown_menus() {
 	APP.setup_dropdown_menu(".operation_link", 130);
 }
 
-function setup_mouse_over() {
-	$(".teacher_row").unbind("mouseenter mouseleave").hover(
-		function() {
-			$(this).css("backgroundColor", "#F8F8F8");
-		},
-		function() {
-			$(this).css("backgroundColor", "#FFFFFF");
-		}
-	);
-}
-
 
 $(document).ready(
 	function() {
 		setup_dropdown_menus();
-		setup_mouse_over();
 		
 		// make success msg disappear some time later
 		$(".success_msg").animate(

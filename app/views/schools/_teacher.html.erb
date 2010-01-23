@@ -1,4 +1,4 @@
-<tr id="teacher_row_<%= teacher.id %>" class="teacher_row">
+<tr<%= %Q! class="odd"! if teacher_counter.even? %>>
 	<% uid = h(teacher.uid) %>
 	
 	<td>
