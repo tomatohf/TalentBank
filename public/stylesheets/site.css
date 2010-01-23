@@ -191,11 +191,13 @@ form {
 	padding: 3px 10px 2px;
 	* padding: 6px 10px 0px;
 }
-
+a.button {
+	text-decoration: none;
+	padding: 4px 10px 3px;
+}
 .button:hover {
 	border-style: outset;
 }
-
 .button:active {
 	border-style: inset;
 }
@@ -743,12 +745,12 @@ img.notification_icon {
 
 .list thead td {
 	border-bottom: 1px solid #BBBBBB;
-	padding: 8px;
+	padding: 6px;
 }
 
 .list tbody td {
 	border-bottom: 1px solid #DDDDDD;
-	padding: 8px;
+	padding: 6px;
 }
 
 .list tbody tr.odd td {
