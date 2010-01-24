@@ -43,19 +43,17 @@
 		</td>
 		
 		<td valign="top" style="width: 180px;">
-			<div class="request_type<%= " selected_request_type" unless @type %>">
-				<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>" style="margin-left: 25px; font-size: 13px;">
+			<div class="vertical_nav">
+				<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>"<%= %Q! class="selected_link"! unless @type %>>
 					全部请求</a>
-			</div>
-			<% @counts.each do |type_id, count| %>
-				<% type = Request::Type.find(type_id) %>
-				<div class="request_type<%= " selected_request_type" if @type && @type[:id] == type[:id] %>">
-					<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
-					<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>?type=<%= type[:name] %>">
+				<% @counts.each do |type_id, count| %>
+					<% type = Request::Type.find(type_id) %>
+					<a href="/<%= @account_type %>/<%= @account_id %>/notifications/requests<%= "/sent" if @sent %>?type=<%= type[:name] %>"<%= %Q! class="selected_link"! if @type && @type[:id] == type[:id] %>>
+						<img class="notification_icon" src="/images/notifications/requests/<%= type[:icon] %>" border="0" title="<%= type[:label] %>" alt="<%= type[:label] %>" />
 						<strong><%= count %></strong>
 						个<%= type[:label] %>的请求</a>
-				</div>
-			<% end %>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 </table>

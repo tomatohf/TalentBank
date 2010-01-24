@@ -344,7 +344,6 @@ a.none:hover {
 	
 	text-shadow: 1px 1px 1px #EEEEEE;
 }
-
 .horizontal_nav a.selected_link {
 	background-color: #FFFFFF;
 	border:1px solid #CCCCCC;
@@ -354,6 +353,28 @@ a.none:hover {
 	font-weight: bold;
 	position: relative;
 	top:-1px;
+}
+
+
+.vertical_nav {
+	border-top: 1px solid #CEE1EE;
+}
+.vertical_nav a {
+	display: block;
+	border-bottom: 1px solid #CEE1EE;
+	color: #333333;
+	text-decoration: none;
+	height: 26px;
+	line-height: 26px;
+	padding-left: 10px;
+}
+.vertical_nav a:hover {
+	background-color: #EDF3FF;
+}
+.vertical_nav a.selected_link {
+	background-color: #7FA3CB;
+	color: #FFFFFF;
+	font-weight: bold;
 }
 
 
@@ -735,24 +756,6 @@ img.notification_icon {
 .request_actions button {
 	margin: 0px 3px;
 	font-weight: normal;
-}
-
-
-.request_type {
-	padding: 3px 5px 2px;
-}
-.request_type a {
-	text-decoration: none;
-}
-.request_type a:hover {
-	text-decoration: underline;
-}
-
-.selected_request_type {
-	background-color: #EEEEEE;
-	border: 1px solid #E2E2E2;
-	padding: 5px 5px 4px;
-	font-weight: bold;
 }
 
 
