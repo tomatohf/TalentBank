@@ -1,4 +1,6 @@
-verify resume_skills#index page (which using multiple thead & tbody) on IE
+verify UI on IE
+	- resume_skills#index page (which using multiple thead & tbody)
+	- horizontal_nav (which using text-shadow)
 
 请求简历查询权限
 

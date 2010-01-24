@@ -314,20 +314,46 @@ a.none:hover {
 
 
 .horizontal_nav {
-	word-spacing: 15px;
+	background: transparent url(/images/ui/horizontal_nav_bg.gif) repeat-x scroll 0 0;
+	height: 26px;
+	margin: 10px 0px 15px;
+	padding: 6px 10px;
+	position: relative;
+	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 .horizontal_nav a {
-	color: #666699;
+	text-decoration: none;
+	float: left;
+	margin-right: 10px;
+	height: 26px;
+	padding: 0px 8px;
+	line-height: 26px;
+	font-size: 14px;
+	color: #333333;
+	
+	text-shadow: 1px 1px 1px #FFFFFF;
+	
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .horizontal_nav a:hover {
-	text-decoration: underline;
+	color: #000000;
+	background-color: #CCCCCC;
+	
+	text-shadow: 1px 1px 1px #EEEEEE;
 }
 
 .horizontal_nav a.selected_link {
-	font-size: 14px;
+	background-color: #FFFFFF;
+	border:1px solid #CCCCCC;
+	border-right-color: #EEEEEE;
+	border-bottom-color: #EEEEEE;
+	color: #000000;
 	font-weight: bold;
-	text-decoration: none;
-	color: #333333;
+	position: relative;
+	top:-1px;
 }
 
 
