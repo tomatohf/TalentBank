@@ -90,17 +90,6 @@ function remove_exp_tag_icon_hover() {
 }
 
 
-function adjust_exp_tags() {
-	var scroll_top = $(document).scrollTop();
-	
-	$("#exp_tags").animate(
-		{
-			top: (scroll_top > 0) ? (scroll_top - 50 + "px") : "0px"
-		}
-	);
-}
-
-
 function update_exp_order(exps_container, order) {
 	section_id = exps_container.attr("id").substr("resume_exp_section_".length);
 
@@ -126,6 +115,28 @@ function update_exp_order(exps_container, order) {
 }
 
 
+function setup_resume_exp_tags() {
+	var tags = $(".resume_exp_tags");
+	var width = tags.width();
+	var top = tags.position().top;
+	
+	$(document).unbind("scroll").scroll(
+		function() {
+			if($(document).scrollTop() > top) {
+				if(!tags.hasClass("position_fixed")) {
+					tags.width(width).addClass("position_fixed").css("top", "15px");
+				}
+			}
+			else {
+				if(tags.hasClass("position_fixed")) {
+					tags.removeClass("position_fixed");
+				}
+			}
+		}
+	);
+}
+
+
 
 $(document).ready(
 	function() {
@@ -134,7 +145,6 @@ $(document).ready(
 		$(".resume_list_section_content").hover(
 			function() {
 				$(this).find("div.exp_operations").css("visibility", "visible");
-				adjust_exp_tags();
 			},
 			function() {
 				$(this).find("div.exp_operations").css("visibility", "hidden");
@@ -145,12 +155,7 @@ $(document).ready(
 		
 		remove_exp_tag_icon_hover();
 		
-		
-		$(".tag_link").click(
-			function() {
-				adjust_exp_tags();
-			}
-		);
+		setup_resume_exp_tags();
 		
 		
 		$(".resume_exp_container").sortable(

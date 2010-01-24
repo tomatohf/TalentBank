@@ -21,8 +21,8 @@
 }
 /* fix ie6 lag bug */
 * html, * html body {
-	background-image:url(about:blank);
-	background-attachment:fixed;
+	background-image: url(about:blank);
+	background-attachment: fixed;
 }
 
 

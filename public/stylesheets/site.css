@@ -225,6 +225,22 @@ a.none:hover {
 }
 
 
+.position_fixed {
+	position: fixed;
+}
+/* implement ie6 position fixed */
+* html .position_fixed {
+	position: absolute;
+	bottom: auto;
+	top: expression(eval(document.documentElement.scrollTop));
+}
+/* fix ie6 lag bug */
+* html, * html body {
+	background-image: url(about:blank);
+	background-attachment: fixed;
+}
+
+
 .bottom_line {
 	margin-top: 100px;
 	margin-bottom: 5px;
@@ -408,17 +424,21 @@ ul.no_bullet {
 }
 
 .resume_exp_tags {
-	width: 110px;
-	position: relative;
 	font-size: 14px;
 	text-align: center;
 	border: 1px solid #EAEAEA;
-	padding: 5px;
+	padding: 6px 4px 5px;
 }
-
 .resume_exp_tags a {
 	display: block;
-	padding: 4px 0px;
+	padding: 3px 0px;
+}
+.resume_exp_tags div {
+	margin-bottom: 5px;
+	padding-bottom: 6px;
+	border-bottom: 1px dashed #C2E3EF;
+	
+	text-shadow: 2px 2px 2px #EEEEEE;
 }
 
 .resume_exp_order_handle {

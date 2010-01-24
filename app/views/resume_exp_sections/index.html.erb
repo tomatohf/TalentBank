@@ -19,40 +19,41 @@
 	</p>
 <% end %>
 
-<div>
-	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/new">
+<div style="margin: 15px 30px 10px;">
+	<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections/new" class="button">
 		添加经历块</a>
 </div>
 
 
-<div class="float_r">
-	<% if @tags.size > 0 %>
-		<div id="exp_tags" class="resume_exp_tags">
-			<div>
-				<img src="/images/loading_icon.gif" id="loading" border="0" title="操作中" alt="操作中" style="margin: 0px 5px -3px 0px; display: none;" />
-				<img src="/images/students/tag_icon.gif" id="tag_icon_img" border="0" title="标签" alt="标签" style="margin: 0px 5px -3px 0px;" />
-				经历标签
-			</div>
-			<div style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed #DDDDDD;">
-				<%= render :partial => "/resume_exps/tagger", :collection => @taggers %>
-			</div>
-		</div>
-	<% end %>
-</div>
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+	<tr>
+		<td valign="top">
+			<% form_tag "", :method => :delete, :id => "del_section_form" do %>
+			<% end %>
+			<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
+			<% end %>
+			<% form_tag "", :method => :post, :id => "del_resume_student_exp_form" do %>
+				<input type="hidden" id="resume_student_exp_id" name="resume_student_exp_id" />
+			<% end %>
 
-<div style="margin-right: 120px;">
-	<% form_tag "", :method => :delete, :id => "del_section_form" do %>
-	<% end %>
-	<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
-	<% end %>
-	<% form_tag "", :method => :post, :id => "del_resume_student_exp_form" do %>
-		<input type="hidden" id="resume_student_exp_id" name="resume_student_exp_id" />
-	<% end %>
-	
-	<%= render :partial => "section", :collection => @sections, :locals => {:tags => @tags} %>
-</div>
-
-<div class="clear_r"></div>
+			<%= render :partial => "section", :collection => @sections, :locals => {:tags => @tags} %>
+		</td>
+		
+		<td valign="top" style="width: 120px;">
+			<% if @tags.size > 0 %>
+				<div id="exp_tags" class="resume_exp_tags">
+					<div>
+						<img src="/images/loading_icon.gif" id="loading" border="0" title="操作中" alt="操作中" style="margin: 0px 5px -3px 0px; display: none;" />
+						<img src="/images/students/tag_icon.gif" id="tag_icon_img" border="0" title="标签" alt="标签" style="margin: 0px 5px -3px 0px;" />
+						经历标签
+					</div>
+					
+					<%= render :partial => "/resume_exps/tagger", :collection => @taggers %>
+				</div>
+			<% end %>
+		</td>
+	</tr>
+</table>
 
 
 <script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
