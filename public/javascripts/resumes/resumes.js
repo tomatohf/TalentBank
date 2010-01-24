@@ -66,7 +66,7 @@ function setup_domain_select() {
 function setup_resume_mouse_over() {
 	$(".resume_row, .trash_resume_row").unbind("mouseenter mouseleave").hover(
 		function() {
-			$(this).css("backgroundColor", "#F8F8F8");
+			$(this).css("backgroundColor", "#F1F6F9");
 		},
 		function() {
 			$(this).css("backgroundColor", "#FFFFFF");

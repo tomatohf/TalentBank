@@ -1,6 +1,13 @@
+vertical tab
+	- requests
+	- saved_resumes
+	- resume_exp_sections
+
 verify UI on IE
 	- resume_skills#index page (which using multiple thead & tbody)
 	- horizontal_nav (which using text-shadow)
+	- resume_exp_sections#index (which using float_r)
+	- corp_saved_resumes#index (which using float_r)
 
 请求简历查询权限
 

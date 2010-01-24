@@ -33,7 +33,7 @@
 		</tr>
 		
 		<% @student_exps.each do |exp| %>
-			<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+			<tr onmouseover="this.style.backgroundColor='#F1F6F9';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 				<td>
 					<%= render :partial => "/student_exps/exp", :object => exp, :locals => {:hide_actions => true} %>
 				</td>
