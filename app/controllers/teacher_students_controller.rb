@@ -65,11 +65,7 @@ class TeacherStudentsController < ApplicationController
               <%= h(student.name) %></a>
           <% end %>
           
-          <br />
-          
-          <div>
-            <%= paging_buttons(@students) %>
-          </div>
+          <%= paging_buttons(@students) %>
         !
       )
     end

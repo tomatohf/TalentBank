@@ -11,6 +11,13 @@
 				<a href="/teachers/<%= @teacher.id %>/edit">
 					填写名称</a>
 			<% end %>
+			
+			
+			<div>
+				<a href="/teachers/<%= @teacher.id %>/notifications/notices">收到的通知</a>
+				|
+				<a href="/teachers/<%= @teacher.id %>/notifications/requests">收到的请求</a>
+			</div>
 		</td>
 		
 		<td valign="top" style="width: 180px;">

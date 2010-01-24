@@ -1,12 +1,16 @@
 <tr<%= %Q! class="odd"! if teacher_counter.even? %>>
 	<td>
-		<%= h(teacher.uid) %>
-		<br />
-		<% if teacher.name? %>
-			<%= h(teacher.name) %>
-		<% else %>
-			&nbsp;
-		<% end %>
+		<div>
+			<%= h(teacher.uid) %>
+		</div>
+		
+		<div>
+			<% if teacher.name? %>
+				<%= h(teacher.name) %>
+			<% else %>
+				&nbsp;
+			<% end %>
+		</div>
 	</td>
 	
 	

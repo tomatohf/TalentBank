@@ -46,8 +46,7 @@
 		<%= render :partial => "blocked_corp", :collection=> @blocked_corps %>
 		
 		<% unless @blocked_corps.size > 0 %>
-			<br />
-			<div class="info align_c">
+			<div class="info align_c" style="margin-top: 30px;">
 				(当前黑名单为空)
 			</div>
 		<% end %>

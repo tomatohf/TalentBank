@@ -156,13 +156,9 @@
 		</div>
 		
 		
-		<div>
-			<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
-		</div>
+		<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
 		
-		<div>
-			<%= paging_buttons(@resumes) %>
-		</div>
+		<%= paging_buttons(@resumes) %>
 		
 	</div>
 <% end %>

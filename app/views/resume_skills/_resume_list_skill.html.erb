@@ -1,4 +1,4 @@
-<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<tr<%= %Q! class="odd"! if resume_list_skill_counter.even? %>>
 	<% skill_name = h(resume_list_skill.name) %>
 	<td>
 		<%= skill_name %>

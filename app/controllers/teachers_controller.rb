@@ -110,11 +110,7 @@ class TeachersController < ApplicationController
               <%= h(corp.name) %> (<%= h(corp.uid) %>)</a>
           <% end %>
           
-          <br />
-          
-          <div>
-            <%= paging_buttons(@corporations) %>
-          </div>
+          <%= paging_buttons(@corporations) %>
         !
       )
     end

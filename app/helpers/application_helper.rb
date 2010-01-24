@@ -17,8 +17,8 @@ module ApplicationHelper
   def paging_buttons(collection, params = {})
     will_paginate(
       collection,
-      :previous_label => "« 上一页",
-      :next_label => "下一页 »",
+      :previous_label => "‹ 上一页",
+      :next_label => "下一页 ›",
       :param_name => :page, # parameter name for page number in URLs (default: :page)
       :page_links => true, # when false, only previous/next links are rendered (default: true) 
       # :separator => "", # string separator for page HTML elements (default: single space)
@@ -42,11 +42,9 @@ module ApplicationHelper
   
   
   def list_model_validate_errors(model)
-    errors = ""
-    model.errors.each do |attr, error|
-      errors += "#{error}<br />"
-    end
-    errors
+    model.errors.map { |attr, error|
+      error
+    }.join("<br />")
   end
   
   

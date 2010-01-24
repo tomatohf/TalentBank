@@ -1,40 +1,36 @@
 <%
-	# show only when the value is large than 0
-	if student_skill.value > 0
-		
-		skill = Skill.find(student_skill.skill_id)
-		resume_skill = resume_skills[student_skill.id]
-		
+	skill = Skill.find(student_skill.skill_id)
+	resume_skill = resume_skills[student_skill.id]
 %>
-	<tr onmouseover="this.style.backgroundColor='#F8F8F8';" onmouseout="this.style.backgroundColor='#FFFFFF';">
-		<td>
-			<%= skill[:name] %>
-		</td>
+
+<tr<%= %Q! class="odd"! if student_skill_counter.even? %>>
+	<td>
+		<%= skill[:name] %>
+	</td>
+
+	<td>
+		<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value) %>
+	</td>
+
+	<td align="center">
+		<% if resume_skill %>
+			<img src="/images/students/selected_icon.gif" border="0" alt="当前显示在简历上" title="当前显示在简历上" />
+		<% end %>
+	</td>
 	
-		<td>
-			<%= SkillValueTypes.get_type(skill[:value_type]).render_label(skill[:data], student_skill.value) %>
-		</td>
+	<td></td>
 	
-		<td align="center">
-			<% if resume_skill %>
-				<img src="/images/students/selected_icon.gif" border="0" alt="当前显示在简历上" title="当前显示在简历上" />
-			<% end %>
-		</td>
-		
-		<td></td>
-		
-		<td></td>
-	
-		<td align="right">
-			<% if resume_skill %>
-				<a href="#" title="不要在简历上显示这一条技能和证书" class="none" onclick="exclude_skill(<%= resume_skill.id %>); return false;">
-					<img src="/images/students/exclude_icon.png" border="0" alt="不在简历上显示" style="margin-bottom: -1px;" />
-					不在简历显示</a>
-			<% else %>
-				<a href="#" title="将这一条技能和证书显示在简历上" class="none" onclick="include_skill(<%= student_skill.id %>); return false;">
-					<img src="/images/students/include_icon.png" border="0" alt="显示在简历上" style="margin-bottom: -1px;" />
-					显示在简历上</a>
-			<% end %>
-		</td>
-	</tr>
-<% end %>
+	<td></td>
+
+	<td align="right">
+		<% if resume_skill %>
+			<a href="#" title="不要在简历上显示这一条技能和证书" class="none" onclick="exclude_skill(<%= resume_skill.id %>); return false;">
+				<img src="/images/students/exclude_icon.png" border="0" alt="不在简历上显示" style="margin-bottom: -1px;" />
+				不在简历显示</a>
+		<% else %>
+			<a href="#" title="将这一条技能和证书显示在简历上" class="none" onclick="include_skill(<%= student_skill.id %>); return false;">
+				<img src="/images/students/include_icon.png" border="0" alt="显示在简历上" style="margin-bottom: -1px;" />
+				显示在简历上</a>
+		<% end %>
+	</td>
+</tr>

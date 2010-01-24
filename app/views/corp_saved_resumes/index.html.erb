@@ -49,28 +49,23 @@
 </div>
 
 <div style="margin-right: 250px;">
-	<div>
-		<%=
-			render(
-				:partial => "/corp_resumes/resume",
-				:collection => @resumes,
-				:locals => {
-					:resume_tags => @resume_tags
-				}
-			)
-		%>
-	</div>
+	<%=
+		render(
+			:partial => "/corp_resumes/resume",
+			:collection => @resumes,
+			:locals => {
+				:resume_tags => @resume_tags
+			}
+		)
+	%>
 	
 	<% if @resumes.blank? %>
-		<br />
-		<div class="info_with_icon" style="margin-left: 50px;">
+		<div class="info_with_icon" style="margin: 30px;">
 			没有找到相对应的收藏的简历
 		</div>
 	<% end %>
 	
-	<div>
-		<%= @taggers && paging_buttons(@taggers) %>
-	</div>
+	<%= @taggers && paging_buttons(@taggers) %>
 </div>
 
 

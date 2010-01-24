@@ -18,7 +18,10 @@ class ResumeSkillsController < ApplicationController
     @student_skills = StudentSkill.find(
       :all,
       :conditions => ["student_id = ?", @student.id]
-    )
+    ).select do |student_skill|
+      # show only when the value is large than 0
+      student_skill.value > 0
+    end
     
     @resume_skills = {}
     ResumeSkill.find(

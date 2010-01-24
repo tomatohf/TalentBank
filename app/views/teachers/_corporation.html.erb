@@ -1,14 +1,18 @@
 <tr<%= %Q! class="odd"! if corporation_counter.even? %>>
 	<td>
-		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-			<%= h(corporation.uid) %></a>
-		<br />
-		<% if corporation.name? %>
+		<div>
 			<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-				<%= h(corporation.name) %></a>
-		<% else %>
-			&nbsp;
-		<% end %>
+				<%= h(corporation.uid) %></a>
+		</div>
+		
+		<div>
+			<% if corporation.name? %>
+				<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+					<%= h(corporation.name) %></a>
+			<% else %>
+				&nbsp;
+			<% end %>
+		</div>
 	</td>
 	
 	<% if @teacher.statistic %>

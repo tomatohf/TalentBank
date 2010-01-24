@@ -35,11 +35,12 @@ class CorpSavedQueriesController < ApplicationController
       render :layout => false, :inline => %Q!
     	  <p class="error_msg">
           保存失败, 再试一次吧
-          <% if @saved_query.errors.size > 0 %>
-            <br />
-          	<%= list_model_validate_errors(@saved_query) %>
-          <% end %>
         </p>
+        <% if @saved_query.errors.size > 0 %>
+          <p class="error_msg">
+        	  <%= list_model_validate_errors(@saved_query) %>
+        	</p>
+        <% end %>
       !
     end
   end

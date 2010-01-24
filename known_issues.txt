@@ -1,6 +1,9 @@
+verify resume_skills#index page (which using multiple thead & tbody) on IE
+
 请求简历查询权限
 
 模块化, 只显示和允许访问该学校拥有的模块
+禁止整个学校的功能
 
 发布公告功能
 

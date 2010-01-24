@@ -8,9 +8,21 @@
 <h2>企业 <%= corp_name %> 的信息</h2>
 
 
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+
 <div style="margin: 5px 30px; font-size: 14px;">
 	<div class="align_r">
-		<% form_tag "/students/#{@student.id}/#{@blocked_corp.new_record? ? 'create' : 'destroy'}_blocked_corp", :method => :post, :id => "adjust_blocked_corp_form" do %>
+		<% form_tag "/students/#{@student.id}/#{@blocked_corp.new_record? ? "create" : "destroy"}_blocked_corp", :method => :post, :id => "adjust_blocked_corp_form" do %>
 			<input type="hidden" id="back" name="back" value="corporations/<%= @corporation.id %>" />
 			<input type="hidden" id="corporation_id" name="corporation_id" value="<%= @corporation.id %>" />
 		<% end %>

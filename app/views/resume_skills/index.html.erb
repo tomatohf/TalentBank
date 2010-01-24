@@ -46,7 +46,7 @@
 		}
 	</script>
 	
-	<table border="0" cellspacing="0" cellpadding="10" class="main_part_w" style="font-size: 14px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list" style="font-size: 14px;">
 		<thead>
 			<tr>
 				<td>技能和证书</td>
@@ -57,18 +57,25 @@
 				<td style="width: 110px;"></td>
 			</tr>
 		</thead>
-		
 		<tbody>
 			<%= render :partial => "student_skill", :collection => @student_skills, :locals => {:resume_skills => @resume_skills} %>
-			
+		</tbody>
+		
+		<thead>
 			<tr>
-				<td colspan="6">
-					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_skills/new">
+				<td style="padding-top: 30px;">
+					自定义的技能和证书
+				</td>
+				
+				<td colspan="5" align="right">
+					<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/resume_skills/new" class="button" style="font-size: 12px;">
 						添加自定义的技能和证书</a>
 				</td>
 			</tr>
-			
+		</thead>
+		<tbody>
 			<%= render :partial => "resume_list_skill", :collection => @resume_list_skills %>
 		</tbody>
+		
 	</table>
 </div>
