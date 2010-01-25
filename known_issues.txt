@@ -1,9 +1,3 @@
-vertical tab
-	- saved_resumes
-
-verify UI on IE
-	- corp_saved_resumes#index (which using float_r)
-
 请求简历查询权限
 
 模块化, 只显示和允许访问该学校拥有的模块
