@@ -1,11 +1,11 @@
 <%
-	page_title = %Q!#{@sent ? "发出" : "收到"}的等待处理的#{@type && @type[:label]+"的"}请求!
+	page_title = %Q!#{@sent ? "发出" : "收到"}的等待处理的请求!
 	
 	talent_page_title(page_title)
 %>
 
 
-<h2><%= page_title %></h2>
+<h2><%= page_title %><%= %Q! - #{@type[:label]}! if @type %></h2>
 
 
 <div class="horizontal_nav" style="margin-right: 200px;">
