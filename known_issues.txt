@@ -2,9 +2,6 @@ vertical tab
 	- saved_resumes
 
 verify UI on IE
-	- resume_skills#index page (which using multiple thead & tbody)
-	- horizontal_nav (which using text-shadow)
-	- resume_exp_sections#index (which using position_fixed)
 	- corp_saved_resumes#index (which using float_r)
 
 请求简历查询权限

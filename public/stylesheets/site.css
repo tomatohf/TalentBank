@@ -232,7 +232,6 @@ a.none:hover {
 * html .position_fixed {
 	position: absolute;
 	bottom: auto;
-	top: expression(eval(document.documentElement.scrollTop));
 }
 /* fix ie6 lag bug */
 * html, * html body {
@@ -439,6 +438,13 @@ ul.no_bullet {
 	border-bottom: 1px dashed #C2E3EF;
 	
 	text-shadow: 2px 2px 2px #EEEEEE;
+}
+.resume_exp_tags.position_fixed {
+	top: 15px;
+}
+/* for ie6 */
+* html .resume_exp_tags.position_fixed {
+	top: expression(eval(document.documentElement.scrollTop) + 15);
 }
 
 .resume_exp_order_handle {

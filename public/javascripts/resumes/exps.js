@@ -120,11 +120,11 @@ function setup_resume_exp_tags() {
 	var width = tags.width();
 	var top = tags.position().top;
 	
-	$(document).unbind("scroll").scroll(
+	$(window).unbind("scroll").scroll(
 		function() {
 			if($(document).scrollTop() > top) {
 				if(!tags.hasClass("position_fixed")) {
-					tags.width(width).addClass("position_fixed").css("top", "15px");
+					tags.width(width).addClass("position_fixed");
 				}
 			}
 			else {
