@@ -22,13 +22,20 @@ class ReviseResumesController < ApplicationController
     end
     
     
+    @requests = Request.requests_of_reference(
+      @account_type, self.instance_variable_get("@#{@account_type.singularize}").id,
+      "revise_resume", @resume.id, !!@student
+    )
+    @revisers = Teacher.revisers(@student.school_id) if @student
+    
+    
     @taggers = @resume.exp_taggers
     @taggers.to_s # for eager loading ...
     
     @revisions = @resume.revisions
     @comments = @resume.comments
     
-    teachers_id = @revisions.map(&:teacher_id)
+    teachers_id = @revisions.map(&:teacher_id) + @requests.map(&:account_id)
     students_id = []
     @comments.each do |comment|
       account_type = AccountType.find(comment.account_type_id) || {}
@@ -57,12 +64,6 @@ class ReviseResumesController < ApplicationController
       {@resume.student_id => @resume.student}
     end
     
-    
-    @requests = Request.requests_of_reference(
-      @account_type, self.instance_variable_get("@#{@account_type.singularize}").id,
-      "revise_resume", @resume.id, !!@student
-    )
-    @revisers = Teacher.revisers(@student.school_id) if @student
     
     render :layout => @account_type
   end
