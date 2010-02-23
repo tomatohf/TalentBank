@@ -25,11 +25,11 @@
 	<td align="right">
 		<% if resume_skill %>
 			<a href="#" title="不要在简历上显示这一条技能和证书" class="none" onclick="exclude_skill(<%= resume_skill.id %>); return false;">
-				<img src="/images/students/exclude_icon.png" border="0" alt="不在简历上显示" style="margin-bottom: -1px;" />
+				<img src="/images/students/exclude_icon.gif" border="0" alt="不在简历上显示" style="margin-bottom: -1px;" />
 				不在简历显示</a>
 		<% else %>
 			<a href="#" title="将这一条技能和证书显示在简历上" class="none" onclick="include_skill(<%= student_skill.id %>); return false;">
-				<img src="/images/students/include_icon.png" border="0" alt="显示在简历上" style="margin-bottom: -1px;" />
+				<img src="/images/students/include_icon.gif" border="0" alt="显示在简历上" style="margin-bottom: -1px;" />
 				显示在简历上</a>
 		<% end %>
 	</td>
