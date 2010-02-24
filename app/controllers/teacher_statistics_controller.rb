@@ -155,7 +155,7 @@ class TeacherStatisticsController < ApplicationController
       
       tip = %Q!<font size="12" face="Verdana" color="#333333">! +
             if first == last
-              %Q!#{first.year}年#{first.month}月#{first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][first.wday]}!
+              ApplicationController.helpers.format_zh_date(first)
             else
               %Q!#{first.year}年#{first.month}月#{first.mday}日 - #{last.year}年#{last.month}月#{last.mday}日!
             end +
@@ -182,7 +182,7 @@ class TeacherStatisticsController < ApplicationController
       if @compared_from
         compared_tip = %Q!<font size="12" face="Verdana" color="#333333">! +
               if compared_first == compared_last
-                %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][compared_first.wday]}!
+                ApplicationController.helpers.format_zh_date(compared_first)
               else
                 %Q!#{compared_first.year}年#{compared_first.month}月#{compared_first.mday}日 - #{compared_last.year}年#{compared_last.month}月#{compared_last.mday}日!
               end +

@@ -9,87 +9,81 @@
     </head>
     <body>
 	
+		<% school_abbr = @school.abbr %>
 		<div class="page_container">
 			
-			<div class="align_c" style="margin-bottom: 32px;">
-				<img src="/images/students/banner.jpg" border="0" alt="<%= @school.logo_title %>" title="<%= @school.logo_title %>" />
+			<%= render_school_view("/common/banner", school_abbr, :account_type => "students") %>
+			
+			<div class="menu_banner" style="background-color: #8EC31F;">
+				<div class="float_l">
+					<span><%= format_zh_date(Time.now) %></span>
+					<span style="margin-left: 60px;"><%= @student.name %> 欢迎你 !</span>
+				</div>
+				
+				<div class="float_r">
+					<a href="/students/<%= @student.id %>">
+						首页</a>
+					
+					<a href="#">
+						消息</a>
+							
+					<a href="#">
+						设置</a>
+					
+					<a href="#">
+						帮助</a>
+							
+					<a href="/index/logout">
+						退出</a>
+				</div>
 			</div>
+			
 			
 			<div class="float_l" style="width: 200px;">
 
-				<div class="student_menu">
+				<div>
 					<a href="/students/<%= @student.id %>">
-						<img src="/images/students/menus/frontpage.jpg" border="0" alt="首页" /></a>
+						首页</a>
 				</div>
 				
-				
-				<div class="student_menu">
-					<div>
-						<a href="/students/<%= @student.id %>/resumes">
-							<img src="/images/students/menus/my_resume.jpg" border="0" alt="我的简历" /></a>
-					</div>
-					
-					<div>
-						<div class="student_sub_menu">
-							<a href="/students/<%= @student.id %>/edit_profile">
-								<div>个人信息</div>
-								<div class="english">PERSONAL INFOMATION</div>
-							</a>
-						</div>
-						<div class="student_sub_menu">
-							<a href="/students/<%= @student.id %>/edu_exps">
-								<div>教育经历</div>
-								<div class="english">EDUCATION INFOMATION</div>
-							</a>
-						</div>
-						<div class="student_sub_menu">
-							<a href="/students/<%= @student.id %>/exps">
-								<div>经历库</div>
-								<div class="english">EXPERIENCES</div>
-							</a>
-						</div>
-						<div class="student_sub_menu">
-							<a href="/students/<%= @student.id %>/edit_skills">
-								<div>技能和证书</div>
-								<div class="english"><%= h("SKILL & CERTIFICATION") %></div>
-							</a>
-						</div>
-						<div class="student_sub_menu">
-							<a href="/students/<%= @student.id %>/edit_job_photo">
-								<div>求职照</div>
-								<div class="english">PHOTO</div>
-							</a>
-						</div>
-					</div>
-					
-					<div style="margin-left: 28px;">
-						<div style="margin: 18px 0px;">
-							<a href="/students/<%= @student.id %>/resumes">
-								<img src="/images/students/menus/resume_management.jpg" border="0" alt="管理简历" /></a>
-						</div>
-
-						<div>
-							<a href="#">
-								<img src="/images/students/menus/resume_wizard.jpg" border="0" alt="简历向导" /></a>
-						</div>
-					</div>
+				<div>
+					<a href="/students/<%= @student.id %>/resumes">
+						我的简历</a>
 				</div>
 				
-				
-				<div style="height: 16px;">
-					
+				<div>
+					<a href="/students/<%= @student.id %>/edit_profile">
+						个人信息</a>
 				</div>
 				
+				<div>
+					<a href="/students/<%= @student.id %>/edu_exps">
+						教育经历</a>
+				</div>
 				
-				<div class="student_menu">
+				<div>
+					<a href="/students/<%= @student.id %>/exps">
+						经历库</a>
+				</div>
+				
+				<div>
+					<a href="/students/<%= @student.id %>/edit_skills">
+						技能和证书</a>
+				</div>
+				
+				<div>
+					<a href="/students/<%= @student.id %>/edit_job_photo">
+						求职照</a>
+				</div>
+				
+				<div>
 					<a href="/students/<%= @student.id %>/edit">
-						<img src="/images/students/menus/setting.jpg" border="0" alt="设置" /></a>
+						设置</a>
 				</div>
 				
-				
-				<div class="student_menu">
+				<div>
 					<a href="/index/logout">
-						<img src="/images/students/menus/logout.jpg" border="0" alt="退出系统" /></a>
+						退出系统</a>
 				</div>
 
 			</div>
@@ -102,7 +96,6 @@
 			
 		</div>
 		
-		<% school_abbr = @school.abbr %>
 		<%= render_school_view("/common/bottom_line", school_abbr) %>
 
 		

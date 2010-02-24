@@ -305,29 +305,48 @@ a.none:hover {
 }
 
 
-.student_menu {
-	margin-bottom: 25px;
+.menu_banner {
+	height: 24px;
+	line-height: 24px;
+	color: #FFFFFF;
+	padding: 0px 30px;
 }
-
-.student_sub_menu {
-	width: 178px;
-	padding: 8px 0px;
-	border-bottom: 1px dashed #CCCCCC;
-}
-
-.student_sub_menu a {
-	display: block;
+.menu_banner a {
 	text-decoration: none;
-	color: #888888;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 1.2;
-	padding-left: 36px;
+	color: #FFFFFF;
+	float: left;
+	display: block;
+	padding: 0px 6px;
+}
+.menu_banner a:hover {
+	background-color: #3777BC;
 }
 
-.student_sub_menu a .english {
-	font-size: 9px;
-	font-weight: normal;
+
+.menu_column {
+	float: left;
+	width: 180px;
+	background-color: #F2F2F2;
+	padding: 25px 0px;
+}
+.menu_column .menu_category {
+	margin: 12px 19px;
+}
+.menu_column .menu_category_title {
+	font-size: 14px;
+	padding-left: 50px;
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+.menu_column .sep_line {
+	height: 1px;
+	line-height: 1px;
+	background-color: 1px solid #CEE1EE;
+	border: 1px solid #FFFFFF;
+	margin: 5px 0px;
+}
+.menu_column .menu_category_body {
+	padding-left: 25px;
 }
 
 

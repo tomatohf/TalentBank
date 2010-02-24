@@ -9,7 +9,35 @@
     </head>
     <body>
 	
+		<% school_abbr = @school.abbr %>
 		<div class="page_container">
+			
+			<%= render_school_view("/common/banner", school_abbr, :account_type => "corporations") %>
+			
+			<div class="menu_banner" style="background-color: #67849E;">
+				<div class="float_l">
+					<span><%= format_zh_date(Time.now) %></span>
+					<span style="margin-left: 60px;"><%= @corporation.get_name %> 欢迎您 !</span>
+				</div>
+				
+				<div class="float_r">
+					<a href="/corporations/<%= @corporation.id %>">
+						首页</a>
+					
+					<a href="#">
+						消息</a>
+							
+					<a href="#">
+						设置</a>
+					
+					<a href="#">
+						帮助</a>
+							
+					<a href="/index/logout">
+						退出</a>
+				</div>
+			</div>
+			
 			
 			<div class="float_l" style="width: 200px;">
 
@@ -69,7 +97,6 @@
 			
 		</div>
 		
-		<% school_abbr = @school.abbr %>
 		<%= render_school_view("/common/bottom_line", school_abbr) %>
 
 		

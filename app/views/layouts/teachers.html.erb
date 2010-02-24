@@ -9,10 +9,49 @@
     </head>
     <body>
 	
+		<% school_abbr = @school.abbr %>
 		<div class="page_container">
 			
-			<div class="float_l" style="width: 200px;">
+			<%= render_school_view("/common/banner", school_abbr, :account_type => "teachers") %>
+			
+			<div class="menu_banner" style="background-color: #0259A0;">
+				<div class="float_l">
+					<span><%= format_zh_date(Time.now) %></span>
+					<span style="margin-left: 60px;"><%= @teacher.get_name %>老师 欢迎您 !</span>
+				</div>
+				
+				<div class="float_r">
+					<a href="/teachers/<%= @teacher.id %>">
+						首页</a>
+					
+					<a href="#">
+						消息</a>
+							
+					<a href="#">
+						设置</a>
+					
+					<a href="#">
+						帮助</a>
+							
+					<a href="/index/logout">
+						退出</a>
+				</div>
+			</div>
+			
+			
+			<div class="menu_column">
 
+				<div class="menu_category">
+					<div class="menu_category_title" style="background-image: url(/images/teachers/student_management.gif);">
+						学生管理
+					</div>
+					<div class="sep_line"></div>
+					<div class="menu_category_body">
+						
+					</div>
+				</div>
+				
+				
 				<div>
 					<a href="/teachers/<%= @teacher.id %>">
 						首页</a>
@@ -79,7 +118,6 @@
 			
 		</div>
 		
-		<% school_abbr = @school.abbr %>
 		<%= render_school_view("/common/bottom_line", school_abbr) %>
 
 		

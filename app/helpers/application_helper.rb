@@ -9,6 +9,10 @@ module ApplicationHelper
     date && date.strftime("%Y-%m-%d")
   end
   
+  def format_zh_date(date)
+    date && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
+  end
+  
   def format_time(date)
     date && date.strftime("%H:%M:%S")
   end
@@ -30,10 +34,10 @@ module ApplicationHelper
   end
   
   
-  def render_school_view(template, school_abbr)
+  def render_school_view(template, school_abbr, options = {})
     school_abbr = "base" unless partial_exist?(template, school_abbr)
     school_abbr = ::DEFAULT_SCHOOL_VIEW unless partial_exist?(template, school_abbr)
-    render(:partial => "#{template}/#{school_abbr}")
+    render(:partial => "#{template}/#{school_abbr}", :locals => options)
   end
   
   def partial_exist?(path, partial)
