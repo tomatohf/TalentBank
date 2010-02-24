@@ -3,8 +3,7 @@
 
 <div style="margin: 40px 225px 8px;">
 	<div class="align_r" style="margin-bottom: 30px;">
-		<a href="/" title="<%= @school.logo_title %>">
-			<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
+		<%= render_school_view("/common/logo", @school.abbr) %>
 	</div>
 	
 	

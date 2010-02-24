@@ -4,8 +4,7 @@
 <div class="align_c" style="margin-top: 60px;">
 	
 	<div style="margin-bottom: 80px;">
-		<a href="/" title="<%= @school.logo_title %>">
-			<img src="<%= @school.logo %>" border="0" alt="<%= @school.logo_title %>" /></a>
+		<%= render_school_view("/common/logo", @school.abbr) %>
 	</div>
 	
 	<div style="width: 950px; height: 304px; background: transparent url(/images/index/background.jpg) no-repeat scroll bottom center; overflow: hidden;">

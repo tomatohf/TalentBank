@@ -14,7 +14,7 @@ class College < HashModel::Grouped
       ],
       
       
-      "shift" => [
+      "shfu" => [
         {:id => 100300, :name => "金融管理学院"},
         {:id => 100400, :name => "国际商务外语学院"}
       ]

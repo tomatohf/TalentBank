@@ -12,15 +12,6 @@ module Schools
     end
     
     
-    def logo
-      "/images/school/qiaobutang_logo.jpg"
-    end
-    
-    def logo_title
-      "#{self.name} 人才库"
-    end
-    
-    
     def edu_levels
       # TODO - MUST BE OVERRIDED
       [30, 20, 40]

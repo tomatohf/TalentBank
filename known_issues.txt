@@ -1,7 +1,3 @@
-PNG ===> GIF
-SHIFT ===> OUC (www.ouc.edu.cn)
-bottom_line, 去掉备案号 和 图片, copyright @ qiaobutang.com
-
 _request 里面的操作加 confirm
 
 

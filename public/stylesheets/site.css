@@ -252,14 +252,17 @@ a.none:hover {
 	line-height: 146%;
 }
 
-.bottom_line .beianhao {
-	margin-left: 5px;
+.bottom_line .link {
 	color: #B3ABA2;
 	text-decoration: none;
 }
 
-.bottom_line .beianhao:hover {
+.bottom_line .link:hover {
 	text-decoration: underline;
+}
+
+.bottom_line .sep {
+	margin: 0px 5px;
 }
 
 

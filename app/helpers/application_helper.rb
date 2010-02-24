@@ -31,8 +31,13 @@ module ApplicationHelper
   
   
   def render_school_view(template, school_abbr)
-    school_abbr = ::DEFAULT_SCHOOL_VIEW unless File.exist?("#{RAILS_ROOT}/app/views#{template}/_#{school_abbr}.html.erb")
+    school_abbr = "base" unless partial_exist?(template, school_abbr)
+    school_abbr = ::DEFAULT_SCHOOL_VIEW unless partial_exist?(template, school_abbr)
     render(:partial => "#{template}/#{school_abbr}")
+  end
+  
+  def partial_exist?(path, partial)
+    File.exist?("#{RAILS_ROOT}/app/views#{path}/_#{partial}.html.erb")
   end
   
   

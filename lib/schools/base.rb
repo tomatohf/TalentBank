@@ -35,12 +35,8 @@ module Schools
     end
     
     
-    def logo
-      # must be implemented in subclass
-    end
-    
     def logo_title
-      ""
+      "#{self.name} 人才库"
     end
     
     

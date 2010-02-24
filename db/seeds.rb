@@ -10,7 +10,7 @@
 
 # schools
 School.create(:abbr => "qiaobutang", :password => Utils.generate_password("qiaobutang"))
-School.create(:abbr => "shift", :password => Utils.generate_password("shift"))
+School.create(:abbr => "shfu", :password => Utils.generate_password("shfu"))
 
 
 
