@@ -1,7 +1,7 @@
 <% talent_page_title("查询企业") %>
 
 
-<h2>查询企业</h2>
+<h2 class="page_title">查询企业</h2>
 
 
 <% if flash[:success_msg] %>
@@ -100,8 +100,9 @@
 </div>
 
 
-<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	var	TEACHER_ID = <%= @teacher.id %>;
-</script>
-<script src="/javascripts/teachers/corporations.js" type="text/javascript" language="JavaScript"></script>
+<% content_for :scripts do %>
+	<script language="JavaScript">
+		var	TEACHER_ID = <%= @teacher.id %>;
+	</script>
+	<script src="/javascripts/teachers/corporations.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

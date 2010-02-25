@@ -1,6 +1,0 @@
-<div class="horizontal_nav">
-	<% Student.setting_parts.each do |part| %>
-		<a href="/students/<%= @student.id %>/<%= part[0] %>"<%= %Q!class="selected_link"! if part[0] == current_link %>>
-			<%= part[1] %></a>
-	<% end %>
-</div>

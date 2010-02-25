@@ -20,22 +20,37 @@
 					<span style="margin-left: 60px;"><%= @corporation.get_name %> 欢迎您 !</span>
 				</div>
 				
-				<div class="float_r">
-					<a href="/corporations/<%= @corporation.id %>">
-						首页</a>
-					
-					<a href="#">
-						消息</a>
+				<table border="0" cellspacing="0" cellpadding="0" class="float_r">
+					<tr>
+						<td>
+							<a href="/corporations/<%= @corporation.id %>">首页</a>
+						</td>
+						<td>
+							<a href="#">消息</a>
+						</td>
+						<td>
+							<a href="/corporations/<%= @corporation.id %>/edit_password" id="setting_link">设置</a>
 							
-					<a href="#">
-						设置</a>
-					
-					<a href="#">
-						帮助</a>
-							
-					<a href="/index/logout">
-						退出</a>
-				</div>
+							<div class="dropdown_menu">
+								<ul class="dropdown_sub_menu">
+									<li>
+										<a href="/corporations/<%= @corporation.id %>/edit_password" style="padding-left: 10px;">
+											<img src="/images/common/password_icon.gif" border="0" alt="密码设置" />
+											密码设置</a>
+									</li>
+									<li>
+										<a href="/corporations/<%= @corporation.id %>/edit_profile" style="padding-left: 10px;">
+											<img src="/images/common/profile_icon.gif" border="0" alt="资料设置" />
+											资料设置</a>
+									</li>
+								</ul>
+							</div>
+						</td>
+						<td>
+							<a href="/index/logout">退出</a>
+						</td>
+					</tr>
+				</table>
 			</div>
 			
 			
@@ -64,7 +79,10 @@
 		</div>
 		
 		<%= render_school_view("/common/bottom_line", school_abbr) %>
-
+		
+		
+		<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
+		<%= yield(:scripts) %>
 		
 		
 		<%= render_school_view("/common/page_track", school_abbr) if Rails.env.production? %>

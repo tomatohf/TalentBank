@@ -5,7 +5,7 @@
 %>
 
 
-<h2>查询学生</h2>
+<h2 class="page_title">查询学生</h2>
 
 
 <% if flash[:success_msg] %>
@@ -91,43 +91,44 @@
 </div>
 
 
-<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	var MAJORS = {};
-	<% College.data[school_abbr].each do |college| %>
-		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
-	<% end %>
+<% content_for :scripts do %>
+	<script language="JavaScript">
+		var MAJORS = {};
+		<% College.data[school_abbr].each do |college| %>
+			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+		<% end %>
 	
-	function fill_majors(college_id, major_id) {
-		$("#major_id").html("");
+		function fill_majors(college_id, major_id) {
+			$("#major_id").html("");
 		
-		$("#major_id").append("<option value=''>不限专业</option>");
+			$("#major_id").append("<option value=''>不限专业</option>");
 
-		var major_objs = MAJORS["c_" + college_id];
-		if(major_objs != null && major_objs.length > 0) {
-			var options = $.map(
-				major_objs,
-				function(major_obj, i) {
-					return "<option value='" + major_obj.id + "'>" + major_obj.name + "</option>";
-				}
-			);
+			var major_objs = MAJORS["c_" + college_id];
+			if(major_objs != null && major_objs.length > 0) {
+				var options = $.map(
+					major_objs,
+					function(major_obj, i) {
+						return "<option value='" + major_obj.id + "'>" + major_obj.name + "</option>";
+					}
+				);
 
-			$("#major_id").append(options.join(""));
+				$("#major_id").append(options.join(""));
 
-			$("#major_id").val(major_id);
+				$("#major_id").val(major_id);
+			}
 		}
-	}
 	
-	$(document).ready(
-		function() {
-			APP.setup_dropdown_menu(".operation_link", 130);
+		$(document).ready(
+			function() {
+				APP.setup_dropdown_menu(".operation_link", 130);
 			
 			
-			$("#college_id").change(
-				function() {
-					fill_majors($(this).val(), "");
-				}
-			);
-		}
-	);
-</script>
+				$("#college_id").change(
+					function() {
+						fill_majors($(this).val(), "");
+					}
+				);
+			}
+		);
+	</script>
+<% end %>

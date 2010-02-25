@@ -14,8 +14,10 @@ a {
 	color: #3B5998;
 }
 
-h2 {
+h2.page_title {
 	font-size: 14px;
+	padding-left: 33px;
+	background: transparent url(/images/common/page_title_icon.gif) no-repeat scroll left center;
 }
 
 img.vertical_middle {
@@ -73,6 +75,7 @@ form {
 	margin: 0px;
 	padding: 0px;
 	position: relative;
+	z-index: 9999;
 }
 .dropdown_menu ul.dropdown_sub_menu {
 	display: none;
@@ -315,7 +318,6 @@ a.none:hover {
 .menu_banner a {
 	text-decoration: none;
 	color: #FFFFFF;
-	float: left;
 	display: block;
 	padding: 0px 8px;
 }
@@ -333,6 +335,10 @@ a.none:hover {
 }
 #page_container_of_corporations .menu_banner a:hover {
 	background-color: #889BAF;
+}
+.menu_banner img {
+	vertical-align: -2px;
+	margin-right: 3px;
 }
 
 

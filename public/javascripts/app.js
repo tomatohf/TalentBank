@@ -42,3 +42,10 @@ var APP = {
 	}
 	
 }
+
+
+$(document).ready(
+	function() {
+		APP.setup_dropdown_menu("#setting_link", 100);
+	}
+);

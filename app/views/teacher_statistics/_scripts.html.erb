@@ -2,36 +2,37 @@
 	slider &&= true
 %>
 
-<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
-<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript" language="JavaScript"></script>
-<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
-<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	var TEACHER_ID = <%= @teacher.id %>;
+<% content_for :scripts do %>
+	<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript" language="JavaScript"></script>
+	<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
+	<script language="JavaScript">
+		var TEACHER_ID = <%= @teacher.id %>;
 	
-	var LEVELS = [<%= EduLevel.data.collect{|level| %Q!{id:#{level[:id]}, name:"#{level[:name]}"}!}.join(",") %>];
+		var LEVELS = [<%= EduLevel.data.collect{|level| %Q!{id:#{level[:id]}, name:"#{level[:name]}"}!}.join(",") %>];
 	
-	<% year = @school.coming_graduation_year %>
-	var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}"}!}.join(",") %>];
+		<% year = @school.coming_graduation_year %>
+		var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}"}!}.join(",") %>];
 	
-	var COLLEGES = [];
-	var MAJORS = {};
-	<% College.data[@school.abbr].each do |college| %>
-		COLLEGES.push({id:<%= college[:id] %>, name:"<%= college[:name] %>"});
-		MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
-	<% end %>
+		var COLLEGES = [];
+		var MAJORS = {};
+		<% College.data[@school.abbr].each do |college| %>
+			COLLEGES.push({id:<%= college[:id] %>, name:"<%= college[:name] %>"});
+			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+		<% end %>
 	
-	var DOMAINS = [];
-	var TAGS = {};
-	<% @school.resume_domains.each do |domain_id| %>
-		<% domain = ResumeDomain.find(domain_id) %>
-		DOMAINS.push({id:<%= domain[:id] %>, name:"<%= domain[:name] %>"});
-		TAGS["d_<%= domain[:id] %>"] = [<%= (ResumeExpTag.data[domain[:id]] || []).collect{|tag| %Q!{id:#{tag[:id]}, name:"#{tag[:name]}"}!}.join(",") %>];
-	<% end %>
+		var DOMAINS = [];
+		var TAGS = {};
+		<% @school.resume_domains.each do |domain_id| %>
+			<% domain = ResumeDomain.find(domain_id) %>
+			DOMAINS.push({id:<%= domain[:id] %>, name:"<%= domain[:name] %>"});
+			TAGS["d_<%= domain[:id] %>"] = [<%= (ResumeExpTag.data[domain[:id]] || []).collect{|tag| %Q!{id:#{tag[:id]}, name:"#{tag[:name]}"}!}.join(",") %>];
+		<% end %>
 	
-	var SKILLS = [<%= Skill.data.collect{|skill| %Q!{id:#{skill[:id]}, name:"#{skill[:name]}"}!}.join(",") %>];
-</script>
-<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
-<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+		var SKILLS = [<%= Skill.data.collect{|skill| %Q!{id:#{skill[:id]}, name:"#{skill[:name]}"}!}.join(",") %>];
+	</script>
+	<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
+	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

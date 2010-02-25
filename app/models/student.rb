@@ -51,14 +51,6 @@ class Student < ActiveRecord::Base
   
   
   
-  def self.setting_parts
-    [
-      ["edit", "修改密码"],
-  		["blocked_corps", "企业黑名单"]
-    ]
-  end
-  
-  
   def self.authenticate(abbr, number, pwd)
     student = self.get_from_number(abbr, number)
     student = nil if student && (student.password != pwd)

@@ -6,7 +6,7 @@
 %>
 
 
-<h2>查看 <%= student_name %> 的简历</h2>
+<h2 class="page_title">查看 <%= student_name %> 的简历</h2>
 
 
 <% unless @available %>
@@ -31,12 +31,13 @@
 	</div>
 	
 	
-	<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-	<script language="JavaScript">
-		var CORPORATION_ID = <%= @corporation.id %>;
-	</script>
-	<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
-	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<% content_for :scripts do %>
+		<script language="JavaScript">
+			var CORPORATION_ID = <%= @corporation.id %>;
+		</script>
+		<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
+		<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+		<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<% end %>
 	
 <% end %>

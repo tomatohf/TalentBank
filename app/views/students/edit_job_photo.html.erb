@@ -4,7 +4,7 @@
 <% talent_page_title("编辑求职照") %>
 
 
-<h2>编辑求职照</h2>
+<h2 class="page_title">编辑求职照</h2>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -73,41 +73,42 @@
 	<% end %>
 	
 	
-	<link href="/lib/Jcrop/css/jquery.Jcrop.css" rel="stylesheet" type="text/css" />
-	<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-	<script src="/lib/Jcrop/js/jquery.Jcrop.min.js" type="text/javascript" language="JavaScript"></script>
-	<script language="JavaScript">
-		function update_preview(coords) {
-			var rx = <%= JobPhoto::Normal_W %> / coords.w;
-			var ry = <%= JobPhoto::Normal_H %> / coords.h;
-			<% large_geometry = @photo.image_geometry(:large) %>
-			var ratio = <%= @photo.image_geometry(:original).width %> / <%= large_geometry.width %>;
+	<% content_for :scripts do %>
+		<link href="/lib/Jcrop/css/jquery.Jcrop.css" rel="stylesheet" type="text/css" />
+		<script src="/lib/Jcrop/js/jquery.Jcrop.min.js" type="text/javascript" language="JavaScript"></script>
+		<script language="JavaScript">
+			function update_preview(coords) {
+				var rx = <%= JobPhoto::Normal_W %> / coords.w;
+				var ry = <%= JobPhoto::Normal_H %> / coords.h;
+				<% large_geometry = @photo.image_geometry(:large) %>
+				var ratio = <%= @photo.image_geometry(:original).width %> / <%= large_geometry.width %>;
 
-			$("#preview_img").css(
-				{
-					width: Math.round(rx * <%= large_geometry.width.to_i %>) + "px",
-					height: Math.round(ry * <%= large_geometry.height.to_i %>) + "px",
-					marginLeft: "-" + Math.round(rx * coords.x) + "px",
-					marginTop: "-" + Math.round(ry * coords.y) + "px"
-				}
-			);
-			$("#crop_x").val(Math.round(coords.x * ratio));
-			$("#crop_y").val(Math.round(coords.y * ratio));
-			$("#crop_w").val(Math.round(coords.w * ratio));
-			$("#crop_h").val(Math.round(coords.h * ratio));
-		}
-
-		$(
-			function() {
-				$("#crop_img").Jcrop(
+				$("#preview_img").css(
 					{
-						onSelect: update_preview,
-						onChange: update_preview,
-						setSelect: [0, 0, 90*6, 110*6],
-						aspectRatio: <%= JobPhoto::Normal_W %>/<%= JobPhoto::Normal_H %>
+						width: Math.round(rx * <%= large_geometry.width.to_i %>) + "px",
+						height: Math.round(ry * <%= large_geometry.height.to_i %>) + "px",
+						marginLeft: "-" + Math.round(rx * coords.x) + "px",
+						marginTop: "-" + Math.round(ry * coords.y) + "px"
 					}
 				);
+				$("#crop_x").val(Math.round(coords.x * ratio));
+				$("#crop_y").val(Math.round(coords.y * ratio));
+				$("#crop_w").val(Math.round(coords.w * ratio));
+				$("#crop_h").val(Math.round(coords.h * ratio));
 			}
-		);
-	</script>
+
+			$(
+				function() {
+					$("#crop_img").Jcrop(
+						{
+							onSelect: update_preview,
+							onChange: update_preview,
+							setSelect: [0, 0, 90*6, 110*6],
+							aspectRatio: <%= JobPhoto::Normal_W %>/<%= JobPhoto::Normal_H %>
+						}
+					);
+				}
+			);
+		</script>
+	<% end %>
 <% end %>

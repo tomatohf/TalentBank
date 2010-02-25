@@ -5,7 +5,7 @@
 %>
 
 
-<h2>管理简历</h2>
+<h2 class="page_title">管理简历</h2>
 
 
 <% if flash[:success_msg] %>
@@ -119,17 +119,18 @@
 </div>
 
 
-<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-<link href="/lib/ibutton/css/jquery.ibutton.min.css" rel="stylesheet" type="text/css" />
-<script src="/lib/ibutton/lib/jquery.ibutton.min.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	var STUDENT_ID = <%= @student.id %>;
+<% content_for :scripts do %>
+	<link href="/lib/ibutton/css/jquery.ibutton.min.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/ibutton/lib/jquery.ibutton.min.js" type="text/javascript" language="JavaScript"></script>
+	<script language="JavaScript">
+		var STUDENT_ID = <%= @student.id %>;
 	
-	<% if @available_domains.size > 0 %>
-		var DOMAINS = {};
-		<% categories.each do |category| %>
-			DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+		<% if @available_domains.size > 0 %>
+			var DOMAINS = {};
+			<% categories.each do |category| %>
+				DOMAINS["c_<%= category[:id] %>"] = [<%= domain_category_mapping[category[:id]].collect{|domain| %Q!{id:#{domain[:id]}, name:"#{domain[:name]}"}!}.join(",") %>];
+			<% end %>
 		<% end %>
-	<% end %>
-</script>
-<script src="/javascripts/resumes/resumes.js" type="text/javascript" language="JavaScript"></script>
+	</script>
+	<script src="/javascripts/resumes/resumes.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

@@ -1,7 +1,7 @@
-<% talent_page_title("修改老师信息") %>
+<% talent_page_title("修改老师资料") %>
 
 
-<h2>修改信息</h2>
+<h2 class="page_title">修改资料</h2>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -62,7 +62,7 @@
 			</td>
 			
 			<td>
-				<%= submit_tag "修改信息", :class => "button", :disabled => !@account_active %>
+				<%= submit_tag "修改资料", :class => "button", :disabled => !@account_active %>
 			</td>
 		</tr>
 	</table>

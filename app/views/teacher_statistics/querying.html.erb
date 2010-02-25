@@ -1,27 +1,28 @@
 <% talent_page_title("最近企业查询") %>
 
 
-<h2>最近企业查询</h2>
+<h2 class="page_title">最近企业查询</h2>
 
 <%= render :partial => "recent_nav" %>
 
 <%= render :partial => "queries_grid", :locals => {:records => @corp_queries} %>
 
 
-<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
-<script language="JavaScript">
-	$(document).ready(
-		function() {
-			APP.setup_dropdown_menu(".operation_link", 110);
+<% content_for :scripts do %>
+	<script language="JavaScript">
+		$(document).ready(
+			function() {
+				APP.setup_dropdown_menu(".operation_link", 110);
 			
 			
-			$("a.query_keyword").unbind("click").click(
-				function() {
-					$(this).siblings("form").submit();
+				$("a.query_keyword").unbind("click").click(
+					function() {
+						$(this).siblings("form").submit();
 					
-					return false;
-				}
-			);
-		}
-	);
-</script>
+						return false;
+					}
+				);
+			}
+		);
+	</script>
+<% end %>
