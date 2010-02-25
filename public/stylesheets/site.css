@@ -15,7 +15,7 @@ a {
 }
 
 h2 {
-	font-size: 18px;
+	font-size: 14px;
 }
 
 img.vertical_middle {
@@ -310,6 +310,7 @@ a.none:hover {
 	line-height: 24px;
 	color: #FFFFFF;
 	padding: 0px 30px;
+	background-color: #0259A0;
 }
 .menu_banner a {
 	text-decoration: none;
@@ -321,32 +322,50 @@ a.none:hover {
 .menu_banner a:hover {
 	background-color: #3777BC;
 }
+#page_container_of_students .menu_banner {
+	background-color: #8EC31F;
+}
+#page_container_of_students .menu_banner a:hover {
+	background-color: #A9CF52;
+}
+#page_container_of_corporations .menu_banner {
+	background-color: #67849E;
+}
+#page_container_of_corporations .menu_banner a:hover {
+	background-color: #889BAF;
+}
 
 
 .menu_column {
 	float: left;
-	width: 180px;
+	width: 165px;
 	background-color: #F2F2F2;
-	padding: 25px 0px;
 }
 .menu_column .menu_category {
-	margin: 12px 19px;
+	margin: 40px 12px;
 }
 .menu_column .menu_category_title {
-	font-size: 14px;
-	padding-left: 50px;
+	color: #666666;
+	padding-left: 40px;
+	padding-bottom: 5px;
+	margin-bottom: 8px;
 	background-repeat: no-repeat;
-	background-position: left bottom;
+	background-position: 5px 2px;
+	border-bottom: 1px solid #DDDDDD;
 }
-.menu_column .sep_line {
-	height: 1px;
-	line-height: 1px;
-	background-color: 1px solid #CEE1EE;
-	border: 1px solid #FFFFFF;
-	margin: 5px 0px;
+.menu_column .menu_category a {
+	display: block;
+	padding: 3px 0px 2px 40px;
+	background: transparent url(/images/common/arrow_icon.gif) no-repeat scroll 20px center;
+	text-decoration: none;
 }
-.menu_column .menu_category_body {
-	padding-left: 25px;
+.menu_column .menu_category a:hover {
+	text-decoration: none;
+	background-color: #BCE2E9;
+}
+
+.main_column {
+	margin-left: 195px;
 }
 
 

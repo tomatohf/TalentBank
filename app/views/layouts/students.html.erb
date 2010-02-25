@@ -10,11 +10,11 @@
     <body>
 	
 		<% school_abbr = @school.abbr %>
-		<div class="page_container">
+		<div class="page_container" id="page_container_of_students">
 			
 			<%= render_school_view("/common/banner", school_abbr, :account_type => "students") %>
 			
-			<div class="menu_banner" style="background-color: #8EC31F;">
+			<div class="menu_banner">
 				<div class="float_l">
 					<span><%= format_zh_date(Time.now) %></span>
 					<span style="margin-left: 60px;"><%= @student.name %> 欢迎你 !</span>
@@ -39,56 +39,31 @@
 			</div>
 			
 			
-			<div class="float_l" style="width: 200px;">
-
-				<div>
-					<a href="/students/<%= @student.id %>">
-						首页</a>
+			<div class="menu_column">
+				
+				<div class="menu_category">
+					<div class="menu_category_title" style="background-image: url(/images/teachers/menus/students.gif);">
+						简历基本信息
+					</div>
+					
+					<a href="/students/<%= @student.id %>/edit_profile">个人信息</a>
+					<a href="/students/<%= @student.id %>/edu_exps">教育经历</a>
+					<a href="/students/<%= @student.id %>/exps">经历库</a>
+					<a href="/students/<%= @student.id %>/edit_skills">技能和证书</a>
+					<a href="/students/<%= @student.id %>/edit_job_photo">求职照</a>
 				</div>
 				
-				<div>
-					<a href="/students/<%= @student.id %>/resumes">
-						我的简历</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/edit_profile">
-						个人信息</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/edu_exps">
-						教育经历</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/exps">
-						经历库</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/edit_skills">
-						技能和证书</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/edit_job_photo">
-						求职照</a>
-				</div>
-				
-				<div>
-					<a href="/students/<%= @student.id %>/edit">
-						设置</a>
-				</div>
-				
-				<div>
-					<a href="/index/logout">
-						退出系统</a>
+				<div class="menu_category">
+					<div class="menu_category_title" style="background-image: url(/images/students/menus/resumes.gif);">
+						管理简历
+					</div>
+					
+					<a href="/students/<%= @student.id %>/resumes">简历列表</a>
 				</div>
 
 			</div>
 
-			<div style="margin-left: 200px;">
+			<div class="main_column">
 				<%= yield %>
 			</div>
 

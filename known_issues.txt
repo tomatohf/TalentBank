@@ -1,3 +1,43 @@
+<div>
+	<a href="/teachers/<%= @teacher.id %>/edit_password">
+		修改密码</a>
+</div>
+
+<div>
+	<a href="/teachers/<%= @teacher.id %>/edit">
+		修改信息</a>
+</div>
+
+
+
+
+<div>
+	<a href="/schools/<%= @school_id %>/edit">
+		修改密码</a>
+</div>
+
+
+
+
+<div>
+	<a href="/corporations/<%= @corporation.id %>/edit_password">
+		修改密码</a>
+</div>
+
+<div>
+	<a href="/corporations/<%= @corporation.id %>/edit_profile">
+		企业信息</a>
+</div>
+
+
+
+<div>
+	<a href="/students/<%= @student.id %>/edit">
+		设置</a>
+</div>
+
+
+
 _request 里面的操作加 confirm
 
 

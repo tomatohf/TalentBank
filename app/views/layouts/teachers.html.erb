@@ -10,11 +10,11 @@
     <body>
 	
 		<% school_abbr = @school.abbr %>
-		<div class="page_container">
+		<div class="page_container" id="page_container_of_teachers">
 			
 			<%= render_school_view("/common/banner", school_abbr, :account_type => "teachers") %>
 			
-			<div class="menu_banner" style="background-color: #0259A0;">
+			<div class="menu_banner">
 				<div class="float_l">
 					<span><%= format_zh_date(Time.now) %></span>
 					<span style="margin-left: 60px;"><%= @teacher.get_name %>老师 欢迎您 !</span>
@@ -41,76 +41,43 @@
 			
 			<div class="menu_column">
 
-				<div class="menu_category">
-					<div class="menu_category_title" style="background-image: url(/images/teachers/student_management.gif);">
-						学生管理
-					</div>
-					<div class="sep_line"></div>
-					<div class="menu_category_body">
-						
-					</div>
-				</div>
-				
-				
-				<div>
-					<a href="/teachers/<%= @teacher.id %>">
-						首页</a>
-				</div>
-				
-				<div>
-					<a href="/teachers/<%= @teacher.id %>/edit_password">
-						修改密码</a>
-				</div>
-				
-				<div>
-					<a href="/teachers/<%= @teacher.id %>/edit">
-						修改信息</a>
-				</div>
-				
 				<% if @teacher.resume %>
-					<div>
-						<a href="/teachers/<%= @teacher.id %>/students">
-							查询学生</a>
+					<div class="menu_category">
+						<div class="menu_category_title" style="background-image: url(/images/teachers/menus/students.gif);">
+							学生管理
+						</div>
+						
+						<a href="/teachers/<%= @teacher.id %>/students">查询学生</a>
 					</div>
 				<% end %>
 				
 				<% if @teacher.admin %>
-					<div>
-						<a href="/teachers/<%= @teacher.id %>/corporations">
-							查询企业</a>
+					<div class="menu_category">
+						<div class="menu_category_title" style="background-image: url(/images/teachers/menus/corporations.gif);">
+							企业管理
+						</div>
+						
+						<a href="/teachers/<%= @teacher.id %>/corporations">查询企业</a>
+						<a href="/teachers/<%= @teacher.id %>/new_corporation">添加企业</a>
 					</div>
 				<% end %>
 				
 				<% if @teacher.statistic %>
-					<div>
-						<a href="/teachers/<%= @teacher.id %>/statistics">
-							简历数据统计</a>
-					</div>
-					
-					<div style="padding-left: 15px;">
-						<a href="/teachers/<%= @teacher.id %>/statistics/college">
-							简历查看统计</a>
-					</div>
-					
-					<div style="padding-left: 15px;">
-						<a href="/teachers/<%= @teacher.id %>/statistics/querying_corp">
-							搜索操作统计</a>
-					</div>
-					
-					<div style="padding-left: 15px;">
-						<a href="/teachers/<%= @teacher.id %>/statistics/querying">
-							最近操作列表</a>
+					<div class="menu_category">
+						<div class="menu_category_title" style="background-image: url(/images/teachers/menus/statistics.gif);">
+							数据统计
+						</div>
+						
+						<a href="/teachers/<%= @teacher.id %>/statistics">简历数据统计</a>
+						<a href="/teachers/<%= @teacher.id %>/statistics/college">简历查看统计</a>
+						<a href="/teachers/<%= @teacher.id %>/statistics/querying_corp">搜索操作统计</a>
+						<a href="/teachers/<%= @teacher.id %>/statistics/querying">最近操作列表</a>
 					</div>
 				<% end %>
-				
-				<div>
-					<a href="/index/logout">
-						退出系统</a>
-				</div>
 
 			</div>
 
-			<div style="margin-left: 200px;">
+			<div class="main_column">
 				<%= yield %>
 			</div>
 

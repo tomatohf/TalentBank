@@ -10,11 +10,11 @@
     <body>
 	
 		<% school_abbr = @school.abbr %>
-		<div class="page_container">
+		<div class="page_container" id="page_container_of_corporations">
 			
 			<%= render_school_view("/common/banner", school_abbr, :account_type => "corporations") %>
 			
-			<div class="menu_banner" style="background-color: #67849E;">
+			<div class="menu_banner">
 				<div class="float_l">
 					<span><%= format_zh_date(Time.now) %></span>
 					<span style="margin-left: 60px;"><%= @corporation.get_name %> 欢迎您 !</span>
@@ -39,57 +39,23 @@
 			</div>
 			
 			
-			<div class="float_l" style="width: 200px;">
+			<div class="menu_column">
 
-				<div>
-					<a href="/corporations/<%= @corporation.id %>">
-						首页</a>
-				</div>
-				
-				<div>
-					<a href="/corporations/<%= @corporation.id %>/edit_password">
-						修改密码</a>
-				</div>
-				
-				<div>
-					<a href="/corporations/<%= @corporation.id %>/edit_profile">
-						企业信息</a>
-				</div>
-				
 				<% if @corporation.allow_query %>
-				
-					<div>
-						<a href="/corporations/<%= @corporation.id %>/resumes">
-							查询简历</a>
+					<div class="menu_category">
+						<div class="menu_category_title" style="background-image: url(/images/teachers/menus/students.gif);">
+							学生简历
+						</div>
+						
+						<a href="/corporations/<%= @corporation.id %>/resumes">查询简历</a>
+						<a href="/corporations/<%= @corporation.id %>/saved_queries">保存的查询</a>
+						<a href="/corporations/<%= @corporation.id %>/saved_resumes">收藏的简历</a>
 					</div>
-					
-					<div>
-						<a href="/corporations/<%= @corporation.id %>/saved_queries">
-							保存的查询</a>
-					</div>
-					
-					<div>
-						<a href="/corporations/<%= @corporation.id %>/saved_resumes">
-							收藏的简历</a>
-					</div>
-					
-				<% else %>
-				
-					<div>
-						<a href="#">
-							申请查询简历</a>
-					</div>
-					
 				<% end %>
-				
-				<div>
-					<a href="/index/logout">
-						退出系统</a>
-				</div>
 
 			</div>
 
-			<div style="margin-left: 200px;">
+			<div class="main_column">
 				<%= yield %>
 			</div>
 
