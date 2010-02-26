@@ -976,28 +976,29 @@ img.notification_icon {
 }
 
 .students_grid {
-	border-collapse: collapse;
+	/* border-collapse: collapse; */
+	border-left: 1px solid #395591;
 }
 .students_grid thead td {
 	color: #FFFFFF;
-	background: #888888 none repeat scroll 0 0;
-	border-left: 1px solid #555555;
-	border-right: 1px solid #555555;
+	background: #0259A0 none repeat scroll 0 0;
+	/* border-left: 1px solid #395591; */
+	border-right: 1px solid #395591;
 	padding: 5px;
 	text-align: center;
 }
-.students_grid thead td.mark {
-	background-color: #0259A0;
-	border-color: #395591;
+.students_grid thead td.grey {
+	background-color: #888888;
+	border-color: #555555;
 }
 .students_grid tbody td {
-	border-left: 1px solid #555555;
-	border-right: 1px solid #555555;
+	/* border-left: 1px solid #395591; */
+	border-right: 1px solid #395591;
 	padding: 5px;
 	text-align: center;
 }
-.students_grid tbody td.mark {
-	border-color: #395591;
+.students_grid tbody td.grey {
+	border-color: #555555;
 }
 .students_grid tbody tr.even td {
 	background-color: #F8F8F8;
