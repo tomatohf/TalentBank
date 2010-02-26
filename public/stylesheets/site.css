@@ -16,7 +16,7 @@ a {
 
 h2.page_title {
 	font-size: 14px;
-	padding-left: 33px;
+	padding: 12px 0px 12px 33px;
 	background: transparent url(/images/common/page_title_icon.gif) no-repeat scroll left center;
 }
 
@@ -56,10 +56,6 @@ form {
 	background: #0063DC;
 	color: #FFFFFF;
 }
-.pagination .page_info {
-	color: #AAAAAA;
-	padding-top: 0.8em;
-}
 .pagination .prev_page, .pagination .next_page {
 	border-color: #BBBBBB;
 }
@@ -68,6 +64,34 @@ form {
 }
 .pagination .next_page {
 	margin-left: 1em;
+}
+
+.mini_pagination {
+	text-align: right;
+	padding: 0px;
+	margin: 0px;
+}
+.mini_pagination a, .mini_pagination span {
+	padding: 3px 3px 2px;
+}
+.mini_pagination span.disabled {
+	display: none;
+}
+.mini_pagination span.current {
+	font-weight: bold;
+	padding-left: 1px;
+	margin-left: 2px;
+	padding-right: 1px;
+	margin-right: 2px;
+	border-bottom: 2px solid #005EAC;
+}
+.mini_pagination a {
+	color: #005EAC;
+	text-decoration: none;
+}
+.mini_pagination a:hover, .mini_pagination a:focus {
+	background-color: #005EAC;
+	color: #FFFFFF;
 }
 
 
@@ -368,7 +392,6 @@ a.none:hover {
 
 .main_column {
 	margin-left: 195px;
-	padding-top: 12px;
 }
 
 
@@ -965,14 +988,6 @@ img.notification_icon {
 	padding: 0px 15px;
 	height: 30px;
 	line-height: 30px;
-}
-.students_list_paging .pagination {
-	margin: 0px;
-	padding: 0px;
-	text-align: right;
-}
-.students_list_paging .pagination a {
-	border: 0px none;
 }
 
 .students_grid {

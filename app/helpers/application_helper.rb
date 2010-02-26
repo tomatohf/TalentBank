@@ -28,7 +28,7 @@ module ApplicationHelper
       # :separator => "", # string separator for page HTML elements (default: single space)
       # :inner_window => 4, # how many links are shown around the current page (default: 4)
       # :outer_window => 1, # how many links are around the first and the last page (default: 1)
-      :class => "pagination", # CSS class name for the generated DIV (default: "pagination")
+      :class => params.delete(:class) || "pagination", # CSS class name for the generated DIV (default: "pagination")
       :params => params # additional parameters when generating pagination links (eg. :controller => "foo", :action => nil)
     )
   end
