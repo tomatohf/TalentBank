@@ -51,9 +51,9 @@
 			<% end %>
 		</select>
 	
-		<label for="edu_level">教育水平:</label>
+		<label for="edu_level">学历:</label>
 		<select name="edu_level" id="edu_level" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>>不限教育水平</option>
+			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>>不限学历</option>
 			<% @school.edu_levels.each do |level_id| %>
 				<% level = EduLevel.find(level_id) %>
 				<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>

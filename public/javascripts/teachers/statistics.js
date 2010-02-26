@@ -245,7 +245,7 @@ function enable_range_input() {
 
 
 function filter_level() {
-	show_static_filter_dialog("level", LEVELS, "过滤教育水平");
+	show_static_filter_dialog("level", LEVELS, "过滤学历");
 }
 
 

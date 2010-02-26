@@ -44,11 +44,11 @@ form {
 }
 .pagination span.current {
 	font-weight: bold;
-	color: #A90A08;
+	/* color: #A90A08; */
 }
 .pagination a {
 	border: 1px solid #DDDDDD;
-	color: #0063DC;
+	/* color: #0063DC; */
 	text-decoration: none;
 }
 .pagination a:hover, .pagination a:focus {
@@ -166,7 +166,7 @@ form {
 .text_field {
 	border-style: solid;
 	border-width: 1px;
-	border-color: #A3988C;
+	border-color: #BDC7D8;
 	
 	background-color: #F8F8F8;
 	
@@ -207,16 +207,12 @@ a.button {
 }
 
 select.dropdown_list, .dropdown_list select {
-	border-style: solid;
-	border-width: 1px;
-	border-color: #BDC7D8;
-	padding: 1px 2px;
+	border: 1px solid #BDC7D8;
+	padding: 2px;
 }
 
 .fieldset {
-	border-style: solid;
-	border-width: 1px;
-	border-color: #CCCCCC;
+	border: 1px solid #CCCCCC;
 }
 
 a.none {
@@ -309,8 +305,8 @@ a.none:hover {
 
 
 .menu_banner {
-	height: 24px;
-	line-height: 24px;
+	height: 28px;
+	line-height: 28px;
 	color: #FFFFFF;
 	padding: 0px 30px;
 	background-color: #0259A0;
@@ -372,6 +368,7 @@ a.none:hover {
 
 .main_column {
 	margin-left: 195px;
+	padding-top: 12px;
 }
 
 
@@ -723,23 +720,19 @@ a.selected_tag {
 .grid {
 	border-collapse: collapse;
 }
-
 .grid thead td {
 	background: #E5E5E5 none repeat scroll 0 0;
 	border: 1px solid #BBBBBB;
 	padding: 5px;
 	text-align: center;
 }
-
 .grid tbody td {
 	border: 1px solid #DDDDDD;
 	padding: 5px;
 }
-
 .grid tbody tr.odd td {
 	background-color: #F8F8F8;
 }
-
 .grid tbody td.datetime {
 	font-size: 10px;
 }
@@ -752,7 +745,6 @@ a.filter_item_link {
 	padding: 5px 5px 5px 25px;
 	background: transparent url(/images/teachers/filter_icon.gif) no-repeat scroll 5px center;
 }
-
 a.filter_item_link:hover {
 	color: #FFFFFF;
 	background-color: #3B5998;
@@ -920,4 +912,97 @@ img.notification_icon {
 }
 .permission_field img {
 	vertical-align: -3px;
+}
+
+
+.students_filters {
+	border: 1px solid #395591;
+	margin: 15px 0px 20px 0px;
+}
+.students_filters .number_form {
+	color: #FFFFFF;
+	border-bottom: 1px solid #395591;
+	padding: 4px 5px 3px 30px;
+	background: #0259A0 url(/images/teachers/search/search_icon.png) no-repeat scroll 10px center;
+}
+.students_filters .number_form #toggle_search_form_link {
+	display: block;
+	padding: 6px 8px 5px;
+}
+.students_filters .number_form input {
+	vertical-align: middle;
+}
+.students_filters .number_form input#number {
+	border: 1px solid #84ABC6;
+	padding: 3px 24px 3px 3px;
+	width: 120px;
+	margin-left: 8px;
+}
+.students_filters .number_form input.search_button {
+	background: #B8D4E8 url(/images/common/magnifier_icon.gif) no-repeat scroll left top;
+	border: 1px solid #84ABC6;
+	height: 22px;
+	margin-left: -21px;
+	position: relative;
+	text-indent: -9999px;
+	width: 21px;
+}
+.students_filters .search_form {
+	background-color: #F2F2F2;
+	padding: 12px 15px 8px;
+}
+.students_filters .search_form .filter {
+	margin-right: 25px;
+}
+.students_filters .search_form .filter label {
+	margin-right: 5px;
+}
+
+
+.students_list_paging {
+	border: 1px solid #395591;
+	background-color: #F2F2F2;
+	padding: 0px 15px;
+	height: 30px;
+	line-height: 30px;
+}
+.students_list_paging .pagination {
+	margin: 0px;
+	padding: 0px;
+	text-align: right;
+}
+.students_list_paging .pagination a {
+	border: 0px none;
+}
+
+.students_grid {
+	border-collapse: collapse;
+}
+.students_grid thead td {
+	color: #FFFFFF;
+	background: #888888 none repeat scroll 0 0;
+	border-left: 1px solid #555555;
+	border-right: 1px solid #555555;
+	padding: 5px;
+	text-align: center;
+}
+.students_grid thead td.mark {
+	background-color: #0259A0;
+	border-color: #395591;
+}
+.students_grid tbody td {
+	border-left: 1px solid #555555;
+	border-right: 1px solid #555555;
+	padding: 5px;
+	text-align: center;
+}
+.students_grid tbody td.mark {
+	border-color: #395591;
+}
+.students_grid tbody tr.even td {
+	background-color: #F8F8F8;
+}
+.students_grid tbody td table td {
+	border: 0px none;
+	padding: 0px;
 }

@@ -59,7 +59,7 @@
 			
 			<% unless query.edu_level_id.blank? %>
 				<span>
-					教育水平:
+					学历:
 					<%= EduLevel.find(query.edu_level_id)[:name] %>
 				</span>
 			<% end %>

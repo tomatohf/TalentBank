@@ -10,61 +10,68 @@
 	resumes = student.resumes.sort { |x, y| x.domain_id <=> y.domain_id }
 %>
 
-<tr<%= %Q! class="odd"! if student_counter.odd? %>>
-	<td>
-		<% if resumes.size > 0 %>
-			<a href="#" title="查看<%= student_name %>的简历" class="none operation_link">
-				<img src="/images/students/preview_resume_icon.gif" border="0" alt="查看简历" style="margin-bottom: -1px;" />
-				简历</a>
-
-			<div class="dropdown_menu" style="font-size: 12px;">
-				<ul class="dropdown_sub_menu">
-					<% resumes.each do |resume| %>
-						<% unless resume.hidden %>
-							<% domain = ResumeDomain.find(resume.domain_id) %>
-							<li>
-								<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
-									<%= domain[:name] %></a>
-							</li>
-						<% end %>
-					<% end %>
-				</ul>
-			</div>
-		<% else %>
-			<span class="info">(无简历)</span>
-		<% end %>
-	</td>
-	
-	
-	<% if @teacher.statistic %>
-		<td>
-			<a href="#" title="查看<%= student_name %>的数据统计" class="none operation_link">
-				<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
-				统计</a>
-
-			<div class="dropdown_menu" style="font-size: 12px;">
-				<ul class="dropdown_sub_menu">
-					<li>
-						<a href="/teachers/<%= @teacher.id %>/statistics?student=<%= student.id %>&q=f">
-							时段统计</a>
-					</li>
-					<li>
-						<a href="/teachers/<%= @teacher.id %>/statistics/viewing_domain?student=<%= student.id %>">
-							求职方向统计</a>
-					</li>
-				</ul>
-			</div>
-		</td>
-	<% end %>
-	
-	
-	<td>
+<tr<%= %Q! class="even"! if student_counter.even? %>>
+	<td class="mark">
 		<%= h(student.number) %>
 	</td>
 	
 	
-	<td>
+	<td class="mark">
 		<%= student_name %>
+	</td>
+	
+	
+	<td class="mark">
+		<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+			<tr>
+				<td>
+					<% if resumes.size > 0 %>
+						<a href="#" title="查看<%= student_name %>的简历" class="none operation_link">
+							<img src="/images/students/preview_resume_icon.gif" border="0" alt="查看简历" style="margin-bottom: -1px;" />
+							简历</a>
+
+						<div class="dropdown_menu" style="font-size: 12px;">
+							<ul class="dropdown_sub_menu">
+								<% resumes.each do |resume| %>
+									<% unless resume.hidden %>
+										<% domain = ResumeDomain.find(resume.domain_id) %>
+										<li>
+											<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
+												<%= domain[:name] %></a>
+										</li>
+									<% end %>
+								<% end %>
+							</ul>
+						</div>
+					<% else %>
+						<span class="info">(无简历)</span>
+					<% end %>
+				</td>
+				
+				<% if @teacher.statistic %>
+					<td style="width: 10px;"></td>
+					
+					<td class="mark">
+						<a href="#" title="查看<%= student_name %>的数据统计" class="none operation_link">
+							<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
+							统计</a>
+
+						<div class="dropdown_menu" style="font-size: 12px;">
+							<ul class="dropdown_sub_menu">
+								<li>
+									<a href="/teachers/<%= @teacher.id %>/statistics?student=<%= student.id %>&q=f">
+										时段统计</a>
+								</li>
+								<li>
+									<a href="/teachers/<%= @teacher.id %>/statistics/viewing_domain?student=<%= student.id %>">
+										求职方向统计</a>
+								</li>
+							</ul>
+						</div>
+					</td>
+				<% end %>
+			</tr>
+		</table>
 	</td>
 	
 	
