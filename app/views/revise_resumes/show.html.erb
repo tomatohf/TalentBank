@@ -2,11 +2,8 @@
 	domain = ResumeDomain.find(@resume.domain_id)[:name]
 	
 	page_title = "修改"
-	if @teacher
-		page_title += " "
-		page_title += h(@resume.student.name)
-	end
-	page_title += " #{domain} 的简历"
+	page_title << " " << h(@resume.student.name) if @teacher
+	page_title << " #{domain} 的简历"
 	
 	talent_page_title(page_title)
 %>

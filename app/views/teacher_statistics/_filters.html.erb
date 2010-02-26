@@ -17,7 +17,7 @@
 	
 	if @skill
 		skill = @skill[:id].to_s
-		skill += @skill_value.to_s if @skill_value
+		skill << @skill_value.to_s if @skill_value
 	end
 	
 	keyword = h(@keyword)
@@ -202,7 +202,7 @@
 						
 						if @skill_value
 							clear_skill_value_item = "{id:#{@skill[:id]}, name:'取消过滤 #{@skill[:name]}'}"
-							clear_skill_value_item += "," unless skill_data_array.blank?
+							clear_skill_value_item << "," unless skill_data_array.blank?
 							skill_data_array = clear_skill_value_item + skill_data_array
 						end
 					%>

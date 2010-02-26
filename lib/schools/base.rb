@@ -30,8 +30,8 @@ module Schools
     end
     
     def page_title(sub_title)
-      sub_title += " - " if sub_title && sub_title != ""
-      "#{sub_title}人才库 - 乔布堂"
+      sub_title << " - " unless sub_title.blank?
+      %Q!#{sub_title}人才库_#{self.name}!
     end
     
     

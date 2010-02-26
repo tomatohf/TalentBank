@@ -6,11 +6,6 @@ module Schools
       "乔布堂"
     end
     
-    def page_title(sub_title)
-      sub_title += " - " if sub_title && sub_title != ""
-      "#{sub_title}人才库_#{self.name}"
-    end
-    
     
     def edu_levels
       # TODO - MUST BE OVERRIDED
