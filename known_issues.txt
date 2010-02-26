@@ -1,3 +1,6 @@
+收藏简历 的 bug
+
+
 _request 里面的操作加 confirm
 
 

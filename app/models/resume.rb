@@ -123,7 +123,7 @@ class Resume < ActiveRecord::Base
   end
   
   
-  Resume_Page_Size = 20
+  Resume_Page_Size = 10
   
   def self.corp_search(query, corporation, page = 1, query_tags = nil, query_skills = nil)
     query_tags, query_skills = query.tags_and_skills unless query_tags && query_skills

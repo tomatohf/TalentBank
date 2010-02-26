@@ -646,12 +646,17 @@ a.unselected_skill:hover {
 }
 
 
-.corp_resume {
-	margin: 20px 0px 0px 0px;
-	padding: 0px 0px 25px 0px;
-	border-bottom: 1px dashed #CDCDCD;
+.corp_resumes_paging {
+	padding: 0px 5px;
+	height: 30px;
+	line-height: 30px;
 }
 
+
+.corp_resume {
+	padding: 20px 0px 25px;
+	border-bottom: 1px dashed #CDCDCD;
+}
 .corp_resume .job_photo {
 	border: 1px solid #999999;
 	padding: 1px;
@@ -940,7 +945,7 @@ img.notification_icon {
 
 .students_filters {
 	border: 1px solid #395591;
-	margin: 15px 0px 20px 0px;
+	margin-bottom: 20px;
 }
 .students_filters .number_form {
 	color: #FFFFFF;

@@ -143,23 +143,28 @@
 
 
 <% if @resumes %>
-	<div>
-		
-		<div>
-			<span style="font-size: 14px; font-weight: bold;">
-				简历列表
-			</span>
-			
-			<span>
-				(找到约 <%= @resumes.total_entries %> 份简历)
-			</span>
+	<div style="width: 600px; margin-top: 20px;">
+		<div class="corp_resumes_paging" style="border-bottom: 1px solid #BBBBBB;">
+			<div class="float_l">
+				搜索到约
+				<strong><%= @resumes.total_entries %></strong>
+				份简历
+			</div>
+
+			<%= paging_buttons(@resumes, :class => "mini_pagination") %>
 		</div>
-		
 		
 		<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
 		
-		<%= paging_buttons(@resumes) %>
-		
+		<div class="corp_resumes_paging">
+			<div class="float_l">
+				搜索到约
+				<strong><%= @resumes.total_entries %></strong>
+				份简历
+			</div>
+
+			<%= paging_buttons(@resumes, :class => "mini_pagination") %>
+		</div>
 	</div>
 <% end %>
 
