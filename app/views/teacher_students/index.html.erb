@@ -111,40 +111,42 @@
 	</div>
 </div>
 
-<div class="students_paging">
-	<div class="float_l">
-		查询到约
-		<strong><%= @students.total_entries %></strong>
-		名学生
-	</div>
-	
-	<%= paging_buttons(@students, :class => "mini_pagination") %>
-</div>
-<table border="0" cellspacing="0" cellpadding="0" class="main_part_w students_grid">
-	<thead>
-		<tr>
-			<td style="width: 80px;">学号</td>
-			<td style="width: 50px;">姓名</td>
-			<td style="width: <%= @teacher.statistic ? 100 : 45 %>px;">操作</td>
-			<td class="grey">学院</td>
-			<td class="grey">专业</td>
-			<td class="grey" style="width: 30px;">学历</td>
-			<td class="grey" style="width: 85px;">毕业时间</td>
-		</tr>
-	</thead>
+<div class="students_list">
+	<div class="students_paging">
+		<div class="float_l">
+			查询到约
+			<strong><%= @students.total_entries %></strong>
+			名学生
+		</div>
 
-	<tbody>
-		<%= render :partial => "student", :collection => @students %>
-	</tbody>
-</table>
-<div class="students_paging">
-	<div class="float_l">
-		查询到约
-		<strong><%= @students.total_entries %></strong>
-		名学生
+		<%= paging_buttons(@students, :class => "mini_pagination") %>
 	</div>
-	
-	<%= paging_buttons(@students, :class => "mini_pagination") %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w students_grid">
+		<thead>
+			<tr>
+				<td style="width: 80px;">学号</td>
+				<td style="width: 50px;">姓名</td>
+				<td style="width: <%= @teacher.statistic ? 100 : 45 %>px;">操作</td>
+				<td class="grey">学院</td>
+				<td class="grey">专业</td>
+				<td class="grey" style="width: 30px;">学历</td>
+				<td class="grey" style="width: 85px;">毕业时间</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<%= render :partial => "student", :collection => @students %>
+		</tbody>
+	</table>
+	<div class="students_paging">
+		<div class="float_l">
+			查询到约
+			<strong><%= @students.total_entries %></strong>
+			名学生
+		</div>
+
+		<%= paging_buttons(@students, :class => "mini_pagination") %>
+	</div>
 </div>
 
 

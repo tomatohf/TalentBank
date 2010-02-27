@@ -1000,6 +1000,14 @@ img.notification_icon {
 	line-height: 30px;
 }
 
+/* ie6 fixed */
+*html .students_list {
+	width: 99%;
+}
+*html .students_list .main_part_w {
+	width: 100%;
+}
+
 .students_grid {
 	/* border-collapse: collapse; */
 	border-left: 1px solid #395591;

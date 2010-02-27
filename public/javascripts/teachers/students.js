@@ -55,6 +55,8 @@ function setup_toggle_search_form_link() {
 				
 				icon.attr("src", "/images/teachers/search/expand_icon.gif");
 			}
+			
+			return false;
 		}
 	);
 }
