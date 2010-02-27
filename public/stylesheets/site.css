@@ -661,6 +661,32 @@ a.unselected_skill:hover {
 	border: 1px solid #999999;
 	padding: 1px;
 }
+.corp_resume .info_list {
+	width: 400px;
+}
+.corp_resume .info_list dl {
+	margin: 0px;
+	padding: 0px;
+	line-height: 20px;
+}
+.corp_resume .info_list dt {
+	color: #808080;
+	float: left;
+	margin: 0px 10px 0px 0px;
+	padding: 0px;
+	text-align: right;
+	width: 60px;
+}
+.corp_resume .info_list dd {
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	width: 330px;
+}
+.corp_resume .info_list .info_title {
+	font-size: 14px;
+	font-weight: bold;
+}
 
 
 .blocked_corps {
@@ -987,7 +1013,7 @@ img.notification_icon {
 }
 
 
-.students_list_paging {
+.students_paging {
 	border: 1px solid #395591;
 	background-color: #F2F2F2;
 	padding: 0px 15px;

@@ -17,9 +17,9 @@
 
 <div class="corp_resume">
 	
-	<table border="0" cellspacing="0" cellpadding="2" class="main_part_w">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
-			<td align="center" valign="top" style="width: <%= photo_w + 6 %>px;">
+			<td align="center" valign="top" style="width: <%= photo_w + 8 %>px;">
 				<div style="width: <%= photo_w %>px; height: <%= photo_h %>px;">
 					<% if photo %>
 						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/resumes/<%= resume.id %>">
@@ -28,34 +28,43 @@
 				</div>
 			</td>
 			
-			<td valign="top">
-				<div style="margin-left: 15px;">
-					<div style="font-size: 14px;">
-						<a title="查看<%= student_name %>的简历" target="_blank" href="/corporations/<%= @corporation.id %>/resumes/<%= resume.id %>" class="none">
+			<td valign="top" class="info_list">
+				<dl>
+					<dt>姓名:</dt>
+					<dd>
+						<a href="/corporations/<%= @corporation.id %>/resumes/<%= resume.id %>" title="查看<%= student_name %>的简历" target="_blank" class="none info_title">
 							<%= student_name %></a>
-					</div>
+							
+						(<%= edu_level[:name] %>)
+					</dd>
 					
-					<div>
-						<%= graduation_year %>
-						年
-						<%= edu_level[:name] %>
-						毕业于
-						<%= @school.name %>
-						»
-						<%= college[:name] %>
-						»
-						<%= major[:name] %>
-						,
-						求职方向:
+					<dt>资料:</dt>
+					<dd>
+						<div><%= @school.name %></div>
+						<div>
+							<%= college[:name] %>
+							<span style="margin: 0px 6px;">›</span>
+							<%= major[:name] %>
+						</div>
+					</dd>
+					
+					<dt>毕业:</dt>
+					<dd>
+						<%= graduation_year %>年
+						<%= %Q! (应届)! if graduation_year == @school.coming_graduation_year %>
+					</dd>
+					
+					<dt>方向:</dt>
+					<dd>
 						<%= domain[:name] %>
-					</div>
-					
-					<div>
-						<span id="save_resume_field_<%= resume.id %>">
-							<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => resume.id, :tags => tags} %>
-						</span>
-					</div>
-				</div>
+					</dd>
+				</dl>
+			</td>
+			
+			<td valign="top">
+				<span id="save_resume_field_<%= resume.id %>">
+					<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => resume.id, :tags => tags} %>
+				</span>
 			</td>
 		</tr>
 	</table>

@@ -189,7 +189,7 @@ function do_save_resume(resume_id, tags) {
 
 
 function remove_saved_resume(resume_id) {
-	if(confirm("确定要从收藏中移除这份简历么 ?")) {
+	if(confirm("确定要从所有收藏中移除这份简历么 ?")) {
 		do_save_resume(resume_id, "");
 	}
 }
