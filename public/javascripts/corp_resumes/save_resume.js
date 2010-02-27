@@ -261,7 +261,7 @@ $(document).ready(
 function setup_update_tag_links() {
 	$("a.update_tag_link").unbind("click").click(
 		function() {
-			update_tag($.trim($(this).siblings("a.corp_tag_list_link").text()));
+			update_tag($.trim(TAG_NAME));
 			
 			return false;
 		}
@@ -271,7 +271,7 @@ function setup_update_tag_links() {
 function setup_destroy_tag_links() {
 	$("a.destroy_tag_link").unbind("click").click(
 		function() {
-			var tag_name = $.trim($(this).siblings("a.corp_tag_list_link").text());
+			var tag_name = $.trim(TAG_NAME);
 			
 			if(confirm("确定要删除所有 " + tag_name + " 的标签么 ?")) {
 				$("#destroy_tag_name").val(tag_name);

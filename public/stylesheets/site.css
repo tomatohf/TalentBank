@@ -446,9 +446,7 @@ a.none:hover {
 	border-bottom: 1px solid #CEE1EE;
 	color: #333333;
 	text-decoration: none;
-	height: 26px;
-	line-height: 26px;
-	padding-left: 10px;
+	padding: 5px 6px 4px;
 }
 .vertical_nav a:hover {
 	background-color: #EDF3FF;
@@ -650,6 +648,7 @@ a.unselected_skill:hover {
 	padding: 0px 5px;
 	height: 30px;
 	line-height: 30px;
+	border-bottom: 1px solid #BBBBBB;
 }
 
 
@@ -687,23 +686,14 @@ a.unselected_skill:hover {
 	font-size: 14px;
 	font-weight: bold;
 }
-.corp_resume ul.actions {
-	margin: 0px;
-	padding: 0px;
-	list-style-type: none;
-}
-.corp_resume ul.actions li {
-	margin: 0px;
-	padding: 0px;
-	border-bottom: 1px solid #D8DFEA;
-}
-.corp_resume ul.actions a {
+.corp_resume .actions a {
 	display: block;
 	color: #3B5998;
 	text-decoration: none;
 	padding: 3px 5px 2px;
+	border-bottom: 1px solid #D8DFEA;
 }
-.corp_resume ul.actions a:hover {
+.corp_resume .actions a:hover {
 	background-color: #3B5998;
 	color: #FFFFFF;
 }
@@ -729,12 +719,12 @@ a.unselected_skill:hover {
 
 
 a.corp_tag, a.corp_tag_selected {
-	display: block
+	display: block;
 	float: left;
 	text-decoration: none;
 	
-	border-bottom: 1px solid #808080;
-	border-right: 1px solid #808080;
+	border-bottom: 1px solid #3E6D8E;
+	border-right: 1px solid #7F9FB6;
 	
 	margin: 3px;
 	padding: 3px 3px 2px 4px;
@@ -742,52 +732,18 @@ a.corp_tag, a.corp_tag_selected {
 	white-space: nowrap;
 }
 a.corp_tag {
-	color: #1A1A1A;
-	background-color: #E6E6E6;
+	color: #3E6D8E;
+	background-color: #E0EAF1;
 }
 a.corp_tag_selected {
 	color: #999999;
 	background-color: #F0F0F0;
 }
 a.corp_tag:hover {
-	background-color: #808080;
-	border-bottom: 1px solid #A0A0A0;
-	border-right: 1px solid #A0A0A0;
-	
-	color: #FFFFFF;
-}
-
-
-.corp_tags div {
-	padding: 5px 0px;
-}
-
-
-a.tag {
-	color: #3E6D8E;
-	background-color: #E0EAF1;
-	border-bottom: 1px solid #3E6D8E;
-	border-right: 1px solid #7F9FB6;
-	padding: 4px 5px 3px;
-	margin: 0px;
-	
-	white-space: nowrap;
-	text-decoration: none;
-}
-a.tag:hover, a.selected_tag {
 	background-color: #3E6D8E;
 	color: #E0EAF1;
 	border-bottom: 1px solid #37607D;
 	border-right: 1px solid #37607D;
-}
-a.selected_tag {
-	font-weight: bold;
-}
-.tag_count {
-	color: #666666;
-	font-size: 15px;
-	font-weight: bold;
-	margin: 0px 3px;
 }
 
 

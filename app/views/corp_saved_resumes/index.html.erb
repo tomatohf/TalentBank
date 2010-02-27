@@ -1,7 +1,32 @@
 <% talent_page_title("简历标签") %>
 
 
-<h2 class="page_title">简历标签<%= %Q! - #{@tag_name}! unless @tag_name.blank? %></h2>
+<% unless @tag_name.blank? %>
+	<% form_tag "/corporations/#{@corporation.id}/saved_resumes/destroy_tag", :method => :post, :id => "destroy_tag_form" do %>
+		<input type="hidden" id="destroy_tag_name" name="destroy_tag_name" />
+	<% end %>
+	<% form_tag "/corporations/#{@corporation.id}/saved_resumes/update_tag", :method => :post, :id => "update_tag_form" do %>
+		<input type="hidden" id="old_tag_name" name="old_tag_name" />
+		<input type="hidden" id="new_tag_name" name="new_tag_name" />
+	<% end %>
+<% end %>
+
+<h2 class="page_title">
+	简历标签<%= %Q! - #{@tag_name}! unless @tag_name.blank? %>
+	<% unless @tag_name.blank? %>
+		<span style="margin-left: 8px; font-size: 12px; font-weight: normal;">
+			(
+				<a href="#" class="update_tag_link none">
+					修改名称</a>
+					
+				<span class="info" style="margin: 0px 5px;">|</span>
+				
+				<a href="#" class="destroy_tag_link none">
+					删除标签</a>
+			)
+		</span>
+	<% end %>
+</h2>
 
 
 <% if flash[:success_msg] %>
@@ -10,47 +35,41 @@
 	</p>
 <% end %>
 
-<div class="float_r" style="width: 210px;">
-	<% form_tag "/corporations/#{@corporation.id}/saved_resumes/destroy_tag", :method => :post, :id => "destroy_tag_form" do %>
-		<input type="hidden" id="destroy_tag_name" name="destroy_tag_name" />
-	<% end %>
-	<% form_tag "/corporations/#{@corporation.id}/saved_resumes/update_tag", :method => :post, :id => "update_tag_form" do %>
-		<input type="hidden" id="old_tag_name" name="old_tag_name" />
-		<input type="hidden" id="new_tag_name" name="new_tag_name" />
-	<% end %>
-	<div class="corp_tags">
-		<div>
-			<a href="/corporations/<%= @corporation.id %>/saved_resumes" class="tag<%= %Q! selected_tag! if @tag_name.blank? %>">
-				全部</a>
-			<span class="tag_count" style="">×&nbsp;<%= @total_count %></span>
-			
-			<span class="info" style="margin-left: 20px;">
-				(
-				<strong><%= @corp_tags.size %></strong>
-				个标签
-				)
-			</span>
-		</div>
-
+<div class="float_r" style="width: 188px;">
+	<div class="align_r info" style="margin: 0px 10px 10px;">
+		<%= @corp_tags.size %>
+		个标签
+	</div>
+	
+	<div class="vertical_nav">
+		<a href="/corporations/<%= @corporation.id %>/saved_resumes"<%= %Q! class="selected_link"! if @tag_name.blank? %>>
+			全部 (<%= @total_count %>)</a>
 		<% @corp_tags.each do |tag, count| %>
 			<%
 				selected = @tag_name && (@tag_name == tag)
 				tag = h(tag)
 			%>
-			<div>
-				<a href="/corporations/<%= @corporation.id %>/saved_resumes?tag=<%= tag %>" class="tag corp_tag_list_link<%= " selected_tag" if selected %>"><%= tag %></a>
-				<span class="tag_count" style="">×&nbsp;<%= count %></span>
-				
-				<a href="#" class="update_tag_link" title="修改标签">
-					<img src="/images/students/edit_icon.gif" border="0" alt="修改" style="margin: 0px 5px -2px;" /></a>
-				<a href="#" class="destroy_tag_link" title="删除标签">
-					<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" /></a>
-			</div>
+			<a href="/corporations/<%= @corporation.id %>/saved_resumes?tag=<%= tag %>"<%= %Q! class="selected_link"! if selected %>>
+				<%= tag %> (<%= count %>)</a>
 		<% end %>
+	</div>
+	
+	<div class="align_r info" style="margin: 10px;">
+		<%= @corp_tags.size %>
+		个标签
 	</div>
 </div>
 
-<div style="margin-right: 230px;">
+<div style="margin-right: 220px;">
+	<div class="corp_resumes_paging">
+		<div class="float_l">
+			<strong><%= @taggers.total_entries %></strong>
+			份简历
+		</div>
+
+		<%= @taggers && paging_buttons(@taggers, :class => "mini_pagination") %>
+	</div>
+	
 	<%=
 		render(
 			:partial => "/corp_resumes/resume",
@@ -65,15 +84,24 @@
 		<div class="info_with_icon" style="margin: 30px;">
 			没有找到相对应的简历
 		</div>
+	<% else %>
+		<div class="corp_resumes_paging" style="border-bottom: 0px none;">
+			<div class="float_l">
+				<strong><%= @taggers.total_entries %></strong>
+				份简历
+			</div>
+
+			<%= @taggers && paging_buttons(@taggers, :class => "mini_pagination") %>
+		</div>
 	<% end %>
-	
-	<%= @taggers && paging_buttons(@taggers) %>
 </div>
 
 
 <% content_for :scripts do %>
 	<script language="JavaScript">
 		var CORPORATION_ID = <%= @corporation.id %>;
+		
+		var TAG_NAME = '<%= @tag_name %>';
 	
 		var required_mark = '<%= required_mark(false).strip %>';
 	</script>

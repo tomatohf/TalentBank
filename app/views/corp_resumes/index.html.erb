@@ -143,8 +143,8 @@
 
 
 <% if @resumes %>
-	<div style="width: 600px; margin-top: 20px;">
-		<div class="corp_resumes_paging" style="border-bottom: 1px solid #BBBBBB;">
+	<div style="width: 550px; margin-top: 20px;">
+		<div class="corp_resumes_paging">
 			<div class="float_l">
 				搜索到约
 				<strong><%= @resumes.total_entries %></strong>
@@ -156,7 +156,7 @@
 		
 		<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
 		
-		<div class="corp_resumes_paging">
+		<div class="corp_resumes_paging" style="border-bottom: 0px none;">
 			<div class="float_l">
 				搜索到约
 				<strong><%= @resumes.total_entries %></strong>

@@ -22,7 +22,7 @@
 			<td valign="top" style="width: 70px; color: #666666;">用过的标签:</td>
 
 			<td>
-				<div id="corp_tags_<%= @resume_id %>" style="line-height: 25px;">
+				<div id="corp_tags_<%= @resume_id %>">
 					<% @corp_tags.each do |tag| %>
 						<a href="#" class="corp_tag"><%= h(tag) %></a>
 					<% end %>
