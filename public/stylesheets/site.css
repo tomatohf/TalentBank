@@ -366,9 +366,10 @@ a.none:hover {
 	float: left;
 	width: 165px;
 	background-color: #F2F2F2;
+	padding: 8px 0px;
 }
 .menu_column .menu_category {
-	margin: 40px 12px;
+	padding: 20px 12px;
 }
 .menu_column .menu_category_title {
 	color: #666666;
@@ -966,8 +967,11 @@ img.notification_icon {
 	border: 1px solid #84ABC6;
 	padding: 3px 24px 3px 3px;
 	width: 120px;
+	height: 14px;
 	margin-left: 8px;
 }
+* html .students_filters .number_form input#number {margin-top:-1px;margin-bottom:-1px;}
+*+html .students_filters .number_form input#number {margin-top:-1px;margin-bottom:-1px;}
 .students_filters .number_form input.search_button {
 	background: #B8D4E8 url(/images/common/magnifier_icon.gif) no-repeat scroll left top;
 	border: 1px solid #84ABC6;
