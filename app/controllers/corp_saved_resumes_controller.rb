@@ -110,7 +110,7 @@ class CorpSavedResumesController < ApplicationController
           if !new_tag.new_record? || new_tag.save
             CorpResumeTagger.update_corp_tag(@corporation.id, old_tag.id, new_tag.id)
 
-            flash[:success_msg] = "操作成功, 已将收藏标签 #{old_tag.name} 改名为 #{new_tag.name}"
+            flash[:success_msg] = "操作成功, 已将简历标签 #{old_tag.name} 改名为 #{new_tag.name}"
 
             return jump_to("/corporations/#{@corporation.id}/saved_resumes?tag=#{new_tag.name}")
           end
@@ -128,7 +128,7 @@ class CorpSavedResumesController < ApplicationController
     unless tag_name.blank? || (tag = CorpResumeTag.get_record(tag_name)).new_record?
       CorpResumeTagger.remove_corp_tag(@corporation.id, tag.id)
       
-      flash[:success_msg] = "操作成功, 已移除所有收藏到标签 #{tag.name} 的简历"
+      flash[:success_msg] = "操作成功, 已删除所有 #{tag.name} 的标签"
     end
     
     jump_to("/corporations/#{@corporation.id}/saved_resumes")

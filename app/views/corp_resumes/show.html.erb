@@ -21,6 +21,10 @@
 <% else %>
 
 	<div class="align_r" style="margin: 0px 50px 10px;">
+		<span style="margin-right: 6px; color: #555555;">
+			标签:
+		</span>
+		
 		<span id="save_resume_field_<%= @resume.id %>">
 			<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => @resume.id, :tags => @tags} %>
 		</span>

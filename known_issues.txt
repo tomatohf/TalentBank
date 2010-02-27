@@ -1,4 +1,4 @@
-收藏简历 的 bug
+按标签列出简历 的 bug
 
 
 _request 里面的操作加 confirm

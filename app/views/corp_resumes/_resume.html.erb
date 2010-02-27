@@ -58,13 +58,23 @@
 					<dd>
 						<%= domain[:name] %>
 					</dd>
+					
+					<dt>标签:</dt>
+					<dd>
+						<span id="save_resume_field_<%= resume.id %>">
+							<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => resume.id, :tags => tags} %>
+						</span>
+					</dd>
 				</dl>
 			</td>
 			
 			<td valign="top">
-				<span id="save_resume_field_<%= resume.id %>">
-					<%= render :partial => "/corp_saved_resumes/save_resume_field", :locals => {:resume_id => resume.id, :tags => tags} %>
-				</span>
+				<ul class="actions">
+					<li>
+						<a href="#" class="none" id="edit_resume_tags_link_<%= resume.id %>">
+							<%= tags.size > 0 ? "修改标签" : "添加标签" %></a>
+					</li>
+				</ul>
 			</td>
 		</tr>
 	</table>

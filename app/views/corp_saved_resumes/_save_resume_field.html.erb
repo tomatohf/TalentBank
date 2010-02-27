@@ -1,15 +1,15 @@
 <input type="hidden" id="corp_resume_tags_<%= resume_id %>" value="<%= h(tags.join(" ")) %>" />
 <% if tags.size > 0 %>
-	已收藏至:
 	<% tags.each do |tag| %>
 		<% tag = h(tag) %>
 		<a target="_blank" class="none" href="/corporations/<%= @corporation.id %>/saved_resumes?tag=<%= tag %>">
 			<%= tag %></a>
 	<% end %>
-	<a href="#" id="save_resume_link_<%= resume_id %>" title="修改">
+	
+	<a href="#" id="save_resume_link_<%= resume_id %>" title="修改标签">
 		<img src="/images/students/edit_icon.gif" border="0" alt="修改" style="margin: 0px 3px -2px;" /></a>
-	<a href="#" id="remove_saved_resume_link_<%= resume_id %>" title="删除收藏">
+	<a href="#" id="remove_saved_resume_link_<%= resume_id %>" title="删除所有标签">
 		<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" /></a>
 <% else %>
-	<a href="#" id="save_resume_link_<%= resume_id %>">收藏这份简历</a>
+	<a href="#" id="save_resume_link_<%= resume_id %>" class="none">(添加标签)</a>
 <% end %>

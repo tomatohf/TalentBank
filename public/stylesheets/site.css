@@ -83,14 +83,14 @@ form {
 	margin-left: 2px;
 	padding-right: 1px;
 	margin-right: 2px;
-	border-bottom: 2px solid #005EAC;
+	border-bottom: 2px solid #3B5998;
 }
 .mini_pagination a {
-	color: #005EAC;
+	color: #3B5998;
 	text-decoration: none;
 }
 .mini_pagination a:hover, .mini_pagination a:focus {
-	background-color: #005EAC;
+	background-color: #3B5998;
 	color: #FFFFFF;
 }
 
@@ -210,7 +210,7 @@ form {
 
 .button {
 	cursor: pointer;
-	background-color: #005EAC;
+	background-color: #3B5998;
 	border-color: #B8D4E8 #124680 #124680 #B8D4E8;
 	border-style: solid;
 	border-width: 1px;
@@ -662,7 +662,7 @@ a.unselected_skill:hover {
 	padding: 1px;
 }
 .corp_resume .info_list {
-	width: 400px;
+	width: 350px;
 }
 .corp_resume .info_list dl {
 	margin: 0px;
@@ -681,11 +681,31 @@ a.unselected_skill:hover {
 	margin: 0px;
 	padding: 0px;
 	float: left;
-	width: 330px;
+	width: 280px;
 }
 .corp_resume .info_list .info_title {
 	font-size: 14px;
 	font-weight: bold;
+}
+.corp_resume ul.actions {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+.corp_resume ul.actions li {
+	margin: 0px;
+	padding: 0px;
+	border-bottom: 1px solid #D8DFEA;
+}
+.corp_resume ul.actions a {
+	display: block;
+	color: #3B5998;
+	text-decoration: none;
+	padding: 3px 5px 2px;
+}
+.corp_resume ul.actions a:hover {
+	background-color: #3B5998;
+	color: #FFFFFF;
 }
 
 
@@ -998,7 +1018,6 @@ img.notification_icon {
 	height: 22px;
 	margin-left: -21px;
 	position: relative;
-	text-indent: -9999px;
 	width: 21px;
 }
 .students_filters .search_form {

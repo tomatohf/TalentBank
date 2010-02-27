@@ -189,7 +189,7 @@ function do_save_resume(resume_id, tags) {
 
 
 function remove_saved_resume(resume_id) {
-	if(confirm("确定要从所有收藏中移除这份简历么 ?")) {
+	if(confirm("确定要删除这份简历的所有标签么 ?")) {
 		do_save_resume(resume_id, "");
 	}
 }
@@ -198,7 +198,7 @@ function remove_saved_resume(resume_id) {
 function show_save_resume_dialog(content, button_text, resume_id, ok_event) {
 	DIALOG.appear(
 		{
-			title: "收藏简历",
+			title: "简历标签",
 			content: content,
 			button_text: button_text,
 			width: 530,
@@ -215,19 +215,32 @@ function show_save_resume_dialog(content, button_text, resume_id, ok_event) {
 
 
 function setup_save_resume_links() {
-	$("a[id^='save_resume_link_']").unbind("click").click(save_resume_link_handler);
+	$("a[id^='save_resume_link_']").unbind("click").click(
+		function() {
+			save_resume($(this).attr("id").substr("save_resume_link_".length));
+
+			return false;
+		}
+	);
 	
-	$("a[id^='remove_saved_resume_link_']").unbind("click").click(remove_saved_resume_link_handler);
+	$("a[id^='remove_saved_resume_link_']").unbind("click").click(
+		function() {
+			remove_saved_resume($(this).attr("id").substr("remove_saved_resume_link_".length));
+
+			return false;
+		}
+	);
 }
-function save_resume_link_handler() {
-	save_resume($(this).attr("id").substr("save_resume_link_".length));
-	
-	return false;
-}
-function remove_saved_resume_link_handler() {
-	remove_saved_resume($(this).attr("id").substr("remove_saved_resume_link_".length));
-	
-	return false;
+
+
+function setup_edit_resume_tags_links() {
+	$("a[id^='edit_resume_tags_link_']").unbind("click").click(
+		function() {
+			save_resume($(this).attr("id").substr("edit_resume_tags_link_".length));
+
+			return false;
+		}
+	);
 }
 
 
@@ -238,6 +251,9 @@ $(document).ready(
 		
 		setup_update_tag_links();
 		setup_destroy_tag_links();
+		
+		
+		setup_edit_resume_tags_links();
 	}
 );
 
@@ -257,7 +273,7 @@ function setup_destroy_tag_links() {
 		function() {
 			var tag_name = $.trim($(this).siblings("a.corp_tag_list_link").text());
 			
-			if(confirm("确定要移除*所有*收藏到标签 " + tag_name + " 的简历么 ?")) {
+			if(confirm("确定要删除所有 " + tag_name + " 的标签么 ?")) {
 				$("#destroy_tag_name").val(tag_name);
 				$("#destroy_tag_form").submit();
 			}
