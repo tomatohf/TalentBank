@@ -4,20 +4,13 @@
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 	<tr>
 		<td valign="top" style="padding-right: 20px;">
-			<h1>
+			<h2>
 				<%= h(@student.name) %>
 
 				<span style="font-size: 14px; margin-left: 15px;">
 					欢迎使用人才库系统
 				</span>
-			</h1>
-			
-			
-			<div>
-				<a href="/students/<%= @student.id %>/notifications/notices">收到的通知</a>
-				|
-				<a href="/students/<%= @student.id %>/notifications/requests">收到的请求</a>
-			</div>
+			</h2>
 		</td>
 		
 		<td valign="top" style="width: 180px;">

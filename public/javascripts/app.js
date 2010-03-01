@@ -47,5 +47,6 @@ var APP = {
 $(document).ready(
 	function() {
 		APP.setup_dropdown_menu("#setting_link", 100);
+		APP.setup_dropdown_menu("#notification_link", 120);
 	}
 );
