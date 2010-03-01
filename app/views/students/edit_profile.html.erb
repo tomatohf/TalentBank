@@ -1,7 +1,9 @@
 <% talent_page_title("编辑个人信息") %>
 
 
-<h2 class="page_title">编辑个人信息</h2>
+<h2 class="page_title">简历基本信息 - 个人信息</h2>
+
+<%= render :partial => "edit_nav", :locals => {:current_link => "edit_profile"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">

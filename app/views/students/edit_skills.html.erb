@@ -1,7 +1,9 @@
 <% talent_page_title("技能和证书") %>
 
 
-<h2 class="page_title">技能和证书</h2>
+<h2 class="page_title">简历基本信息 - 技能和证书</h2>
+
+<%= render :partial => "edit_nav", :locals => {:current_link => "edit_skills"} %>
 
 <% if flash[:success_msg] %>
 	<p class="success_msg">
@@ -19,7 +21,7 @@
 </div>
 
 <div style="margin-right: 280px;">
-	<div class="info_with_icon">
+	<div class="info_with_icon" style="margin-left: 15px;">
 		从右侧列表中选择添加你要填写的技能和证书
 	</div>
 	

@@ -1,0 +1,14 @@
+<div class="horizontal_nav">
+	<%
+		[
+			["edit_profile", "个人信息"],
+	  		["edu_exps", "教育经历"],
+	  		["exps", "经历库"],
+	  		["edit_skills", "技能和证书"],
+	  		["edit_job_photo", "求职照"]
+		].each do |part|
+	%>
+		<a href="/students/<%= @student.id %>/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == current_link %>>
+			<%= part[1] %></a>
+	<% end %>
+</div>
