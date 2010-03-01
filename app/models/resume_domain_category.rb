@@ -6,9 +6,9 @@ class ResumeDomainCategory < HashModel::Simple
     # ]
     
     [
-      {:id => 100, :name => "不限方向"},
+      {:id => 100, :name => "不限方向类"},
       
-      {:id => 200, :name => "销售和市场"},
+      {:id => 200, :name => "销售和市场类"},
       {:id => 300, :name => "研发类"},
       {:id => 400, :name => "财会类"},
       {:id => 500, :name => "行政类"}

@@ -25,61 +25,11 @@
 	</p>
 <% end %>
 
-<% form_tag "/corporations/#{@corporation.id}/resumes/create_query", :method => :post, :id => "query_form" do %>
-	<div>
-		学校:
-		<span>
-			<%= @school.name %>
-		</span>
-	</div>
-	
-	
-	<div>
-		<label for="college">学院:</label>
-		<select name="college" id="college" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限学院</option>
-			<% College.data[school_abbr].each do |college| %>
-				<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
-			<% end %>
-		</select>
-	
-		<label for="major">专业:</label>
-		<select name="major" id="major" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限专业</option>
-			<% (Major.data[@query.college_id]|| []).each do |major| %>
-				<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
-			<% end %>
-		</select>
-	
-		<label for="edu_level">学历:</label>
-		<select name="edu_level" id="edu_level" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>>不限学历</option>
-			<% @school.edu_levels.each do |level_id| %>
-				<% level = EduLevel.find(level_id) %>
-				<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
-			<% end %>
-		</select>
-	
-		<label for="graduation_year">毕业时间:</label>
-		<select name="graduation_year" id="graduation_year" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>>不限毕业时间</option>
-			<% year = @school.coming_graduation_year %>
-			<% @school.graduation_years.each do |graduation_year| %>
-				<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == graduation_year %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>
-			<% end %>
-		</select>
-	</div>
-
-
-	<div>
-		<label for="keyword_input">关键词:</label>
-		<input type="text" id="keyword_input" name="keyword_input" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
-		<input type="hidden" id="keyword" name="keyword" />
-	</div>
-
-
-	<div>
-		<label for="domain">求职方向:</label>
+<% form_tag "/corporations/#{@corporation.id}/resumes/create_query", :method => :post, :id => "query_resume_form" do %>
+	<div id="domain_field">
+		<%= required_mark(false) %>
+		
+		<label for="domain">请选择求职方向:</label>
 		
 		<select id="domain_category" class="dropdown_list">
 			<% categories.each do |category| %>
@@ -95,55 +45,129 @@
 	</div>
 
 
-	<div>
-		<% domains.each do |domain| %>
-			<% tags = ResumeExpTag.data[domain[:id]] || [] %>
-			<% if tags.size > 0 %>
-				<div id="tags_<%= domain[:id] %>"<%= %Q! style="display: none;"! unless domain[:id] == @query.domain_id %>>
-					需要具备的经历标签:
-					<% tags.each do |tag| %>
-						<span class="query_tag">
-							<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query_tags.include?(tag[:id]) %>
-							<label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
+	<div id="form_body">
+		<div class="form_section">
+			<a href="#" title="展开/收起" class="none form_section_title">学生信息</a>
+			
+			<div class="form_section_body">
+				<div class="field_row">
+					<span class="field">
+						<label>
+							学校:
+						</label>
+						<span style="color: #666666; font-weight: bold;">
+							<%= @school.name %>
 						</span>
-					<% end %>
+					</span>
+
+					<span class="field">
+						<label for="college">学院:</label>
+						<select name="college" id="college" class="dropdown_list">
+							<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限学院</option>
+							<% College.data[school_abbr].each do |college| %>
+								<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
+							<% end %>
+						</select>
+					</span>
+
+					<span class="field">
+						<label for="major">专业:</label>
+						<select name="major" id="major" class="dropdown_list">
+							<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限专业</option>
+							<% (Major.data[@query.college_id]|| []).each do |major| %>
+								<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
+							<% end %>
+						</select>
+					</span>
 				</div>
-			<% end %>
-		<% end %>
-	</div>
-
-
-	<div>
-		<div>
-			<label for="skill_list">需要具备的技能和证书:</label>
-			<select id="skill_list" class="dropdown_list">
-				<% Skill.data.each do |skill| %>
-					<option value="<%= skill[:id] %>" id="skill_<%= skill[:id] %>"><%= skill[:name] %></option>
-				<% end %>
-			</select>
-
-			<a href="#" id="add_skill_link">
-				添加</a>
+				
+				<div class="field_row">
+					<span class="field">
+						<label for="edu_level">学历:</label>
+						<select name="edu_level" id="edu_level" class="dropdown_list">
+							<option value=""<%= %Q! selected="selected"! if @query.edu_level_id.blank? %>>不限学历</option>
+							<% @school.edu_levels.each do |level_id| %>
+								<% level = EduLevel.find(level_id) %>
+								<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @query.edu_level_id == level[:id] %>><%= level[:name] %></option>
+							<% end %>
+						</select>
+					</span>
+					
+					<span class="field">
+						<label for="graduation_year">毕业时间:</label>
+						<select name="graduation_year" id="graduation_year" class="dropdown_list">
+							<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>>不限毕业时间</option>
+							<% year = @school.coming_graduation_year %>
+							<% @school.graduation_years.each do |graduation_year| %>
+								<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == graduation_year %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>
+							<% end %>
+						</select>
+					</span>
+				</div>
+			</div>
 		</div>
-	
-		<div id="skills" class="query_skills">
-			<%= render :partial => "query_skill", :collection => @query_skills %>
-		</div>
-	</div>
-	
-	
-	<div class="align_c">
-		<%= submit_tag "查询", :class => "button", :disabled => !@account_active %>
 		
-		<a href="#" id="save_query_link" style="margin-left: 20px;">
-			保存此查询条件</a>
+		<div class="form_section">
+			<a href="#" title="展开/收起" class="none form_section_title">简历信息</a>
+			
+			<div class="form_section_body">
+				<% domains.each do |domain| %>
+					<% tags = ResumeExpTag.data[domain[:id]] || [] %>
+					<% if tags.size > 0 %>
+						<div id="tags_<%= domain[:id] %>" class="field_row"<%= %Q! style="display: none;"! unless domain[:id] == @query.domain_id %>>
+							经历标签:
+							<% tags.each do |tag| %>
+								<span class="query_tag">
+									<%= check_box_tag "tag_#{tag[:id]}", value = "true", @query_tags.include?(tag[:id]) %>
+									<label for="tag_<%= tag[:id] %>"><%= tag[:name] %></label>
+								</span>
+							<% end %>
+						</div>
+					<% end %>
+				<% end %>
+				
+				<div class="field_row">
+					<div class="field">
+						<label for="skill_list">技能和证书:</label>
+						<select id="skill_list" class="dropdown_list">
+							<% Skill.data.each do |skill| %>
+								<option value="<%= skill[:id] %>" id="skill_<%= skill[:id] %>"><%= skill[:name] %></option>
+							<% end %>
+						</select>
+
+						<a href="#" id="add_skill_link" style="margin-left: 6px;">
+							添加</a>
+							
+						<img src="/images/loading_icon.gif" class="loading_icon" border="0" title="操作中" alt="操作中" style="margin: 0px 0px -3px 10px; display: none;" />
+					</div>
+
+					<div id="skills" class="query_skills">
+						<%= render :partial => "query_skill", :collection => @query_skills %>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="align_r" style="margin: 15px 100px 5px 5px;">
+			<div class="float_l field">
+				<label for="keyword_input">关键词:</label>
+				<input type="text" id="keyword_input" name="keyword_input" class="text_field" size="30" value="<%= h(@query.keyword) %>" />
+				<input type="hidden" id="keyword" name="keyword" />
+			</div>
+			
+			<a href="#" id="save_query_link" style="margin-right: 20px;">
+				保存此查询条件</a>
+				
+			<%= submit_tag "搜索", :class => "button", :disabled => !@account_active %>
+		</div>
 	</div>
 <% end %>
 
 
 
 <% if @resumes %>
-	<div style="width: 550px; margin-top: 20px;">
+	<div style="width: 550px; margin-top: 30px;">
 		<div class="corp_resumes_paging">
 			<div class="float_l">
 				搜索到约
@@ -156,15 +180,17 @@
 		
 		<%= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
 		
-		<div class="corp_resumes_paging" style="border-bottom: 0px none;">
-			<div class="float_l">
-				搜索到约
-				<strong><%= @resumes.total_entries %></strong>
-				份简历
-			</div>
+		<% unless @resumes.blank? %>
+			<div class="corp_resumes_paging" style="border-bottom: 0px none;">
+				<div class="float_l">
+					搜索到约
+					<strong><%= @resumes.total_entries %></strong>
+					份简历
+				</div>
 
-			<%= paging_buttons(@resumes, :class => "mini_pagination") %>
-		</div>
+				<%= paging_buttons(@resumes, :class => "mini_pagination") %>
+			</div>
+		<% end %>
 	</div>
 <% end %>
 

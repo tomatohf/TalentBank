@@ -52,26 +52,36 @@ function show_tags(domain_id) {
 }
 
 
-function add_skill(skill_id) {
-	$.post(
-		"/corporations/" + CORPORATION_ID + "/resumes/add_skill",
+function add_skill(skill_id, loading) {
+	if(isNaN(parseInt(skill_id))) { return; }
+	
+	loading.fadeIn("slow");
+	
+	$.ajax(
 		{
-			skill_id: skill_id
-		},
-		function(data) {
-			// add skill input
-			var query_skill = $("#query_skill_" + skill_id);
-			if(query_skill.length > 0) {
-				query_skill.replaceWith(data);
+			type: "POST",
+			url: "/corporations/" + CORPORATION_ID + "/resumes/add_skill",
+			dataType: "html",
+			data: {
+				skill_id: skill_id
+			},
+			complete: function() {
+				loading.fadeOut("slow");
+			},
+			success: function(data, text_status) {
+				// add skill input
+				var query_skill = $("#query_skill_" + skill_id);
+				if(query_skill.length > 0) {
+					query_skill.replaceWith(data);
+				}
+				else {
+					$("#skills").append(data);
+				}
+
+				// adjust skill list
+				remove_skill_from_list(skill_id);
 			}
-			else {
-				$("#skills").append(data);
-			}
-			
-			// adjust skill list
-			remove_skill_from_list(skill_id);
-		},
-		"html"
+		}
 	);
 }
 
@@ -121,7 +131,7 @@ function save_query() {
 function do_save_query(query_name) {
 	$.post(
 		"/corporations/" + CORPORATION_ID + "/saved_queries",
-		$("#query_form").serialize() + "&name=" + encodeURIComponent(query_name),
+		$("#query_resume_form").serialize() + "&name=" + encodeURIComponent(query_name),
 		function(data) {
 			if(data != null && data.substr(0, 4) == "true") {
 				// success and do nothing
@@ -155,9 +165,30 @@ function show_dialog(content, button_text, ok_event) {
 }
 
 
+function setup_toggle_form_section() {
+	$(".form_section_title").unbind("click").click(
+		function() {
+			var section_body = $(this).siblings(".form_section_body");
+			if(section_body.css("display") == "none") {
+				section_body.slideDown();
+			
+				$(this).css("backgroundImage", "url(/images/corporations/collapse_icon.gif)");
+			}
+			else {
+				section_body.slideUp();
+				
+				$(this).css("backgroundImage", "url(/images/corporations/expand_icon.gif)");
+			}
+			
+			return false;
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
-		$("#query_form").submit(
+		$("#query_resume_form").submit(
 			function() {
 				$("#keyword").val(encodeURIComponent($("#keyword_input").val()));
 			}
@@ -187,7 +218,7 @@ $(document).ready(
 		
 		$("#add_skill_link").click(
 			function() {
-				add_skill($("#skill_list").val());
+				add_skill($("#skill_list").val(), $(this).siblings(".loading_icon"));
 				
 				return false;
 			}
@@ -201,6 +232,9 @@ $(document).ready(
 				return false;
 			}
 		);
+		
+		
+		setup_toggle_form_section();
 		
 		
 		// remove selected skill from list

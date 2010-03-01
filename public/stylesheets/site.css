@@ -616,11 +616,17 @@ a.unselected_skill:hover {
 
 
 .query_tag {
-	margin: 0px 8px;
+	margin: 0px 4px;
+	white-space: nowrap;
 }
 
 .query_skill {
-	margin: 0px 10px;
+	display: inline-block;
+	margin: 8px 8px 0px;
+	white-space: nowrap;
+}
+.query_skill label {
+	margin: 0px 3px;
 }
 
 
@@ -1045,4 +1051,44 @@ img.notification_icon {
 .search_result_of_teachers .result_grid tbody td table td {
 	border: 0px none;
 	padding: 0px;
+}
+
+
+#query_resume_form {
+	border: 1px solid #C2D4ED;
+	margin-right: 20px;
+}
+#query_resume_form #domain_field {
+	background-color: #DFE9F7;
+	border-bottom: 1px solid #C2D4ED;
+	padding: 5px 15px 4px;
+}
+#query_resume_form #domain_field label {
+	margin: 0px 3px;
+}
+#query_resume_form #domain_field select {
+	margin: 0px 3px;
+}
+#query_resume_form #form_body {
+	background-color: #FCFCFC;
+	padding: 12px 15px 10px;
+}
+#query_resume_form #form_body .form_section {
+	margin-bottom: 5px;
+}
+#query_resume_form #form_body .form_section_title {
+	padding: 3px 22px 2px;
+	background: transparent url(/images/corporations/collapse_icon.gif) no-repeat scroll left center;
+}
+#query_resume_form #form_body .form_section_body {
+	padding: 3px 22px;
+}
+#query_resume_form #form_body .form_section_body .field_row {
+	padding: 5px 0px;
+}
+#query_resume_form #form_body .field {
+	margin-right: 25px;
+}
+#query_resume_form #form_body .field label {
+	margin-right: 5px;
 }

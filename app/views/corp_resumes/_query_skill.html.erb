@@ -11,10 +11,12 @@
 
 <% if skill %>
 	<span id="query_skill_<%= skill[:id] %>" class="query_skill">
-		<label for="<%= element_id %>"><%= skill[:name] %></label>
-		<%= SkillValueTypes.get_type(skill[:value_type]).render_input(skill[:data], value, element_id) %>
-		<a href="#" title="删除" class="none" onclick="remove_skill(<%= skill[:id] %>); return false;">
+		<a href="#" title="删除 <%= skill[:name] %>" class="none" onclick="remove_skill(<%= skill[:id] %>); return false;">
 			<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" /></a>
+			
+		<label for="<%= element_id %>"><%= skill[:name] %></label>
+		
+		<%= SkillValueTypes.get_type(skill[:value_type]).render_input(skill[:data], value, element_id) %>
 	</span>
 <% end %>
 	
