@@ -1,27 +1,25 @@
-<tr<%= %Q! class="odd"! if corporation_counter.even? %>>
+<tr<%= %Q! class="even"! if corporation_counter.even? %>>
 	<td>
-		<div>
+		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+			<%= h(corporation.uid) %></a>
+	</td>
+	
+	<td>
+		<% if corporation.name? %>
 			<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-				<%= h(corporation.uid) %></a>
-		</div>
-		
-		<div>
-			<% if corporation.name? %>
-				<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
-					<%= h(corporation.name) %></a>
-			<% else %>
-				&nbsp;
-			<% end %>
-		</div>
+				<%= h(corporation.name) %></a>
+		<% else %>
+			&nbsp;
+		<% end %>
 	</td>
 	
 	<% if @teacher.statistic %>
 		<td>
 			<a href="#" title="查看企业的数据统计" class="none statistics_link">
 				<img src="/images/teachers/statistic_icon.png" border="0" alt="数据统计" />
-				数据统计</a>
+				统计</a>
 			
-			<div class="dropdown_menu" style="font-size: 12px; text-align: left;">
+			<div class="dropdown_menu" style="font-size: 12px;">
 				<ul class="dropdown_sub_menu">
 					<li>
 						<a href="/teachers/<%= @teacher.id %>/statistics?corp=<%= corporation.id %>">

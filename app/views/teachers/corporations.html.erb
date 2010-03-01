@@ -1,6 +1,10 @@
 <% talent_page_title("查询企业") %>
 
 
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/new_corporation" class="button">
+		添加企业帐号</a>
+</div>
 <h2 class="page_title">查询企业</h2>
 
 
@@ -10,83 +14,121 @@
 	</p>
 <% end %>
 
-<div class="align_r" style="margin-right: 30px;">
-	<a href="/teachers/<%= @teacher.id %>/new_corporation" class="button">
-		添加企业帐号</a>
-</div>
-
-<div>
-	<div>
+<div class="search_form_of_teachers">
+	<div class="quick_form">
+		<a href="#" title="展开/收起" id="toggle_search_form_link"></a>
+		
 		<% form_tag "", :method => :get do %>
 			<label for="uid">
-				通过用户名
+				快速查询企业 (通过用户名):
 			</label>
-			<input type="text" id="uid" name="u" class="text_field" size="20" value="<%= h(@uid) %>" />
-			<input type="submit" value="确定" class="button" />
+			<input type="text" id="uid" name="u" value="<%= h(@uid) %>" class="text_input" />
+			<input type="submit" value="" class="submit_button" />
 		<% end %>
 	</div>
 	
-	<div>
+	<div id="search_form">
 		<% form_tag "", :method => :get do %>
 			<div>
-				<select name="n" id="nature_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @nature_id.blank? %>>不限企业性质</option>
-					<% CorporationNature.data.each do |nature| %>
-						<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @nature_id == nature[:id].to_s %>><%= nature[:name] %></option>
-					<% end %>
-				</select>
-
-				<select name="s" id="size_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @size_id.blank? %>>不限企业规模</option>
-					<% CorporationSize.data.each do |size| %>
-						<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @size_id == size[:id].to_s %>><%= size[:name] %></option>
-					<% end %>
-				</select>
-
-				<select name="i" id="industry_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @industry_id.blank? %>>不限企业所属行业</option>
-					<% CorporationIndustry.data.each do |industry| %>
-						<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @industry_id == industry[:id].to_s %>><%= industry[:name] %></option>
-					<% end %>
-				</select>
-
-				<select name="p" id="province_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限企业所在地</option>
-					<% Province.data.each do |province| %>
-						<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
-					<% end %>
-				</select>
+				<span class="field">
+					<label for="nature_id">
+						性质:
+					</label>
+					<select name="n" id="nature_id" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @nature_id.blank? %>>不限性质</option>
+						<% CorporationNature.data.each do |nature| %>
+							<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @nature_id == nature[:id].to_s %>><%= nature[:name] %></option>
+						<% end %>
+					</select>
+				</span>
+				
+				<span class="field">
+					<label for="size_id">
+						规模:
+					</label>
+					<select name="s" id="size_id" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @size_id.blank? %>>不限规模</option>
+						<% CorporationSize.data.each do |size| %>
+							<option value="<%= size[:id] %>"<%= %Q! selected="selected"! if @size_id == size[:id].to_s %>><%= size[:name] %></option>
+						<% end %>
+					</select>
+				</span>
+				
+				<span class="field">
+					<label for="industry_id">
+						行业:
+					</label>
+					<select name="i" id="industry_id" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @industry_id.blank? %>>不限行业</option>
+						<% CorporationIndustry.data.each do |industry| %>
+							<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @industry_id == industry[:id].to_s %>><%= industry[:name] %></option>
+						<% end %>
+					</select>
+				</span>
+				
+				<% if false %>
+				<span class="field">
+					<label for="province_id">
+						所在地:
+					</label>
+					<select name="p" id="province_id" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限所在地</option>
+						<% Province.data.each do |province| %>
+							<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
+						<% end %>
+					</select>
+				</span>
+				<% end %>
 			</div>
 			
-			<div>
-				<label for="keyword">
-					关键词
-				</label>
-				<input type="text" id="keyword" name="k" class="text_field" size="20" value="<%= h(@keyword) %>" />
+			<div style="margin-top: 15px;">
+				<span class="field">
+					<label for="allow_query">
+						查询简历:
+					</label>
+					<select name="aq" id="allow_query" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @allow_query.nil? %>>不限</option>
+						<option value="t"<%= %Q! selected="selected"! if @allow_query == true %>>允许</option>
+						<option value="f"<%= %Q! selected="selected"! if @allow_query == false %>>禁止</option>
+					</select>
+				</span>
 				
-				<select name="aq" id="allow_query" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @allow_query.nil? %>>不限查询权限</option>
-					<option value="t"<%= %Q! selected="selected"! if @allow_query == true %>>允许查询简历</option>
-					<option value="f"<%= %Q! selected="selected"! if @allow_query == false %>>禁止查询简历</option>
-				</select>
-				
+				<span class="field">
+					<label for="keyword">
+						关键词
+					</label>
+					<input type="text" id="keyword" name="k" class="text_field" size="20" value="<%= h(@keyword) %>" />
+				</span>
+			</div>
+			
+			<div class="align_r" style="margin-right: 20px;">
 				<input type="submit" value="查找企业" class="button" />
 			</div>
 		<% end %>
 	</div>
 </div>
 
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list" style="font-size: 14px;">
+<div class="search_result_of_teachers">
+	<div class="result_paging">
+		<div class="float_l">
+			查询到约
+			<strong><%= @corporations.total_entries %></strong>
+			个企业
+		</div>
+
+		<%= paging_buttons(@corporations, :class => "mini_pagination") %>
+	</div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w result_grid">
 		<thead>
 			<tr>
-				<td>名称</td>
+				<td>用户名</td>
+				<td>企业名称</td>
 				<% if @teacher.statistic %>
-					<td style="width: 85px;">数据统计</td>
+					<td style="width: 45px;">查看</td>
 				<% end %>
-				<td>
-					权限
-					<img src="/images/loading_icon.gif" id="permission_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
+				<td style="width: 200px;">
+					权限管理 (单击修改权限)
+					<img src="/images/teachers/search/loading_icon.gif" id="permission_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
 				</td>
 			</tr>
 		</thead>
@@ -95,8 +137,15 @@
 			<%= render :partial => "corporation", :collection => @corporations %>
 		</tbody>
 	</table>
-	
-	<%= paging_buttons(@corporations) %>
+	<div class="result_paging">
+		<div class="float_l">
+			查询到约
+			<strong><%= @corporations.total_entries %></strong>
+			个企业
+		</div>
+
+		<%= paging_buttons(@corporations, :class => "mini_pagination") %>
+	</div>
 </div>
 
 

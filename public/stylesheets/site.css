@@ -333,7 +333,6 @@ a.none:hover {
 	line-height: 28px;
 	color: #FFFFFF;
 	padding: 0px 30px;
-	background-color: #0259A0;
 }
 .menu_banner a {
 	text-decoration: none;
@@ -341,7 +340,10 @@ a.none:hover {
 	display: block;
 	padding: 0px 8px;
 }
-.menu_banner a:hover {
+#page_container_of_teachers .menu_banner, #page_container_of_schools .menu_banner {
+	background-color: #0259A0;
+}
+#page_container_of_teachers .menu_banner a:hover, #page_container_of_schools .menu_banner a:hover {
 	background-color: #3777BC;
 }
 #page_container_of_students .menu_banner {
@@ -359,6 +361,9 @@ a.none:hover {
 .menu_banner img {
 	vertical-align: -2px;
 	margin-right: 3px;
+}
+.menu_banner .dropdown_menu {
+	line-height: 1.8;
 }
 
 
@@ -938,7 +943,6 @@ img.notification_icon {
 
 
 .permission_field {
-	float: left;
 	margin: 0px 10px;
 }
 .permission_field img {
@@ -946,33 +950,37 @@ img.notification_icon {
 }
 
 
-.students_filters {
+.search_form_of_teachers {
 	border: 1px solid #395591;
 	margin-bottom: 20px;
 }
-.students_filters .number_form {
+.search_form_of_teachers #toggle_search_form_link {
+	display: block;
+	padding: 6px 8px 5px;
+	float: right;
+	background: transparent url(/images/teachers/search/pack_icon.gif) no-repeat scroll center center;
+	width: 5px;
+	height: 6px;
+}
+.search_form_of_teachers .quick_form {
 	color: #FFFFFF;
 	border-bottom: 1px solid #395591;
 	padding: 4px 5px 3px 30px;
 	background: #0259A0 url(/images/teachers/search/search_icon.png) no-repeat scroll 10px center;
 }
-.students_filters .number_form #toggle_search_form_link {
-	display: block;
-	padding: 6px 8px 5px;
-}
-.students_filters .number_form input {
+.search_form_of_teachers .quick_form input {
 	vertical-align: middle;
 }
-.students_filters .number_form input#number {
+.search_form_of_teachers .quick_form input.text_input {
 	border: 1px solid #84ABC6;
 	padding: 3px 24px 3px 3px;
 	width: 120px;
 	height: 14px;
 	margin-left: 8px;
 }
-* html .students_filters .number_form input#number {margin-top:-1px;margin-bottom:-1px;}
-*+html .students_filters .number_form input#number {margin-top:-1px;margin-bottom:-1px;}
-.students_filters .number_form input.search_button {
+* html .search_form_of_teachers .quick_form input.text_input {margin-top:-1px;margin-bottom:-1px;}
+*+html .search_form_of_teachers .quick_form input.text_input {margin-top:-1px;margin-bottom:-1px;}
+.search_form_of_teachers .quick_form input.submit_button {
 	background: #B8D4E8 url(/images/common/magnifier_icon.gif) no-repeat scroll left top;
 	border: 1px solid #84ABC6;
 	height: 22px;
@@ -980,19 +988,26 @@ img.notification_icon {
 	position: relative;
 	width: 21px;
 }
-.students_filters .search_form {
+.search_form_of_teachers #search_form {
 	background-color: #F2F2F2;
 	padding: 12px 15px 8px;
 }
-.students_filters .search_form .filter {
+.search_form_of_teachers #search_form .field {
 	margin-right: 25px;
 }
-.students_filters .search_form .filter label {
+.search_form_of_teachers #search_form .field label {
 	margin-right: 5px;
 }
 
 
-.students_paging {
+*html .search_result_of_teachers {
+	width: 99%;
+}
+*html .search_result_of_teachers .main_part_w {
+	width: 100%;
+}
+
+.search_result_of_teachers .result_paging {
 	border: 1px solid #395591;
 	background-color: #F2F2F2;
 	padding: 0px 15px;
@@ -1000,19 +1015,11 @@ img.notification_icon {
 	line-height: 30px;
 }
 
-/* ie6 fixed */
-*html .students_list {
-	width: 99%;
-}
-*html .students_list .main_part_w {
-	width: 100%;
-}
-
-.students_grid {
+.search_result_of_teachers .result_grid {
 	/* border-collapse: collapse; */
 	border-left: 1px solid #395591;
 }
-.students_grid thead td {
+.search_result_of_teachers .result_grid thead td {
 	color: #FFFFFF;
 	background: #0259A0 none repeat scroll 0 0;
 	/* border-left: 1px solid #395591; */
@@ -1020,23 +1027,23 @@ img.notification_icon {
 	padding: 5px;
 	text-align: center;
 }
-.students_grid thead td.grey {
+.search_result_of_teachers .result_grid thead td.grey {
 	background-color: #888888;
 	border-color: #555555;
 }
-.students_grid tbody td {
+.search_result_of_teachers .result_grid tbody td {
 	/* border-left: 1px solid #395591; */
 	border-right: 1px solid #395591;
 	padding: 5px;
 	text-align: center;
 }
-.students_grid tbody td.grey {
+.search_result_of_teachers .result_grid tbody td.grey {
 	border-color: #555555;
 }
-.students_grid tbody tr.even td {
+.search_result_of_teachers .result_grid tbody tr.even td {
 	background-color: #F8F8F8;
 }
-.students_grid tbody td table td {
+.search_result_of_teachers .result_grid tbody td table td {
 	border: 0px none;
 	padding: 0px;
 }

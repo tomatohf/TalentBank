@@ -1,6 +1,10 @@
 <% talent_page_title("查询老师") %>
 
 
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/schools/<%= @school_id %>/new_teacher" class="button">
+		添加新的老师</a>
+</div>
 <h2 class="page_title">查询老师</h2>
 
 
@@ -10,18 +14,13 @@
 	</p>
 <% end %>
 
-<div class="align_r" style="margin-right: 30px;">
-	<a href="/schools/<%= @school_id %>/new_teacher" class="button">
-		添加新的老师</a>
-</div>
-
 <div>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list" style="font-size: 14px;">
 		<thead>
 			<tr>
 				<td>名称</td>
 				<td>
-					权限
+					权限管理
 					<img src="/images/loading_icon.gif" id="permission_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
 				</td>
 			</tr>

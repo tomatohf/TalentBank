@@ -37,23 +37,30 @@ function setup_number_input() {
 				}
 			}
 		)
-		.focus().blur();
+		.focus().blur()
+		.parent("form").unbind("submit")
+			.submit(
+				function() {
+					if($.trim($("input#number").val()) == number_input_tip) {
+						$("input#number").val("");
+					}
+				}
+			);
 }
 
 
 function setup_toggle_search_form_link() {
 	$("#toggle_search_form_link").unbind("click").click(
 		function() {
-			var icon = $(this).find("img:first");
 			if($("#search_form").css("display") == "none") {
 				$("#search_form").slideDown();
 			
-				icon.attr("src", "/images/teachers/search/pack_icon.gif");
+				$(this).css("backgroundImage", "url(/images/teachers/search/pack_icon.gif)");
 			}
 			else {
 				$("#search_form").slideUp();
 				
-				icon.attr("src", "/images/teachers/search/expand_icon.gif");
+				$(this).css("backgroundImage", "url(/images/teachers/search/expand_icon.gif)");
 			}
 			
 			return false;

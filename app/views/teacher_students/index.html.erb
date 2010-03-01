@@ -14,35 +14,30 @@
 	</p>
 <% end %>
 
-<div class="students_filters">
-	<div class="number_form">
-		<a href="#" title="展开/收起" id="toggle_search_form_link" class="float_r">
-			<img src="/images/teachers/search/pack_icon.gif" border="0" alt="展开/收起" /></a>
+<div class="search_form_of_teachers">
+	<div class="quick_form">
+		<a href="#" title="展开/收起" id="toggle_search_form_link"></a>
 		
 		<% form_tag "", :method => :get do %>
 			<label for="number">
-				快速查询学生:
+				快速查询学生 (通过学号):
 			</label>
-			<input type="text" id="number" name="n" value="<%= h(@number) %>" />
-			<input type="submit" value="" class="search_button" />
+			<input type="text" id="number" name="n" value="<%= h(@number) %>" class="text_input" />
+			<input type="submit" value="" class="submit_button" />
 		<% end %>
 	</div>
 	
-	<div id="search_form" class="search_form">
+	<div id="search_form">
 		<% form_tag "", :method => :get do %>
 			<div>
-				<span class="filter">
+				<span class="field">
 					<label for="name">
 						姓名:
 					</label>
 					<input type="text" id="name" name="name" class="text_field" size="10" value="<%= h(@name) %>" />
 				</span>
 				
-				<span class="filter">
-					
-				</span>
-				
-				<span class="filter">
+				<span class="field">
 					<label for="edu_level_id">
 						学历:
 					</label>
@@ -55,7 +50,7 @@
 					</select>
 				</span>
 				
-				<span class="filter">
+				<span class="field">
 					<label for="graduation_year">
 						毕业时间:
 					</label>
@@ -70,7 +65,7 @@
 			</div>
 			
 			<div style="margin-top: 15px;">
-				<span class="filter">
+				<span class="field">
 					<label>
 						学校:
 					</label>
@@ -79,7 +74,7 @@
 					</span>
 				</span>
 				
-				<span class="filter">
+				<span class="field">
 					<label for="college_id">
 						学院:
 					</label>
@@ -91,7 +86,7 @@
 					</select>
 				</span>
 				
-				<span class="filter">
+				<span class="field">
 					<label for="major_id">
 						专业:
 					</label>
@@ -111,8 +106,8 @@
 	</div>
 </div>
 
-<div class="students_list">
-	<div class="students_paging">
+<div class="search_result_of_teachers">
+	<div class="result_paging">
 		<div class="float_l">
 			查询到约
 			<strong><%= @students.total_entries %></strong>
@@ -121,7 +116,7 @@
 
 		<%= paging_buttons(@students, :class => "mini_pagination") %>
 	</div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w students_grid">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w result_grid">
 		<thead>
 			<tr>
 				<td style="width: 80px;">学号</td>
@@ -138,7 +133,7 @@
 			<%= render :partial => "student", :collection => @students %>
 		</tbody>
 	</table>
-	<div class="students_paging">
+	<div class="result_paging">
 		<div class="float_l">
 			查询到约
 			<strong><%= @students.total_entries %></strong>
