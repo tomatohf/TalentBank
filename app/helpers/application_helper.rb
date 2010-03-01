@@ -9,6 +9,14 @@ module ApplicationHelper
     date && date.strftime("%Y-%m-%d")
   end
   
+  def format_short_date(date)
+    date && date.strftime("%y-%m-%d")
+  end
+  
+  def format_short_datetime(date)
+    date && date.strftime("%y-%m-%d %H:%M:%S")
+  end
+  
   def format_zh_date(date)
     date && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
   end

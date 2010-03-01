@@ -10,18 +10,6 @@
 %>
 
 <div class="request" style="background-image: url(/images/notifications/requests/<%= type[:icon] %>)">
-	<%=
-		render(
-			:partial => "/requests/types/#{type[:name]}",
-			:locals => {
-				:request => request,
-				:accounts => accounts,
-				:sent => sent
-			}
-		)
-	%>
-	
-	
 	<%
 		form_tag(
 			"/#{@account_type}/#{account_id}/notifications/requests/#{request.id}/accept",
@@ -53,20 +41,32 @@
 	<% end %>
 	
 	
-	<div class="request_actions clear_r">
+	<div class="request_actions">
 		<% if sent %>
-			<a href="#" onclick="document.getElementById('del_request_form_<%= request.id %>').submit(); return false;">
+			<a href="#" onclick="if(confirm('确定要删除这个请求么 ?')) { document.getElementById('del_request_form_<%= request.id %>').submit(); } return false;">
 				删除这个请求</a>
 		<% else %>
 			<button class="button" onclick="document.getElementById('accept_request_form_<%= request.id %>').submit();">
 				<%= type[:accept_label] %>
 			</button>
 			
-			<button class="button" onclick="document.getElementById('del_request_form_<%= request.id %>').submit();">
-				忽略
-			</button>
+			<a href="#" onclick="if(confirm('确定要忽略这个请求么 ?')) { document.getElementById('del_request_form_<%= request.id %>').submit(); } return false;">
+				忽略</a>
 		<% end %>
 		
-		<span class="request_time"><%= format_datetime(request.updated_at) %></span>
+		<span class="request_time">
+			<%= format_short_datetime(request.updated_at) %>
+		</span>
 	</div>
+	
+	<%=
+		render(
+			:partial => "/requests/types/#{type[:name]}",
+			:locals => {
+				:request => request,
+				:accounts => accounts,
+				:sent => sent
+			}
+		)
+	%>
 </div>

@@ -878,7 +878,7 @@ img.notification_icon {
 
 
 .request {
-	padding: 10px 5px 10px 25px;
+	padding: 13px 5px 13px 25px;
 	border-bottom: 1px solid #DCDCDC;
 	background-color: transparent;
 	background-repeat: no-repeat;
@@ -895,17 +895,15 @@ img.notification_icon {
 .request_time {
 	font-size: 10px;
 	color: #999999;
-	margin-left: 15px;
+	margin-left: 10px;
 }
 
 .request_actions {
-	text-align: right;
-	padding-top: 3px;
+	float: right;
+	margin-left: 10px;
 }
-
 .request_actions button {
-	margin: 0px 3px;
-	font-weight: normal;
+	margin-right: 10px;
 }
 
 

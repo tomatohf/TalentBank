@@ -1,7 +1,7 @@
+显示新的提醒, 结合 account_summary ?
+
+
 按标签列出简历 的 bug
-
-
-_request 里面的操作加 confirm
 
 
 企业邀请学生面试
