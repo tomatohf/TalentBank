@@ -8,8 +8,8 @@ class JobPhoto < ActiveRecord::Base
   
   Normal_W = 90
   Normal_H = 110
-  Large_W = 600
-  Large_H = 600
+  Large_W = 400
+  Large_H = 400
   
   # paperclip
   has_attached_file(
