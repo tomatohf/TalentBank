@@ -1,16 +1,16 @@
-<% talent_page_title("学生") %>
+<%
+	student_name = h(@student.name)
+	
+	talent_page_title("学生")
+%>
 
+
+<h2 class="page_title"><%= student_name %></h2>
 
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 	<tr>
 		<td valign="top" style="padding-right: 20px;">
-			<h2>
-				<%= h(@student.name) %>
-
-				<span style="font-size: 14px; margin-left: 15px;">
-					欢迎使用人才库系统
-				</span>
-			</h2>
+			
 		</td>
 		
 		<td valign="top" style="width: 180px;">

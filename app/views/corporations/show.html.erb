@@ -1,10 +1,16 @@
-<% talent_page_title("企业") %>
+<%
+	corporation_name = h(@corporation.get_name)
+	
+	talent_page_title(corporation_name)
+%>
 
+
+<h2 class="page_title"><%= corporation_name %></h2>
 
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 	<tr>
 		<td valign="top" style="padding-right: 20px;">
-			<h2 class="page_title">企业用户操作首页</h2>
+			
 		</td>
 		
 		<td valign="top" style="width: 180px;">

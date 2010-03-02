@@ -17,7 +17,7 @@
 			<div class="menu_banner">
 				<div class="float_l">
 					<span><%= format_zh_date(Time.now) %></span>
-					<span style="margin-left: 60px;"><%= @student.name %> 欢迎你 !</span>
+					<span style="margin-left: 60px;"><%= h(@student.name) %> 欢迎你 !</span>
 				</div>
 				
 				<table border="0" cellspacing="0" cellpadding="0" class="float_r">
@@ -36,7 +36,7 @@
 											通知</a>
 									</li>
 									<li>
-										<a href="/students/<%= @student.id %>/notifications/requests" style="padding-left: 10px;">
+										<a href="/students/<%= @student.id %>/notifications/requests/sent" style="padding-left: 10px;">
 											<img src="/images/common/request_icon.gif" border="0" alt="请求" />
 											请求</a>
 									</li>

@@ -2,13 +2,13 @@
 	corp_name = h(corporation.get_name)
 %>
 
-<tr onmouseover="this.style.backgroundColor='#F1F6F9';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<tr<%= %Q! class="odd"! if corporation_counter.even? %>>
 	<td>
 		<a target="_blank" class="none" href="/students/<%= @student.id %>/corporations/<%= corporation.id %>">
 			<%= corp_name %></a>
 	</td>
 	
-	<td align="right">
+	<td>
 		<a class="none" href="#" onclick="create_blocked_corp(<%= corporation.id %>, '<%= a(corp_name) %>'); return false;">
 			<img src="/images/students/blocked_corp_icon.gif" border="0" style="margin-bottom: -2px;" />
 			添加到黑名单</a>
