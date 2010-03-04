@@ -38,6 +38,11 @@
 					["unread = ?", false],
 					["id in (?)", unread_ids]
 				)
+				
+				Notice.clear_unread_count_cache(
+					@account_type,
+					self.instance_variable_get("@#{@account_type.singularize}").id
+				)
 			end
 		%>
 	<% end %>

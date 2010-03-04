@@ -3,13 +3,46 @@ class Notice < ActiveRecord::Base
   validates_presence_of :type_id, :account_type_id, :account_id, :content
   
   
+  after_save { |notice|
+    self.clear_unread_count_cache(AccountType.find(notice.account_type_id)[:name], notice.account_id)
+  }
+  after_destroy { |notice|
+    self.clear_unread_count_cache(AccountType.find(notice.account_type_id)[:name], notice.account_id)
+  }
+  
+  
+  CKP_unread_count = "notice_unread_count"
   def self.count_unread(account_type_name, account_id)
-    self.count(
-      :conditions => [
-        "account_type_id = ? and account_id = ? and unread = ?",
-        AccountType.find_by(:name, account_type_name)[:id], account_id, true
-      ]
+    count = Rails.cache.read(self.unread_count_key(account_type_name, account_id))
+    
+    unless count
+      count = self.set_unread_count_cache(
+        account_type_name, account_id,
+        self.count(
+          :conditions => [
+            "account_type_id = ? and account_id = ? and unread = ?",
+            AccountType.find_by(:name, account_type_name)[:id], account_id, true
+          ]
+        )
+      )
+    end
+    
+    count
+  end
+  
+  def self.unread_count_key(account_type_name, account_id)
+    "#{CKP_unread_count}_#{account_type_name}_#{account_id}"
+  end
+  def self.set_unread_count_cache(account_type_name, account_id, count)
+    Rails.cache.write(
+      self.unread_count_key(account_type_name, account_id),
+      count,
+      :expires_in => Cache_TTL[:long]
     )
+    count
+  end
+  def self.clear_unread_count_cache(account_type_name, account_id)
+    Rails.cache.delete(self.unread_count_key(account_type_name, account_id))
   end
   
   

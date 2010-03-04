@@ -61,19 +61,21 @@
 </div>
 
 <div style="margin-right: 220px;">
-	<div class="corp_resumes_paging">
-		<div class="float_l">
-			<strong><%= @taggers.total_entries %></strong>
-			份简历
-		</div>
+	<% if @taggers %>
+		<div class="corp_resumes_paging">
+			<div class="float_l">
+				<strong><%= @taggers.total_entries %></strong>
+				份简历
+			</div>
 
-		<%= @taggers && paging_buttons(@taggers, :class => "mini_pagination") %>
-	</div>
+			<%= paging_buttons(@taggers, :class => "mini_pagination") %>
+		</div>
+	<% end %>
 	
 	<%=
 		render(
 			:partial => "/corp_resumes/resume",
-			:collection => @resumes,
+			:collection => @resumes || [],
 			:locals => {
 				:resume_tags => @resume_tags
 			}
@@ -85,14 +87,16 @@
 			没有找到相对应的简历
 		</div>
 	<% else %>
-		<div class="corp_resumes_paging" style="border-bottom: 0px none;">
-			<div class="float_l">
-				<strong><%= @taggers.total_entries %></strong>
-				份简历
-			</div>
+		<% if @taggers %>
+			<div class="corp_resumes_paging" style="border-bottom: 0px none;">
+				<div class="float_l">
+					<strong><%= @taggers.total_entries %></strong>
+					份简历
+				</div>
 
-			<%= @taggers && paging_buttons(@taggers, :class => "mini_pagination") %>
-		</div>
+				<%= paging_buttons(@taggers, :class => "mini_pagination") %>
+			</div>
+		<% end %>
 	<% end %>
 </div>
 

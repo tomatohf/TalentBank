@@ -1,0 +1,27 @@
+<%
+	notice_count = Notice.count_unread(account_type_name, account_id)
+	request_count = Request.count_by_type(account_type_name, account_id).values.sum
+	
+	total_count = notice_count + request_count
+	count_viewer = Proc.new { |count| count > 0 ? %Q!<strong>(#{count > 1000 ? "1000+" : count})</strong>! : "" }
+	
+	to_sent = (account_type_name == "students") && request_count <= 0
+%>
+
+<a href="/<%= account_type_name %>/<%= account_id %>/notifications/notices" id="notification_link">
+	提醒<%= count_viewer.call(total_count) %></a>
+
+<div class="dropdown_menu">
+	<ul class="dropdown_sub_menu">
+		<li>
+			<a href="/<%= account_type_name %>/<%= account_id %>/notifications/notices" style="padding-left: 10px;">
+				<img src="/images/common/notice_icon.gif" border="0" alt="通知" />
+				通知<%= count_viewer.call(notice_count) %></a>
+		</li>
+		<li>
+			<a href="/<%= account_type_name %>/<%= account_id %>/notifications/requests<%= "/sent" if to_sent %>" style="padding-left: 10px;">
+				<img src="/images/common/request_icon.gif" border="0" alt="请求" />
+				请求<%= count_viewer.call(request_count) %></a>
+		</li>
+	</ul>
+</div>

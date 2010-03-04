@@ -7,6 +7,14 @@ class Request < ActiveRecord::Base
   hash_field :data
   
   
+  after_save { |request|
+    self.clear_type_counts_cache(AccountType.find(request.account_type_id)[:name], request.account_id)
+  }
+  after_destroy { |request|
+    self.clear_type_counts_cache(AccountType.find(request.account_type_id)[:name], request.account_id)
+  }
+  
+  
   def self.requests_of_reference(account_type_name, account_id, type_name, reference_id, is_requester)
     account_key = is_requester ? "requester" : "account"
     
@@ -22,15 +30,41 @@ class Request < ActiveRecord::Base
   end
   
   
+  CKP_type_counts = "request_type_counts"
   def self.count_by_type(account_type_name, account_id)
-    self.count(
-      :conditions => [
-        "account_type_id = ? and account_id = ?",
-        AccountType.find_by(:name, account_type_name)[:id], account_id
-      ],
-      :group => "type_id"
-    )
+    counts = Rails.cache.read(self.type_counts_key(account_type_name, account_id))
+    
+    unless counts
+      counts = self.set_type_counts_cache(
+        account_type_name, account_id,
+        self.count(
+          :conditions => [
+            "account_type_id = ? and account_id = ?",
+            AccountType.find_by(:name, account_type_name)[:id], account_id
+          ],
+          :group => "type_id"
+        )
+      )
+    end
+    
+    counts
   end
+  
+  def self.type_counts_key(account_type_name, account_id)
+    "#{CKP_type_counts}_#{account_type_name}_#{account_id}"
+  end
+  def self.set_type_counts_cache(account_type_name, account_id, counts)
+    Rails.cache.write(
+      self.type_counts_key(account_type_name, account_id),
+      counts,
+      :expires_in => Cache_TTL[:long]
+    )
+    counts
+  end
+  def self.clear_type_counts_cache(account_type_name, account_id)
+    Rails.cache.delete(self.type_counts_key(account_type_name, account_id))
+  end
+  
   
   def self.count_sent_by_type(requester_type_name, requester_id)
     self.count(
