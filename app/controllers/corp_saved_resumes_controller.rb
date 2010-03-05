@@ -34,8 +34,8 @@ class CorpSavedResumesController < ApplicationController
         :total_entries => @total_count,
         :select => "corp_resume_taggers.resume_id, corp_resume_taggers.created_at",
         :joins => "LEFT JOIN corp_resume_taggers taggers_1 ON corp_resume_taggers.resume_id = taggers_1.resume_id AND corp_resume_taggers.corp_id = taggers_1.corp_id AND corp_resume_taggers.created_at < taggers_1.created_at " +
-                  "LEFT JOIN corp_resume_taggers taggers_2 ON corp_resume_taggers.resume_id = taggers_2.resume_id AND corp_resume_taggers.corp_id = taggers_2.corp_id AND corp_resume_taggers.tag_id < taggers_2.tag_id",
-        :conditions => ["taggers_1.resume_id IS NULL and taggers_2.tag_id IS NULL and corp_resume_taggers.corp_id = ?", @corporation.id],
+                  "LEFT JOIN corp_resume_taggers taggers_2 ON corp_resume_taggers.resume_id = taggers_2.resume_id AND corp_resume_taggers.corp_id = taggers_2.corp_id AND corp_resume_taggers.id < taggers_2.id",
+        :conditions => ["taggers_1.created_at IS NULL and taggers_2.id IS NULL and corp_resume_taggers.corp_id = ?", @corporation.id],
         :order => "corp_resume_taggers.created_at DESC"
       )
     else

@@ -1,5 +1,3 @@
-按标签列出简历 的 bug
-
 缓存
 - 简历 html
 - save resume tags
