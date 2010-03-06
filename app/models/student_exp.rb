@@ -44,7 +44,7 @@ class StudentExp < ActiveRecord::Base
   
   def renew_resume_updated_at(time)
     self.resumes.each do |resume|
-      resume.renew_updated_at(time)
+      resume.after_change(time)
     end
   end
   

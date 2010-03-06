@@ -71,7 +71,7 @@ class Student < ActiveRecord::Base
       :all,
       :conditions => ["student_id = ?", student_id]
     ).each do |resume|
-      resume.renew_updated_at(time)
+      resume.after_change(time)
     end
   end
   

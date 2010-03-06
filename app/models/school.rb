@@ -36,10 +36,10 @@ class School < ActiveRecord::Base
   end
   
   
-  CKP_school_info = "school_info"
+  CKP_info = "school_info"
   
   def self.school_info_key(abbr)
-    "#{CKP_school_info}_#{abbr}"
+    "#{CKP_info}_#{abbr}"
   end
   
   def self.get_school_info(abbr)

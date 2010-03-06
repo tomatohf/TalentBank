@@ -1,5 +1,4 @@
 缓存
-- 简历 html
 - save resume tags
 - 统计数据
 	* 数据来自 sphinx 查询, 在 sphinx delta index 周期内, 数据不会变化

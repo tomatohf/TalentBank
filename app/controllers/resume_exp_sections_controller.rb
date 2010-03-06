@@ -39,7 +39,7 @@ class ResumeExpSectionsController < ApplicationController
     @section.title = params[:title] && params[:title].strip
     
     if @section.save
-      @resume.renew_updated_at(@section.updated_at)
+      @resume.after_change(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 已添加经历块 #{@section.title}"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
@@ -57,7 +57,7 @@ class ResumeExpSectionsController < ApplicationController
     @section.title = params[:title] && params[:title].strip
     
     if @section.save
-      @resume.renew_updated_at(@section.updated_at)
+      @resume.after_change(@section.updated_at)
       
       flash[:success_msg] = "操作成功, 经历块 #{@section.title} 已更新"
       return jump_to("/students/#{@student.id}/resumes/#{@resume.id}/exp_sections")
@@ -70,7 +70,7 @@ class ResumeExpSectionsController < ApplicationController
   def destroy
     @section.destroy
     
-    @resume.renew_updated_at(Time.now)
+    @resume.after_change(Time.now)
     
     flash[:success_msg] = "操作成功, 已删除经历块 #{@section.title}"
   
@@ -100,7 +100,7 @@ class ResumeExpSectionsController < ApplicationController
         ActiveRecord::Base.transaction do
           resume_student_exp.save!
           
-          @resume.renew_updated_at(resume_student_exp.updated_at)
+          @resume.after_change(resume_student_exp.updated_at)
           
           @section.add_exp_order(ResumeExpSection::Student_Exp, resume_student_exp.id)
           @section.save!
@@ -124,7 +124,7 @@ class ResumeExpSectionsController < ApplicationController
         ActiveRecord::Base.transaction do
           resume_student_exp.destroy
           
-          @resume.renew_updated_at(Time.now)
+          @resume.after_change(Time.now)
           
           @section.remove_exp_order(ResumeExpSection::Student_Exp, resume_student_exp.id)
           @section.save!

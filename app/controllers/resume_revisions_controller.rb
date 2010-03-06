@@ -205,7 +205,7 @@ class ResumeRevisionsController < ReviseResumesController
         part.save!
       end
     end
-    @resume.renew_updated_at(Time.now)
+    @resume.after_change(Time.now)
     
     @revision.applied = true
     @revision.save!
