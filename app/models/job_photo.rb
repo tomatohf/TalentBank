@@ -48,6 +48,15 @@ class JobPhoto < ActiveRecord::Base
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
   after_update :reprocess_image, :if => :crop?
+  
+  after_save { |job_photo|
+    Resume.find(
+      :all,
+      :conditions => ["student_id = ?", job_photo.student_id]
+    ).each do |resume|
+      resume.clear_html_fragment_cache
+    end
+  }
 
 
   def crop?

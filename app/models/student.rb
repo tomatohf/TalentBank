@@ -65,7 +65,6 @@ class Student < ActiveRecord::Base
   def renew_resume_updated_at(time)
     self.class.renew_resume_updated_at(self.id, time)
   end
-  
   def self.renew_resume_updated_at(student_id, time)
     Resume.find(
       :all,

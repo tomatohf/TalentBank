@@ -335,12 +335,13 @@ class Resume < ActiveRecord::Base
   
   FCKP_html = "resume_html"
   
-  def self.html_fragment_cache_key(resume_id)
-    "#{FCKP_html}_#{resume_id}"
+  def self.html_fragment_cache_key(resume_id, protective)
+    "#{FCKP_html}_#{resume_id}_#{protective}"
   end
   
   def self.clear_html_fragment_cache(resume_id)
-    Rails.cache.delete(Utils.expand_cache_key(html_fragment_cache_key(resume_id)))
+    Rails.cache.delete(Utils.expand_cache_key(html_fragment_cache_key(resume_id, true)))
+    Rails.cache.delete(Utils.expand_cache_key(html_fragment_cache_key(resume_id, false)))
   end
   def clear_html_fragment_cache
     self.class.clear_html_fragment_cache(self.id)

@@ -1,6 +1,10 @@
+<%
+	protective &&= true
+%>
+
 <link href="/stylesheets/resume.css" rel="stylesheet" type="text/css" />
 
-<% #cache(Resume.html_fragment_cache_key(resume.id)) do %>
+<% cache(Resume.html_fragment_cache_key(resume.id, !!protective)) do %>
 	<div class="resume_wrap">
 		<div>
 		
@@ -16,7 +20,6 @@
 					photo = JobPhoto.get_record(student.id)
 					no_photo = photo.new_record?
 
-					protective &&= true
 					profile = StudentProfile.get_record(student.id) unless protective
 				%>
 			
@@ -319,4 +322,4 @@
 			</div>
 		</div>
 	</div>
-<% #end %>
+<% end %>
