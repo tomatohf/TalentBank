@@ -1,17 +1,5 @@
-缓存
-- save resume tags
-- 统计数据
-	* 数据来自 sphinx 查询, 在 sphinx delta index 周期内, 数据不会变化
-	* 数据并不是来自 DB, 适合直接缓存页面内容
-
-
-
 企业邀请学生面试
 企业邀请学生面试的数据统计
-
-全局帐号
-	- 管理员
-	- 企业
 
 请求简历查询权限
 
@@ -57,10 +45,8 @@ sphinx max_match
 
 表单旁添加适当的填写提示(包括内容和格式)
 
-提交疑问建议,错误反馈的功能
-
-optimize database index
-set up 备份的脚本
+缓存
+- save resume tags
 
 
 
