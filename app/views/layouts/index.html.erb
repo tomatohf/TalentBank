@@ -14,10 +14,10 @@
 		</div>
 		
 		<% school_abbr = @school.abbr %>
-		<%= render_school_view("/common/bottom_line", school_abbr) %>
+		<%= render_school_partial("bottom_line", school_abbr) %>
 
 		
 		
-		<%= render_school_view("/common/page_track", school_abbr) if Rails.env.production? %>
+		<%= render_school_partial("page_track", school_abbr) if Rails.env.production? %>
     </body>
 </html>

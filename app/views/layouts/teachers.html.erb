@@ -12,7 +12,7 @@
 		<% school_abbr = @school.abbr %>
 		<div class="page_container" id="page_container_of_teachers">
 			
-			<%= render_school_view("/common/banner", school_abbr, :account_type => "teachers") %>
+			<%= render_school_partial("banner", school_abbr, :account_type => "teachers") %>
 			
 			<div class="menu_banner">
 				<div class="float_l">
@@ -108,13 +108,13 @@
 			
 		</div>
 		
-		<%= render_school_view("/common/bottom_line", school_abbr) %>
+		<%= render_school_partial("bottom_line", school_abbr) %>
 		
 		
 		<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
 		<%= yield(:scripts) %>
 		
 		
-		<%= render_school_view("/common/page_track", school_abbr) if Rails.env.production? %>
+		<%= render_school_partial("page_track", school_abbr) if Rails.env.production? %>
     </body>
 </html>
