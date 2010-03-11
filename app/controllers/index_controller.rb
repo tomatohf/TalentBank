@@ -9,9 +9,9 @@ class IndexController < ApplicationController
     elsif cookies[:logintype] == "corporations"
       jump_to("/index/corporation")
     elsif cookies[:logintype] == "schools"
-      jump_to("/index/school")
+      jump_to("/index/teacher/school")
     elsif cookies[:logintype] == "teachers"
-      jump_to("/index/school/teacher")
+      jump_to("/index/teacher")
     end
 
   end
@@ -47,11 +47,11 @@ class IndexController < ApplicationController
   end
   
   
-  def school
+  def teacher
     
-    is_teacher = !params[:id].blank?
-    @user_type = is_teacher ? "teacher" : "school"
-    @uid = cookies[:loginid] if cookies[:logintype] == (is_teacher ? "teachers" : "schools")
+    is_school = (params[:id] == "school")
+    @user_type = is_school ? "school" : "teacher"
+    @uid = cookies[:loginid] if cookies[:logintype] == (is_school ? "schools" : "teachers")
 
     if request.post?
       @user_type = params[:user_type]
