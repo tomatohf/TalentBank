@@ -13,9 +13,5 @@ module Paperclip
       attachment.instance.created_at.mday
     end
     
-    def school_abbr(attachment, style)
-      SCHOOL_ABBR
-    end
-    
   end
 end

@@ -26,8 +26,8 @@ class JobPhoto < ActiveRecord::Base
         :format => :jpg   # PDF lib prawn only support JPG and PNG currently
       }
     },
-    :path => ":rails_root/public/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
-    :url => "/system/files/:class_:attachment/:school_abbr/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
+    :path => ":rails_root/public/system/files/:class_:attachment/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
+    :url => "/system/files/:class_:attachment/:created_year/:created_month/:created_mday/:id/:style_:id.:extension",
     :default_url => "",
     :storage => :filesystem,
     :whiny_thumbnails => false # to avoid displaying internal errors
