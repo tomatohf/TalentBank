@@ -1,6 +1,6 @@
 module Schools
   
-  class Shfu < Base
+  class Shou < Base
     
     def name
       "上海海洋大学"
@@ -8,20 +8,17 @@ module Schools
     
     
     def edu_levels
-      # TODO - MUST BE OVERRIDED
       [30]
     end
     
     
     def resume_domains
-      # TODO - MUST BE OVERRIDED
-      [10, 110, 120]
+      [10]
     end
     
     
     def all_graduation_years
-      # TODO - MUST BE OVERRIDED
-      super
+      [2011]
     end
     
   end
