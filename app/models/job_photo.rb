@@ -50,15 +50,24 @@ class JobPhoto < ActiveRecord::Base
   after_update :reprocess_image, :if => :crop?
   
   after_save { |job_photo|
-    Resume.find(
-      :all,
-      :conditions => ["student_id = ?", job_photo.student_id]
-    ).each do |resume|
-      resume.clear_html_fragment_cache
-    end
+    job_photo.clear_resume_html_fragment_cache
+  }
+  
+  after_destroy { |job_photo|
+    job_photo.clear_resume_html_fragment_cache
   }
 
 
+  def clear_resume_html_fragment_cache
+    Resume.find(
+      :all,
+      :conditions => ["student_id = ?", self.student_id]
+    ).each do |resume|
+      resume.clear_html_fragment_cache
+    end
+  end
+  
+  
   def crop?
     !crop_x.blank? && !crop_y.blank? && !crop_w.blank? && !crop_h.blank?
   end
