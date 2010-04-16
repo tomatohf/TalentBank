@@ -1,5 +1,3 @@
-检查 prawn 的新版本
-
 处理 teachers 表的索引
 
 
