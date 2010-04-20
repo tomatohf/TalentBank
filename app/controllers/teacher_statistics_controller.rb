@@ -1,6 +1,6 @@
 class TeacherStatisticsController < ApplicationController
   
-  Queries_Page_Size = 100
+  Queries_Page_Size = 30
   Date_Range_Splitter = "-"
 
   include OpenFlashChartHelpers
@@ -20,10 +20,12 @@ class TeacherStatisticsController < ApplicationController
   def querying
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    @corp_queries = CorpQuery.paginate(
+    @corp_queries = CorpQuery.search(
       :page => page,
       :per_page => Queries_Page_Size,
-      :order => "id DESC",
+      :match_mode => CorpQuery::Search_Match_Mode,
+      :order => "@relevance DESC, updated_at DESC",
+      :with => {:school_id => @teacher.school_id},
       :include => [:corporation]
     )
   end
@@ -31,10 +33,12 @@ class TeacherStatisticsController < ApplicationController
   def viewing
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    @viewed_resumes = CorpViewedResume.paginate(
+    @viewed_resumes = CorpViewedResume.search(
       :page => page,
       :per_page => Queries_Page_Size,
-      :order => "id DESC",
+      :match_mode => CorpViewedResume::Search_Match_Mode,
+      :order => "@relevance DESC, updated_at DESC",
+      :with => {:school_id => @teacher.school_id},
       :include => [:corporation, {:resume => [:student]}]
     )
   end

@@ -93,7 +93,7 @@
 				经历标签:
 				<% tags.each do |tag_id| %>
 					<span style="margin-left: 10px;">
-						<%= ResumeExpTag.find(query.domain_id, tag_id)[:name] %>
+						<%= ResumeExpTag.find_by_id(tag_id)[:name] %>
 					</span>
 				<% end %>
 			</div>
