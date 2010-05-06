@@ -1657,7 +1657,7 @@ function set_revisions_to_applied(revisions) {
 
 function request_revise_resume(teacher_id, teacher_name) {
 	confirm_msg(
-		"确定要请" + teacher_name + "(老师)来帮助修改简历么 ?",
+		"我们会尽快安排老师来修改你的简历, 确定发送请求 ?",
 		function() {
 			$.post(
 				"/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/notifications/requests",
