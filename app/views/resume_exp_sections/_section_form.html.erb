@@ -8,6 +8,10 @@
 		
 		<td>
 			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= h(@section.title) %>" />
+			
+			<span class="info_with_icon" style="margin-left: 10px;">
+				可填写 金融相关经历 / 销售相关经历 ... 等
+			</span>
 		</td>
 	</tr>
 	
@@ -21,6 +25,18 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="/students/<%= @student.id %>/resumes/<%= @resume.id %>/exp_sections">
 				返回经历列表</a>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2">
+			<div style="border-bottom: 1px solid #B2B2B2; margin: 15px 20px 30px;">
+				
+			</div>
+			
+			<div>
+				<img src="http://www.qiaobutang.com/system/files/photos_images/2010/5/7/2283/original_2283.jpg" border="0" alt="填写经历块标题" />
+			</div>
 		</td>
 	</tr>
 </table>

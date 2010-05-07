@@ -20,6 +20,10 @@
 		
 		<td>
 			<input type="text" id="title" name="title" class="text_field" size="30" value="<%= h(@exp.title) %>" />
+			
+			<span class="info_with_icon" style="margin-left: 10px;">
+				可填写 协会 / 公司 / 项目 ... 等
+			</span>
 		</td>
 	</tr>
 	
@@ -32,6 +36,10 @@
 		
 		<td>
 			<input type="text" id="sub_title" name="sub_title" class="text_field" size="30" value="<%= h(@exp.sub_title) %>" />
+			
+			<span class="info_with_icon" style="margin-left: 10px;">
+				可填写 部门 / 职务 ... 等
+			</span>
 		</td>
 	</tr>
 	
@@ -45,7 +53,7 @@
 		<td>
 			<textarea id="content" name="content" class="text_field" cols="50" rows="8"><%= @exp.content %></textarea>
 			
-			<div class="info_with_icon" style="margin-top: 10px; font-size: 12px;">
+			<div class="info_with_icon" style="margin-top: 10px;">
 				每行输入一条
 			</div>
 		</td>
