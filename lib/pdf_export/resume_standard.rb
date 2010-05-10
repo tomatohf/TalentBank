@@ -105,7 +105,7 @@ module PdfExport
       )
       cell.height = cell.text_area_height + @styles[:title_padding_v] * 2 + @styles[:title_extra_padding_bottom]
       cell.background_color = @styles[:title_bg_color]
-      cell.draw()
+      cell.draw
     end
     
     
