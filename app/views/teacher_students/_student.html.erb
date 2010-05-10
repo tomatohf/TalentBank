@@ -7,7 +7,7 @@
 	
 	student_name = h(student.name)
 	
-	resumes = student.resumes.sort { |x, y| x.domain_id <=> y.domain_id }
+	resumes = student.resumes.select{|resume| !resume.hidden }.sort { |x, y| x.domain_id <=> y.domain_id }
 %>
 
 <tr<%= %Q! class="even"! if student_counter.even? %>>
@@ -33,13 +33,11 @@
 						<div class="dropdown_menu" style="font-size: 12px;">
 							<ul class="dropdown_sub_menu">
 								<% resumes.each do |resume| %>
-									<% unless resume.hidden %>
-										<% domain = ResumeDomain.find(resume.domain_id) %>
-										<li>
-											<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
-												<%= domain[:name] %></a>
-										</li>
-									<% end %>
+									<% domain = ResumeDomain.find(resume.domain_id) %>
+									<li>
+										<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= resume.id %>/resume">
+											<%= domain[:name] %></a>
+									</li>
 								<% end %>
 							</ul>
 						</div>

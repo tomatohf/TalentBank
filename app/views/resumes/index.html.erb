@@ -112,7 +112,7 @@
 					</td>
 				</tr>
 				
-				<%= render :partial => "added_resume", :collection => grouped_resumes[category_id], :locals => {:resumes => @resumes} %>
+				<%= render :partial => "added_resume", :collection => grouped_resumes[category_id], :locals => {:resumes => @resumes.select{|resume| !resume.hidden }} %>
 			<% end %>
 		</tbody>
 	</table>
