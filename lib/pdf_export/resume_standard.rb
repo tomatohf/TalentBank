@@ -194,7 +194,10 @@ module PdfExport
     end
     
     def draw_profile(doc, profile, options = {})
-      move_down(doc, @styles[:content_padding_v])
+      profile_line_padding_v = @styles[:content_line_height]/2
+      profile_padding_v = @styles[:content_padding_v] - profile_line_padding_v
+      
+      move_down(doc, profile_padding_v)
       
       draw_section_content_table(
         doc,
@@ -207,7 +210,7 @@ module PdfExport
           ]
         ],
         {
-          :vertical_padding => 0
+          :vertical_padding => profile_line_padding_v
         }.merge(options)
       )
       
@@ -218,8 +221,6 @@ module PdfExport
       optional_profiles << %Q!地址: #{profile.address}! unless profile.address.blank?
       optional_profiles << %Q!邮编: #{profile.zip}! unless profile.zip.blank?
       if optional_profiles.size > 0
-        move_down(doc, @styles[:content_line_height])
-        
         draw_section_content_table(
           doc,
           [
@@ -228,12 +229,12 @@ module PdfExport
             ]
           ],
           {
-            :vertical_padding => 0
+            :vertical_padding => profile_line_padding_v
           }.merge(options)
         )
       end
       
-      move_down(doc, @styles[:content_padding_v])
+      move_down(doc, profile_padding_v)
     end
     
     def draw_job_intention(doc, job_intention, margin_right)
@@ -343,8 +344,8 @@ module PdfExport
               :contents => [
                 [
                   {:text => exp.period},
-                  {:text => h(exp.title), :font_style => :bold},
-                  {:text => h(exp.sub_title), :font_style => :bold}
+                  {:text => exp.title, :font_style => :bold},
+                  {:text => exp.sub_title, :font_style => :bold}
                 ]
               ]
             )
