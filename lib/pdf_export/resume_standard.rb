@@ -342,9 +342,9 @@ module PdfExport
               :align => {0 => :left, 2 => :right},
               :contents => [
                 [
-                  exp.period,
-                  "<b>#{h(exp.title)}</b>",
-                  "<b>#{h(exp.sub_title)}</b>"
+                  {:text => exp.period},
+                  {:text => h(exp.title), :font_style => :bold},
+                  {:text => h(exp.sub_title), :font_style => :bold}
                 ]
               ]
             )

@@ -2,7 +2,6 @@ require "open-uri"
 require "prawn"
 require "prawn/layout"
 require "prawn/measurement_extensions"
-require "prawn/format"
 
 module PdfExport
   
