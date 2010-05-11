@@ -114,7 +114,7 @@ class Resumes < ActiveRecord::Migration
     create_table :resume_hobbies, :force => true do |t|
       t.column :resume_id, :integer
       
-      t.column :content, :string
+      t.column :content, :string, :limit => 500
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
@@ -128,7 +128,7 @@ class Resumes < ActiveRecord::Migration
     create_table :resume_awards, :force => true do |t|
       t.column :resume_id, :integer
       
-      t.column :content, :string
+      t.column :content, :string, :limit => 500
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime
@@ -200,7 +200,7 @@ class Resumes < ActiveRecord::Migration
       
       t.column :title, :string, :limit => 25
       
-      t.column :content, :string
+      t.column :content, :string, :limit => 500
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime

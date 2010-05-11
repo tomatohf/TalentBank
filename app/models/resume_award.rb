@@ -7,7 +7,7 @@ class ResumeAward < ActiveRecord::Base
   
   validates_presence_of :resume_id
   
-  validates_length_of :content, :maximum => 250, :message => "荣誉和奖励 超过长度限制", :allow_nil => true
+  validates_length_of :content, :maximum => 500, :message => "荣誉和奖励 超过长度限制", :allow_nil => true
   
   
   
