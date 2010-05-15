@@ -457,9 +457,9 @@ function setup_new_revision_buttons(type, part) {
 function draw_new_revision_form(action, type, part) {
 	var form_container = '<div></div>';
 	
-	var type_id_input = '<input type="hidden" id="revision_type_id" />';
-	var part_id_input = '<input type="hidden" id="revision_part_id" />';
-	var revision_action_input = '<input type="hidden" id="revision_action" />';
+	var type_id_input = '<input type="hidden" name="revision_type_id" />';
+	var part_id_input = '<input type="hidden" name="revision_part_id" />';
+	var revision_action_input = '<input type="hidden" name="revision_action" />';
 	var part_id = $(part).attr("id").substr(type.name.length + 1);
 	
 	form_container = $(form_container).css(
@@ -717,7 +717,7 @@ function get_edit_revision_form(revision) {
 	add_submit_button(
 		form_container,
 		function() {
-			// update_revision(revision);
+			update_revision(revision);
 		},
 		function() {
 			$(revision).find(".resume_revision_form").hide();
@@ -770,7 +770,7 @@ function table_row_for_text_field(field_id, field_label, field_value, multi_line
 function div_for_text_field(field_id, field_value, multi_line) {
 	return $('<div></div>').append(
 		$(multi_line ? '<textarea rows="5"></textarea>' : '<input type="text" />')
-			.attr("id", field_id)
+			.attr("name", field_id)
 			.addClass("text_field ui-corner-all")
 			.css(
 				{
@@ -894,31 +894,8 @@ function compute_id_for_pop(part_attr_id, key) {
 
 function create_revision(type, part) {
 	if($("#new_revision_form").find("input#revision_action").val() != "delete") {
-		var type_name = type.name;
-		if(type_name == "edu" && $.trim($("#edu_period").val()).length <= 0) {
-			return fail_msg("请输入时间段 ...");
-		}
-		if(type_name.indexOf("_exp") >= 0) {
-			if($.trim($("#exp_period").val()).length <= 0) {
-				return fail_msg("请输入时间段 ...");
-			}
-			if($.trim($("#exp_title").val()).length <= 0) {
-				return fail_msg("请输入标题 ...");
-			}
-			if($.trim($("#exp_content").val()).length <= 0) {
-				return fail_msg("请输入内容 ...");
-			}
-		}
-		if(type_name.indexOf("_skill") >= 0 && $.trim($("#skill_name").val()).length <= 0) {
-			return fail_msg("请输入名称 ...");
-		}
-		if(type_name == "list_section") {
-			if($.trim($("#section_title").val()).length <= 0) {
-				return fail_msg("请输入标题 ...");
-			}
-			if($.trim($("#section_content").val()).length <= 0) {
-				return fail_msg("请输入内容 ...");
-			}
+		if(!check_revision_form($("#new_revision_form"), type.name)) {
+			return;
 		}
 	}
 	
@@ -967,6 +944,82 @@ function create_revision(type, part) {
 }
 
 
+function update_revision(revision) {
+	var target_part_id = $(revision).find("input:hidden:first").val();
+	var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+	var form_container = $(revision).find(".resume_revision_form:first");
+	if(!check_revision_form(form_container, type_name)) {
+		return;
+	}
+	
+	
+	disable_submit_button(form_container);
+	$(form_container).find("input:submit").siblings("span:first").hide();
+	
+	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
+	var form_data = collect_form_data($(form_container).find("input:hidden, input:text, textarea"));
+	form_data["_method"] = "put"; // simulate HTTP delete request in rails
+	$.ajax(
+		{
+			type: "POST",
+			url: "/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/revisions/" + revision_id,
+			dataType: "html",
+			data: form_data,
+			error: function() {
+				show_error_msg(enable_submit_button(form_container).siblings("span:first"));
+			},
+			success: function(data, text_status) {
+				var revision_attr_id = "revision_" + revision_id;
+				var update_revisions = $("#" + revision_attr_id).add("#" + compute_id_for_part(revision_attr_id));
+
+				var content_containers = update_revisions.find(".resume_revision_content:first");
+				content_containers.html(
+					$('<div class="resume_revision_data"></div>').html(data)
+				);
+			}
+		}
+	);
+}
+
+
+function check_revision_form(container, type_name) {
+	if(type_name == "edu" && $.trim($(container).find("[name='edu_period']:first").val()).length <= 0) {
+		fail_msg("请输入时间段 ...");
+		return false;
+	}
+	if(type_name.indexOf("_exp") >= 0) {
+		if($.trim($(container).find("[name='exp_period']:first").val()).length <= 0) {
+			fail_msg("请输入时间段 ...");
+			return false;
+		}
+		if($.trim($(container).find("[name='exp_title']:first").val()).length <= 0) {
+			fail_msg("请输入标题 ...");
+			return false;
+		}
+		if($.trim($(container).find("[name='exp_content']:first").val()).length <= 0) {
+			fail_msg("请输入内容 ...");
+			return false;
+		}
+	}
+	if(type_name.indexOf("_skill") >= 0 && $.trim($(container).find("[name='skill_name']:first").val()).length <= 0) {
+		fail_msg("请输入名称 ...");
+		return false;
+	}
+	if(type_name == "list_section") {
+		if($.trim($(container).find("[name='section_title']:first").val()).length <= 0) {
+			fail_msg("请输入标题 ...");
+			return false;
+		}
+		if($.trim($(container).find("[name='section_content']:first").val()).length <= 0) {
+			fail_msg("请输入内容 ...");
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+
 function disable_submit_button(container) {
 	return $(container).find("input:submit")
 		.attr("disabled", true)
@@ -1010,7 +1063,7 @@ function collect_form_data(inputs) {
 	$.each(
 		inputs,
 		function(i, input) {
-			data[$(input).attr("id")] = $(input).val();
+			data[$(input).attr("name")] = $(input).val();
 		}
 	);
 	
@@ -1052,7 +1105,11 @@ function setup_revisions(revisions) {
 					content_container.find(".resume_revision_data").hide();
 					content_container.find(".resume_revision_diff").hide();
 					$(revision).find("button.diff_revision_btn").removeClass("ui-state-active");
-					content_container.find(".resume_revision_form").html(get_edit_revision_form(revision)).show();
+					var revision_form = content_container.find(".resume_revision_form");
+					if(revision_form.length <= 0) {
+						revision_form = $('<div class="resume_revision_form"></div>').appendTo(content_container);
+					}
+					revision_form.html(get_edit_revision_form(revision)).show();
 					
 					return false;
 				}

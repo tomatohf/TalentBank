@@ -35,6 +35,14 @@ class ResumeRevisionsController < ReviseResumesController
     revision_action = ResumeRevision::Action.find_by(:name, params[:revision_action])
     return jump_to("/errors/forbidden") unless revision_action
     
+    return jump_to("/errors/forbidden") if part_type[:name] == "student_skill" &&
+                                            revision_action[:name] == "update"
+    return jump_to("/errors/forbidden") if !(part_type[:name] == "edu") &&
+                                            !(part_type[:name] =~ /_exp$/) &&
+                                            !(part_type[:name] =~ /_skill$/) &&
+                                            !(part_type[:name] == "list_section") &&
+                                            revision_action[:name] == "add"
+    
     
     revision = ResumeRevision.new(
       :resume_id => @resume.id,
@@ -44,42 +52,7 @@ class ResumeRevisionsController < ReviseResumesController
       :action_id => revision_action[:id],
       :applied => false
     )
-    revision.fill_data(
-      case part_type[:name]
-      when "edu"
-        {
-          :period => params[:edu_period] && params[:edu_period].strip,
-          :university => params[:edu_university] && params[:edu_university].strip,
-          :college => params[:edu_college] && params[:edu_college].strip,
-          :major => params[:edu_major] && params[:edu_major].strip,
-          :edu_type => params[:edu_type] && params[:edu_type].strip
-        }
-      when /_exp$/
-        {
-          :period => params[:exp_period] && params[:exp_period].strip,
-          :title => params[:exp_title] && params[:exp_title].strip,
-          :sub_title => params[:exp_sub_title] && params[:exp_sub_title].strip,
-          :content => params[:exp_content] && params[:exp_content].strip
-        }
-      when /_skill$/
-        return jump_to("/errors/forbidden") if part_type[:name] == "student_skill" && revision_action[:name] == "update"
-        
-        {
-          :name => params[:skill_name] && params[:skill_name].strip,
-          :level => params[:skill_level] && params[:skill_level].strip
-        }
-      when "list_section"
-        {
-          :title => params[:section_title] && params[:section_title].strip,
-          :content => params[:section_content] && params[:section_content].strip
-        }
-      else
-        return jump_to("/errors/forbidden") if revision_action[:name] == "add"
-        
-        param_key = part_type[:name].to_sym
-        {:content => params[param_key] && params[param_key].strip}
-      end
-    ) unless revision_action[:name] == "delete"
+    revision.fill_data(collect_revision_data(part_type[:name])) unless revision_action[:name] == "delete"
     
     if revision.save!
       generate_notice(@teacher)
@@ -96,7 +69,22 @@ class ResumeRevisionsController < ReviseResumesController
   
   
   def update
+    @revision.fill_data(
+      collect_revision_data(
+        ResumePartType.find(@revision.part_type_id)[:name]
+      )
+    )
     
+    if @revision.save!
+      generate_notice(@teacher)
+
+      return render(
+        :partial => "/revise_resumes/revision_data",
+        :locals => {:revision => @revision}
+      )
+    end
+    
+    render :nothing => true
   end
   
   
@@ -244,6 +232,40 @@ class ResumeRevisionsController < ReviseResumesController
   def check_revision
     @revision = ResumeRevision.find(params[:id])
     jump_to("/errors/forbidden") unless @revision.resume_id == @resume.id
+  end
+  
+  
+  def collect_revision_data(type_name)
+    case type_name
+    when "edu"
+      {
+        :period => params[:edu_period] && params[:edu_period].strip,
+        :university => params[:edu_university] && params[:edu_university].strip,
+        :college => params[:edu_college] && params[:edu_college].strip,
+        :major => params[:edu_major] && params[:edu_major].strip,
+        :edu_type => params[:edu_type] && params[:edu_type].strip
+      }
+    when /_exp$/
+      {
+        :period => params[:exp_period] && params[:exp_period].strip,
+        :title => params[:exp_title] && params[:exp_title].strip,
+        :sub_title => params[:exp_sub_title] && params[:exp_sub_title].strip,
+        :content => params[:exp_content] && params[:exp_content].strip
+      }
+    when /_skill$/
+      {
+        :name => params[:skill_name] && params[:skill_name].strip,
+        :level => params[:skill_level] && params[:skill_level].strip
+      }
+    when "list_section"
+      {
+        :title => params[:section_title] && params[:section_title].strip,
+        :content => params[:section_content] && params[:section_content].strip
+      }
+    else
+      param_key = type_name.to_sym
+      {:content => params[param_key] && params[param_key].strip}
+    end
   end
   
   
