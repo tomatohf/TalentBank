@@ -55,16 +55,40 @@
 			<div class="resume_revision_data">
 				<%= render :partial => "/revise_resumes/revision_data", :locals => {:revision => revision} %>
 			</div>
+			<div class="resume_revision_form"></div>
 		</div>
 		
 		
 		
 		<div class="resume_revision_actions">
-			<% if @teacher && @teacher.id == revision.teacher_id %>
-				<div class="align_r">
-					<a href="#" class="delete_revision_link">
-						删除</a>
-				</div>
+			<% if @teacher %>
+				<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+					<tr>
+						<td align="right">
+							&nbsp;
+						</td>
+						
+						<% if @teacher.id == revision.teacher_id %>
+							<td style="width: 40px;">
+								<a href="#" class="delete_revision_link">
+									删除</a>
+							</td>
+							
+							<% if revision_action[:name] != "delete" %>
+								<td style="width: 40px;">
+									<a href="#" class="edit_revision_link">
+										修改</a>
+								</td>
+							<% end %>
+						
+							<td align="center" style="width: 10px;" class="info">|</td>
+						<% end %>
+						
+						<td style="width: 60px;">
+							<button class="diff_revision_btn">对比</button>
+						</td>
+					</tr>
+				</table>
 			<% end %>
 			
 			<% if @student && @student.id == @resume.student_id %>

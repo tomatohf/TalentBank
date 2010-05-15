@@ -3,19 +3,19 @@ class ResumeRevisionsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy, :update_applied, :set_applied, :apply]
+    :only => [:create, :update, :destroy, :update_applied, :set_applied, :apply]
   )
   
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_student,
-    :only => [:update_applied, :diff, :set_applied, :apply]
+    :only => [:update_applied, :set_applied, :apply]
   )
   
   insert_before_filter(
     :check_login_for_account,
     :check_account_type_teacher,
-    :only => [:create, :destroy]
+    :only => [:create, :update, :destroy]
   )
   
   before_filter :check_revision, :except => [:create, :set_applied]
@@ -92,6 +92,11 @@ class ResumeRevisionsController < ReviseResumesController
     end
     
     render :nothing => true
+  end
+  
+  
+  def update
+    
   end
   
   

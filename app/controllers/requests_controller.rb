@@ -44,7 +44,8 @@ class RequestsController < NotificationsController
         :page => @page,
         :per_page => Request_Page_Size,
         :total_entries => total_count,
-        :conditions => conditions
+        :conditions => conditions,
+        :order => "updated_at ASC" # "order by updated_at" causes MySql to "using filesort"
       )
     else
       []

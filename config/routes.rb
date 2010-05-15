@@ -142,7 +142,7 @@ ActionController::Routing::Routes.draw do |map|
     :account_type => /(students|teachers)/,
     :account_id => /\d+/
   }, :only => [:show] do |revise_resumes|
-    revise_resumes.resources :resume_revisions, :only => [:create, :destroy], :as => :revisions, :member => {
+    revise_resumes.resources :resume_revisions, :only => [:create, :update, :destroy], :as => :revisions, :member => {
       :update_applied => :post,
       :diff => :any,
       :apply => :post

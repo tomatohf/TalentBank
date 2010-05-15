@@ -614,6 +614,125 @@ function get_new_revision_inputs(type, part, modify) {
 }
 
 
+function get_edit_revision_form(revision) {
+	var form_container = $('<div></div>');
+	
+	var revision_data = $(revision).find(".resume_revision_data:first").find("div:first");
+	
+	var target_part_id = $(revision).find("input:hidden:first").val();
+	var type_name = target_part_id.substring(0, target_part_id.lastIndexOf("_"));
+	if(type_name == "edu") {
+		table_for_text_fields(
+			[
+				["edu_period", "时间段" + required_mark],
+				["edu_university", "大学"],
+				["edu_college", "学院"],
+				["edu_major", "专业"],
+				["edu_type", "教育类型"]
+			],
+			revision_data,
+			true
+		).appendTo(form_container);
+	}
+	else if(type_name.indexOf("_exp") >= 0) {
+		$('<table border="0" cellspacing="0" cellpadding="5"></table>')
+			.addClass("main_part_w")
+			.append(
+				table_row_for_text_field(
+					"exp_period",
+					"时间段" + required_mark,
+					$.trim($(revision_data).find("td:first").html()),
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_title",
+					"标题" + required_mark,
+					$.trim($(revision_data).find(".resume_exp_title").html()),
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_sub_title",
+					"子标题",
+					$.trim($(revision_data).find("td:last div.float_r").html()),
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"exp_content",
+					"内容" + required_mark,
+					items_to_text($(revision_data).find("ul")),
+					true
+				)
+			)
+			.appendTo(form_container);
+	}
+	else if(type_name.indexOf("_skill") >= 0) {
+		table_for_text_fields(
+			[
+				["skill_name", "名称" + required_mark],
+				["skill_level", "程度"]
+			],
+			revision_data,
+			true
+		).appendTo(form_container);
+	}
+	else if(type_name == "list_section") {
+		$('<table border="0" cellspacing="0" cellpadding="5"></table>')
+			.addClass("main_part_w")
+			.append(
+				table_row_for_text_field(
+					"section_title",
+					"标题" + required_mark,
+					$.trim($(revision_data).find("div.resume_section:first div:first").html()),
+					false
+				)
+			)
+			.append(
+				table_row_for_text_field(
+					"section_content",
+					"内容" + required_mark,
+					items_to_text($(revision_data).find("ul")),
+					true
+				)
+			)
+			.appendTo(form_container);
+	}
+	else if(
+		type_name == "job_intention" ||
+		type_name == "award" || type_name == "hobby"
+	) {
+		var multi_line = (type_name != "job_intention");
+		div_for_text_field(
+			type_name,
+			multi_line ? items_to_text($(revision_data).find("ul")) : $.trim($(revision_data).find("div.resume_section:first").html()),
+			multi_line
+		).appendTo(form_container);
+	}
+	
+	add_submit_button(
+		form_container,
+		function() {
+			// update_revision(revision);
+		},
+		function() {
+			$(revision).find(".resume_revision_form").hide();
+			$(revision).find(".resume_revision_diff").hide();
+			$(revision).find("button.diff_revision_btn").removeClass("ui-state-active");
+			$(revision).find(".resume_revision_data").show();
+			
+			return false;
+		}
+	);
+	
+	return form_container;
+}
+
+
 function table_for_text_fields(fields, part, modify) {
 	var table = $('<table border="0" cellspacing="0" cellpadding="5"></table>').addClass("main_part_w");
 	
@@ -926,6 +1045,20 @@ function setup_revisions(revisions) {
 			);
 			
 			
+			$(revision).find("a.edit_revision_link").unbind("click").click(
+				function() {
+					var content_container = $(revision).find(".resume_revision_content:first");
+					
+					content_container.find(".resume_revision_data").hide();
+					content_container.find(".resume_revision_diff").hide();
+					$(revision).find("button.diff_revision_btn").removeClass("ui-state-active");
+					content_container.find(".resume_revision_form").html(get_edit_revision_form(revision)).show();
+					
+					return false;
+				}
+			);
+			
+			
 			APP.setup_dropdown_menu($(revision).find("a.dropdown_menu_link"), 100);
 			setup_update_applied_link(revision);
 			beautify_buttons(
@@ -939,13 +1072,15 @@ function setup_revisions(revisions) {
 					var diff = $(revision).find(".resume_revision_diff:first");
 					if(diff.length > 0) {
 						if(diff.is(":visible")) {
+							content_container.find(".resume_revision_form").hide();
 							content_container.find(".resume_revision_diff").hide();
-							content_container.find(".resume_revision_data").show();
 							$(this).removeClass("ui-state-active");
+							content_container.find(".resume_revision_data").show();
 						}
 						else {
-							content_container.find(".resume_revision_diff").show();
+							content_container.find(".resume_revision_form").hide();
 							content_container.find(".resume_revision_data").hide();
+							content_container.find(".resume_revision_diff").show();
 							$(this).addClass("ui-state-active");
 						}
 					}
@@ -1171,12 +1306,10 @@ function diff_revision(revision) {
 			
 			update_revisions.find(".resume_revision_diff").remove();
 			
-			update_revisions.find(".resume_revision_content")
-				.append(
-					$('<div class="resume_revision_diff"></div>').html(data)
-				)
-				.find(".resume_revision_data").hide();
-			
+			var content_containers = update_revisions.find(".resume_revision_content:first");
+			content_containers.find(".resume_revision_form").hide();
+			content_containers.find(".resume_revision_data").hide();
+			content_containers.append($('<div class="resume_revision_diff"></div>').html(data));
 			update_revisions.find("button.diff_revision_btn").addClass("ui-state-active");
 		},
 		"html"
@@ -1667,6 +1800,7 @@ function request_revise_resume(teacher_id, teacher_name) {
 					resume: RESUME_ID
 				},
 				function(data) {
+					// window.location.href = "";
 					$('<form method="get" action=""></form>').appendTo($("body")).submit();
 				},
 				"html"
