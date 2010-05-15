@@ -150,7 +150,7 @@ ActionController::Routing::Routes.draw do |map|
       :set_applied => :post
     }
     
-    revise_resumes.resources :resume_comments, :only => [:create, :destroy], :as => :comments
+    revise_resumes.resources :resume_comments, :only => [:create, :update, :destroy], :as => :comments
   end
   
   

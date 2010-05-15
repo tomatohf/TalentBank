@@ -1,3 +1,5 @@
+var LINK_COLOR = "#3B5998";
+
 var DIALOG_INIT_WIDTH = 500;
 var DIALOG_INIT_HEIGHT = 420;
 
@@ -733,6 +735,32 @@ function get_edit_revision_form(revision) {
 }
 
 
+function get_edit_comment_form(comment) {
+	var form_container = $('<div></div>');
+	
+	div_for_text_field(
+		"comment",
+		$.trim($(comment).find("pre.preformatted_content:first").text()),
+		true
+	).appendTo(form_container);
+	
+	add_submit_button(
+		form_container,
+		function() {
+			update_comment(comment);
+		},
+		function() {
+			$(comment).find(".resume_comment_form").hide();
+			$(comment).find("pre.preformatted_content").show();
+			
+			return false;
+		}
+	);
+	
+	return form_container;
+}
+
+
 function table_for_text_fields(fields, part, modify) {
 	var table = $('<table border="0" cellspacing="0" cellpadding="5"></table>').addClass("main_part_w");
 	
@@ -958,7 +986,7 @@ function update_revision(revision) {
 	
 	var revision_id = parseInt($(revision).attr("id").substr("revision_".length));
 	var form_data = collect_form_data($(form_container).find("input:hidden, input:text, textarea"));
-	form_data["_method"] = "put"; // simulate HTTP delete request in rails
+	form_data["_method"] = "put"; // simulate HTTP put request in rails
 	$.ajax(
 		{
 			type: "POST",
@@ -976,6 +1004,49 @@ function update_revision(revision) {
 				content_containers.html(
 					$('<div class="resume_revision_data"></div>').html(data)
 				);
+			}
+		}
+	);
+}
+
+
+function update_comment(comment) {
+	var form_container = $(comment).find(".resume_comment_form:first");
+	var text_field = form_container.find("textarea:first");
+	if($.trim(text_field.val()).length > 1000) {
+		return fail_msg("内容超过长度限制 ...");
+	}
+	if($.trim(text_field.val()).length <= 0) {
+		return fail_msg("请输入内容 ...");
+	}
+	
+	
+	disable_submit_button(form_container);
+	$(form_container).find("input:submit").siblings("span:first").hide();
+	
+	var comment_id = parseInt($(comment).attr("id").substr("comment_".length));
+	$.ajax(
+		{
+			type: "POST",
+			url: "/" + ACCOUNT_TYPE + "/" + ACCOUNT_ID + "/revise_resumes/" + RESUME_ID + "/comments/" + comment_id,
+			dataType: "html",
+			data: {
+				content: text_field.val(),
+				_method: "put" // simulate HTTP put request in rails
+			},
+			error: function() {
+				show_error_msg(enable_submit_button(form_container).siblings("span:first"));
+			},
+			success: function(data, text_status) {
+				var comment_attr_id = "comment_" + comment_id;
+				var update_comments = $("#" + comment_attr_id).add("#" + compute_id_for_part(comment_attr_id));
+
+				var content_containers = update_comments.find(".resume_comment_content:first");
+				content_containers.html(
+					$('<pre class="preformatted_content"></pre>').html(data)
+				);
+				
+				$(update_comments).find("a").css("color", LINK_COLOR);
 			}
 		}
 	);
@@ -1205,7 +1276,7 @@ function setup_revisions(revisions) {
 			}
 			
 			
-			$(revision).find("a").css("color", "#3B5998");
+			$(revision).find("a").css("color", LINK_COLOR);
 		}
 	);
 	
@@ -1647,6 +1718,7 @@ function setup_comments(comments) {
 				}
 			);
 			
+			
 			$(comment).find("a.delete_comment_link").unbind("click").click(
 				function() {
 					confirm_msg(
@@ -1655,6 +1727,22 @@ function setup_comments(comments) {
 							delete_comment(comment);
 						}
 					);
+					
+					return false;
+				}
+			);
+			
+			
+			$(comment).find("a.edit_comment_link").unbind("click").click(
+				function() {
+					var content_container = $(comment).find(".resume_comment_content:first");
+					
+					content_container.find("pre.preformatted_content").hide();
+					var comment_form = content_container.find(".resume_comment_form");
+					if(comment_form.length <= 0) {
+						comment_form = $('<div class="resume_comment_form"></div>').appendTo(content_container);
+					}
+					comment_form.html(get_edit_comment_form(comment)).show();
 					
 					return false;
 				}
@@ -1681,7 +1769,7 @@ function setup_comments(comments) {
 			}
 			
 			
-			$(comment).find("a").css("color", "#3B5998");
+			$(comment).find("a").css("color", LINK_COLOR);
 		}
 	);
 	

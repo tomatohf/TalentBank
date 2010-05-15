@@ -26,8 +26,8 @@
 			
 			<td align="right">
 				<% if @account_type == account_type[:name] && self.instance_variable_get("@#{@account_type.singularize}").id == comment.account_id %>
-					<a href="#" class="delete_comment_link">
-						删除</a>
+					<a href="#" class="delete_comment_link">删除</a>
+					<a href="#" class="edit_comment_link">修改</a>
 				<% end %>
 				
 				<a href="#" title="展开/收起 评注内容" class="toggle_revision_link">

@@ -144,8 +144,8 @@ ul.no_bullet {
 	padding: 10px 20px;
 }
 
-.resume_comment a.delete_comment_link {
-	margin: 0px 20px;
+.resume_comment a.delete_comment_link, .resume_comment a.edit_comment_link {
+	margin-right: 10px;
 	font-weight: normal;
 }
 

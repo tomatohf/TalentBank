@@ -3,7 +3,7 @@ class ResumeCommentsController < ReviseResumesController
   insert_before_filter(
     :check_account,
     :check_active,
-    :only => [:create, :destroy]
+    :only => [:create, :update, :destroy]
   )
   
   before_filter :check_comment, :except => [:create]
@@ -39,6 +39,20 @@ class ResumeCommentsController < ReviseResumesController
         :partial => "/revise_resumes/comment",
         :object => comment,
         :locals => {@account_type.to_sym => {account.id => account}}
+      )
+    end
+    
+    render :nothing => true
+  end
+  
+  
+  def update
+    @comment.content = params[:content] && params[:content].strip
+    
+    if @comment.save!
+      return render(
+        :layout => false,
+        :inline => %Q!<%= auto_link(h(@comment.content), :urls, :target => "_blank") %>!
       )
     end
     
