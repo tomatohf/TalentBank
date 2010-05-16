@@ -159,7 +159,7 @@ ul.no_bullet {
 }
 
 
-.resume_revision_pop, .resume_comment_pop {
+.resume_revision_pop, .resume_comment_pop, .resume_overall_comment_pop {
 	position: absolute;
 	text-align: center;
 	font-size: 11px;
@@ -189,6 +189,20 @@ ul.no_bullet {
 	
 	padding-top: 4px;
 	padding-left: 1px;
+}
+
+.resume_overall_comment_pop {
+	width: 48px;
+	height: 48px;
+	background: transparent url(/images/revise_resumes/overall_comment_pop.gif) no-repeat scroll left top;
+	
+	margin-top: -20px;
+	margin-left: 680px;
+	
+	padding-top: 12px;
+	padding-left: 1px;
+	
+	cursor: pointer;
 }
 
 

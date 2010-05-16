@@ -35,6 +35,25 @@ function setup_resume_parts() {
 			);
 		}
 	);
+	
+	
+	var overall_comment_count = $("#all_comments ._").length;
+	var class_name = "resume_overall_comment_pop";
+	var pop_container = $(".resume:first");
+	pop_container.find("." + class_name).remove();
+	var pop = pop_container.prepend(
+		$('<span></span>')
+			.attr("id", compute_id_for_pop("overall", "comment"))
+			.addClass(class_name).html(overall_comment_count)
+	).find("." + class_name + ":first");
+	pop.unbind("click").click(
+		function() {
+			alert("show overall comment !");
+		}
+	);
+	if(overall_comment_count <= 0) {
+		pop.hide();
+	}
 }
 
 
