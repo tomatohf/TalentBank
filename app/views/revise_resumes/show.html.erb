@@ -225,6 +225,42 @@
 	</div>
 </div>
 
+<div id="overall_comment_dialog" style="display: none;">
+	<div class="tabs">
+		<ul>
+			<li>
+				<a href="#overall_comments"><img src="/images/revise_resumes/comment_icon.gif" border="0" style="margin: 0px 3px -1px 0px;" />针对整份简历的评注</a>
+			</li>
+			
+			<li style="margin-left: 30px;">
+				<a href="#new_overall_comment_in_dialog"><img src="/images/revise_resumes/add_comment_icon.gif" border="0" style="margin: 0px 3px -4px 0px;" />添加整份简历的评注</a>
+			</li>
+		</ul>
+		
+		<div id="overall_comments">
+			
+		</div>
+		
+		<div id="new_overall_comment_in_dialog">
+			<div style="padding: 5px 30px 0px 20px;">
+				<div class="align_r info" style="margin: 0px 50px 5px;">
+					1000 字以内
+				</div>
+				
+				<div>
+					<textarea rows="10" name="comment" class="text_field ui-corner-all" style="width: 95%;"></textarea>
+				</div>
+				
+				<div style="margin-top: 15px;">
+					<input type="submit" value="提交" />
+					<a href="#" class="none" style="margin: 0px 25px;">清空</a>
+					<span style="color: #CD0A0A;"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 
 <% content_for :scripts do %>

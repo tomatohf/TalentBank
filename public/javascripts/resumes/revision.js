@@ -8,6 +8,27 @@ var BTN_PADDING_SMALL = "3px 6px 2px";
 
 var UNAPPLIED_PART_DELETED_REVISIONS = [];
 
+var DIALOG_DEFAULT_OPTIONS = {
+	autoOpen: false,
+	closeOnEscape: true,
+	
+	title: "",
+	
+	draggable: true,
+	resizable: true,
+	
+	show: null,
+	hide: null,
+	
+	width: DIALOG_INIT_WIDTH,
+	height: DIALOG_INIT_HEIGHT,
+	maxWidth: 950,
+	maxHeight: 600,
+	minWidth: 460,
+	
+	modal: false,
+};
+
 
 function setup_tabs() {
 	$(".tabs").css(
@@ -45,15 +66,17 @@ function setup_resume_parts() {
 		$('<span></span>')
 			.attr("id", compute_id_for_pop("overall", "comment"))
 			.addClass(class_name).html(overall_comment_count)
-	).find("." + class_name + ":first");
-	pop.unbind("click").click(
-		function() {
-			alert("show overall comment !");
-		}
-	);
+	).find("." + class_name + ":first").unbind("click").click(overall_comment_pop_click_handler);
 	if(overall_comment_count <= 0) {
 		pop.hide();
 	}
+}
+
+
+function overall_comment_pop_click_handler() {
+	fill_overall_comments($("#all_comments ._"), true);
+	
+	open_overall_comment_dialog();
 }
 
 
@@ -204,38 +227,24 @@ function hide_highlighter(index) {
 
 function setup_dialog() {
 	$("#dialog").dialog(
-		{
-			autoOpen: false,
-			closeOnEscape: true,
-			
-			title: "",
-			
-			draggable: true,
-			resizable: true,
-			
-			show: null,
-			hide: null,
-			
-			width: DIALOG_INIT_WIDTH,
-			height: DIALOG_INIT_HEIGHT,
-			maxWidth: 950,
-			maxHeight: 600,
-			minWidth: 460,
-			position: calculate_dialog_position(),
-			
-			modal: false,
-			
-			close: function() {
-				hide_highlighter(1);
-			},
-			
-			resize: function(event, ui) {
-				adjust_tabs_content_height_by_dialog();
-			},
-			open: function(event, ui) {
-				adjust_tabs_content_height_by_dialog();
+		$.extend(
+			DIALOG_DEFAULT_OPTIONS,
+			{
+				position: calculate_dialog_position("#dialog"),
+				
+				close: function() {
+					hide_highlighter(1);
+				},
+
+				resize: function(event, ui) {
+					adjust_tabs_content_height_by_dialog("#dialog");
+				},
+				open: function(event, ui) {
+					$("#overall_comment_dialog").dialog("close");
+					adjust_tabs_content_height_by_dialog("#dialog");
+				}
 			}
-		}
+		)
 	).show();
 	
 	
@@ -250,12 +259,34 @@ function setup_dialog() {
 }
 
 
-function adjust_tabs_content_height_by_dialog() {
+function setup_overall_comment_dialog() {
+	$("#overall_comment_dialog").dialog(
+		$.extend(
+			DIALOG_DEFAULT_OPTIONS,
+			{
+				title: "整份简历的评注",
+				
+				position: calculate_dialog_position("#overall_comment_dialog"),
+				
+				resize: function(event, ui) {
+					adjust_tabs_content_height_by_dialog("#overall_comment_dialog");
+				},
+				open: function(event, ui) {
+					$("#dialog").dialog("close");
+					adjust_tabs_content_height_by_dialog("#overall_comment_dialog");
+				}
+			}
+		)
+	).show();
+}
+
+
+function adjust_tabs_content_height_by_dialog(dialog) {
 	$.each(
-		$("#dialog").css("overflow", "hidden").find(".tabs > div"),
+		$(dialog).css("overflow", "hidden").find(".tabs > div"),
 		function(i, div) {
-			var dialog_h = $("#dialog").innerHeight();
-			var tabs_nav_h = $("#dialog .tabs ul:first").outerHeight(true);
+			var dialog_h = $(dialog).innerHeight();
+			var tabs_nav_h = $(dialog).find(".tabs ul:first").outerHeight(true);
 			var div_margin = to_number($(div).css("marginTop")) + to_number($(div).css("marginBottom"));
 			var div_padding = to_number($(div).css("paddingTop")) + to_number($(div).css("paddingBottom"));
 			var fix_h = 20;
@@ -268,7 +299,7 @@ function adjust_tabs_content_height_by_dialog() {
 			
 			
 			if(is_ie6()) {
-				$(div).width($("#dialog .tabs").width() - 35);
+				$(div).width($(dialog).find(".tabs").width() - 35);
 			}
 		}
 	);
@@ -281,10 +312,10 @@ function to_number(value) {
 }
 
 
-function calculate_dialog_position() {
-	var width = $("#dialog").dialog("option", "width") || DIALOG_INIT_WIDTH;
+function calculate_dialog_position(dialog) {
+	var width = $(dialog).dialog("option", "width") || DIALOG_INIT_WIDTH;
 	var left = "center";
-	var resume_width = $(".resume").width();
+	var resume_width = $(".resume:first").width();
 	if(resume_width > width) {
 		left = $(".resume").position().left + ((resume_width-width)/2)
 	}
@@ -336,6 +367,8 @@ function get_dialog_sub_title(type_name, part) {
 
 
 function open_dialog(part) {
+	$("#overall_comment_dialog").dialog("close");
+	
 	show_highlighter(1, part);
 	
 	var dialog_height = $("#dialog").dialog("option", "height");
@@ -360,7 +393,7 @@ function open_dialog(part) {
 		},
 		function() {
 			if(!$("#dialog").dialog("isOpen")) {
-				$("#dialog").dialog("option", "position", calculate_dialog_position());
+				$("#dialog").dialog("option", "position", calculate_dialog_position("#dialog"));
 				$("#dialog").dialog("open");
 			}
 			
@@ -376,6 +409,18 @@ function open_dialog(part) {
 			);
 		}
 	);
+}
+
+
+function open_overall_comment_dialog() {
+	$("#dialog").dialog("close");
+	
+	if(!$("#overall_comment_dialog").dialog("isOpen")) {
+		$("#overall_comment_dialog").dialog("close");
+	}
+	
+	$("#overall_comment_dialog").dialog("option", "position", calculate_dialog_position("#overall_comment_dialog"));
+	$("#overall_comment_dialog").dialog("open");
 }
 
 
@@ -923,6 +968,30 @@ function fill_part_comments(comments, replace) {
 	}
 	else {
 		$("#part_comments").append(setup_comments(copied_comments));
+	}
+	
+	return copied_comments;
+}
+
+
+function fill_overall_comments(comments, replace) {
+	var copied_comments = $(comments).clone();
+	
+	$.each(
+		copied_comments,
+		function(i, copied_comment) {
+			$(copied_comment).attr(
+				"id",
+				compute_id_for_part($(copied_comment).attr("id"))
+			).find(".target_part_title").remove();
+		}
+	);
+	
+	if(replace) {
+		$("#overall_comments").html(setup_comments(copied_comments));
+	}
+	else {
+		$("#overall_comments").append(setup_comments(copied_comments));
 	}
 	
 	return copied_comments;
@@ -1628,7 +1697,7 @@ function fill_list_content(part, content) {
 function setup_new_comment_form() {
 	$.each(
 		beautify_buttons(
-			$("#new_overall_comment, #new_comment").find("input:submit:first"),
+			$("#new_overall_comment, #new_comment, #new_overall_comment_in_dialog").find("input:submit:first"),
 			BTN_PADDING_SMALL
 		),
 		function(i, button) {
@@ -1698,17 +1767,22 @@ function create_comment(text_field, error_container, data) {
 				var comment_attr_id = $(data).attr("id");
 				var target_part_id = setup_comments($(data)).appendTo($("#all_comments"))
 										.find("input:hidden:first").val();
-				$("#" + target_part_id).click();
 				
-				// switch tab
-				$("#dialog .tabs").tabs("select", "#part_comments");
-				$("#overall_tabs.tabs").tabs("select", "#all_comments");
-				
-				if($("#" + target_part_id).length > 0) {
+				var target_part = $("#" + target_part_id);
+				if(target_part.length > 0) {
+					// part comment created
+					target_part.click();
+					$("#dialog .tabs").tabs("select", "#part_comments");
 					$("#part_comments").scrollTop($("#part_comments")[0].scrollHeight);
 				}
 				else {
+					// overall comment created
+					$("#overall_tabs.tabs").tabs("select", "#all_comments");
 					$(document).scrollTop($(document).height());
+					
+					overall_comment_pop_click_handler();
+					$("#overall_comment_dialog .tabs").tabs("select", "#overall_comments");
+					$("#overall_comments").scrollTop($("#overall_comments")[0].scrollHeight);
 				}
 				
 				// fade in effect
@@ -1826,6 +1900,9 @@ function delete_comment(comment) {
 
 function adjust_pop_count(part_attr_id, key, n) {
 	var pop = $("#" + compute_id_for_pop(part_attr_id, key));
+	if($.trim(part_attr_id) == "_") {
+		pop = $("#" + compute_id_for_pop("overall", "comment"));
+	}
 	
 	var count = to_number(pop.html()) + n;
 	pop.html(count);
@@ -1920,6 +1997,7 @@ $(document).ready(
 		
 		setup_tabs();
 		setup_dialog();
+		setup_overall_comment_dialog();
 		
 		setup_revisions($(".resume_revision"));
 		setup_comments($(".resume_comment"));
