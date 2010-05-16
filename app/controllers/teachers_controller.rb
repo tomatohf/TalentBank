@@ -167,13 +167,13 @@ class TeachersController < ApplicationController
     @date = begin
       Date.parse(params[:date])
     rescue
-      last_revision_date = ResumeRevision.find(
+      last_revision = ResumeRevision.find(
         :first,
         :select => revision_select_fields,
         :conditions => ["teacher_id = ?", @teacher.id],
         :order => "created_at DESC"
       )
-      last_comment_date = ResumeComment.find(
+      last_comment = ResumeComment.find(
         :first,
         :select => comment_select_fields,
         :conditions => [
@@ -183,10 +183,15 @@ class TeachersController < ApplicationController
         ],
         :order => "created_at DESC"
       )
-      @date = [
-        (last_revision_date && last_revision_date.created_at.to_date) || Date.today,
-        (last_comment_date && last_comment_date.created_at.to_date) || Date.today
-      ].max
+      
+      last_revision_date = last_revision && last_revision.created_at.to_date
+      last_comment_date = last_comment && last_comment.created_at.to_date
+      last_date = last_revision_date
+      if !last_date || (last_comment_date && last_comment_date > last_date)
+        last_date = last_comment_date
+      end
+      last_date ||= Date.today
+      last_date
     end
     
     revisions = ResumeRevision.find(
