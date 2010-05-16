@@ -24,7 +24,9 @@ ActionController::Routing::Routes.draw do |map|
     :new_corporation => :get,
     :create_corporation => :post,
     
-    :adjust_corporation_permission => :post
+    :adjust_corporation_permission => :post,
+    
+    :revisions => :get
   } do |teachers|
     teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get

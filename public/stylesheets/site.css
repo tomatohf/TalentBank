@@ -1096,3 +1096,15 @@ img.notification_icon {
 #query_resume_form #form_body .field label {
 	margin-right: 5px;
 }
+
+
+.resume_revision_history_count {
+	float: left;
+	width: 60px;
+	color: #333333;
+}
+.resume_revision_history_times {
+	margin-left: 80px;
+	word-spacing: 10px;
+	color: #333333;
+}

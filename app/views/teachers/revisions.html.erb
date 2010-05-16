@@ -1,0 +1,113 @@
+<%
+	talent_page_title("简历修改历史")
+	
+	last_day = 1.day.ago(@date)
+	last_date = format_date([last_day, Date.today].min)
+%>
+
+
+<h2 class="page_title">简历修改历史 - <%= format_date(@date) %></h2>
+
+
+<div style="padding: 5px 15px 15px; font-size: 14px; margin: 0px 15px 15px;">
+	<span class="float_r">
+		<a href="/teachers/<%= @teacher.id %>/revisions?date=<%= last_date %>" class="none">
+		 	‹ <%= last_date %></a>
+
+		<% unless 1.day.since(@date) > Date.today %>
+			<span style="margin: 0px 10px; color: #888888;">|</span>
+			
+			<% next_date = format_date(1.day.since(@date)) %>
+			<a href="/teachers/<%= @teacher.id %>/revisions?date=<%= next_date %>" class="none">
+			 	<%= next_date %> ›</a>
+		<% end %>
+	</span>
+	
+	<% form_tag "/teachers/#{@teacher.id}/revisions", :method => :get do %>
+		<input type="text" name="date" class="text_field" size="10" value="<%= format_date(@date) %>" />
+		<input type="submit" value="查看" class="button" />
+	<% end %>
+</div>
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
+	<thead>
+		<tr>
+			<td style="width: 200px;">简历</td>
+			<td>修改操作</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @operations.each_with_index do |operation, i| %>
+			<%
+				resume = @resumes[operation[0]]
+				domain = ResumeDomain.find(resume.domain_id)
+				
+				revisions = []
+				comments = []
+				operation[1].each do |r_or_c|
+					revisions << r_or_c if r_or_c.kind_of?(ResumeRevision)
+					comments << r_or_c if r_or_c.kind_of?(ResumeComment)
+				end
+				
+				student = resume.student
+				college = College.find(@school.abbr, student.college_id)
+				major = Major.find(college[:id], student.major_id)
+				edu_level = EduLevel.find(student.edu_level_id)
+				graduation_year = student.graduation_year
+			%>
+			<tr<%= %Q! class="odd"! if i.even? %>>
+				<td valign="top">
+					<div style="font-size: 14px; margin-bottom: 5px;">
+						<a href="/teachers/<%= @teacher.id %>/revise_resumes/<%= resume.id %>" target="_blank" class="none">
+							<%= h(student.name) %>的<%= domain[:name] %>的简历</a>
+					</div>
+					
+					<div class="info">
+						<%= college[:name] %>
+						›
+						<%= major[:name] %>
+						<br />
+						<%= edu_level[:name] %>
+						›
+						<%= graduation_year %> 年 <%= %Q! (应届)! if graduation_year == @school.coming_graduation_year %>
+						毕业
+					</div>
+				</td>
+				<td valign="top">
+					<% if revisions.size > 0 %>
+						<div>
+							<div class="resume_revision_history_count">
+								<%= revisions.size %> 条建议
+							</div>
+							<div class="resume_revision_history_times">
+								<% revisions.each do |revision| %>
+									<%= format_time(revision.created_at) %>
+								<% end %>
+							</div>
+						</div>
+						<div style="clear: left; padding-top: 5px;"></div>
+					<% end %>
+					<% if comments.size > 0 %>
+						<div>
+							<div class="resume_revision_history_count">
+								<%= comments.size %> 个评注
+							</div>
+							<div class="resume_revision_history_times">
+								<% comments.each do |comment| %>
+									<%= format_time(comment.created_at) %>
+								<% end %>
+							</div>
+						</div>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<% unless @operations.size > 0 %>
+	<div class="info_with_icon" style="margin: 20px;">
+		没有修改简历的记录
+	</div>
+<% end %>
+	

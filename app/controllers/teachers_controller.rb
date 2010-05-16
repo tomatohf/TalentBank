@@ -14,6 +14,8 @@ class TeachersController < ApplicationController
   
   before_filter :check_corporation, :only => [:adjust_corporation_permission, :show_corporation]
   
+  before_filter :check_teacher_revision, :only => [:revisions]
+  
   
   def show
     
@@ -157,6 +159,71 @@ class TeachersController < ApplicationController
   end
   
   
+  def revisions
+    teacher_account_type_id = AccountType.find_by(:name, "teachers")[:id]
+    revision_select_fields = "id, resume_id, teacher_id, created_at"
+    comment_select_fields = "id, resume_id, account_type_id, account_id, created_at"
+    
+    @date = begin
+      Date.parse(params[:date])
+    rescue
+      last_revision_date = ResumeRevision.find(
+        :first,
+        :select => revision_select_fields,
+        :conditions => ["teacher_id = ?", @teacher.id],
+        :order => "created_at DESC"
+      )
+      last_comment_date = ResumeComment.find(
+        :first,
+        :select => comment_select_fields,
+        :conditions => [
+          "account_type_id = ? and account_id = ?",
+          teacher_account_type_id,
+          @teacher.id
+        ],
+        :order => "created_at DESC"
+      )
+      @date = [
+        (last_revision_date && last_revision_date.created_at.to_date) || Date.today,
+        (last_comment_date && last_comment_date.created_at.to_date) || Date.today
+      ].max
+    end
+    
+    revisions = ResumeRevision.find(
+      :all,
+      :select => revision_select_fields,
+      :conditions => ["teacher_id = ? and created_at BETWEEN ? and ?",
+        @teacher.id,
+        @date,
+        1.second.ago(1.day.since(@date))
+      ],
+      :order => "created_at DESC"
+    )
+    comments = ResumeComment.find(
+      :all,
+      :select => comment_select_fields,
+      :conditions => [
+        "account_type_id = ? and account_id = ? and created_at BETWEEN ? and ?",
+        teacher_account_type_id,
+        @teacher.id,
+        @date,
+        1.second.ago(1.day.since(@date))
+      ],
+      :order => "created_at DESC"
+    )
+    
+    @operations = (revisions + comments).group_by { |r_or_c| r_or_c.resume_id }
+    @resumes = (@operations.keys.size > 0) && Resume.find(
+      :all,
+      :conditions => ["id in (?)", @operations.keys],
+      :include => [:student]
+    ).inject({}) do |hash, resume|
+			hash[resume.id] = resume
+			hash
+		end
+  end
+  
+  
   private
   
   def check_teacher
@@ -173,6 +240,11 @@ class TeachersController < ApplicationController
   def check_corporation
     @corporation = Corporation.find(params[:corporation_id])
     jump_to("/errors/forbidden") unless @corporation.school_id == @teacher.school_id
+  end
+  
+  
+  def check_teacher_revision
+    jump_to("/errors/unauthorized") unless @teacher.revision
   end
   
 end

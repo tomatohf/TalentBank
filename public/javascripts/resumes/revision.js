@@ -26,7 +26,7 @@ var DIALOG_DEFAULT_OPTIONS = {
 	maxHeight: 600,
 	minWidth: 460,
 	
-	modal: false,
+	modal: false
 };
 
 

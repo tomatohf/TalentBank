@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 13) do
+ActiveRecord::Schema.define(:version => 14) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(:version => 13) do
 
   create_table "resume_awards", :force => true do |t|
     t.integer  "resume_id"
-    t.string   "content"
+    t.string   "content",    :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(:version => 13) do
     t.datetime "updated_at"
   end
 
+  add_index "resume_comments", ["account_type_id", "account_id", "created_at"], :name => "index_resume_comments_on_account_and_created_at"
   add_index "resume_comments", ["resume_id"], :name => "index_resume_comments_on_resume_id"
 
   create_table "resume_exp_sections", :force => true do |t|
@@ -228,7 +229,7 @@ ActiveRecord::Schema.define(:version => 13) do
 
   create_table "resume_hobbies", :force => true do |t|
     t.integer  "resume_id"
-    t.string   "content"
+    t.string   "content",    :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -247,7 +248,7 @@ ActiveRecord::Schema.define(:version => 13) do
   create_table "resume_list_sections", :force => true do |t|
     t.integer  "resume_id"
     t.string   "title",      :limit => 25
-    t.string   "content"
+    t.string   "content",    :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -277,6 +278,7 @@ ActiveRecord::Schema.define(:version => 13) do
   end
 
   add_index "resume_revisions", ["resume_id"], :name => "index_resume_revisions_on_resume_id"
+  add_index "resume_revisions", ["teacher_id", "created_at"], :name => "index_resume_revisions_on_teacher_id_and_created_at"
 
   create_table "resume_skills", :force => true do |t|
     t.integer  "resume_id"

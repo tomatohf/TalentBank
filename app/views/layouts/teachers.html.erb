@@ -71,6 +71,10 @@
 						</div>
 						
 						<a href="/teachers/<%= @teacher.id %>/students">查询学生</a>
+						
+						<% if @teacher.revision %>
+							<a href="/teachers/<%= @teacher.id %>/revisions">简历修改历史</a>
+						<% end %>
 					</div>
 				<% end %>
 				
