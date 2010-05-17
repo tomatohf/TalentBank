@@ -1009,7 +1009,7 @@ function compute_id_for_pop(part_attr_id, key) {
 
 
 function create_revision(type, part) {
-	if($("#new_revision_form").find("input#revision_action").val() != "delete") {
+	if($("#new_revision_form").find("input[name='revision_action']:first").val() != "delete") {
 		if(!check_revision_form($("#new_revision_form"), type.name)) {
 			return;
 		}
