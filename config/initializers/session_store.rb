@@ -5,9 +5,9 @@
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
 ActionController::Base.session = {
+  # :expire_after => 60*30, # set the session expire time to 60 * 30 = 30 minutes
   :key         => '_TalentBank_session',
-  :secret      => '4454a3f7a67e7cf2eec1f84f0bd91be2a2fe99455824fdd61862380c4a42d51a4917781bc369ec99944e99c677446a3d7d29795a912cbe69908632affab32727',
-  :expire_after => 60*30 # set the session expire time to 60 * 30 = 30 minutes
+  :secret      => '4454a3f7a67e7cf2eec1f84f0bd91be2a2fe99455824fdd61862380c4a42d51a4917781bc369ec99944e99c677446a3d7d29795a912cbe69908632affab32727'
 }
 
 # Use the database for sessions instead of the cookie-based default,
