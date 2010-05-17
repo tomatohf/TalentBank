@@ -78,7 +78,7 @@
 					<% end %>
 				</td>
 
-				<td valign="top">
+				<td valign="top" class="disc_ul_container">
 					<div class="float_r">
 						<% if diff %>
 							<%= Differ.diff_by_char(h(data[:sub_title]), h(diff.sub_title)).format_as(:html) %>

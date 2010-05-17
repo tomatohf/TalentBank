@@ -519,9 +519,17 @@ a.none:hover {
 ul.disc_bullet {
 	list-style-type: disc;
 }
-
 ul.no_bullet {
 	list-style-type: none;
+}
+.disc_ul_container {
+	
+}
+*html .disc_ul_container {
+	padding-left: 15px;
+}
+*+html .disc_ul_container {
+	padding-left: 15px;
 }
 
 .resume_exp_tags {
