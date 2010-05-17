@@ -228,6 +228,7 @@ function hide_highlighter(index) {
 function setup_dialog() {
 	$("#dialog").dialog(
 		$.extend(
+			{},
 			DIALOG_DEFAULT_OPTIONS,
 			{
 				position: calculate_dialog_position("#dialog"),
@@ -262,6 +263,7 @@ function setup_dialog() {
 function setup_overall_comment_dialog() {
 	$("#overall_comment_dialog").dialog(
 		$.extend(
+			{},
 			DIALOG_DEFAULT_OPTIONS,
 			{
 				title: "整份简历的评注",
