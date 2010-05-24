@@ -4,7 +4,7 @@
 
 <link href="/stylesheets/resume.css" rel="stylesheet" type="text/css" />
 
-<% cache(Resume.html_fragment_cache_key(resume.id, !!protective)) do %>
+<%# cache(Resume.html_fragment_cache_key(resume.id, !!protective)) do %>
 	<div class="resume_wrap">
 		<div>
 		
@@ -174,7 +174,7 @@
 						end
 					%>
 					<div id="exp_section_<%= exp_section.id %>">
-						<div class="resume_section_title">
+						<div id="exp_section_title_<%= exp_section.id %>" class="resume_section_title">
 							<%= h(exp_section.title) %>
 						</div>
 
@@ -322,4 +322,4 @@
 			</div>
 		</div>
 	</div>
-<% end %>
+<%# end %>

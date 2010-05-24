@@ -174,5 +174,13 @@
 				</ul>
 			</div>
 		</div>
+	<% when "exp_section_title" %>
+		<div class="resume_section">
+			<% if diff %>
+				<%= Differ.diff_by_char(h(data[:title]), h(diff.title)).format_as(:html) %>
+			<% else %>
+				<%= h(data[:title]) %>
+			<% end %>
+		</div>
 	<% end %>
 </div>

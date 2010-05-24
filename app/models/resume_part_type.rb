@@ -15,7 +15,8 @@ class ResumePartType < HashModel::Simple
       {:id => 70, :name => "resume_skill", :label => "技能和证书", :model => ResumeListSkill},
       {:id => 80, :name => "award", :label => "荣誉和奖励", :model => ResumeAward},
       {:id => 90, :name => "hobby", :label => "特长和爱好", :model => ResumeHobby},
-      {:id => 100, :name => "list_section", :label => "附加信息", :model => ResumeListSection}
+      {:id => 100, :name => "list_section", :label => "附加信息", :model => ResumeListSection},
+      {:id => 110, :name => "exp_section_title", :label => "经历块标题", :model => ResumeExpSection}
     ]
   end
   

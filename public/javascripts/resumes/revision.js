@@ -202,19 +202,30 @@ function show_highlighter(index, part) {
 	var padding_y = 1;
 	
 	var width = $(".resume").width() - (padding_x*2);
+	var height = $(part).height();
+	var left = $(".resume").position().left + padding_x;
+	var top = $(part).position().top - padding_y + to_number($(part).css("marginTop"));
 	if($(part).attr("id").indexOf("job_intention") >= 0) {
 		width = $(part).outerWidth() - (padding_x*2);
+	}
+	if($(part).attr("id").indexOf("exp_section_title") >= 0) {
+		var shift_x = padding_x;
+		var shift_y = 4;
+		width += shift_x*2;
+		height += shift_y*2;
+		left -= shift_x;
+		top -= shift_y;
 	}
 	
 	$("#highlighter_" + index)
 		.css(
 			{
-				left: $(".resume").position().left + padding_x,
-				top: $(part).position().top - padding_y,
+				left: left,
+				top: top,
 				"z-index": (0-index)
 			}
 		)
-		.height($(part).height() + (padding_y*2))
+		.height(height + (padding_y*2))
 		.width(width)
 		.fadeIn("fast");
 }
@@ -326,7 +337,7 @@ function calculate_dialog_position(dialog) {
 
 
 function get_dialog_title(part, type_name) {
-	var title = get_section_title(part);
+	var title = (type_name == "exp_section_title") ? "经历块标题" : get_section_title(part);
 	
 	var sub_title = get_dialog_sub_title(type_name, part);
 	if(sub_title != "") {
@@ -362,6 +373,9 @@ function get_dialog_sub_title(type_name, part) {
 	}
 	else if(type_name.indexOf("_skill") >= 0) {
 		sub_title = $(part).find("td:first").html();
+	}
+	else if(type_name == "exp_section_title") {
+		sub_title = $(part).html();
 	}
 	
 	return $.trim(sub_title);
@@ -469,9 +483,11 @@ function setup_new_revision_buttons(type, part) {
 	if(type_name != "student_skill") {
 		buttons_html += '<button id="action_update">' + get_action_icon("update") + '修改内容</button>';
 	}
-	buttons_html += '<button id="action_delete">' + get_action_icon("delete") + '删除这段</button>';
-	if(type_name != "job_intention" && type_name != "award" && type_name != "hobby") {
-		buttons_html += '<button id="action_add">' + get_action_icon("add") + '添加内容</button>';
+	if(type_name != "exp_section_title") {
+		buttons_html += '<button id="action_delete">' + get_action_icon("delete") + '删除这段</button>';
+		if(type_name != "job_intention" && type_name != "award" && type_name != "hobby") {
+			buttons_html += '<button id="action_add">' + get_action_icon("add") + '添加内容</button>';
+		}
 	}
 	$("#new_revision_actions").html(buttons_html);
 	
@@ -655,10 +671,10 @@ function get_new_revision_inputs(type, part, modify) {
 			.appendTo(inputs_container);
 	}
 	else if(
-		type_name == "job_intention" ||
+		type_name == "job_intention" || type_name == "exp_section_title" ||
 		type_name == "award" || type_name == "hobby"
 	) {
-		var multi_line = (type_name != "job_intention");
+		var multi_line = !(type_name == "job_intention" || type_name == "exp_section_title");
 		div_for_text_field(
 			type_name,
 			modify ? (multi_line ? items_to_text($(part).find("ul")) : $.trim($(part).html())) : "",
@@ -771,10 +787,10 @@ function get_edit_revision_form(revision) {
 			.appendTo(form_container);
 	}
 	else if(
-		type_name == "job_intention" ||
+		type_name == "job_intention" || type_name == "exp_section_title" ||
 		type_name == "award" || type_name == "hobby"
 	) {
-		var multi_line = (type_name != "job_intention");
+		var multi_line = !(type_name == "job_intention" || type_name == "exp_section_title");
 		div_for_text_field(
 			type_name,
 			multi_line ? items_to_text($(revision_data).find("ul")) : $.trim($(revision_data).find("div.resume_section:first").html()),
@@ -1678,6 +1694,9 @@ function fill_resume_part(type_name, part, data) {
 	}
 	else if(type_name == "award" || type_name == "hobby") {
 		fill_list_content(part, data.content);
+	}
+	else if(type_name == "exp_section_title") {
+		$(part).text(data.title);
 	}
 	else {
 		$(part).text(data.content);

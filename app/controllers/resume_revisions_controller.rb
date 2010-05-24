@@ -42,6 +42,8 @@ class ResumeRevisionsController < ReviseResumesController
                                             !(part_type[:name] =~ /_skill$/) &&
                                             !(part_type[:name] == "list_section") &&
                                             revision_action[:name] == "add"
+    return jump_to("/errors/forbidden") if part_type[:name] == "exp_section_title" &&
+                                            revision_action[:name] != "update"
     
     
     revision = ResumeRevision.new(
@@ -176,7 +178,7 @@ class ResumeRevisionsController < ReviseResumesController
         part.destroy
       end
     else
-      revision_data = @revision.get_data.each { |key, value| part.send("#{key}=", value) }
+      revision_data = @revision.get_data.each { |key, value| part.send("#{key}=", value) if part.respond_to?("#{key}=") }
       
       if part_type[:name] =~ /_exp$/
         if revision_action[:name] == "add"
@@ -261,6 +263,10 @@ class ResumeRevisionsController < ReviseResumesController
       {
         :title => params[:section_title] && params[:section_title].strip,
         :content => params[:section_content] && params[:section_content].strip
+      }
+    when "exp_section_title"
+      {
+        :title => params[:exp_section_title] && params[:exp_section_title].strip
       }
     else
       param_key = type_name.to_sym
