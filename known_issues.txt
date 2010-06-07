@@ -50,7 +50,7 @@ sphinx max_match
 表单旁添加适当的填写提示(包括内容和格式)
 
 缓存
-- save resume tags
+	- save resume tags
 
 
 
