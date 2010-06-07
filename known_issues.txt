@@ -58,5 +58,7 @@ sphinx max_match
 Denpendencies besides CareerCommunity's:
 
 -----
-	prawn
-	differ
+	prawn (0.8.4)
+	prawn-core (0.8.4)
+	prawn-layout (0.8.4)
+	differ (0.1.1)
