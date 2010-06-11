@@ -163,7 +163,19 @@ function setup_resume_part(type_name, part) {
 function get_section_title(part) {
 	var section = ancestor_with_class(part, "resume_section");
 	
-	return section ? $.trim(section.prev(".resume_section_title").html()) : "";
+	var title = "";
+	if(section) {
+		var section_title = section.prev(".resume_section_title");
+		if(section_title) {
+			var copied_section_title = section_title.clone();
+			copied_section_title.find("").remove();
+			copied_section_title.find(".resume_revision_pop").add(
+				copied_section_title.find(".resume_comment_pop")
+			).remove();
+			title = $.trim(copied_section_title.html());
+		}
+	}
+	return title;
 }
 
 
