@@ -213,7 +213,7 @@ $(document).ready(
 			function() {
 				show_tags($(this).val());
 			}
-		);
+		).change();
 		
 		
 		$("#add_skill_link").click(

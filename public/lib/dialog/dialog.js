@@ -193,7 +193,7 @@ var DIALOG = {
 				width: setting.width,
 				left: (setting.docWidth - setting.width) / 2,
 				marginTop: setting.margin_top,
-				top: document.documentElement.scrollTop
+				top: $(document).scrollTop()
 			}
 		).animate(
 			{
