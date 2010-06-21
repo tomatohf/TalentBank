@@ -21,7 +21,10 @@ class ResumeDomain < HashModel::Simple
       {:id => 180, :name => "财务", :category_id => 400},
       
       {:id => 190, :name => "助理", :category_id => 500},
-      {:id => 200, :name => "HR", :category_id => 500}
+      {:id => 200, :name => "HR", :category_id => 500},
+      
+      {:id => 210, :name => "中学教师", :category_id => 600},
+      {:id => 220, :name => "小学教师", :category_id => 600}
     ]
   end
   
