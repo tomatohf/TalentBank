@@ -1,6 +1,11 @@
 <% talent_page_title("注册企业帐号") %>
 
 
+<div class="align_c" style="margin: 30px 0px 10px;">
+	<%= render_school_partial("logo", @school.abbr) %>
+</div>
+
+
 <h2 class="page_title">注册企业帐号</h2>
 
 <% if flash[:error_msg] %>
@@ -99,7 +104,7 @@
 				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@corporation.name) %>" />
 				&nbsp;
 				<span class="info_with_icon">
-					注册后不可修改 
+					注册后不可修改
 				</span>
 			</td>
 		</tr>

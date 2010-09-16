@@ -31,6 +31,18 @@
 		
 		<tr>
 			<td>
+				<label for="password">
+					密码<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="password" name="password" class="text_field" size="30" value="<%= h(@teacher.password) %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
 				<label for="resume">
 					允许老师查询学生简历
 				</label>

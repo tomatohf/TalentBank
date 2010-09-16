@@ -1,5 +1,8 @@
 class TeachersController < ApplicationController
   
+  Corporation_Page_Size = 10
+  
+  
   before_filter :check_login_for_teacher
   
   before_filter :check_active, :only => [:update, :update_password, :create_corporation,
@@ -91,16 +94,26 @@ class TeachersController < ApplicationController
       
       page = params[:page]
       page = 1 unless page =~ /\d+/
-      Corporation.school_search(
-        @keyword,
-        @teacher.school_id,
-        page, 10,
-        :allow_query => @allow_query,
-        :nature_id => @nature_id,
-        :size_id => @size_id,
-        :industry_id => @industry_id,
-        :province_id => @province_id
-      )
+      if @nature_id.blank? && @size_id.blank? && @industry_id.blank? && @province_id.blank? &&
+          @keyword.blank? && @allow_query.blank?
+        Corporation.paginate(
+          :page => page,
+          :per_page => Corporation_Page_Size,
+          :conditions => ["school_id = ?", @teacher.school_id],
+          :order => "updated_at DESC"
+        )
+      else
+        Corporation.school_search(
+          @keyword,
+          @teacher.school_id,
+          page, Corporation_Page_Size,
+          :allow_query => @allow_query,
+          :nature_id => @nature_id,
+          :size_id => @size_id,
+          :industry_id => @industry_id,
+          :province_id => @province_id
+        )
+      end
     end
     
     if request.xhr?
@@ -127,7 +140,7 @@ class TeachersController < ApplicationController
     @corporation = Corporation.new(:school_id => @teacher.school_id)
     
     @corporation.uid = params[:uid] && params[:uid].strip
-    @corporation.password = ::Utils.generate_password(@corporation.uid)
+    @corporation.password = params[:password] && params[:password].strip
     @corporation.allow_query = (params[:allow_query] == "true")
     
     if @corporation.save

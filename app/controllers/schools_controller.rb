@@ -65,7 +65,7 @@ class SchoolsController < ApplicationController
     @teacher = Teacher.new(:school_id => @school_id)
     
     @teacher.uid = params[:uid] && params[:uid].strip
-    @teacher.password = ::Utils.generate_password(@teacher.uid)
+    @teacher.password = params[:password] && params[:password].strip
     
     @teacher.resume = (params[:resume] == "true")
     @teacher.revision = (params[:revision] == "true")

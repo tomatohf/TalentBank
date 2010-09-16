@@ -1,8 +1,7 @@
 module Utils
   
-  # !!! the method to generate initial password
   def self.generate_password(uid = "")
-    "pass#{uid}word"
+    uid.blank? ? "password" : uid
   end
   
   
