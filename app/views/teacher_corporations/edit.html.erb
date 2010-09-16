@@ -1,0 +1,69 @@
+<% talent_page_title("编辑企业资料") %>
+
+
+<h2 class="page_title">编辑企业资料</h2>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @corporation.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@corporation) %>
+	</p>
+<% end %>
+<% if @profile.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@profile) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}", :method => :put do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				企业帐号
+			</td>
+
+			<td>
+				<%= h(@corporation.uid) %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="name">
+					企业名称
+				</label>
+			</td>
+
+			<td>
+				<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@corporation.name) %>" />
+				&nbsp;
+				<span class="info_with_icon">
+					注意： 填写后企业不可修改
+				</span>
+			</td>
+		</tr>
+
+		<%= render :partial => "/corporations/profile_form" %>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "修改企业资料", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

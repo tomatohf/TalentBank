@@ -13,23 +13,20 @@ ActionController::Routing::Routes.draw do |map|
   }
   
   
-  map.connect "/teachers/:id/corporations/:corporation_id", :controller => "teachers", :action => "show_corporation", :id => /\d+/, :corporation_id => /\d+/
   map.resources :teachers, :collection => {
     
   }, :member => {
     :edit_password => :get,
     :update_password => :post,
     
-    :corporations => :get,
-    :new_corporation => :get,
-    :create_corporation => :post,
-    
-    :adjust_corporation_permission => :post,
-    
     :revisions => :get
   } do |teachers|
     teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get
+    }
+    
+    teachers.resources :teacher_corporations, :as => :corporations, :member => {
+      :adjust_permission => :post
     }
     
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {

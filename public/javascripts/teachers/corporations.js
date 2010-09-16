@@ -4,10 +4,9 @@ function adjust_permission(corporation_id, permission, allow) {
 	$.ajax(
 		{
 			type: "POST",
-			url: "/teachers/" + TEACHER_ID + "/adjust_corporation_permission",
+			url: "/teachers/" + TEACHER_ID + "/corporations/" + corporation_id + "/adjust_permission",
 			dataType: "html",
 			data: {
-				corporation_id: corporation_id,
 				permission: permission,
 				allow: allow
 			},
@@ -84,6 +83,7 @@ function setup_uid_input() {
 $(document).ready(
 	function() {
 		APP.setup_dropdown_menu(".statistics_link", 120);
+		APP.setup_dropdown_menu(".admin_link", 120);
 		
 		
 		setup_toggle_search_form_link();

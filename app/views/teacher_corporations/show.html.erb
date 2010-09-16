@@ -9,8 +9,7 @@
 
 
 <div style="margin: 5px 30px;">
-	<% form_tag "/teachers/#{@teacher.id}/adjust_corporation_permission", :method => :post, :id => "adjust_allow_query_form" do %>
-		<input type="hidden" name="corporation_id" value="<%= @corporation.id %>" />
+	<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}/adjust_permission", :method => :post, :id => "adjust_allow_query_form" do %>
 		<input type="hidden" name="permission" value="query" />
 		<input type="hidden" name="allow" value="<%= !@corporation.allow_query %>" />
 	<% end %>

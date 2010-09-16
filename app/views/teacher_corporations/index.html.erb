@@ -2,7 +2,7 @@
 
 
 <div class="float_r" style="margin: 12px 25px 0px;">
-	<a href="/teachers/<%= @teacher.id %>/new_corporation" class="button">
+	<a href="/teachers/<%= @teacher.id %>/corporations/new" class="button">
 		添加企业帐号</a>
 </div>
 <h2 class="page_title">查询企业</h2>
@@ -125,6 +125,9 @@
 				<td>企业名称</td>
 				<% if @teacher.statistic %>
 					<td style="width: 45px;">查看</td>
+				<% end %>
+				<% if @teacher.admin %>
+					<td style="width: 45px;">操作</td>
 				<% end %>
 				<td style="width: 200px;">
 					权限管理 (单击修改权限)
