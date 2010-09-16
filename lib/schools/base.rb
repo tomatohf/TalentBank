@@ -26,7 +26,7 @@ module Schools
     
     
     def name
-      # must be implemented in subclass
+      raise "Not Implemented"
     end
     
     def page_title(sub_title)
@@ -34,9 +34,13 @@ module Schools
       %Q!#{sub_title}人才库_#{self.name}!
     end
     
-    
     def logo_title
       "#{self.name} 人才库"
+    end
+    
+    
+    def universities
+      []
     end
     
     

@@ -7,6 +7,11 @@ module Schools
     end
     
     
+    def universities
+      [100200]
+    end
+    
+    
     def edu_levels
       [30]
     end

@@ -7,6 +7,11 @@ module Schools
     end
     
     
+    def universities
+      [100100]
+    end
+    
+    
     def edu_levels
       # TODO - MUST BE OVERRIDED
       [30, 20, 40]
