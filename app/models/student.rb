@@ -19,7 +19,7 @@ class Student < ActiveRecord::Base
     
     indexes number, name
     
-    has school_id, college_id, major_id, edu_level_id, graduation_year, updated_at
+    has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at
     
     set_property(:delta => false)
     

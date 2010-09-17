@@ -1,3 +1,26 @@
+function fill_colleges(university_id, college_id) {
+	$("#college_id").html("");
+
+	$("#college_id").append("<option value=''>不限学院</option>");
+
+	var college_objs = COLLEGES["u_" + university_id];
+	if(college_objs != null && college_objs.length > 0) {
+		var options = $.map(
+			college_objs,
+			function(college_obj, i) {
+				return "<option value='" + college_obj.id + "'>" + college_obj.name + "</option>";
+			}
+		);
+
+		$("#college_id").append(options.join(""));
+
+		$("#college_id").val(college_id);
+	}
+	
+	fill_majors(college_id, "");
+}
+
+
 function fill_majors(college_id, major_id) {
 	$("#major_id").html("");
 
@@ -74,6 +97,11 @@ $(document).ready(
 		APP.setup_dropdown_menu(".operation_link", 130);
 	
 	
+		$("#university_id").change(
+			function() {
+				fill_colleges($(this).val(), "");
+			}
+		);
 		$("#college_id").change(
 			function() {
 				fill_majors($(this).val(), "");

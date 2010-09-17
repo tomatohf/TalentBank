@@ -29,6 +29,7 @@ class TeacherStudentsController < ApplicationController
         :include => request.xhr? ? [] : [:resumes]
       )
     else
+      @university_id = params[:u] && params[:u].strip
       @college_id = params[:c] && params[:c].strip
       @major_id = params[:m] && params[:m].strip
       @edu_level_id = params[:e] && params[:e].strip
@@ -37,7 +38,7 @@ class TeacherStudentsController < ApplicationController
       @name = params[:name] && params[:name].strip
       
       filters = {:school_id => @teacher.school_id}
-      [:college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
+      [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
         filter_value = self.instance_variable_get("@#{filter_key}")
         filters.merge!(filter_key => filter_value) unless filter_value.blank?
       end

@@ -17,7 +17,7 @@ class CorpQuery < ActiveRecord::Base
     
     indexes corporation.name
     
-    has updated_at, corporation_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
+    has updated_at, corporation_id, university_id, college_id, major_id, edu_level_id, graduation_year, domain_id, from_saved
     
     has corporation.school_id, :as => :school_id
     
@@ -80,8 +80,9 @@ class CorpQuery < ActiveRecord::Base
   
   def self.parse_from_conditions(conditions)
     domain_id, info, tags, skills, keyword = (conditions || "").split(Sep_Part, 5)
-    college_id, major_id, edu_level_id, graduation_year = (info || "").split(Sep_Value)
+    university_id, college_id, major_id, edu_level_id, graduation_year = (info || "").split(Sep_Value)
     self.new(
+      :university_id => university_id,
       :college_id => college_id,
       :major_id => major_id,
       :edu_level_id => edu_level_id,

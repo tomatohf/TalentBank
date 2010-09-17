@@ -1,5 +1,6 @@
 <%
-	college = College.find(@school.abbr, student.college_id)
+	university = University.find(student.university_id)
+	college = College.find(university[:id], student.college_id)
 	major = Major.find(college[:id], student.major_id)
 	
 	edu_level = EduLevel.find(student.edu_level_id)
@@ -70,6 +71,11 @@
 				<% end %>
 			</tr>
 		</table>
+	</td>
+	
+	
+	<td class="grey">
+		<%= university[:name] %>
 	</td>
 	
 	

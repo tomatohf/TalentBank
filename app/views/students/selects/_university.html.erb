@@ -1,0 +1,10 @@
+<label for="<%= field_id %>">
+	大学:
+</label>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if university_id.blank? %>>不限大学</option>
+	<% @school.universities.each do |u_id| %>
+		<% university = University.find(u_id) %>
+		<option value="<%= university[:id] %>"<%= %Q! selected="selected"! if university_id.to_i == university[:id] %>><%= university[:name] %></option>
+	<% end %>
+</select>

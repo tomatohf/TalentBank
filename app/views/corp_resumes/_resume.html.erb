@@ -3,7 +3,8 @@
 	
 	student = resume.student
 	student_name = h(student.name)
-	college = College.find(@school.abbr, student.college_id)
+	university = University.find(student.university_id)
+	college = College.find(university[:id], student.college_id)
 	major = Major.find(college[:id], student.major_id)
 	edu_level = EduLevel.find(student.edu_level_id)
 	graduation_year = student.graduation_year
@@ -40,7 +41,7 @@
 					
 					<dt>资料:</dt>
 					<dd>
-						<div><%= @school.name %></div>
+						<div><%= university[:name] %></div>
 						<div>
 							<%= college[:name] %>
 							<span style="margin: 0px 6px;">›</span>

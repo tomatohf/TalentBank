@@ -52,32 +52,41 @@
 			<div class="form_section_body">
 				<div class="field_row">
 					<span class="field">
-						<label>
-							学校:
-						</label>
-						<span style="color: #666666; font-weight: bold;">
-							<%= @school.name %>
-						</span>
+						<%=
+							render(
+								:partial => "/students/selects/university",
+								:locals => {
+									:university_id => @query.university_id,
+									:field_id => "university", :field_name => "university"
+								}
+							)
+						%>
 					</span>
 
 					<span class="field">
-						<label for="college">学院:</label>
-						<select name="college" id="college" class="dropdown_list">
-							<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限学院</option>
-							<% College.data[school_abbr].each do |college| %>
-								<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @query.college_id == college[:id] %>><%= college[:name] %></option>
-							<% end %>
-						</select>
+						<%=
+							render(
+								:partial => "/students/selects/college",
+								:locals => {
+									:university_id => @query.university_id,
+									:college_id => @query.college_id,
+									:field_id => "college", :field_name => "college"
+								}
+							)
+						%>
 					</span>
 
 					<span class="field">
-						<label for="major">专业:</label>
-						<select name="major" id="major" class="dropdown_list">
-							<option value=""<%= %Q! selected="selected"! if @query.college_id.blank? %>>不限专业</option>
-							<% (Major.data[@query.college_id]|| []).each do |major| %>
-								<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @query.major_id == major[:id] %>><%= major[:name] %></option>
-							<% end %>
-						</select>
+						<%=
+							render(
+								:partial => "/students/selects/major",
+								:locals => {
+									:college_id => @query.college_id,
+									:major_id => @query.major_id,
+									:field_id => "major", :field_name => "major"
+								}
+							)
+						%>
 					</span>
 				</div>
 				
@@ -197,13 +206,9 @@
 
 
 <% content_for :scripts do %>
+	<%= render :partial => "/students/selects/var" %>
 	<script language="JavaScript">
 		var CORPORATION_ID = <%= @corporation.id %>;
-	
-		var MAJORS = {};
-		<% College.data[school_abbr].each do |college| %>
-			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
-		<% end %>
 	
 		var ALL_DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
 	

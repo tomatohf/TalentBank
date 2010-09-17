@@ -1,0 +1,12 @@
+<script language="JavaScript">
+	var COLLEGES = {};
+	var MAJORS = {};
+	<% @school.universities.each do |u_id| %>
+		<% university = University.find(u_id) %>
+		COLLEGES["u_<%= university[:id] %>"] = [<%= College.data[university[:id]].collect{|college| %Q!{id:#{college[:id]}, name:"#{college[:name]}"}!}.join(",") %>];
+		
+		<% (College.data[u_id]|| []).each do |college| %>
+			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+		<% end %>
+	<% end %>
+</script>

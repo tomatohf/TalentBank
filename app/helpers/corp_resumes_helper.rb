@@ -1,6 +1,7 @@
 module CorpResumesHelper
 
   def collect_query_conditions(params, keyword_key)
+    university_id = params[:university]
     college_id = params[:college]
     major_id = params[:major]
     edu_level_id = params[:edu_level]
@@ -23,7 +24,7 @@ module CorpResumesHelper
   
     CorpQuery.build_conditions(
       domain_id,
-      [college_id, major_id, edu_level_id, graduation_year],
+      [university_id, college_id, major_id, edu_level_id, graduation_year],
       tags,
       skills,
       keyword

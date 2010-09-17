@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 14) do
+ActiveRecord::Schema.define(:version => 15) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 14) do
     t.string   "other_conditions"
     t.boolean  "from_saved"
     t.datetime "updated_at"
+    t.integer  "university_id"
   end
 
   add_index "corp_queries", ["updated_at"], :name => "index_corp_queries_on_updated_at"
@@ -122,6 +123,7 @@ ActiveRecord::Schema.define(:version => 14) do
   end
 
   add_index "corporations", ["school_id", "uid"], :name => "index_corporations_on_school_id_and_uid", :unique => true
+  add_index "corporations", ["school_id", "updated_at"], :name => "index_corporations_on_school_id_and_updated_at"
   add_index "corporations", ["updated_at"], :name => "index_corporations_on_updated_at"
 
   create_table "edu_exps", :force => true do |t|
@@ -382,6 +384,7 @@ ActiveRecord::Schema.define(:version => 14) do
     t.integer  "graduation_year", :limit => 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "university_id"
   end
 
   add_index "students", ["school_id", "number"], :name => "index_students_on_school_id_and_number", :unique => true

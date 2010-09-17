@@ -38,15 +38,17 @@
 	
 	<div class="saved_query_conditions" id="save_query_detail_<%= saved_query.id %>" style="display: none;">
 		<div>
-			<span>
-				学校:
-				<%= @school.name %>
-			</span>
+			<% unless query.university_id.blank? %>
+				<span>
+					大学:
+					<%= University.find(query.university_id)[:name] %>
+				</span>
+			<% end %>
 			
 			<% unless query.college_id.blank? %>
 				<span>
 					学院:
-					<%= College.find(@school.abbr, query.college_id)[:name] %>
+					<%= College.find(query.university_id, query.college_id)[:name] %>
 				</span>
 			<% end %>
 			

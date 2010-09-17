@@ -66,36 +66,41 @@
 			
 			<div style="margin-top: 15px;">
 				<span class="field">
-					<label>
-						学校:
-					</label>
-					<span style="color: #666666; font-weight: bold;">
-						<%= @school.name %>
-					</span>
+					<%=
+						render(
+							:partial => "/students/selects/university",
+							:locals => {
+								:university_id => @university_id,
+								:field_id => "university_id", :field_name => "u"
+							}
+						)
+					%>
 				</span>
 				
 				<span class="field">
-					<label for="college_id">
-						学院:
-					</label>
-					<select name="c" id="college_id" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @college_id.blank? %>>不限学院</option>
-						<% College.data[school_abbr].each do |college| %>
-							<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if @college_id.to_i == college[:id] %>><%= college[:name] %></option>
-						<% end %>
-					</select>
+					<%=
+						render(
+							:partial => "/students/selects/college",
+							:locals => {
+								:university_id => @university_id,
+								:college_id => @college_id,
+								:field_id => "college_id", :field_name => "c"
+							}
+						)
+					%>
 				</span>
 				
 				<span class="field">
-					<label for="major_id">
-						专业:
-					</label>
-					<select name="m" id="major_id" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @major_id.blank? %>>不限专业</option>
-						<% (Major.data[@college_id.to_i]|| []).each do |major| %>
-							<option value="<%= major[:id] %>"<%= %Q! selected="selected"! if @major_id.to_i == major[:id] %>><%= major[:name] %></option>
-						<% end %>
-					</select>
+					<%=
+						render(
+							:partial => "/students/selects/major",
+							:locals => {
+								:college_id => @college_id,
+								:major_id => @major_id,
+								:field_id => "major_id", :field_name => "m"
+							}
+						)
+					%>
 				</span>
 			</div>
 			
@@ -122,6 +127,7 @@
 				<td style="width: 80px;">学号</td>
 				<td style="width: 50px;">姓名</td>
 				<td style="width: <%= @teacher.statistic ? 100 : 45 %>px;">操作</td>
+				<td class="grey">大学</td>
 				<td class="grey">学院</td>
 				<td class="grey">专业</td>
 				<td class="grey" style="width: 30px;">学历</td>
@@ -146,11 +152,6 @@
 
 
 <% content_for :scripts do %>
-	<script language="JavaScript">
-		var MAJORS = {};
-		<% College.data[school_abbr].each do |college| %>
-			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
-		<% end %>
-	</script>
+	<%= render :partial => "/students/selects/var" %>
 	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
 <% end %>
