@@ -320,14 +320,27 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  def university
+    @group_by = :university_id
+    @groups_name = "大学"
+    
+    viewing_rank do |group_values|
+      group_values.inject({}) { |hash, group_value|
+        record = University.find(group_value)
+        hash[record[:id]] = record[:name]
+        hash
+      }
+    end
+  end
+  
+  
   def college
     @group_by = :college_id
     @groups_name = "学院"
     
     viewing_rank do |group_values|
-      school_abbr = @school.abbr
       group_values.inject({}) { |hash, group_value|
-        record = College.find(school_abbr, group_value)
+        record = College.find_by_id(group_value)
         hash[record[:id]] = record[:name]
         hash
       }
@@ -536,8 +549,11 @@ class TeacherStatisticsController < ApplicationController
     
     @graduation = params[:graduation] && params[:graduation].strip
     
+    university_id = params[:university] && params[:university].strip
+    @university = University.find(university_id.to_i)
+    
     college_id = params[:college] && params[:college].strip
-    @college = College.find(@school.abbr, college_id.to_i)
+    @college = College.find_by_id(college_id.to_i)
     
     major_id = params[:major] && params[:major].strip
 	  @major = Major.find_by_id(major_id.to_i)
@@ -573,6 +589,7 @@ class TeacherStatisticsController < ApplicationController
     
     filters[:edu_level_id] = @level[:id] if @level
     filters[:graduation_year] = @graduation unless @graduation.blank?
+    filters[:university_id] = @university[:id] if @university
     filters[:college_id] = @college[:id] if @college
     filters[:major_id] = @major[:id] if @major
     filters[:student_id] = @student.id if @student
@@ -799,7 +816,7 @@ class TeacherStatisticsController < ApplicationController
     @nav = "viewing_nav"
     @dataset_color = "#FF6600"
     @detail_function = "group_view_detail"
-    @drill = ["college", "major", "student", "viewing_domain", nil]
+    @drill = ["university", "college", "major", "student", "viewing_domain", nil]
     @hide_filters = [:tag, :skill] + (@hide_filters || [])
     
     rank(CorpViewedResume) { |group_values| block.call(group_values) }

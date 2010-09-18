@@ -16,6 +16,7 @@ class CorpViewedResume < ActiveRecord::Base
     has resume.student_id, :as => :student_id
     
     has resume.student.school_id, :as => :school_id
+    has resume.student.university_id, :as => :university_id
     has resume.student.college_id, :as => :college_id
     has resume.student.major_id, :as => :major_id
     has resume.student.edu_level_id, :as => :edu_level_id

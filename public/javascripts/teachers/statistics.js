@@ -4,7 +4,7 @@ var range_splitter = "-";
 var period_date_format = "yymmdd";
 
 var FILTERS = [
-	"level", "graduation", "college", "major", "student",
+	"level", "graduation", "university", "college", "major", "student",
 	"corp", "domain", "tag", "skill", "keyword"
 ];
 
@@ -254,8 +254,24 @@ function filter_graduation() {
 }
 
 
+function filter_university() {
+	show_static_filter_dialog("university", UNIVERSITIES, "过滤大学")
+}
+
+
 function filter_college() {
-	show_static_filter_dialog("college", COLLEGES, "过滤学院");
+	var college_objs = COLLEGES["u_" + $("input#university").val()];
+	if(college_objs == null) {
+		college_objs = [];
+		$.each(
+			COLLEGES,
+			function(key, value) {
+				$.merge(college_objs, value);
+			}
+		);
+	}
+	
+	show_static_filter_dialog("college", college_objs, "过滤学院");
 }
 
 
@@ -294,6 +310,7 @@ function filter_student_dialog_content(container, url) {
 			url: url || ("/teachers/" + TEACHER_ID + "/students"),
 			dataType: "html",
 			data: {
+				u: $("input#university").val(),
 				c: $("input#college").val(),
 				m: $("input#major").val(),
 				e: $("input#level").val(),

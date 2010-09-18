@@ -57,6 +57,7 @@ class Resume < ActiveRecord::Base
     
     
     has student.school_id, :as => :school_id
+    has student.university_id, :as => :university_id
     has student.college_id, :as => :college_id
     has student.major_id, :as => :major_id
     has student.edu_level_id, :as => :edu_level_id
@@ -138,7 +139,7 @@ class Resume < ActiveRecord::Base
       :hidden => false
     }
     filters.merge!(:school_id => corporation.school_id)
-    [:college_id, :major_id, :edu_level_id, :graduation_year, :domain_id].each do |filter_key|
+    [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year, :domain_id].each do |filter_key|
       filter_value = query.send(filter_key)
       filters.merge!(filter_key => filter_value) unless filter_value.nil?
     end

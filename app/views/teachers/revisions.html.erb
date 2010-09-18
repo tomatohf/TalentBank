@@ -51,7 +51,8 @@
 				end
 				
 				student = resume.student
-				college = College.find(@school.abbr, student.college_id)
+				university = University.find(student.university_id)
+				college = College.find(university[:id], student.college_id)
 				major = Major.find(college[:id], student.major_id)
 				edu_level = EduLevel.find(student.edu_level_id)
 				graduation_year = student.graduation_year
@@ -64,6 +65,8 @@
 					</div>
 					
 					<div class="info">
+						<%= university[:name] %>
+						<br />
 						<%= college[:name] %>
 						›
 						<%= major[:name] %>

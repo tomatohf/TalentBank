@@ -37,6 +37,7 @@
 	
 	<input type="hidden" id="level" name="level" value="<%= @level && @level[:id] %>" />
 	<input type="hidden" id="graduation" name="graduation" value="<%= graduation %>" />
+	<input type="hidden" id="university" name="university" value="<%= @university && @university[:id] %>" />
 	<input type="hidden" id="college" name="college" value="<%= @college && @college[:id] %>" />
 	<input type="hidden" id="major" name="major" value="<%= @major && @major[:id] %>" />
 	<% unless hide_student %>
@@ -117,6 +118,7 @@
 			["level", "学历"],
 			["graduation", "毕业时间"],
 			
+			["university", "大学"],
 			["college", "学院"],
 			["major", "专业"],
 			["student", "学生"],
@@ -138,7 +140,7 @@
 					<ul class="dropdown_sub_menu">
 						<%
 							filters_in_menu = filters
-							filters_in_menu = filters_in_menu[0..4] + filters_in_menu[6..-1] if @q
+							filters_in_menu = filters_in_menu[0..5] + filters_in_menu[7..-1] if @q
 							filters_in_menu = filters_in_menu[0..-3] if @v
 						%>
 						<% filters_in_menu.each do |filter| %>

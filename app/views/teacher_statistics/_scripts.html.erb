@@ -7,6 +7,7 @@
 	<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript" language="JavaScript"></script>
 	<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
 	<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
+	<%= render :partial => "/students/selects/var" %>
 	<script language="JavaScript">
 		var TEACHER_ID = <%= @teacher.id %>;
 	
@@ -14,13 +15,6 @@
 	
 		<% year = @school.coming_graduation_year %>
 		var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}"}!}.join(",") %>];
-	
-		var COLLEGES = [];
-		var MAJORS = {};
-		<% College.data[@school.abbr].each do |college| %>
-			COLLEGES.push({id:<%= college[:id] %>, name:"<%= college[:name] %>"});
-			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
-		<% end %>
 	
 		var DOMAINS = [];
 		var TAGS = {};

@@ -42,10 +42,19 @@
 	</td>
 	
 	<td>
+		<% if query.university_id.blank? %>
+			<span class="info">不限大学</span>
+		<% else %>
+			<% university = University.find(query.university_id) %>
+			<%= university && university[:name] %>
+		<% end %>
+	</td>
+	
+	<td>
 		<% if query.college_id.blank? %>
 			<span class="info">不限学院</span>
 		<% else %>
-			<% college = College.find(@school.abbr, query.college_id) %>
+			<% college = College.find(query.university_id, query.college_id) %>
 			<%= college && college[:name] %>
 		<% end %>
 	</td>

@@ -1,6 +1,4 @@
 <%
-	school_abbr = @school.abbr
-	
 	domains = @school.resume_domains.collect { |domain_id| ResumeDomain.find(domain_id) }
 	
 	domain_category_mapping = domains.group_by do |domain|
