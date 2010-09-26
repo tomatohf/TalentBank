@@ -11,6 +11,8 @@
 # schools
 School.create(:abbr => "qiaobutang", :password => Utils.generate_password("qiaobutang"))
 School.create(:abbr => "shou", :password => Utils.generate_password("shou"))
+School.create(:abbr => "jx", :password => Utils.generate_password("jx"))
+School.create(:abbr => "jianli", :password => Utils.generate_password("jianli"))
 
 
 

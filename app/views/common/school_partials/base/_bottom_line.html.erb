@@ -1,9 +1,30 @@
 <div class="bottom_line">
-	<%= @school.name %>
-	<span class="sep">|</span>
-	Powered by <a href="http://www.qiaobutang.com" title="乔布堂" target="_blank" class="link">乔布堂</a>
-	<span class="sep">|</span>
-	<a href="http://www.qiaobutang.com/custom_groups/feedback/show/34" target="_blank" class="link">反馈与建议</a>
-	<span class="sep">|</span>
-	Copyright © 2008－<%= Time.now.year %> <%= request.host %>.
+	<a href="http://www.qiaobutang.com" title="乔布堂">
+		<img class="float_r" style="margin-left: 20px;" src="/images/school/qiaobutang/small_logo.jpg" border="0" alt="乔布堂" /></a>
+	
+	<div>
+		<%= @school.name %>
+		<span class="sep">|</span>
+		Powered by <a href="http://www.qiaobutang.com" title="乔布堂" target="_blank" class="link">乔布堂</a>
+		
+		<span class="sep">|</span>
+		<a href="http://www.qiaobutang.com/groups/34" target="_blank" class="link">反馈与建议</a>
+		<span class="sep">|</span>
+		
+		<a href="http://www.miibeian.gov.cn" target="_blank" class="link">
+			沪ICP备08114117号</a>
+	</div>
+	<div>
+		Copyright © 2008－<%= Time.now.year %>
+		<span class="sep">|</span>
+		
+		支持
+		<a href="http://www.mozilla.com/firefox" target="_blank">Firefox</a>
+		,
+		<a href="http://www.google.com/chrome" target="_blank">Chrome</a>
+		,
+		<a href="http://www.apple.com/safari" target="_blank">Safari</a>
+		,
+		<a href="http://www.microsoft.com/windows/internet-explorer" target="_blank">IE <b>7</b></a>
+	</div>
 </div>
