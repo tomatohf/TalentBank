@@ -43,6 +43,18 @@
 		
 		<tr>
 			<td>
+				<label for="student">
+					允许老师管理学生帐号
+				</label>
+			</td>
+			
+			<td>
+				<%= check_box_tag :student, value = "true", @teacher.student %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
 				<label for="resume">
 					允许老师查询学生简历
 				</label>

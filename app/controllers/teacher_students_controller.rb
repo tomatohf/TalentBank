@@ -8,15 +8,17 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_login_for_teacher
   
-  before_filter :check_active, :only => []
+  before_filter :check_active, :only => [:create, :update]
   
   before_filter :check_teacher
   
-  before_filter :check_teacher_resume
+  before_filter :check_teacher_access, :only => [:index]
   
   before_filter :check_resume, :only => [:resume]
   
-  before_filter :check_student, :only => []
+  before_filter :check_teacher_student, :only => [:new, :create, :edit, :update]
+  
+  before_filter :check_student, :except => [:index, :new, :create, :resume]
   
   
   def index
@@ -37,24 +39,31 @@ class TeacherStudentsController < ApplicationController
       
       @name = params[:name] && params[:name].strip
       
-      filters = {:school_id => @teacher.school_id}
-      [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
-        filter_value = self.instance_variable_get("@#{filter_key}")
-        filters.merge!(filter_key => filter_value) unless filter_value.blank?
-      end
+      includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
       
       page = params[:page]
       page = 1 unless page =~ /\d+/
-      Student.search(
-        @name,
-        :page => page,
-        :per_page => Student_Page_Size,
-        :match_mode => Student::Search_Match_Mode,
-        :order => "@relevance DESC, updated_at DESC",
-        :field_weights => {},
-        :with => filters,
-        :include => request.xhr? ? [] : [:resumes]
-      )
+      if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
+          @graduation_year.blank? && @name.blank?
+        Student.paginate(
+          :page => page,
+          :per_page => Student_Page_Size,
+          :conditions => ["school_id = ?", @teacher.school_id],
+          :order => "created_at DESC",
+          :include => includes
+        )
+      else
+        Student.school_search(
+          @name,
+          @teacher.school_id, includes,
+          page, Student_Page_Size,
+          :university_id => @university_id,
+          :college_id => @college_id,
+          :major_id => @major_id,
+          :edu_level_id => @edu_level_id,
+          :graduation_year => @graduation_year
+        )
+      end
     end
     
     if request.xhr?
@@ -91,6 +100,44 @@ class TeacherStudentsController < ApplicationController
   end
   
   
+  def new
+    @student = Student.new(:school_id => @teacher.school_id)
+  end
+  
+  def create
+    @student = Student.new(:school_id => @teacher.school_id)
+    
+    @student.number = params[:number] && params[:number].strip
+    @student.password = params[:password] && params[:password].strip
+    
+    StudentsController.helpers.fill_student_editable_fields(@student, params)
+    
+    if @student.save
+      flash[:success_msg] = "操作成功, 已添加学生帐号 #{@student.name} (#{@student.number})"
+      return jump_to("/teachers/#{@teacher.id}/students")
+    end
+    
+    render :action => "new"
+  end
+  
+  
+  def edit
+    
+  end
+  
+  def update
+    StudentsController.helpers.fill_student_editable_fields(@student, params)
+    
+    if @student.save
+      flash.now[:success_msg] = "修改成功, 学生帐号已更新"
+    else
+      flash.now[:error_msg] = "操作失败, 再试一次吧"
+    end
+    
+    render :action => "edit"
+  end
+  
+  
   private
   
   def check_teacher
@@ -99,8 +146,13 @@ class TeacherStudentsController < ApplicationController
   end
   
   
-  def check_teacher_resume
-    jump_to("/errors/unauthorized") unless @teacher.resume
+  def check_teacher_access
+    jump_to("/errors/unauthorized") unless @teacher.student || @teacher.resume
+  end
+  
+  
+  def check_teacher_student
+    jump_to("/errors/unauthorized") unless @teacher.student
   end
   
   
@@ -111,6 +163,8 @@ class TeacherStudentsController < ApplicationController
   
   
   def check_resume
+    return jump_to("/errors/unauthorized") unless @teacher.resume
+    
     @resume = Resume.find(params[:id])
     jump_to("/errors/forbidden") unless @resume.student.school_id == @teacher.school_id
   end

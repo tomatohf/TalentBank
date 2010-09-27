@@ -64,19 +64,23 @@
 			
 			<div class="menu_column">
 
-				<% if @teacher.resume %>
-					<div class="menu_category">
-						<div class="menu_category_title" style="background-image: url(/images/teachers/menus/students.gif);">
-							学生管理
-						</div>
-						
-						<a href="/teachers/<%= @teacher.id %>/students">查询学生</a>
-						
-						<% if @teacher.revision %>
-							<a href="/teachers/<%= @teacher.id %>/revisions">简历修改历史</a>
-						<% end %>
+				<div class="menu_category">
+					<div class="menu_category_title" style="background-image: url(/images/teachers/menus/students.gif);">
+						学生管理
 					</div>
-				<% end %>
+					
+					<% if @teacher.student || @teacher.resume %>
+						<a href="/teachers/<%= @teacher.id %>/students">查询学生</a>
+					<% end %>
+					
+					<% if @teacher.student %>
+						<a href="/teachers/<%= @teacher.id %>/students/new">添加学生</a>
+					<% end %>
+					
+					<% if @teacher.revision %>
+						<a href="/teachers/<%= @teacher.id %>/revisions">简历修改历史</a>
+					<% end %>
+				</div>
 				
 				<% if @teacher.admin %>
 					<div class="menu_category">

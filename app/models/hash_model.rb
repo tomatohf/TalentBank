@@ -43,6 +43,10 @@ module HashModel
       self.select_one(self.data.values.flatten, :id, id)
     end
     
+    def self.find_group(group_id)
+      self.data[group_id] || []
+    end
+    
     def self.get_group_id(id)
       self.data.keys.detect { |key|
         self.find(key, id)

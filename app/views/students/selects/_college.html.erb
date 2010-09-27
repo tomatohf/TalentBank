@@ -1,9 +1,17 @@
-<label for="<%= field_id %>">
-	学院:
-</label>
+<%
+	hide_label &&= true
+	empty_label ||= "不限学院"
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		学院:
+	</label>
+<% end %>
 <select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
-	<option value=""<%= %Q! selected="selected"! if college_id.blank? %>>不限学院</option>
-	<% (College.data[university_id.to_i]|| []).each do |college| %>
+	<option value=""<%= %Q! selected="selected"! if college_id.blank? %>><%= empty_label %></option>
+	<% College.find_group(university_id.to_i).each do |college| %>
 		<option value="<%= college[:id] %>"<%= %Q! selected="selected"! if college_id.to_i == college[:id] %>><%= college[:name] %></option>
 	<% end %>
 </select>

@@ -1,0 +1,18 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限毕业时间"
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		毕业时间:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if graduation_year.blank? %>><%= empty_label %></option>
+	<% year = @school.coming_graduation_year %>
+	<% @school.graduation_years.each do |g_year| %>
+		<option value="<%= g_year %>"<%= %Q! selected="selected"! if graduation_year.to_i == g_year %>><%= g_year %> 年<%= %Q! (应届)! if g_year == year %></option>
+	<% end %>
+</select>

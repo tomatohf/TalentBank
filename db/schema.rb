@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 15) do
+ActiveRecord::Schema.define(:version => 16) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -122,8 +122,8 @@ ActiveRecord::Schema.define(:version => 15) do
     t.datetime "updated_at"
   end
 
+  add_index "corporations", ["school_id", "created_at"], :name => "index_corporations_on_school_id_and_created_at"
   add_index "corporations", ["school_id", "uid"], :name => "index_corporations_on_school_id_and_uid", :unique => true
-  add_index "corporations", ["school_id", "updated_at"], :name => "index_corporations_on_school_id_and_updated_at"
   add_index "corporations", ["updated_at"], :name => "index_corporations_on_updated_at"
 
   create_table "edu_exps", :force => true do |t|
@@ -387,7 +387,9 @@ ActiveRecord::Schema.define(:version => 15) do
     t.integer  "university_id"
   end
 
+  add_index "students", ["school_id", "created_at"], :name => "index_students_on_school_id_and_created_at"
   add_index "students", ["school_id", "number"], :name => "index_students_on_school_id_and_number", :unique => true
+  add_index "students", ["updated_at"], :name => "index_students_on_updated_at"
 
   create_table "teachers", :force => true do |t|
     t.string   "uid",        :limit => 25
@@ -402,6 +404,7 @@ ActiveRecord::Schema.define(:version => 15) do
     t.boolean  "statistic",                :default => false
     t.boolean  "resume",                   :default => true
     t.boolean  "revision",                 :default => false
+    t.boolean  "student",                  :default => false
   end
 
   add_index "teachers", ["school_id", "created_at"], :name => "index_teachers_on_school_id_and_created_at"

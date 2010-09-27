@@ -1,0 +1,118 @@
+<tr>
+	<td>
+		<label for="name">
+			姓名<%= required_mark %>
+		</label>
+	</td>
+	
+	<td>
+		<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@student.name) %>" />
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="university_id">
+			大学
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/students/selects/university",
+				:locals => {
+					:university_id => @student.university_id,
+					:field_id => "university_id", :field_name => "university_id",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="college_id">
+			学院
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/students/selects/college",
+				:locals => {
+					:university_id => @student.university_id,
+					:college_id => @student.college_id,
+					:field_id => "college_id", :field_name => "college_id",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="major_id">
+			专业
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/students/selects/major",
+				:locals => {
+					:college_id => @student.college_id,
+					:major_id => @student.major_id,
+					:field_id => "major_id", :field_name => "major_id",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="edu_level_id">
+			学历
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/students/selects/edu_level",
+				:locals => {
+					:edu_level_id => @student.edu_level_id,
+					:field_id => "edu_level_id", :field_name => "edu_level_id",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="graduation_year">
+			毕业时间
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/students/selects/graduation_year",
+				:locals => {
+					:graduation_year => @student.graduation_year,
+					:field_id => "graduation_year", :field_name => "graduation_year",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>

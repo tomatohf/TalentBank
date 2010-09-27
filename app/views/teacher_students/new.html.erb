@@ -1,0 +1,70 @@
+<% talent_page_title("添加学生帐号") %>
+
+
+<h2 class="page_title">添加学生帐号</h2>
+
+<p class="warn_msg">
+    请谨慎并尽量完整填写如下信息，学生本人无法修改自己的除密码以外的帐号信息！
+</p>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @student.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@student) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/students", :method => :post do %>
+
+	<table border="0" cellspacing="10" cellpadding="5">
+		<tr>
+			<td style="width: 100px;">
+				<label for="number">
+					学号<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="number" name="number" class="text_field" size="30" value="<%= h(@student.number) %>" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="password">
+					密码<%= required_mark %>
+				</label>
+			</td>
+			
+			<td>
+				<input type="text" id="password" name="password" class="text_field" size="30" value="<%= h(@student.password) %>" />
+			</td>
+		</tr>
+		
+		<%= render :partial => "student_form" %>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/teachers/<%= @teacher.id %>/students">
+					返回学生帐号列表</a>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/students/selects/var" %>
+	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

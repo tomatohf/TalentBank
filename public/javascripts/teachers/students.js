@@ -45,7 +45,7 @@ function fill_majors(college_id, major_id) {
 function setup_number_input() {
 	var number_input_tip = "请输入学号";
 	
-	$("input#number").unbind("focus").unbind("blur")
+	$(".quick_form input#number").unbind("focus").unbind("blur")
 		.focus(
 			function() {
 				if($.trim($(this).val()) == number_input_tip) {

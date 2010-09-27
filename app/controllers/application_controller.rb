@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   # ========== filters ==========
   
   def prepare_school
-    abbr = Rails.env.production? ? request.host.split(".").first : "jianli"
+    abbr = Rails.env.production? ? request.host.split(".").first : "talent"
     abbr = "qiaobutang" if abbr == "talent"
     
     @school = Schools.get_school(abbr)

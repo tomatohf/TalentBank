@@ -3,6 +3,12 @@
 %>
 
 
+<% if @teacher.student %>
+	<div class="float_r" style="margin: 12px 25px 0px;">
+		<a href="/teachers/<%= @teacher.id %>/students/new" class="button">
+			添加学生帐号</a>
+	</div>
+<% end %>
 <h2 class="page_title">查询学生</h2>
 
 
@@ -36,29 +42,27 @@
 				</span>
 				
 				<span class="field">
-					<label for="edu_level_id">
-						学历:
-					</label>
-					<select name="e" id="edu_level_id" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @edu_level_id.blank? %>>不限学历</option>
-						<% @school.edu_levels.each do |level_id| %>
-							<% level = EduLevel.find(level_id) %>
-							<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if @edu_level_id == level[:id].to_s %>><%= level[:name] %></option>
-						<% end %>
-					</select>
+					<%=
+						render(
+							:partial => "/students/selects/edu_level",
+							:locals => {
+								:edu_level_id => @edu_level_id,
+								:field_id => "edu_level_id", :field_name => "e"
+							}
+						)
+					%>
 				</span>
 				
 				<span class="field">
-					<label for="graduation_year">
-						毕业时间:
-					</label>
-					<select name="g" id="graduation_year" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @graduation_year.blank? %>>不限毕业时间</option>
-						<% year = @school.coming_graduation_year %>
-						<% @school.graduation_years.each do |graduation_year| %>
-							<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @graduation_year == graduation_year.to_s %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>
-						<% end %>
-					</select>
+					<%=
+						render(
+							:partial => "/students/selects/graduation_year",
+							:locals => {
+								:graduation_year => @graduation_year,
+								:field_id => "graduation_year", :field_name => "g"
+							}
+						)
+					%>
 				</span>
 			</div>
 			
@@ -124,7 +128,16 @@
 			<tr>
 				<td style="width: 80px;">学号</td>
 				<td style="width: 50px;">姓名</td>
-				<td style="width: <%= @teacher.statistic ? 100 : 45 %>px;">操作</td>
+				<%
+					n = [@teacher.resume, @teacher.statistic, @teacher.student].select{|bool|bool}.size
+					width = 45 * n + 5 * (n-1)
+					width += 5 if @teacher.resume
+				%>
+				<% if n > 0 %>
+					<td style="width: <%= width %>px;">操作</td>
+				<% else %>
+					<td></td>
+				<% end %>
 				<td class="grey">大学</td>
 				<td class="grey">学院</td>
 				<td class="grey">专业</td>

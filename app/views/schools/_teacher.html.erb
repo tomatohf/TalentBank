@@ -16,7 +16,7 @@
 	
 	<td>
 		<%
-			["resume", "revision", "statistic", "admin"].each do |field|
+			["student", "resume", "revision", "statistic", "admin"].each do |field|
 		%>
 			<%= render :partial => "permission_field", :locals => {:teacher => teacher, :field => field} %>
 		<% end %>

@@ -49,7 +49,7 @@ class TeacherCorporationsController < ApplicationController
           :page => page,
           :per_page => Corporation_Page_Size,
           :conditions => ["school_id = ?", @teacher.school_id],
-          :order => "updated_at DESC"
+          :order => "created_at DESC"
         )
       else
         Corporation.school_search(

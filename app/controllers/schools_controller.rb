@@ -67,6 +67,7 @@ class SchoolsController < ApplicationController
     @teacher.uid = params[:uid] && params[:uid].strip
     @teacher.password = params[:password] && params[:password].strip
     
+    @teacher.student = (params[:student] == "true")
     @teacher.resume = (params[:resume] == "true")
     @teacher.revision = (params[:revision] == "true")
     @teacher.statistic = (params[:statistic] == "true")

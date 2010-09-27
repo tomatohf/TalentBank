@@ -1,0 +1,52 @@
+<% talent_page_title("编辑学生资料") %>
+
+
+<h2 class="page_title">编辑学生资料</h2>
+
+<p class="warn_msg">
+    请谨慎并尽量完整填写如下信息，学生本人无法修改自己的除密码以外的帐号信息！
+</p>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @student.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@student) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}", :method => :put do %>
+
+	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+		<tr>
+			<td style="width: 100px;">
+				学号
+			</td>
+
+			<td>
+				<%= h(@student.number) %>
+			</td>
+		</tr>
+		
+		<%= render :partial => "student_form" %>
+		
+		<tr>
+			<td>
+				
+			</td>
+			
+			<td>
+				<%= submit_tag "修改学生帐号", :class => "button", :disabled => !@account_active %>
+			</td>
+		</tr>
+	</table>
+	
+<% end %>

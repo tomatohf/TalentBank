@@ -6,10 +6,10 @@
 		<% university = University.find(u_id) %>
 		UNIVERSITIES.push({id:<%= university[:id] %>, name:"<%= university[:name] %>"});
 		
-		COLLEGES["u_<%= university[:id] %>"] = [<%= College.data[university[:id]].collect{|college| %Q!{id:#{college[:id]}, name:"#{college[:name]}"}!}.join(",") %>];
+		COLLEGES["u_<%= university[:id] %>"] = [<%= College.find_group(university[:id]).collect{|college| %Q!{id:#{college[:id]}, name:"#{college[:name]}"}!}.join(",") %>];
 		
-		<% (College.data[u_id]|| []).each do |college| %>
-			MAJORS["c_<%= college[:id] %>"] = [<%= Major.data[college[:id]].collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
+		<% College.find_group(u_id).each do |college| %>
+			MAJORS["c_<%= college[:id] %>"] = [<%= Major.find_group(college[:id]).collect{|major| %Q!{id:#{major[:id]}, name:"#{major[:name]}"}!}.join(",") %>];
 		<% end %>
 	<% end %>
 </script>

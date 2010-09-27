@@ -21,7 +21,14 @@ class Student < ActiveRecord::Base
     
     has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at
     
-    set_property(:delta => false)
+    set_property(
+      :delta => DailyDelta,
+      :column => :updated_at,
+      # :rate => 70.minutes,
+      :hour => Overall_Index_Hour,
+      :minute => Overall_Index_Minute,
+      :batch => 100
+    )
     
   end
   
@@ -72,6 +79,26 @@ class Student < ActiveRecord::Base
     ).each do |resume|
       resume.after_change(time)
     end
+  end
+  
+  
+  def self.school_search(name, school_id, includes, page = 1, per_page = 10, options = {})
+    filters = {:school_id => school_id}
+    [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
+      filter_value = options[filter_key]
+      filters.merge!(filter_key => filter_value) unless filter_value.blank?
+    end
+    
+    self.search(
+      name,
+      :page => page,
+      :per_page => per_page,
+      :match_mode => Search_Match_Mode,
+      :order => "@relevance DESC, updated_at DESC",
+      :field_weights => {},
+      :with => filters,
+      :include => includes
+    )
   end
   
   
