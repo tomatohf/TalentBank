@@ -1,47 +1,3 @@
-function fill_colleges(university_id, college_id) {
-	$("#college").html("");
-
-	$("#college").append("<option value=''>不限学院</option>");
-
-	var college_objs = COLLEGES["u_" + university_id];
-	if(college_objs != null && college_objs.length > 0) {
-		var options = $.map(
-			college_objs,
-			function(college_obj, i) {
-				return "<option value='" + college_obj.id + "'>" + college_obj.name + "</option>";
-			}
-		);
-
-		$("#college").append(options.join(""));
-
-		$("#college").val(college_id);
-	}
-	
-	fill_majors(college_id, "");
-}
-
-
-function fill_majors(college_id, major_id) {
-	$("#major").html("");
-	
-	$("#major").append("<option value=''>不限专业</option>");
-
-	var major_objs = MAJORS["c_" + college_id];
-	if(major_objs != null && major_objs.length > 0) {
-		var options = $.map(
-			major_objs,
-			function(major_obj, i) {
-				return "<option value='" + major_obj.id + "'>" + major_obj.name + "</option>";
-			}
-		);
-		
-		$("#major").append(options.join(""));
-		
-		$("#major").val(major_id);
-	}
-}
-
-
 function fill_domains(category_id, domain_id) {
 	$("#domain").html("");
 
@@ -220,12 +176,12 @@ $(document).ready(
 		
 		$("#university").change(
 			function() {
-				fill_colleges($(this).val(), "");
+				APP.fill_colleges($(this).val(), "");
 			}
 		);
 		$("#college").change(
 			function() {
-				fill_majors($(this).val(), "");
+				APP.fill_majors($(this).val(), "");
 			}
 		);
 		

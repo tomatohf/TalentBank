@@ -12,7 +12,7 @@
 
 <tr>
 	<td>
-		<label for="university_id">
+		<label for="university">
 			大学
 		</label>
 	</td>
@@ -23,7 +23,7 @@
 				:partial => "/students/selects/university",
 				:locals => {
 					:university_id => @student.university_id,
-					:field_id => "university_id", :field_name => "university_id",
+					:field_id => "university", :field_name => "university_id",
 					:hide_label => true
 				}
 			)
@@ -33,7 +33,7 @@
 
 <tr>
 	<td>
-		<label for="college_id">
+		<label for="college">
 			学院
 		</label>
 	</td>
@@ -45,7 +45,7 @@
 				:locals => {
 					:university_id => @student.university_id,
 					:college_id => @student.college_id,
-					:field_id => "college_id", :field_name => "college_id",
+					:field_id => "college", :field_name => "college_id",
 					:hide_label => true
 				}
 			)
@@ -55,7 +55,7 @@
 
 <tr>
 	<td>
-		<label for="major_id">
+		<label for="major">
 			专业
 		</label>
 	</td>
@@ -67,7 +67,7 @@
 				:locals => {
 					:college_id => @student.college_id,
 					:major_id => @student.major_id,
-					:field_id => "major_id", :field_name => "major_id",
+					:field_id => "major", :field_name => "major_id",
 					:hide_label => true
 				}
 			)
@@ -77,7 +77,7 @@
 
 <tr>
 	<td>
-		<label for="edu_level_id">
+		<label for="edu_level">
 			学历
 		</label>
 	</td>
@@ -88,7 +88,7 @@
 				:partial => "/students/selects/edu_level",
 				:locals => {
 					:edu_level_id => @student.edu_level_id,
-					:field_id => "edu_level_id", :field_name => "edu_level_id",
+					:field_id => "edu_level", :field_name => "edu_level_id",
 					:hide_label => true
 				}
 			)

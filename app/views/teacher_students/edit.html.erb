@@ -50,3 +50,9 @@
 	</table>
 	
 <% end %>
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/students/selects/var" %>
+	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
+<% end %>
