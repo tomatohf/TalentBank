@@ -59,6 +59,19 @@
 
 <tr>
 	<td>
+		<label for="business_scope">
+			经营范围
+		</label>
+	</td>
+	
+	<td>
+		<input type="text" id="business_scope" name="business_scope" class="text_field" size="30" value="<%= h(@profile.business_scope) %>" />
+	</td>
+</tr>
+
+
+<tr>
+	<td>
 		<label for="address">
 			地址
 		</label>
@@ -130,18 +143,44 @@
 
 <tr>
 	<td>
-		<label for="industry">
-			所属行业
+		<label for="industry_category">
+			行业大类
 		</label>
 	</td>
 	
 	<td>
-		<select name="industry" id="industry" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.industry_id.blank? %>></option>
-			<% CorporationIndustry.data.each do |industry| %>
-				<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @profile.industry_id == industry[:id] %>><%= industry[:name] %></option>
-			<% end %>
-		</select>
+		<%=
+			render(
+				:partial => "/corporations/selects/industry_category",
+				:locals => {
+					:industry_category_id => @profile.industry_category_id,
+					:field_id => "industry_category", :field_name => "industry_category",
+					:hide_label => true
+				}
+			)
+		%>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		<label for="industry">
+			行业细分
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/corporations/selects/industry",
+				:locals => {
+					:industry_category_id => @profile.industry_category_id,
+					:industry_id => @profile.industry_id,
+					:field_id => "industry", :field_name => "industry",
+					:hide_label => true
+				}
+			)
+		%>
 	</td>
 </tr>
 

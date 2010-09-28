@@ -81,6 +81,27 @@ var APP = {
 
 			$("#major").val(major_id);
 		}
+	},
+	
+	
+	fill_industries: function(category_id, industry_id) {
+		$("#industry").html("");
+
+		$("#industry").append("<option value=''>不限行业细分</option>");
+
+		var industry_objs = INDUSTRIES["c_" + category_id];
+		if(industry_objs != null && industry_objs.length > 0) {
+			var options = $.map(
+				industry_objs,
+				function(industry_obj, i) {
+					return "<option value='" + industry_obj.id + "'>" + industry_obj.name + "</option>";
+				}
+			);
+
+			$("#industry").append(options.join(""));
+
+			$("#industry").val(industry_id);
+		}
 	}
 	
 }

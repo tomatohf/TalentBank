@@ -28,8 +28,9 @@ class TeacherCorporationsController < ApplicationController
     else
       @nature_id = params[:n] && params[:n].strip
       @size_id = params[:s] && params[:s].strip
-      @industry_id = params[:i] && params[:i].strip
       @province_id = params[:p] && params[:p].strip
+      @industry_category_id = params[:ic] && params[:ic].strip
+      @industry_id = params[:i] && params[:i].strip
       
       @keyword = params[:k] && params[:k].strip
       
@@ -43,8 +44,8 @@ class TeacherCorporationsController < ApplicationController
       
       page = params[:page]
       page = 1 unless page =~ /\d+/
-      if @nature_id.blank? && @size_id.blank? && @industry_id.blank? && @province_id.blank? &&
-          @keyword.blank? && @allow_query.blank?
+      if @nature_id.blank? && @size_id.blank? && @industry_category_id.blank? && @industry_id.blank? &&
+        @province_id.blank? && @keyword.blank? && @allow_query.blank?
         Corporation.paginate(
           :page => page,
           :per_page => Corporation_Page_Size,
@@ -59,6 +60,7 @@ class TeacherCorporationsController < ApplicationController
           :allow_query => @allow_query,
           :nature_id => @nature_id,
           :size_id => @size_id,
+          :industry_category_id => @industry_category_id,
           :industry_id => @industry_id,
           :province_id => @province_id
         )

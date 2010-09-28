@@ -95,6 +95,16 @@
 				<%= %Q!, (职位: #{@profile.contact_title})! unless @profile.contact_title.blank? %>
 			</td>
 		</tr>
+		
+		<tr>
+			<td>
+				经营范围:
+			</td>
+
+			<td>
+				<%= h(@profile.business_scope) %>
+			</td>
+		</tr>
 
 		<tr>
 			<td>
@@ -151,11 +161,22 @@
 
 		<tr>
 			<td>
-				所属行业:
+				行业大类:
 			</td>
 
 			<td>
-				<% industry = @profile.industry_id && CorporationIndustry.find(@profile.industry_id) %>
+				<% industry_category = @profile.industry_category_id && IndustryCategory.find(@profile.industry_category_id) %>
+				<%= industry_category && industry_category[:name] %>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				行业细分:
+			</td>
+
+			<td>
+				<% industry = @profile.industry_id && Industry.find(industry_category[:id], @profile.industry_id) %>
 				<%= industry && industry[:name] %>
 			</td>
 		</tr>

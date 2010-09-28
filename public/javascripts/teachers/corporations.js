@@ -86,6 +86,13 @@ $(document).ready(
 		APP.setup_dropdown_menu(".admin_link", 120);
 		
 		
+		$("#industry_category").change(
+			function() {
+				APP.fill_industries($(this).val(), "");
+			}
+		);
+		
+		
 		setup_toggle_search_form_link();
 		
 		setup_uid_input();

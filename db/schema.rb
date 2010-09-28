@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 16) do
+ActiveRecord::Schema.define(:version => 17) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -92,21 +92,23 @@ ActiveRecord::Schema.define(:version => 16) do
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"
     t.string   "email"
-    t.string   "phone",          :limit => 25
-    t.string   "contact",        :limit => 15
+    t.string   "phone",                :limit => 25
+    t.string   "contact",              :limit => 15
     t.boolean  "contact_gender"
-    t.string   "contact_title",  :limit => 15
+    t.string   "contact_title",        :limit => 15
     t.string   "address"
-    t.string   "zip",            :limit => 10
+    t.string   "zip",                  :limit => 10
     t.string   "website"
-    t.integer  "nature_id",      :limit => 2
-    t.integer  "size_id",        :limit => 2
-    t.integer  "industry_id",    :limit => 2
-    t.integer  "province_id",    :limit => 2
-    t.integer  "city_id",        :limit => 2
-    t.string   "desc",           :limit => 500
+    t.integer  "nature_id",            :limit => 2
+    t.integer  "size_id",              :limit => 2
+    t.integer  "industry_id",          :limit => 2
+    t.integer  "province_id",          :limit => 2
+    t.integer  "city_id",              :limit => 2
+    t.string   "desc",                 :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "industry_category_id", :limit => 2
+    t.string   "business_scope"
   end
 
   add_index "corporation_profiles", ["corporation_id"], :name => "index_corporation_profiles_on_corporation_id", :unique => true

@@ -27,6 +27,8 @@ class CorporationProfile < ActiveRecord::Base
   
   validates_length_of :desc, :maximum => 500, :message => "企业简介 超过长度限制", :allow_nil => true
   
+  validates_length_of :business_scope, :maximum => 250, :message => "经营范围 超过长度限制", :allow_nil => true
+  
   
   
   Belongs_To_Keys = [:corporation_id]

@@ -1,0 +1,9 @@
+<script language="JavaScript">
+	var INDUSTRY_CATEGORIES = [];
+	var INDUSTRIES = {};
+	<% IndustryCategory.data.each do |category| %>
+		INDUSTRY_CATEGORIES.push({id:<%= category[:id] %>, name:"<%= category[:name] %>"});
+		
+		INDUSTRIES["c_<%= category[:id] %>"] = [<%= Industry.find_group(category[:id]).collect{|industry| %Q!{id:#{industry[:id]}, name:"#{industry[:name]}"}!}.join(",") %>];
+	<% end %>
+</script>

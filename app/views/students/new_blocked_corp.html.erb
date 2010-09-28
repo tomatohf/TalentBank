@@ -14,6 +14,47 @@
 	<% form_tag "", :method => :get do %>
 		<div>
 			<span class="field">
+				<%=
+					render(
+						:partial => "/corporations/selects/industry_category",
+						:locals => {
+							:industry_category_id => @industry_category_id,
+							:field_id => "industry_category", :field_name => "ic"
+						}
+					)
+				%>
+			</span>
+			
+			<span class="field">
+				<%=
+					render(
+						:partial => "/corporations/selects/industry",
+						:locals => {
+							:industry_category_id => @industry_category_id,
+							:industry_id => @industry_id,
+							:field_id => "industry", :field_name => "i"
+						}
+					)
+				%>
+			</span>
+			
+			<% if false %>
+			<span class="field">
+				<label for="province_id">
+					所在地:
+				</label>
+				<select name="p" id="province_id" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限所在地</option>
+					<% Province.data.each do |province| %>
+						<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
+					<% end %>
+				</select>
+			</span>
+			<% end %>
+		</div>
+
+		<div style="margin-top: 15px;">
+			<span class="field">
 				<label for="nature_id">
 					性质:
 				</label>
@@ -37,34 +78,6 @@
 				</select>
 			</span>
 			
-			<span class="field">
-				<label for="industry_id">
-					行业:
-				</label>
-				<select name="i" id="industry_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @industry_id.blank? %>>不限行业</option>
-					<% CorporationIndustry.data.each do |industry| %>
-						<option value="<%= industry[:id] %>"<%= %Q! selected="selected"! if @industry_id == industry[:id].to_s %>><%= industry[:name] %></option>
-					<% end %>
-				</select>
-			</span>
-			
-			<% if false %>
-			<span class="field">
-				<label for="province_id">
-					所在地:
-				</label>
-				<select name="p" id="province_id" class="dropdown_list">
-					<option value=""<%= %Q! selected="selected"! if @province_id.blank? %>>不限所在地</option>
-					<% Province.data.each do |province| %>
-						<option value="<%= province[:id] %>"<%= %Q! selected="selected"! if @province_id == province[:id].to_s %>><%= province[:name] %></option>
-					<% end %>
-				</select>
-			</span>
-			<% end %>
-		</div>
-
-		<div style="margin-top: 15px;">
 			<span class="field">
 				<label for="keyword">
 					关键词:
@@ -108,3 +121,9 @@
 
 	<%= paging_buttons(@corporations) %>
 </div>
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/corporations/selects/var" %>
+	<script src="/javascripts/teachers/corporations.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

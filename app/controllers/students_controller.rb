@@ -184,6 +184,7 @@ class StudentsController < ApplicationController
   def new_blocked_corp
     @nature_id = params[:n] && params[:n].strip
     @size_id = params[:s] && params[:s].strip
+    @industry_category_id = params[:ic] && params[:ic].strip
     @industry_id = params[:i] && params[:i].strip
     @province_id = params[:p] && params[:p].strip
     
@@ -197,6 +198,7 @@ class StudentsController < ApplicationController
       page, 20,
       :nature_id => @nature_id,
       :size_id => @size_id,
+      :industry_category_id => @industry_category_id,
       :industry_id => @industry_id,
       :province_id => @province_id
     )

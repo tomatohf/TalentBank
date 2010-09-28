@@ -16,6 +16,7 @@ class Corporation < ActiveRecord::Base
     indexes profile.email, :as => :email
     indexes profile.phone, :as => :phone
     indexes profile.contact, :as => :contact
+    indexes profile.business_scope, :as => :business_scope
     indexes profile.address, :as => :address
     indexes profile.zip, :as => :zip
     indexes profile.website, :as => :website
@@ -26,8 +27,9 @@ class Corporation < ActiveRecord::Base
     
     has profile.nature_id, :as => :nature_id
     has profile.size_id, :as => :size_id
-    has profile.industry_id, :as => :industry_id
     has profile.province_id, :as => :province_id
+    has profile.industry_category_id, :as => :industry_category_id
+    has profile.industry_id, :as => :industry_id
     
     
     set_property(
@@ -75,7 +77,7 @@ class Corporation < ActiveRecord::Base
   def self.school_search(keyword, school_id, page = 1, per_page = 10, options = {})
     filters = {:school_id => school_id}
     filters.merge!(:allow_query => options[:allow_query]) unless options[:allow_query].nil?
-    [:nature_id, :size_id, :industry_id, :province_id].each do |filter_key|
+    [:nature_id, :size_id, :industry_category_id, :industry_id, :province_id].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?
     end
