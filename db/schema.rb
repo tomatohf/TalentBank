@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 17) do
+ActiveRecord::Schema.define(:version => 19) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -141,6 +141,87 @@ ActiveRecord::Schema.define(:version => 17) do
 
   add_index "edu_exps", ["student_id"], :name => "index_edu_exps_on_student_id"
 
+  create_table "intern_corp_nature_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "nature_id",  :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_corp_nature_blacklists", ["student_id", "nature_id"], :name => "index_intern_corp_nature_blacklists_on_student_and_nature", :unique => true
+
+  create_table "intern_corp_nature_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "nature_id",  :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_corp_nature_wishes", ["student_id", "nature_id"], :name => "index_intern_corp_nature_wishes_on_student_and_nature", :unique => true
+
+  create_table "intern_industry_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "industry_category_id", :limit => 2
+    t.integer  "industry_id",          :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_industry_blacklists", ["student_id", "industry_category_id", "industry_id"], :name => "index_intern_industry_blacklists_on_student_and_industry", :unique => true
+
+  create_table "intern_industry_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "industry_category_id", :limit => 2
+    t.integer  "industry_id",          :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_industry_wishes", ["student_id", "industry_category_id", "industry_id"], :name => "index_intern_industry_wishes_on_student_and_industry", :unique => true
+
+  create_table "intern_job_category_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_category_class_id", :limit => 2
+    t.integer  "job_category_id",       :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_category_blacklists", ["student_id", "job_category_class_id", "job_category_id"], :name => "index_intern_job_category_blacklists_on_student_and_category", :unique => true
+
+  create_table "intern_job_category_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_category_class_id", :limit => 2
+    t.integer  "job_category_id",       :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_category_wishes", ["student_id", "job_category_class_id", "job_category_id"], :name => "index_intern_job_category_wishes_on_student_and_category", :unique => true
+
+  create_table "intern_job_district_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_district_id", :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_district_blacklists", ["student_id", "job_district_id"], :name => "index_intern_job_district_blacklists_on_student_and_district", :unique => true
+
+  create_table "intern_job_district_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_district_id", :limit => 2
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_district_wishes", ["student_id", "job_district_id"], :name => "index_intern_job_district_wishes_on_student_and_district", :unique => true
+
+  create_table "intern_profiles", :force => true do |t|
+    t.integer  "student_id"
+    t.datetime "begin_at"
+    t.integer  "period_id",  :limit => 2
+    t.integer  "workday_id", :limit => 2
+    t.integer  "major_id",   :limit => 2
+    t.integer  "salary",     :limit => 10, :precision => 10, :scale => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_profiles", ["student_id"], :name => "index_intern_profiles_on_student_id", :unique => true
+
   create_table "job_photos", :force => true do |t|
     t.integer  "student_id"
     t.string   "image_file_name"
@@ -152,6 +233,34 @@ ActiveRecord::Schema.define(:version => 17) do
   end
 
   add_index "job_photos", ["student_id"], :name => "index_job_photos_on_student_id", :unique => true
+
+  create_table "jobs", :force => true do |t|
+    t.integer  "corporation_id"
+    t.string   "name",              :limit => 50
+    t.integer  "category_class_id", :limit => 2
+    t.integer  "category_id",       :limit => 2
+    t.string   "manager",           :limit => 50
+    t.string   "desc",              :limit => 500
+    t.integer  "district_id",       :limit => 2
+    t.string   "place",             :limit => 200
+    t.integer  "salary",            :limit => 10,  :precision => 10, :scale => 0
+    t.string   "welfare",           :limit => 300
+    t.integer  "number",            :limit => 2
+    t.integer  "interview_number",  :limit => 2
+    t.datetime "begin_at"
+    t.integer  "period_id",         :limit => 2
+    t.integer  "workday_id",        :limit => 2
+    t.integer  "edu_level_id",      :limit => 2
+    t.integer  "graduation_id",     :limit => 2
+    t.integer  "major_id",          :limit => 2
+    t.integer  "skill_id"
+    t.string   "requirement",       :limit => 500
+    t.datetime "recruit_end_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "jobs", ["corporation_id", "created_at"], :name => "index_jobs_on_corporation_id_and_created_at"
 
   create_table "notices", :force => true do |t|
     t.integer  "account_type_id", :limit => 1
