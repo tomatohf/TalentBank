@@ -22,7 +22,10 @@ ActionController::Routing::Routes.draw do |map|
     :revisions => :get
   } do |teachers|
     teachers.resources :teacher_students, :as => :students, :member => {
-      :resume => :get
+      :resume => :get,
+      
+      :edit_intern_profile => :get,
+      :update_intern_profile => :post
     }
     
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {

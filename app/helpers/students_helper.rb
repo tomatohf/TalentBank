@@ -10,4 +10,13 @@ module StudentsHelper
     student.graduation_year = params[:graduation_year]
   end
   
+  
+  def fill_student_intern_profile(profile, params)
+    profile.begin_at = params[:begin_at] && params[:begin_at].strip
+    profile.period_id = params[:job_period]
+    profile.workday_id = params[:job_workday]
+    profile.major_id = params[:job_major]
+    profile.salary = params[:salary] && params[:salary].strip
+  end
+  
 end

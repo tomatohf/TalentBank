@@ -1,0 +1,45 @@
+<%
+	student_name = h(@student.get_name)
+	page_title = "编辑学生 #{student_name} 的实习信息"
+
+	talent_page_title(page_title)
+%>
+
+
+<h2 class="page_title"><%= page_title %></h2>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @profile.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@profile) %>
+	</p>
+<% end %>
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+	<tr>
+		<td valign="top" style="width: 50%;">
+			<% if @profile.new_record? %>
+				<p class="warn_msg">
+					当前还没有学生 <%= student_name %> 的实习信息
+				</p>
+			<% end %>
+			
+			<% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/update_intern_profile", :method => :post do %>
+				<%= render :partial => "intern_profile_form" %>
+			<% end %>
+		</td>
+		
+		<td valign="top">
+			
+		</td>
+	</tr>
+</table>

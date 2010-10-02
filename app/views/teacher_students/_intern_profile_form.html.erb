@@ -1,0 +1,103 @@
+<table border="0" cellspacing="10" cellpadding="5">
+	<tr>
+		<td style="width: 100px;" valign="top">
+			<label for="begin_at">
+				上岗时间<%= required_mark %>
+			</label>
+		</td>
+
+		<td>
+			<input type="text" id="begin_at" name="begin_at" class="text_field" size="15" value="<%= format_date(@profile.begin_at) %>" />
+			
+			<div class="info_with_icon" style="margin-top: 10px;">
+				日期格式: <%= format_date(Date.today) %>
+			</div>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_period">
+				工作期限<%= required_mark %>
+			</label>
+		</td>
+
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_period",
+					:locals => {
+						:job_period_id => @profile.period_id,
+						:field_id => "job_period", :field_name => "job_period",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_workday">
+				每周工作时间<%= required_mark %>
+			</label>
+		</td>
+
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_workday",
+					:locals => {
+						:job_workday_id => @profile.workday_id,
+						:field_id => "job_workday", :field_name => "job_workday",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_major">
+				相关专业<%= required_mark %>
+			</label>
+		</td>
+
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_major",
+					:locals => {
+						:job_major_id => @profile.major_id,
+						:field_id => "job_major", :field_name => "job_major",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="salary">
+				期望薪酬<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= h(@profile.salary) %>" />
+			元/天
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			
+		</td>
+		
+		<td>
+			<%= submit_tag "保存实习信息", :class => "button", :disabled => !@account_active %>
+		</td>
+	</tr>
+</table>

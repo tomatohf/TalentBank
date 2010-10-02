@@ -8,7 +8,7 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_login_for_teacher
   
-  before_filter :check_active, :only => [:create, :update]
+  before_filter :check_active, :only => [:create, :update, :update_intern_profile]
   
   before_filter :check_teacher
   
@@ -16,7 +16,7 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_resume, :only => [:resume]
   
-  before_filter :check_teacher_student, :only => [:new, :create, :edit, :update]
+  before_filter :check_teacher_student, :except => [:index, :resume]
   
   before_filter :check_student, :except => [:index, :new, :create, :resume]
   
@@ -135,6 +135,25 @@ class TeacherStudentsController < ApplicationController
     end
     
     render :action => "edit"
+  end
+  
+  
+  def edit_intern_profile
+    @profile = InternProfile.get_record(@student.id)
+  end
+  
+  def update_intern_profile
+    @profile = InternProfile.get_record(@student.id)
+    
+    StudentsController.helpers.fill_student_intern_profile(@profile, params)
+    
+    if @profile.save
+      flash.now[:success_msg] = "保存成功, 实习信息已更新"
+    else
+      flash.now[:error_msg] = "操作失败, 再试一次吧"
+    end
+    
+    render :action => "edit_intern_profile"
   end
   
   
