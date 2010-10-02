@@ -102,6 +102,27 @@ var APP = {
 
 			$("#industry").val(industry_id);
 		}
+	},
+	
+	
+	fill_job_categories: function(category_class_id, category_id) {
+		$("#job_category").html("");
+
+		$("#job_category").append("<option value=''>不限岗位细分</option>");
+
+		var job_category_objs = JOB_CATEGORIES["c_" + category_class_id];
+		if(job_category_objs != null && job_category_objs.length > 0) {
+			var options = $.map(
+				job_category_objs,
+				function(job_category_obj, i) {
+					return "<option value='" + job_category_obj.id + "'>" + job_category_obj.name + "</option>";
+				}
+			);
+
+			$("#job_category").append(options.join(""));
+
+			$("#job_category").val(category_id);
+		}
 	}
 	
 }

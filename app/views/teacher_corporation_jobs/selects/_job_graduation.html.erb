@@ -1,0 +1,20 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限毕业时间"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		毕业时间:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if job_graduation_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobGraduation.data.each do |graduation| %>
+		<option value="<%= graduation[:id] %>"<%= %Q! selected="selected"! if job_graduation_id.to_i == graduation[:id] %>><%= graduation[:name] %></option>
+	<% end %>
+</select>

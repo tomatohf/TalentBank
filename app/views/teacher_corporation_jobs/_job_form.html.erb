@@ -1,0 +1,336 @@
+<%
+	date_tip = %Q!
+		<span class="info_with_icon" style="margin-left: 10px;">
+			日期格式: #{format_date(Date.today)}
+		</span>
+	!
+%>
+
+<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
+	<tr>
+		<td style="width: 120px;">
+			<label for="name">
+				名称<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="name" name="name" class="text_field" size="30" value="<%= h(@job.name) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_category_class">
+				岗位大类
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_category_class",
+					:locals => {
+						:job_category_class_id => @job.category_class_id,
+						:field_id => "job_category_class", :field_name => "job_category_class",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_category">
+				岗位细分
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_category",
+					:locals => {
+						:job_category_class_id => @job.category_class_id,
+						:job_category_id => @job.category_id,
+						:field_id => "job_category", :field_name => "job_category",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="manager">
+				负责人
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="manager" name="manager" class="text_field" size="30" value="<%= h(@job.manager) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="desc">
+				工作内容<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<textarea id="desc" name="desc" class="text_field" cols="50" rows="5"><%= h(@job.desc) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_district">
+				工作区域<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_district",
+					:locals => {
+						:job_district_id => @job.district_id,
+						:field_id => "job_district", :field_name => "job_district",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="place">
+				工作地址<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="place" name="place" class="text_field" size="50" value="<%= h(@job.place) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="salary">
+				薪酬<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= h(@job.salary) %>" />
+			元/天
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="welfare">
+				福利待遇
+			</label>
+		</td>
+		
+		<td>
+			<textarea id="welfare" name="welfare" class="text_field" cols="50" rows="3"><%= h(@job.welfare) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="number">
+				招聘人数<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="number" name="number" class="text_field" size="5" value="<%= h(@job.number) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="interview_number">
+				面试人数
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="interview_number" name="interview_number" class="text_field" size="5" value="<%= h(@job.interview_number) %>" />
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td colspan="2" style="text-align: center; padding: 10px 0px 8px; background-color: #F2F2F2;">
+			岗位要求
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td>
+			<label for="begin_at">
+				上岗时间
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="begin_at" name="begin_at" class="text_field" size="15" value="<%= format_date(@job.begin_at) %>" />
+			
+			<%= date_tip %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_period">
+				工作期限<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_period",
+					:locals => {
+						:job_period_id => @job.period_id,
+						:field_id => "job_period", :field_name => "job_period",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_workday">
+				每周工作时间
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_workday",
+					:locals => {
+						:job_workday_id => @job.workday_id,
+						:field_id => "job_workday", :field_name => "job_workday",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="edu_level">
+				最低学历<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/students/selects/edu_level",
+					:locals => {
+						:edu_level_id => @job.edu_level_id,
+						:field_id => "edu_level", :field_name => "edu_level",
+						:hide_label => true, :required => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_graduation">
+				毕业时间
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_graduation",
+					:locals => {
+						:job_graduation_id => @job.graduation_id,
+						:field_id => "job_graduation", :field_name => "job_graduation",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="job_major">
+				相关专业
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_major",
+					:locals => {
+						:job_major_id => @job.major_id,
+						:field_id => "job_major", :field_name => "job_major",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="requirement">
+				其它要求
+			</label>
+		</td>
+		
+		<td>
+			<textarea id="requirement" name="requirement" class="text_field" cols="50" rows="5"><%= h(@job.requirement) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="recruit_end_at">
+				招聘终止日期<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="recruit_end_at" name="recruit_end_at" class="text_field" size="15" value="<%= format_date(@job.recruit_end_at) %>" />
+			
+			<%= date_tip %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			
+		</td>
+		
+		<td style="padding-top: 15px;">
+			<%= submit_tag submit_label, :class => "button", :disabled => !@account_active %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs">
+				返回企业岗位列表</a>
+		</td>
+	</tr>
+</table>

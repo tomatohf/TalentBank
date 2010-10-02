@@ -29,7 +29,6 @@ class Jobs < ActiveRecord::Migration
       t.column :edu_level_id, :integer, :limit => 2
       t.column :graduation_id, :integer, :limit => 2
       t.column :major_id, :integer, :limit => 2
-      t.column :skill_id, :integer
       t.column :requirement, :string, :limit => 500
       t.column :recruit_end_at, :datetime
       

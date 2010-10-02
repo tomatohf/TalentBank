@@ -1,8 +1,7 @@
-class JobPeriod < HashModel::Simple
+class JobWorkday < HashModel::Simple
   
   def self.data
     [
-      {:id => 10, :name => "无限制"},
       {:id => 20, :name => "1个工作日"},
       {:id => 30, :name => "2个工作日"},
       {:id => 40, :name => "3个工作日"},

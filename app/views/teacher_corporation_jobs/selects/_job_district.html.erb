@@ -1,0 +1,20 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限工作区域"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		工作区域:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if job_district_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobDistrict.data.each do |district| %>
+		<option value="<%= district[:id] %>"<%= %Q! selected="selected"! if job_district_id.to_i == district[:id] %>><%= district[:name] %></option>
+	<% end %>
+</select>

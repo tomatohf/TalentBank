@@ -1,0 +1,17 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限岗位细分"
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		岗位细分:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if job_category_id.blank? %>><%= empty_label %></option>
+	<% JobCategory.find_group(job_category_class_id.to_i).each do |category| %>
+		<option value="<%= category[:id] %>"<%= %Q! selected="selected"! if job_category_id.to_i == category[:id] %>><%= category[:name] %></option>
+	<% end %>
+</select>

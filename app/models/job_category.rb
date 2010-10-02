@@ -1,4 +1,4 @@
-class Industry < HashModel::Grouped
+class JobCategory < HashModel::Grouped
   
   def self.data
     {

@@ -13,8 +13,7 @@ module Schools
     
     
     def edu_levels
-      # TODO - MUST BE OVERRIDED
-      [30, 20, 40]
+      EduLevel.data.map { |e| e[:id] }
     end
     
     

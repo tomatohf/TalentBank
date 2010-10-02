@@ -1,6 +1,7 @@
 <%
 	hide_label &&= true
 	empty_label ||= "不限学历"
+	required &&= true
 %>
 
 
@@ -10,7 +11,9 @@
 	</label>
 <% end %>
 <select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
-	<option value=""<%= %Q! selected="selected"! if edu_level_id.blank? %>><%= empty_label %></option>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if edu_level_id.blank? %>><%= empty_label %></option>
+	<% end %>
 	<% @school.edu_levels.each do |level_id| %>
 		<% level = EduLevel.find(level_id) %>
 		<option value="<%= level[:id] %>"<%= %Q! selected="selected"! if edu_level_id.to_i == level[:id] %>><%= level[:name] %></option>

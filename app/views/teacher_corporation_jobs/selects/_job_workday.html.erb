@@ -1,0 +1,20 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限每周工作时间"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		每周工作时间:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if job_workday_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobWorkday.data.each do |workday| %>
+		<option value="<%= workday[:id] %>"<%= %Q! selected="selected"! if job_workday_id.to_i == workday[:id] %>><%= workday[:name] %></option>
+	<% end %>
+</select>

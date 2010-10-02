@@ -25,10 +25,6 @@ ActionController::Routing::Routes.draw do |map|
       :resume => :get
     }
     
-    teachers.resources :teacher_corporations, :as => :corporations, :member => {
-      :adjust_permission => :post
-    }
-    
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {
       :querying => :any,
       :viewing => :any,
@@ -49,6 +45,12 @@ ActionController::Routing::Routes.draw do |map|
       :skill_value => :any,
       :keyword => :any
     }
+    
+    teachers.resources :teacher_corporations, :as => :corporations, :member => {
+      :adjust_permission => :post
+    } do |teacher_corporations|
+      teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs
+    end
   end
   
   

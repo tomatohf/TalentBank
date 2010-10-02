@@ -1,0 +1,46 @@
+<%
+	page_title = "编辑企业 #{@corporation.get_name} 的岗位"
+
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs">
+		返回企业岗位列表</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+<% if @job.errors.size > 0 %>
+	<p class="error_msg">
+		<%= list_model_validate_errors(@job) %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}/jobs/#{@job.id}", :method => :put do %>
+
+	<%= render :partial => "job_form", :locals => {:submit_label => "修改"} %>
+	
+<% end %>
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
+	<script language="JavaScript">
+		$("#job_category_class").change(
+			function() {
+				APP.fill_job_categories($(this).val(), "");
+			}
+		);
+	</script>
+<% end %>

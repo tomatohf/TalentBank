@@ -1,0 +1,25 @@
+<%
+	page_title = "企业 #{@corporation.get_name} 的岗位"
+
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/new" class="button">
+		添加企业岗位</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<% if flash[:success_msg] %>
+	<p class="success_msg">
+	    <%= flash[:success_msg] %>
+	</p>
+<% end %>
+
+<div>
+	<%= render :partial => "job", :collection => @jobs %>
+	
+	<%= paging_buttons(@jobs) %>
+</div>

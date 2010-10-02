@@ -1,0 +1,9 @@
+<script language="JavaScript">
+	var JOB_CATEGORY_CLASSES = [];
+	var JOB_CATEGORIES = {};
+	<% JobCategoryClass.data.each do |category_class| %>
+		JOB_CATEGORY_CLASSES.push({id:<%= category_class[:id] %>, name:"<%= category_class[:name] %>"});
+		
+		JOB_CATEGORIES["c_<%= category_class[:id] %>"] = [<%= JobCategory.find_group(category_class[:id]).collect{|category| %Q!{id:#{category[:id]}, name:"#{category[:name]}"}!}.join(",") %>];
+	<% end %>
+</script>

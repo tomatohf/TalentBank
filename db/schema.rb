@@ -253,7 +253,6 @@ ActiveRecord::Schema.define(:version => 19) do
     t.integer  "edu_level_id",      :limit => 2
     t.integer  "graduation_id",     :limit => 2
     t.integer  "major_id",          :limit => 2
-    t.integer  "skill_id"
     t.string   "requirement",       :limit => 500
     t.datetime "recruit_end_at"
     t.datetime "created_at"

@@ -1,0 +1,20 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限工作期限"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		工作期限:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if job_period_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobPeriod.data.each do |period| %>
+		<option value="<%= period[:id] %>"<%= %Q! selected="selected"! if job_period_id.to_i == period[:id] %>><%= period[:name] %></option>
+	<% end %>
+</select>

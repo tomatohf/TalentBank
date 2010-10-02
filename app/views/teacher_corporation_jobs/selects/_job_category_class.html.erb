@@ -1,0 +1,17 @@
+<%
+	hide_label &&= true
+	empty_label ||= "不限岗位大类"
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		岗位大类:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if job_category_class_id.blank? %>><%= empty_label %></option>
+	<% JobCategoryClass.data.each do |category_class| %>
+		<option value="<%= category_class[:id] %>"<%= %Q! selected="selected"! if job_category_class_id.to_i == category_class[:id] %>><%= category_class[:name] %></option>
+	<% end %>
+</select>
