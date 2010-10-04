@@ -1,0 +1,333 @@
+<%
+	job_name = h(@job.name)
+	page_title = "匹配岗位 #{job_name}"
+
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<% if @naive %>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>/search" class="none">
+			完整搜索模式</a>
+	<% else %>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>/match" class="none">
+			岗位匹配模式</a>
+	<% end %>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+<% form_tag "", :method => :get, :id => "match_job_form" do %>
+	<div id="form_body">
+		<div class="form_section">
+			<a href="#" title="展开/收起" class="none form_section_title">公司信息</a>
+			<a title="查看完整公司信息" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>" class="none" target="_blank">
+				<%= h(@corporation.get_name) %></a>
+			
+			<div class="form_section_body">
+				<div class="field_row">
+					<span class="field">
+						<% if @naive %>
+							<label>行业大类:</label>
+							<% industry_category = @profile.industry_category_id && IndustryCategory.find(@profile.industry_category_id) %>
+							<%= industry_category && industry_category[:name] %>
+							<input type="hidden" name="industry_category" value="<%= industry_category && industry_category[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/corporations/selects/industry_category",
+									:locals => {
+										:industry_category_id => @profile.industry_category_id,
+										:field_id => "industry_category", :field_name => "industry_category"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+					
+					<span class="field">
+						<% if @naive %>
+							<label>行业细分:</label>
+							<% industry = @profile.industry_id && Industry.find(industry_category[:id], @profile.industry_id) %>
+							<%= industry && industry[:name] %>
+							<input type="hidden" name="industry" value="<%= industry && industry[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/corporations/selects/industry",
+									:locals => {
+										:industry_category_id => @profile.industry_category_id,
+										:industry_id => @profile.industry_id,
+										:field_id => "industry", :field_name => "industry"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
+						<% if @naive %>
+							<label>企业性质:</label>
+							<% nature = @profile.nature_id && CorporationNature.find(@profile.nature_id) %>
+							<%= nature && nature[:name] %>
+							<input type="hidden" name="nature" value="<%= nature && nature[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/corporations/selects/nature",
+									:locals => {
+										:nature_id => @profile.nature_id,
+										:field_id => "nature", :field_name => "nature"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="form_section">
+			<a href="#" title="展开/收起" class="none form_section_title">岗位信息</a>
+			<a title="查看完整岗位信息" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>" class="none" target="_blank">
+				<%= job_name %></a>
+			
+			<div class="form_section_body">
+				<div class="field_row">
+					<span class="field">
+						<% if @naive %>
+							<label>岗位大类:</label>
+							<% job_category_class = @job.category_class_id && JobCategoryClass.find(@job.category_class_id) %>
+							<%= job_category_class && job_category_class[:name] %>
+							<input type="hidden" name="job_category_class" value="<%= job_category_class && job_category_class[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/teacher_corporation_jobs/selects/job_category_class",
+									:locals => {
+										:job_category_class_id => @job.category_class_id,
+										:field_id => "job_category_class", :field_name => "job_category_class"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+					
+					<span class="field">
+						<% if @naive %>
+							<label>岗位大类:</label>
+							<% job_category = @job.category_id && JobCategory.find(job_category_class[:id], @job.category_id) %>
+							<%= job_category && job_category[:name] %>
+							<input type="hidden" name="job_category" value="<%= job_category && job_category[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/teacher_corporation_jobs/selects/job_category",
+									:locals => {
+										:job_category_class_id => @job.category_class_id,
+										:job_category_id => @job.category_id,
+										:field_id => "job_category", :field_name => "job_category"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
+						<% if @naive %>
+							<label>工作区域:</label>
+							<% district = @job.district_id && JobDistrict.find(@job.district_id) %>
+							<%= district && district[:name] %>
+							<input type="hidden" name="district" value="<%= district && district[:id] %>" />
+						<% else %>
+							<%=
+								render(
+									:partial => "/teacher_corporation_jobs/selects/job_district",
+									:locals => {
+										:job_district_id => @job.district_id,
+										:field_id => "district", :field_name => "district"
+									}
+								)
+							%>
+						<% end %>
+					</span>
+					
+					<span class="field">
+						<label for="salary">薪酬:</label>
+						<% job_salary = h(@job.salary) %>
+						<% if @naive %>
+							<%= @job.salary %>
+							<input type="hidden" name="salary" value="<%= job_salary %>" />
+						<% else %>
+							<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= job_salary %>" />
+						<% end %>
+						元/天
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="form_section">
+			<a href="#" title="展开/收起" class="none form_section_title">岗位要求</a>
+			
+			<div class="form_section_body">
+				<div class="field_row">
+					<span class="field">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_period",
+								:locals => {
+									:job_period_id => @job.period_id,
+									:field_id => "job_period", :field_name => "job_period"
+								}
+							)
+						%>
+					</span>
+					
+					<span class="field">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_workday",
+								:locals => {
+									:job_workday_id => @job.workday_id,
+									:field_id => "job_workday", :field_name => "job_workday"
+								}
+							)
+						%>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
+						<label for="edu_level">最低学历:</label>
+						<%=
+							render(
+								:partial => "/students/selects/edu_level",
+								:locals => {
+									:edu_level_id => @job.edu_level_id,
+									:field_id => "edu_level", :field_name => "edu_level",
+									:hide_label => true
+								}
+							)
+						%>
+					</span>
+					
+					<span class="field">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_major",
+								:locals => {
+									:job_major_id => @job.major_id,
+									:field_id => "job_major", :field_name => "job_major"
+								}
+							)
+						%>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
+						<label for="begin_at">上岗时间:</label>
+						<input type="text" id="begin_at" name="begin_at" class="text_field" size="15" value="<%= format_date(@job.begin_at) %>" />
+					</span>
+					
+					<span class="field">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_graduation",
+								:locals => {
+									:job_graduation_id => @job.graduation_id,
+									:field_id => "job_graduation", :field_name => "job_graduation"
+								}
+							)
+						%>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="align_r" style="margin: 15px 100px 5px 5px;">
+			<%= submit_tag "搜索", :class => "button", :disabled => !@account_active, :style => "font-size: 14px;" %>
+		</div>
+	</div>
+<% end %>
+
+
+
+<% if @students %>
+	<div style="width: 550px; margin-top: 30px;">
+		<div class="corp_resumes_paging">
+			<div class="float_l">
+				搜索到约
+				<strong><%= @students.total_entries %></strong>
+				名学生
+			</div>
+
+			<%= paging_buttons(@students, :class => "mini_pagination") %>
+		</div>
+		
+		<%#= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
+		
+		<% unless @students.blank? %>
+			<div class="corp_resumes_paging" style="border-bottom: 0px none;">
+				<div class="float_l">
+					搜索到约
+					<strong><%= @students.total_entries %></strong>
+					名学生
+				</div>
+
+				<%= paging_buttons(@students, :class => "mini_pagination") %>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/corporations/selects/var" %>
+	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
+	<script language="JavaScript">
+		function setup_toggle_form_section() {
+			$(".form_section_title").unbind("click").click(
+				function() {
+					var section_body = $(this).siblings(".form_section_body");
+					if(section_body.css("display") == "none") {
+						section_body.slideDown();
+						$(this).css("backgroundImage", "url(/images/corporations/collapse_icon.gif)");
+					}
+					else {
+						section_body.slideUp();
+						$(this).css("backgroundImage", "url(/images/corporations/expand_icon.gif)");
+					}
+					return false;
+				}
+			);
+		}
+		
+		$(document).ready(
+			function() {
+				$("#industry_category").unbind("change").change(
+					function() {
+						APP.fill_industries("#industry", $(this).val(), "");
+					}
+				);
+				
+				$("#job_category_class").unbind("change").change(
+					function() {
+						APP.fill_job_categories("#job_category", $(this).val(), "");
+					}
+				);
+				
+				setup_toggle_form_section();
+			}
+		);
+	</script>
+<% end %>

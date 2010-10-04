@@ -174,26 +174,26 @@ $(document).ready(
 		);
 		
 		
-		$("#university").change(
+		$("#university").unbind("change").change(
 			function() {
 				APP.fill_colleges($(this).val(), "");
 			}
 		);
-		$("#college").change(
+		$("#college").unbind("change").change(
 			function() {
 				APP.fill_majors($(this).val(), "");
 			}
 		);
 		
 		
-		$("#domain_category").change(
+		$("#domain_category").unbind("change").change(
 			function() {
 				fill_domains($(this).val());
 			}
 		);
 		
 		
-		$("#domain").change(
+		$("#domain").unbind("change").change(
 			function() {
 				show_tags($(this).val());
 			}

@@ -86,7 +86,7 @@ $(document).ready(
 		APP.setup_dropdown_menu(".admin_link", 120);
 		
 		
-		$("#industry_category").change(
+		$("#industry_category").unbind("change").change(
 			function() {
 				APP.fill_industries("#industry", $(this).val(), "");
 			}

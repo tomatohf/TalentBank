@@ -53,12 +53,12 @@ $(document).ready(
 		APP.setup_dropdown_menu(".operation_link", 130);
 	
 	
-		$("#university").change(
+		$("#university").unbind("change").change(
 			function() {
 				APP.fill_colleges($(this).val(), "");
 			}
 		);
-		$("#college").change(
+		$("#college").unbind("change").change(
 			function() {
 				APP.fill_majors($(this).val(), "");
 			}

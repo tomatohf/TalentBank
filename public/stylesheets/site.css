@@ -1130,3 +1130,41 @@ img.notification_icon {
 	font-weight: normal;
 	margin-right: 10px;
 }
+
+
+.job_form_title_section {
+	text-align: center;
+	padding: 10px 0px 8px;
+	background-color: #F2F2F2;
+}
+
+
+#match_job_form {
+	border: 1px solid #C2DDED;
+	margin-right: 20px;
+}
+#match_job_form #form_body {
+	background-color: #FCFCFC;
+	padding: 12px 15px 8px;
+}
+#match_job_form #form_body .form_section {
+	margin-bottom: 5px;
+}
+#match_job_form #form_body .form_section_title {
+	margin-right: 20px;
+	padding: 3px 22px 2px;
+	background: transparent url(/images/corporations/collapse_icon.gif) no-repeat scroll left center;
+}
+#match_job_form #form_body .form_section_body {
+	padding: 3px 22px;
+}
+#match_job_form #form_body .form_section_body .field_row {
+	padding: 5px 0px;
+}
+#match_job_form #form_body .field {
+	margin-right: 25px;
+}
+#match_job_form #form_body .field label {
+	color: #666666;
+	margin-right: 5px;
+}

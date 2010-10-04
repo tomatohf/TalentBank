@@ -1,0 +1,255 @@
+<%
+	job_name = h(@job.name)
+	page_title = "岗位 #{job_name}"
+	
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>/match" class="button">
+		对岗位进行匹配</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<div class="align_r" style="word-spacing: 20px; margin: 0px 30px 20px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>">
+		企业信息</a>
+		
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>/edit">
+		编辑岗位</a>
+		
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs">
+		返回岗位列表</a>
+</div>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w" style="font-size: 14px;">
+	<tr>
+		<td valign="top" style="width: 50%;">
+			<table border="0" cellspacing="10" cellpadding="5" class="main_part_w">
+				<tr>
+					<td colspan="2" class="job_form_title_section">
+						岗位信息
+					</td>
+				</tr>
+
+				<tr>
+					<td style="width: 80px;">
+						名称:
+					</td>
+
+					<td>
+						<%= job_name %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						岗位分类:
+					</td>
+
+					<td>
+						<%
+							category_class = @job.category_class_id && JobCategoryClass.find(@job.category_class_id)
+							category = @job.category_id && JobCategory.find(category_class[:id], @job.category_id)
+						%>
+						
+						<%= category_class && category_class[:name] %>
+						›
+						<%= category && category[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						负责人:
+					</td>
+
+					<td>
+						<%= h(@job.manager) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						工作内容:
+					</td>
+
+					<td>
+						<%= simple_format(h(@job.desc)) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						工作区域:
+					</td>
+
+					<td>
+						<%
+							district = @job.district_id && JobDistrict.find(@job.district_id)
+						%>
+						
+						<%= district && district[:name] %>
+						›
+						<%= h(@job.place) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						薪酬:
+					</td>
+
+					<td>
+						<%= h(@job.salary) %>
+						元/天
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						福利待遇:
+					</td>
+
+					<td>
+						<%= simple_format(h(@job.welfare)) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						招聘人数:
+					</td>
+
+					<td>
+						<%= h(@job.number) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						面试人数:
+					</td>
+
+					<td>
+						<%= h(@job.interview_number) %>
+					</td>
+				</tr>
+			</table>
+		</td>
+		
+		<td valign="top">
+			<table border="0" cellspacing="10" cellpadding="5" class="main_part_w">
+				<tr>
+					<td colspan="2" class="job_form_title_section">
+						岗位要求
+					</td>
+				</tr>
+
+
+				<tr>
+					<td style="width: 100px;">
+						上岗时间:
+					</td>
+
+					<td>
+						<%= format_date(@job.begin_at) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						工作期限:
+					</td>
+
+					<td>
+						<%
+							period = @job.period_id && JobPeriod.find(@job.period_id)
+						%>
+						
+						<%= period && period[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						每周工作时间:
+					</td>
+
+					<td>
+						<%
+							workday = @job.workday_id && JobWorkday.find(@job.workday_id)
+						%>
+						
+						<%= workday && workday[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						最低学历:
+					</td>
+
+					<td>
+						<%
+							edu_level = @job.edu_level_id && EduLevel.find(@job.edu_level_id)
+						%>
+						
+						<%= edu_level && edu_level[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						毕业时间:
+					</td>
+
+					<td>
+						<%
+							graduation = @job.graduation_id && JobGraduation.find(@job.graduation_id)
+						%>
+						
+						<%= graduation && graduation[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						相关专业:
+					</td>
+
+					<td>
+						<%
+							major = @job.major_id && JobMajor.find(@job.major_id)
+						%>
+						
+						<%= major && major[:name] %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						其它要求:
+					</td>
+
+					<td>
+						<%= simple_format(h(@job.requirement)) %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						招聘终止日期:
+					</td>
+
+					<td>
+						<%= format_date(@job.recruit_end_at) %>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

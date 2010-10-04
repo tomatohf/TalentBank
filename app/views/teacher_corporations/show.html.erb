@@ -1,7 +1,7 @@
 <%
 	corp_name = h(@corporation.name)
 	
-	talent_page_title("企业 #{corp_name} 的信息")
+	talent_page_title("企业 #{corp_name} 的资料")
 %>
 
 
@@ -9,6 +9,12 @@
 
 
 <div style="margin: 5px 30px;">
+	<div class="align_r">
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/edit">
+			编辑企业资料</a>
+	</div>
+	
+	
 	<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}/adjust_permission", :method => :post, :id => "adjust_allow_query_form" do %>
 		<input type="hidden" name="permission" value="query" />
 		<input type="hidden" name="allow" value="<%= !@corporation.allow_query %>" />

@@ -66,6 +66,24 @@ class TeacherCorporationJobsController < ApplicationController
   end
   
   
+  def show
+    
+  end
+  
+  
+  def match
+    @naive = true
+    search
+    render :action => "search"
+  end
+  
+  def search
+    @profile = @corporation.profile
+    
+    #@students = Student.paginate(:all, :per_page => 10, :page => 1)
+  end
+  
+  
   private
   
   def check_teacher

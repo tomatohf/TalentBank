@@ -1,7 +1,60 @@
-<div>
-	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>">
-		<%= h(job.name) %></a>
+<%
+	classes = []
+	classes << "odd" if job_counter.even?
+	classes << "info" if Time.now > job.recruit_end_at
+%>
+
+<tr<%= %Q! class="#{classes.join(" ")}"! if classes.size > 0 %>>
+	<td>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
+			<%= h(job.name) %></a>
+		<br />
+		<%= h(job.manager) %>
+	</td>
 	
-	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/edit">
-		编辑</a>
-</div>
+	<td>
+		<%
+			category_class = JobCategoryClass.find(job.category_class_id)
+			category = JobCategory.find(
+				job.category_class_id,
+				job.category_id
+			)
+		%>
+		
+		<%= category_class[:name] %>
+		<br />
+		›
+		<%= category[:name] %>
+	</td>
+	
+	<td>
+		<%
+			district = JobDistrict.find(job.district_id)
+		%>
+		
+		<%= district[:name] %>
+		<br />
+		›
+		<%= h(job.place) %>
+	</td>
+	
+	<td>
+		<%= job.salary %>元/天
+	</td>
+	
+	<td>
+		<span title="招聘人数"><%= job.number %></span>
+		<span title="面试人数">(<%= job.interview_number %>)</span>
+	</td>
+	
+	<td>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/edit" class="none">
+			编辑</a>
+
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank" style="margin: 0px 8px;">
+			查看</a>
+
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/match" class="none" target="_blank">
+			匹配</a>
+	</td>
+</tr>

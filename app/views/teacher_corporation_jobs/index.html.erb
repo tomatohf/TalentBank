@@ -19,7 +19,22 @@
 <% end %>
 
 <div>
-	<%= render :partial => "job", :collection => @jobs %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
+		<thead>
+			<tr>
+				<td>岗位名称</td>
+				<td>岗位分类</td>
+				<td>工作地址</td>
+				<td>薪酬</td>
+				<td>人数</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "job", :collection => @jobs %>
+		</tbody>
+	</table>
 	
 	<%= paging_buttons(@jobs) %>
 </div>

@@ -56,7 +56,10 @@ ActionController::Routing::Routes.draw do |map|
     teachers.resources :teacher_corporations, :as => :corporations, :member => {
       :adjust_permission => :post
     } do |teacher_corporations|
-      teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs
+      teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs, :member => {
+        :search => :get,
+        :match => :get
+      }
     end
   end
   

@@ -69,12 +69,12 @@
 		$.each(
 			["wish", "blacklist"],
 			function(i, type) {
-				$("#industry_category_" + type).change(
+				$("#industry_category_" + type).unbind("change").change(
 					function() {
 						APP.fill_industries("#industry_" + type, $(this).val(), "", "选择行业细分");
 					}
 				);
-				$("#job_category_class_" + type).change(
+				$("#job_category_class_" + type).unbind("change").change(
 					function() {
 						APP.fill_job_categories("#job_category_" + type, $(this).val(), "", "选择岗位细分");
 					}
@@ -82,7 +82,7 @@
 			}
 		);
 		
-		$("select.aspect").change(
+		$("select.aspect").unbind("change").change(
 			function() {
 				var aspect_select = $(this);
 				$.each(
