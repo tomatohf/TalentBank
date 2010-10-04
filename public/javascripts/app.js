@@ -84,10 +84,12 @@ var APP = {
 	},
 	
 	
-	fill_industries: function(category_id, industry_id) {
-		$("#industry").html("");
+	fill_industries: function(industry_selector, category_id, industry_id, empty_label) {
+		if(empty_label == null) empty_label = "不限行业细分";
+		
+		$(industry_selector).html("");
 
-		$("#industry").append("<option value=''>不限行业细分</option>");
+		$(industry_selector).append("<option value=''>" + empty_label + "</option>");
 
 		var industry_objs = INDUSTRIES["c_" + category_id];
 		if(industry_objs != null && industry_objs.length > 0) {
@@ -98,17 +100,19 @@ var APP = {
 				}
 			);
 
-			$("#industry").append(options.join(""));
+			$(industry_selector).append(options.join(""));
 
-			$("#industry").val(industry_id);
+			$(industry_selector).val(industry_id);
 		}
 	},
 	
 	
-	fill_job_categories: function(category_class_id, category_id) {
-		$("#job_category").html("");
+	fill_job_categories: function(job_category_selector, category_class_id, category_id, empty_label) {
+		if(empty_label == null) empty_label = "不限岗位细分";
+		
+		$(job_category_selector).html("");
 
-		$("#job_category").append("<option value=''>不限岗位细分</option>");
+		$(job_category_selector).append("<option value=''>" + empty_label + "</option>");
 
 		var job_category_objs = JOB_CATEGORIES["c_" + category_class_id];
 		if(job_category_objs != null && job_category_objs.length > 0) {
@@ -119,9 +123,9 @@ var APP = {
 				}
 			);
 
-			$("#job_category").append(options.join(""));
+			$(job_category_selector).append(options.join(""));
 
-			$("#job_category").val(category_id);
+			$(job_category_selector).val(category_id);
 		}
 	}
 	

@@ -1,0 +1,123 @@
+<% if industry_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td>行业大类</td>
+				<td>行业细分</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% industry_wishes.each_with_index do |industry_wish, i| %>
+				<%
+					industry_category = IndustryCategory.find(industry_wish.industry_category_id)
+					industry = Industry.find(
+						industry_wish.industry_category_id,
+						industry_wish.industry_id
+					)
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= industry_category[:name] %></td>
+					<td><%= industry[:name] %></td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('industry_<%= type %>', <%= industry_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+
+<% if job_category_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td>岗位大类</td>
+				<td>岗位细分</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% job_category_wishes.each_with_index do |job_category_wish, i| %>
+				<%
+					job_category_class = JobCategoryClass.find(job_category_wish.job_category_class_id)
+					job_category = JobCategory.find(
+						job_category_wish.job_category_class_id,
+						job_category_wish.job_category_id
+					)
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= job_category_class[:name] %></td>
+					<td><%= job_category[:name] %></td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('job_category_<%= type %>', <%= job_category_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+
+
+<% if corp_nature_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td>企业性质</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% corp_nature_wishes.each_with_index do |corp_nature_wish, i| %>
+				<%
+					corp_nature = CorporationNature.find(corp_nature_wish.nature_id)
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= corp_nature[:name] %></td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('corp_nature_<%= type %>', <%= corp_nature_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+
+<% if job_district_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td>工作区域</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% job_district_wishes.each_with_index do |job_district_wish, i| %>
+				<%
+					job_district = JobDistrict.find(job_district_wish.job_district_id)
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= job_district[:name] %></td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('job_district_<%= type %>', <%= job_district_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>

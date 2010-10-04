@@ -25,7 +25,11 @@ ActionController::Routing::Routes.draw do |map|
       :resume => :get,
       
       :edit_intern_profile => :get,
-      :update_intern_profile => :post
+      :update_intern_profile => :post,
+      
+      :edit_intern_wishes => :get,
+      :add_intern_wish => :post,
+      :remove_intern_wish => :post
     }
     
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {

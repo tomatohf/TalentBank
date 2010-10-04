@@ -339,5 +339,25 @@ module Utils
       
     end
   end
+  
+  
+  module InternWishHelpers
+    def self.included(including_model)
+      
+      def including_model.list_from_student(student_id)
+        self.find(
+          :all,
+          :conditions => ["student_id = ?", student_id]
+        )
+      end
+      
+      
+      including_model.after_save { |wish|
+      }
+      including_model.after_destroy { |wish|
+      }
+      
+    end
+  end
 
 end

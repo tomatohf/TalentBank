@@ -88,7 +88,7 @@ $(document).ready(
 		
 		$("#industry_category").change(
 			function() {
-				APP.fill_industries($(this).val(), "");
+				APP.fill_industries("#industry", $(this).val(), "");
 			}
 		);
 		

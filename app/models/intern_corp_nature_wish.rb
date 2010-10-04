@@ -9,4 +9,7 @@ class InternCorpNatureWish < ActiveRecord::Base
   Belongs_To_Keys = [:student_id, :nature_id]
   include Utils::UniqueBelongs
   
+  
+  include Utils::InternWishHelpers
+  
 end

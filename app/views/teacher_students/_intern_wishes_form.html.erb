@@ -1,0 +1,85 @@
+<% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/add_intern_wish", :method => :post do %>
+	<select class="dropdown_list aspect" name="aspect">
+		<option value="industry">按行业类别</option>
+		<option value="job_category">按岗位类别</option>
+		<option value="corp_nature">按企业性质</option>
+		<option value="job_district">按工作区域</option>
+	</select>
+
+	<span class="industry" style="display: none;">
+		<%=
+			render(
+				:partial => "/corporations/selects/industry_category",
+				:locals => {
+					:industry_category_id => nil,
+					:field_id => "industry_category_#{type}", :field_name => "industry_category",
+					:hide_label => true, :empty_label => "选择行业大类"
+				}
+			)
+		%>
+		<%=
+			render(
+				:partial => "/corporations/selects/industry",
+				:locals => {
+					:industry_category_id => nil,
+					:industry_id => nil,
+					:field_id => "industry_#{type}", :field_name => "industry",
+					:hide_label => true, :empty_label => "选择行业细分"
+				}
+			)
+		%>
+	</span>
+
+	<span class="job_category" style="display: none;">
+		<%=
+			render(
+				:partial => "/teacher_corporation_jobs/selects/job_category_class",
+				:locals => {
+					:job_category_class_id => nil,
+					:field_id => "job_category_class_#{type}", :field_name => "job_category_class",
+					:hide_label => true, :empty_label => "选择岗位大类"
+				}
+			)
+		%>
+		<%=
+			render(
+				:partial => "/teacher_corporation_jobs/selects/job_category",
+				:locals => {
+					:job_category_class_id => nil,
+					:job_category_id => nil,
+					:field_id => "job_category_#{type}", :field_name => "job_category",
+					:hide_label => true, :empty_label => "选择岗位细分"
+				}
+			)
+		%>
+	</span>
+	
+	<span class="corp_nature" style="display: none;">
+		<%=
+			render(
+				:partial => "/corporations/selects/nature",
+				:locals => {
+					:nature_id => nil,
+					:field_id => "corp_nature", :field_name => "corp_nature",
+					:hide_label => true, :required => true
+				}
+			)
+		%>
+	</span>
+	
+	<span class="job_district" style="display: none;">
+		<%=
+			render(
+				:partial => "/teacher_corporation_jobs/selects/job_district",
+				:locals => {
+					:job_district_id => nil,
+					:field_id => "job_district", :field_name => "job_district",
+					:hide_label => true, :required => true
+				}
+			)
+		%>
+	</span>
+
+	<input type="hidden" name="type" value="<%= type %>" />
+	<%= submit_tag "添加", :class => "button", :disabled => !@account_active %>
+<% end %>

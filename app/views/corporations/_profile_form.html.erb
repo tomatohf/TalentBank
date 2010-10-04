@@ -115,12 +115,16 @@
 	</td>
 	
 	<td>
-		<select name="nature" id="nature" class="dropdown_list">
-			<option value=""<%= %Q! selected="selected"! if @profile.nature_id.blank? %>></option>
-			<% CorporationNature.data.each do |nature| %>
-				<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if @profile.nature_id == nature[:id] %>><%= nature[:name] %></option>
-			<% end %>
-		</select>
+		<%=
+			render(
+				:partial => "/corporations/selects/nature",
+				:locals => {
+					:nature_id => @profile.nature_id,
+					:field_id => "nature", :field_name => "nature",
+					:hide_label => true, :empty_label => ""
+				}
+			)
+		%>
 	</td>
 </tr>
 

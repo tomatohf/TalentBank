@@ -1,0 +1,21 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= "不限企业性质"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		企业性质:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if nature_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% CorporationNature.data.each do |nature| %>
+		<option value="<%= nature[:id] %>"<%= %Q! selected="selected"! if nature_id.to_i == nature[:id] %>><%= nature[:name] %></option>
+	<% end %>
+</select>

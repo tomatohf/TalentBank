@@ -1,0 +1,98 @@
+<%
+	student_name = h(@student.get_name)
+	page_title = "编辑学生 #{student_name} 的实习意愿"
+
+	talent_page_title(page_title)
+%>
+
+
+<h2 class="page_title"><%= page_title %></h2>
+
+<%= render :partial => "edit_intern_nav", :locals => {:current_link => "edit_intern_wishes"} %>
+
+
+
+<div class="intern_wishes_title">
+	<div class="float_r">
+		<%= render :partial => "intern_wishes_form", :locals => {:type => "wish"} %>
+	</div>
+	
+	希望能去的岗位:
+</div>
+<%=
+	render :partial => "intern_wishes", :locals => {
+		:type => "wish",
+		:industry_wishes => @industry_wishes,
+		:job_category_wishes => @job_category_wishes,
+		:corp_nature_wishes => @corp_nature_wishes,
+		:job_district_wishes => @job_district_wishes
+	}
+%>
+
+
+<div class="intern_wishes_title" style="margin-top: 50px;">
+	<div class="float_r">
+		<%= render :partial => "intern_wishes_form", :locals => {:type => "blacklist"} %>
+	</div>
+	
+	肯定不去的岗位:
+</div>
+<%=
+	render :partial => "intern_wishes", :locals => {
+		:type => "blacklist",
+		:industry_wishes => @industry_blacklists,
+		:job_category_wishes => @job_category_blacklists,
+		:corp_nature_wishes => @corp_nature_blacklists,
+		:job_district_wishes => @job_district_blacklists
+	}
+%>
+
+
+<% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/remove_intern_wish", :method => :post, :id => "remove_intern_wish_form" do %>
+	<input type="hidden" id="remove_intern_wish_form_aspect" name="aspect" />
+	<input type="hidden" id="remove_intern_wish_form_remove_id" name="remove_id" />
+<% end %>
+
+
+<% content_for :scripts do %>
+	<%= render :partial => "/corporations/selects/var" %>
+	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
+	<script language="JavaScript">
+		function remove_wish(aspect, remove_id) {
+			if(confirm("确定要删除么 ?")) {
+				$("#remove_intern_wish_form_aspect").val(aspect);
+				$("#remove_intern_wish_form_remove_id").val(remove_id);
+				$("#remove_intern_wish_form").submit();
+			}
+		}
+		
+		$.each(
+			["wish", "blacklist"],
+			function(i, type) {
+				$("#industry_category_" + type).change(
+					function() {
+						APP.fill_industries("#industry_" + type, $(this).val(), "", "选择行业细分");
+					}
+				);
+				$("#job_category_class_" + type).change(
+					function() {
+						APP.fill_job_categories("#job_category_" + type, $(this).val(), "", "选择岗位细分");
+					}
+				);
+			}
+		);
+		
+		$("select.aspect").change(
+			function() {
+				var aspect_select = $(this);
+				$.each(
+					aspect_select.find("option"),
+					function(i, option) {
+						aspect_select.siblings("." + $(option).val()).hide();
+					}
+				);
+				aspect_select.siblings("." + aspect_select.val()).show();
+			}
+		).change();
+	</script>
+<% end %>

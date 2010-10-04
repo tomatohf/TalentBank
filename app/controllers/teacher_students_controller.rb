@@ -8,7 +8,8 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_login_for_teacher
   
-  before_filter :check_active, :only => [:create, :update, :update_intern_profile]
+  before_filter :check_active, :only => [:create, :update, :update_intern_profile,
+                                          :add_intern_wish, :remove_intern_wish]
   
   before_filter :check_teacher
   
@@ -154,6 +155,62 @@ class TeacherStudentsController < ApplicationController
     end
     
     render :action => "edit_intern_profile"
+  end
+  
+  
+  def edit_intern_wishes
+    @industry_wishes = InternIndustryWish.list_from_student(@student.id)
+    @industry_blacklists = InternIndustryBlacklist.list_from_student(@student.id)
+    @job_category_wishes = InternJobCategoryWish.list_from_student(@student.id)
+    @job_category_blacklists = InternJobCategoryBlacklist.list_from_student(@student.id)
+    @corp_nature_wishes = InternCorpNatureWish.list_from_student(@student.id)
+    @corp_nature_blacklists = InternCorpNatureBlacklist.list_from_student(@student.id)
+    @job_district_wishes = InternJobDistrictWish.list_from_student(@student.id)
+    @job_district_blacklists = InternJobDistrictBlacklist.list_from_student(@student.id)
+  end
+  
+  def add_intern_wish
+    url = "/teachers/#{@teacher.id}/students/#{@student.id}/edit_intern_wishes"
+    
+    type = if ["wish", "blacklist"].include?(type = params[:type])
+      type.capitalize 
+    else
+      jump_to(url)
+    end
+    
+    record = case params[:aspect]
+    when "industry"
+      "InternIndustry#{type}".constantize.get_record(
+        @student.id,
+        params[:industry_category], params[:industry]
+      )
+    when "job_category"
+      "InternJobCategory#{type}".constantize.get_record(
+        @student.id,
+        params[:job_category_class], params[:job_category]
+      )
+    when "corp_nature"
+      "InternCorpNature#{type}".constantize.get_record(@student.id, params[:corp_nature])
+    when "job_district"
+      "InternJobDistrict#{type}".constantize.get_record(@student.id, params[:job_district])
+    else
+      return jump_to(url)
+    end
+    
+    record.save if record.new_record?
+    
+    jump_to(url)
+  end
+  
+  def remove_intern_wish
+    aspect = params[:aspect]
+    if ["wish", "blacklist"].map { |t|
+      ["industry", "job_category", "corp_nature", "job_district"].map { |a| "#{a}_#{t}" }
+    }.flatten.include?(aspect)
+      "intern_#{aspect}".camelize.constantize.find(params[:remove_id]).destroy
+    end
+    
+    jump_to("/teachers/#{@teacher.id}/students/#{@student.id}/edit_intern_wishes")
   end
   
   

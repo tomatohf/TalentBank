@@ -1116,3 +1116,17 @@ img.notification_icon {
 	word-spacing: 10px;
 	color: #333333;
 }
+
+
+.intern_wishes_title {
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 1px solid #DDDDDD;
+	margin-bottom: 8px;
+	padding: 5px 5px 12px;
+}
+.intern_wishes_title select, .intern_wishes_title a {
+	font-size: 12px;
+	font-weight: normal;
+	margin-right: 10px;
+}

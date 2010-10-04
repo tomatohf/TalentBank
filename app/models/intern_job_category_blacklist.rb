@@ -9,4 +9,7 @@ class InternJobCategoryBlacklist < ActiveRecord::Base
   Belongs_To_Keys = [:student_id, :job_category_class_id, :job_category_id]
   include Utils::UniqueBelongs
   
+  
+  include Utils::InternWishHelpers
+  
 end
