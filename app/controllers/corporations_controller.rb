@@ -70,8 +70,6 @@ class CorporationsController < ApplicationController
     self.class.helpers.fill_corporation_profile(@profile, params)
     
     if @profile.save
-      @corporation.renew_updated_at(@profile.updated_at)
-      
       flash.now[:success_msg] = "修改成功, 企业信息已更新"
     else
       flash.now[:error_msg] = "操作失败, 再试一次吧"

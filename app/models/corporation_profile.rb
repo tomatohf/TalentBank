@@ -34,4 +34,10 @@ class CorporationProfile < ActiveRecord::Base
   Belongs_To_Keys = [:corporation_id]
   include Utils::UniqueBelongs
   
+  
+  
+  after_save { |profile|
+    profile.corporation.renew_updated_at(profile.updated_at)
+  }
+  
 end

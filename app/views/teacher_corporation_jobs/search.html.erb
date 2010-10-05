@@ -31,14 +31,14 @@
 							<label>行业大类:</label>
 							<% industry_category = @profile.industry_category_id && IndustryCategory.find(@profile.industry_category_id) %>
 							<%= industry_category && industry_category[:name] %>
-							<input type="hidden" name="industry_category" value="<%= industry_category && industry_category[:id] %>" />
+							<input type="hidden" name="ic" value="<%= industry_category && industry_category[:id] %>" />
 						<% else %>
 							<%=
 								render(
 									:partial => "/corporations/selects/industry_category",
 									:locals => {
 										:industry_category_id => @profile.industry_category_id,
-										:field_id => "industry_category", :field_name => "industry_category"
+										:field_id => "industry_category", :field_name => "ic"
 									}
 								)
 							%>
@@ -50,7 +50,7 @@
 							<label>行业细分:</label>
 							<% industry = @profile.industry_id && Industry.find(industry_category[:id], @profile.industry_id) %>
 							<%= industry && industry[:name] %>
-							<input type="hidden" name="industry" value="<%= industry && industry[:id] %>" />
+							<input type="hidden" name="i" value="<%= industry && industry[:id] %>" />
 						<% else %>
 							<%=
 								render(
@@ -58,7 +58,7 @@
 									:locals => {
 										:industry_category_id => @profile.industry_category_id,
 										:industry_id => @profile.industry_id,
-										:field_id => "industry", :field_name => "industry"
+										:field_id => "industry", :field_name => "i"
 									}
 								)
 							%>
@@ -72,14 +72,14 @@
 							<label>企业性质:</label>
 							<% nature = @profile.nature_id && CorporationNature.find(@profile.nature_id) %>
 							<%= nature && nature[:name] %>
-							<input type="hidden" name="nature" value="<%= nature && nature[:id] %>" />
+							<input type="hidden" name="n" value="<%= nature && nature[:id] %>" />
 						<% else %>
 							<%=
 								render(
 									:partial => "/corporations/selects/nature",
 									:locals => {
 										:nature_id => @profile.nature_id,
-										:field_id => "nature", :field_name => "nature"
+										:field_id => "nature", :field_name => "n"
 									}
 								)
 							%>
@@ -102,14 +102,14 @@
 							<label>岗位大类:</label>
 							<% job_category_class = @job.category_class_id && JobCategoryClass.find(@job.category_class_id) %>
 							<%= job_category_class && job_category_class[:name] %>
-							<input type="hidden" name="job_category_class" value="<%= job_category_class && job_category_class[:id] %>" />
+							<input type="hidden" name="jcc" value="<%= job_category_class && job_category_class[:id] %>" />
 						<% else %>
 							<%=
 								render(
 									:partial => "/teacher_corporation_jobs/selects/job_category_class",
 									:locals => {
 										:job_category_class_id => @job.category_class_id,
-										:field_id => "job_category_class", :field_name => "job_category_class"
+										:field_id => "job_category_class", :field_name => "jcc"
 									}
 								)
 							%>
@@ -121,7 +121,7 @@
 							<label>岗位大类:</label>
 							<% job_category = @job.category_id && JobCategory.find(job_category_class[:id], @job.category_id) %>
 							<%= job_category && job_category[:name] %>
-							<input type="hidden" name="job_category" value="<%= job_category && job_category[:id] %>" />
+							<input type="hidden" name="jc" value="<%= job_category && job_category[:id] %>" />
 						<% else %>
 							<%=
 								render(
@@ -129,7 +129,7 @@
 									:locals => {
 										:job_category_class_id => @job.category_class_id,
 										:job_category_id => @job.category_id,
-										:field_id => "job_category", :field_name => "job_category"
+										:field_id => "job_category", :field_name => "jc"
 									}
 								)
 							%>
@@ -143,30 +143,18 @@
 							<label>工作区域:</label>
 							<% district = @job.district_id && JobDistrict.find(@job.district_id) %>
 							<%= district && district[:name] %>
-							<input type="hidden" name="district" value="<%= district && district[:id] %>" />
+							<input type="hidden" name="d" value="<%= district && district[:id] %>" />
 						<% else %>
 							<%=
 								render(
 									:partial => "/teacher_corporation_jobs/selects/job_district",
 									:locals => {
 										:job_district_id => @job.district_id,
-										:field_id => "district", :field_name => "district"
+										:field_id => "district", :field_name => "d"
 									}
 								)
 							%>
 						<% end %>
-					</span>
-					
-					<span class="field">
-						<label for="salary">薪酬:</label>
-						<% job_salary = h(@job.salary) %>
-						<% if @naive %>
-							<%= @job.salary %>
-							<input type="hidden" name="salary" value="<%= job_salary %>" />
-						<% else %>
-							<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= job_salary %>" />
-						<% end %>
-						元/天
 					</span>
 				</div>
 			</div>
@@ -184,7 +172,7 @@
 								:partial => "/teacher_corporation_jobs/selects/job_period",
 								:locals => {
 									:job_period_id => @job.period_id,
-									:field_id => "job_period", :field_name => "job_period"
+									:field_id => "job_period", :field_name => "jp"
 								}
 							)
 						%>
@@ -196,10 +184,16 @@
 								:partial => "/teacher_corporation_jobs/selects/job_workday",
 								:locals => {
 									:job_workday_id => @job.workday_id,
-									:field_id => "job_workday", :field_name => "job_workday"
+									:field_id => "job_workday", :field_name => "jw"
 								}
 							)
 						%>
+					</span>
+					
+					<span class="field">
+						<label for="salary">薪酬:</label>
+						<input type="text" id="salary" name="s" class="text_field" size="3" value="<%= h(@job.salary) %>" />
+						元/天
 					</span>
 				</div>
 				
@@ -211,7 +205,7 @@
 								:partial => "/students/selects/edu_level",
 								:locals => {
 									:edu_level_id => @job.edu_level_id,
-									:field_id => "edu_level", :field_name => "edu_level",
+									:field_id => "edu_level", :field_name => "el",
 									:hide_label => true
 								}
 							)
@@ -224,7 +218,7 @@
 								:partial => "/teacher_corporation_jobs/selects/job_major",
 								:locals => {
 									:job_major_id => @job.major_id,
-									:field_id => "job_major", :field_name => "job_major"
+									:field_id => "job_major", :field_name => "jm"
 								}
 							)
 						%>
@@ -234,7 +228,7 @@
 				<div class="field_row">
 					<span class="field">
 						<label for="begin_at">上岗时间:</label>
-						<input type="text" id="begin_at" name="begin_at" class="text_field" size="15" value="<%= format_date(@job.begin_at) %>" />
+						<input type="text" id="begin_at" name="ba" class="text_field" size="15" value="<%= format_date(@job.begin_at) %>" />
 					</span>
 					
 					<span class="field">
@@ -243,7 +237,7 @@
 								:partial => "/teacher_corporation_jobs/selects/job_graduation",
 								:locals => {
 									:job_graduation_id => @job.graduation_id,
-									:field_id => "job_graduation", :field_name => "job_graduation"
+									:field_id => "job_graduation", :field_name => "jg"
 								}
 							)
 						%>
@@ -254,7 +248,7 @@
 		
 		
 		<div class="align_r" style="margin: 15px 100px 5px 5px;">
-			<%= submit_tag "搜索", :class => "button", :disabled => !@account_active, :style => "font-size: 14px;" %>
+			<input type="submit" value="搜索" class="button" style="font-size: 14px;" />
 		</div>
 	</div>
 <% end %>

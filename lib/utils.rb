@@ -353,8 +353,10 @@ module Utils
       
       
       including_model.after_save { |wish|
+        wish.student.renew_updated_at(wish.updated_at)
       }
       including_model.after_destroy { |wish|
+        wish.student.renew_updated_at(Time.now)
       }
       
     end

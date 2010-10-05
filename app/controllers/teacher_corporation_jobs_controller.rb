@@ -80,7 +80,27 @@ class TeacherCorporationJobsController < ApplicationController
   def search
     @profile = @corporation.profile
     
-    #@students = Student.paginate(:all, :per_page => 10, :page => 1)
+    
+    @profile.industry_category_id = params[:ic].strip unless params[:ic].nil?
+    @profile.industry_id = params[:i].strip unless params[:i].nil?
+    @profile.nature_id = params[:n].strip unless params[:n].nil?
+    
+    @job.category_class_id = params[:jcc].strip unless params[:jcc].nil?
+    @job.category_id = params[:jc].strip unless params[:jc].nil?
+    @job.district_id = params[:d].strip unless params[:d].nil?
+    @job.salary = params[:s].strip unless params[:s].nil?
+    
+    @job.begin_at = params[:ba].strip unless params[:ba].nil?
+    @job.period_id = params[:jp].strip unless params[:jp].nil?
+    @job.workday_id = params[:jw].strip unless params[:jw].nil?
+    @job.edu_level_id = params[:el].strip unless params[:el].nil?
+    @job.graduation_id = params[:jg].strip unless params[:jg].nil?
+    @job.major_id = params[:jm].strip unless params[:jm].nil?
+    
+    
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @students = Student.job_search(@corporation.school_id, @job, @profile, page)
   end
   
   

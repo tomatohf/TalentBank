@@ -21,4 +21,10 @@ class InternProfile < ActiveRecord::Base
   Belongs_To_Keys = [:student_id]
   include Utils::UniqueBelongs
   
+  
+  
+  after_save { |profile|
+    profile.student.renew_updated_at(profile.updated_at)
+  }
+  
 end
