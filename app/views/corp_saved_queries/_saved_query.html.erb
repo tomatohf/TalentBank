@@ -41,23 +41,27 @@
 			<% unless query.university_id.blank? %>
 				<span>
 					大学:
-					<%= University.find(query.university_id)[:name] %>
+					<% university = University.find(query.university_id) %>
+					<%= university && university[:name] %>
 				</span>
+				
+				<% unless query.college_id.blank? %>
+					<span>
+						学院:
+						<% college = College.find(query.university_id, query.college_id) %>
+						<%= college && college[:name] %>
+					</span>
+					
+					<% unless query.major_id.blank? %>
+						<span>
+							专业:
+							<% major = Major.find(query.college_id, query.major_id) %>
+							<%= major && major[:name] %>
+						</span>
+					<% end %>
+				<% end %>
 			<% end %>
 			
-			<% unless query.college_id.blank? %>
-				<span>
-					学院:
-					<%= College.find(query.university_id, query.college_id)[:name] %>
-				</span>
-			<% end %>
-			
-			<% unless query.major_id.blank? %>
-				<span>
-					专业:
-					<%= Major.find(query.college_id, query.major_id)[:name] %>
-				</span>
-			<% end %>
 			
 			<% unless query.edu_level_id.blank? %>
 				<span>

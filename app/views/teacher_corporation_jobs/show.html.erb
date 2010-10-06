@@ -52,8 +52,8 @@
 
 					<td>
 						<%
-							category_class = @job.category_class_id && JobCategoryClass.find(@job.category_class_id)
-							category = @job.category_id && JobCategory.find(category_class[:id], @job.category_id)
+							category_class = JobCategoryClass.find(@job.category_class_id)
+							category = category_class && JobCategory.find(category_class[:id], @job.category_id)
 						%>
 						
 						<%= category_class && category_class[:name] %>

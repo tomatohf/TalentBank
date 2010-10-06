@@ -23,7 +23,7 @@ class ResumeExpSectionsController < ApplicationController
       :include => [{:resume_student_exps => :student_exp}, :exps]
     )
     
-    @tags = ResumeExpTag.data[@resume.domain_id] || []
+    @tags = ResumeExpTag.find_group(@resume.domain_id)
     
     @taggers = @resume.exp_taggers
   end

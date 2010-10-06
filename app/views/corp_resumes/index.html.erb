@@ -119,7 +119,7 @@
 			
 			<div class="form_section_body">
 				<% domains.each do |domain| %>
-					<% tags = ResumeExpTag.data[domain[:id]] || [] %>
+					<% tags = ResumeExpTag.find_group(domain[:id]) %>
 					<% if tags.size > 0 %>
 						<div id="tags_<%= domain[:id] %>" class="field_row"<%= %Q! style="display: none;"! unless domain[:id] == @query.domain_id %>>
 							经历标签:

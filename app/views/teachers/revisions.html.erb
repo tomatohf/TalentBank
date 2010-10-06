@@ -52,8 +52,8 @@
 				
 				student = resume.student
 				university = University.find(student.university_id)
-				college = College.find(university[:id], student.college_id)
-				major = Major.find(college[:id], student.major_id)
+				college = university && College.find(university[:id], student.college_id)
+				major = college && Major.find(college[:id], student.major_id)
 				edu_level = EduLevel.find(student.edu_level_id)
 				graduation_year = student.graduation_year
 			%>
@@ -65,11 +65,11 @@
 					</div>
 					
 					<div class="info">
-						<%= university[:name] %>
+						<%= university && university[:name] %>
 						<br />
-						<%= college[:name] %>
+						<%= college && college[:name] %>
 						›
-						<%= major[:name] %>
+						<%= major && major[:name] %>
 						<br />
 						<%= edu_level[:name] %>
 						›

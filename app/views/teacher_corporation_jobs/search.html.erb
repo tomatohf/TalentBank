@@ -29,7 +29,7 @@
 					<span class="field">
 						<% if @naive %>
 							<label>行业大类:</label>
-							<% industry_category = @profile.industry_category_id && IndustryCategory.find(@profile.industry_category_id) %>
+							<% industry_category = IndustryCategory.find(@profile.industry_category_id) %>
 							<%= industry_category && industry_category[:name] %>
 							<input type="hidden" name="ic" value="<%= industry_category && industry_category[:id] %>" />
 						<% else %>
@@ -48,7 +48,7 @@
 					<span class="field">
 						<% if @naive %>
 							<label>行业细分:</label>
-							<% industry = @profile.industry_id && Industry.find(industry_category[:id], @profile.industry_id) %>
+							<% industry = industry_category && Industry.find(industry_category[:id], @profile.industry_id) %>
 							<%= industry && industry[:name] %>
 							<input type="hidden" name="i" value="<%= industry && industry[:id] %>" />
 						<% else %>
@@ -100,7 +100,7 @@
 					<span class="field">
 						<% if @naive %>
 							<label>岗位大类:</label>
-							<% job_category_class = @job.category_class_id && JobCategoryClass.find(@job.category_class_id) %>
+							<% job_category_class = JobCategoryClass.find(@job.category_class_id) %>
 							<%= job_category_class && job_category_class[:name] %>
 							<input type="hidden" name="jcc" value="<%= job_category_class && job_category_class[:id] %>" />
 						<% else %>
@@ -119,7 +119,7 @@
 					<span class="field">
 						<% if @naive %>
 							<label>岗位大类:</label>
-							<% job_category = @job.category_id && JobCategory.find(job_category_class[:id], @job.category_id) %>
+							<% job_category = job_category_class && JobCategory.find(job_category_class[:id], @job.category_id) %>
 							<%= job_category && job_category[:name] %>
 							<input type="hidden" name="jc" value="<%= job_category && job_category[:id] %>" />
 						<% else %>

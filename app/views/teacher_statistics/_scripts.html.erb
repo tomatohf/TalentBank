@@ -21,7 +21,7 @@
 		<% @school.resume_domains.each do |domain_id| %>
 			<% domain = ResumeDomain.find(domain_id) %>
 			DOMAINS.push({id:<%= domain[:id] %>, name:"<%= domain[:name] %>"});
-			TAGS["d_<%= domain[:id] %>"] = [<%= (ResumeExpTag.data[domain[:id]] || []).collect{|tag| %Q!{id:#{tag[:id]}, name:"#{tag[:name]}"}!}.join(",") %>];
+			TAGS["d_<%= domain[:id] %>"] = [<%= ResumeExpTag.find_group(domain[:id]).collect{|tag| %Q!{id:#{tag[:id]}, name:"#{tag[:name]}"}!}.join(",") %>];
 		<% end %>
 	
 		var SKILLS = [<%= Skill.data.collect{|skill| %Q!{id:#{skill[:id]}, name:"#{skill[:name]}"}!}.join(",") %>];

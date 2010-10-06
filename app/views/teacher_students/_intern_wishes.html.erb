@@ -12,13 +12,13 @@
 			<% industry_wishes.each_with_index do |industry_wish, i| %>
 				<%
 					industry_category = IndustryCategory.find(industry_wish.industry_category_id)
-					industry = industry_wish.industry_id && Industry.find(
+					industry = Industry.find(
 						industry_wish.industry_category_id,
 						industry_wish.industry_id
 					)
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
-					<td><%= industry_category[:name] %></td>
+					<td><%= industry_category && industry_category[:name] %></td>
 					<td><%= industry ? industry[:name] : %Q!<span class="info">不限行业细分</span>! %></td>
 					<td align="center">
 						<a href="#" class="none" onclick="remove_wish('industry_<%= type %>', <%= industry_wish.id %>); return false;">
@@ -46,13 +46,13 @@
 			<% job_category_wishes.each_with_index do |job_category_wish, i| %>
 				<%
 					job_category_class = JobCategoryClass.find(job_category_wish.job_category_class_id)
-					job_category = job_category_wish.job_category_id && JobCategory.find(
+					job_category = JobCategory.find(
 						job_category_wish.job_category_class_id,
 						job_category_wish.job_category_id
 					)
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
-					<td><%= job_category_class[:name] %></td>
+					<td><%= job_category_class && job_category_class[:name] %></td>
 					<td><%= job_category ? job_category[:name] : %Q!<span class="info">不限岗位细分</span>! %></td>
 					<td align="center">
 						<a href="#" class="none" onclick="remove_wish('job_category_<%= type %>', <%= job_category_wish.id %>); return false;">

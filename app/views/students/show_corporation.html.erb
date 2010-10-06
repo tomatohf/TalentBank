@@ -117,7 +117,7 @@
 				</td>
 
 				<td>
-					<% industry_category = @profile.industry_category_id && IndustryCategory.find(@profile.industry_category_id) %>
+					<% industry_category = IndustryCategory.find(@profile.industry_category_id) %>
 					<%= industry_category && industry_category[:name] %>
 				</td>
 			</tr>
@@ -128,7 +128,7 @@
 				</td>
 
 				<td>
-					<% industry = @profile.industry_id && Industry.find(industry_category[:id], @profile.industry_id) %>
+					<% industry = industry_category && Industry.find(industry_category[:id], @profile.industry_id) %>
 					<%= industry && industry[:name] %>
 				</td>
 			</tr>

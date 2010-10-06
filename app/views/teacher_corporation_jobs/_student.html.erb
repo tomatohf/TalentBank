@@ -1,8 +1,8 @@
 <%
 	student_number = h(student.number)
 	university = University.find(student.university_id)
-	college = College.find(university[:id], student.college_id)
-	major = Major.find(college[:id], student.major_id)
+	college = university && College.find(university[:id], student.college_id)
+	major = college && Major.find(college[:id], student.major_id)
 	edu_level = EduLevel.find(student.edu_level_id)
 	
 	profile = student.profile
@@ -25,11 +25,15 @@
 				<br />
 			<% end %>
 			
-			<%= university[:name] %>
-			›
-			<%= college[:name] %>
-			›
-			<%= major[:name] %>
+			<%= university && university[:name] %>
+			<% if college %>
+				›
+				<%= college[:name] %>
+			<% end %>
+			<% if major %>
+				›
+				<%= major[:name] %>
+			<% end %>
 			
 			<br />
 			

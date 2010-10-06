@@ -21,18 +21,16 @@
 			)
 		%>
 		
-		<%= category_class[:name] %>
+		<%= category_class && category_class[:name] %>
 		<br />
 		›
-		<%= category[:name] %>
+		<%= category && category[:name] %>
 	</td>
 	
 	<td>
-		<%
-			district = JobDistrict.find(job.district_id)
-		%>
+		<% district = JobDistrict.find(job.district_id) %>
 		
-		<%= district[:name] %>
+		<%= district && district[:name] %>
 		<br />
 		›
 		<%= h(job.place) %>

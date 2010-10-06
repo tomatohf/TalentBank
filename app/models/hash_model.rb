@@ -36,7 +36,7 @@ module HashModel
     end
     
     def self.find_by(group_id, field, value)
-      self.select_one(self.data[group_id], field, value)
+      self.select_one(self.find_group(group_id), field, value)
     end
     
     def self.find_by_id(id)

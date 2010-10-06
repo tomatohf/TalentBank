@@ -12,7 +12,7 @@ module CorpResumesHelper
     domain_id = params[:domain] && params[:domain].to_i
 
     tags = []
-    (ResumeExpTag.data[domain_id] || []).each do |tag|
+    ResumeExpTag.find_group(domain_id).each do |tag|
       tags << tag[:id] if params["tag_#{tag[:id]}".to_sym] == "true"
     end
 
