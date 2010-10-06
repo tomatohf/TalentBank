@@ -24,7 +24,7 @@ class TeacherStatisticsController < ApplicationController
       :page => page,
       :per_page => Queries_Page_Size,
       :match_mode => CorpQuery::Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :with => {:school_id => @teacher.school_id},
       :include => [:corporation]
     )
@@ -37,7 +37,7 @@ class TeacherStatisticsController < ApplicationController
       :page => page,
       :per_page => Queries_Page_Size,
       :match_mode => CorpViewedResume::Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :with => {:school_id => @teacher.school_id},
       :include => [:corporation, {:resume => [:student]}]
     )

@@ -149,7 +149,7 @@ class Resume < ActiveRecord::Base
       :page => page,
       :per_page => Resume_Page_Size,
       :match_mode => Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :field_weights => self.weights,
       :with => filters,
       :with_all => {

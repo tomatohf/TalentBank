@@ -139,7 +139,7 @@ class Student < ActiveRecord::Base
       :page => page,
       :per_page => per_page,
       :match_mode => Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :field_weights => {},
       :with => filters,
       :include => includes
@@ -168,7 +168,7 @@ class Student < ActiveRecord::Base
     self.search(
       :page => page, :per_page => 10,
       :match_mode => Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :field_weights => {},
       :with => filters,
       :without => blacklists,

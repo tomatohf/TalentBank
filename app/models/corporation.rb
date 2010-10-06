@@ -87,7 +87,7 @@ class Corporation < ActiveRecord::Base
       :page => page,
       :per_page => per_page,
       :match_mode => Search_Match_Mode,
-      :order => "@relevance DESC, updated_at DESC",
+      :order => "@weight DESC, updated_at DESC",
       :field_weights => {},
       :with => filters
     )
