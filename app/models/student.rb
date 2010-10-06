@@ -39,26 +39,49 @@ class Student < ActiveRecord::Base
     
     has intern_industry_wishes.industry_category_id, :as => :intern_wish_industry_category_id
     has intern_industry_wishes.industry_id, :as => :intern_wish_industry_id
+    has intern_job_category_wishes.job_category_class_id, :as => :intern_wish_job_category_class_id
+    has intern_job_category_wishes.job_category_id, :as => :intern_wish_job_category_id
+    has intern_corp_nature_wishes.nature_id, :as => :intern_wish_nature_id
+    has intern_job_district_wishes.job_district_id, :as => :intern_wish_job_district_id
+    indexes(
+      "GROUP_CONCAT(DISTINCT IF(intern_industry_wishes.industry_id, '', CONCAT('j', intern_industry_wishes.industry_category_id, 'y')) SEPARATOR ',')",
+      :as => :intern_wish_industry_category_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_industry_wishes.industry_id, 'i') SEPARATOR ',')",
+      :as => :intern_wish_industry_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT IF(intern_job_category_wishes.job_category_id, '', CONCAT('j', intern_job_category_wishes.job_category_class_id, 's')) SEPARATOR ',')",
+      :as => :intern_wish_job_category_class_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_category_wishes.job_category_id, 'c') SEPARATOR ',')",
+      :as => :intern_wish_job_category_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_corp_nature_wishes.nature_id, 'n') SEPARATOR ',')",
+      :as => :intern_wish_nature_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_district_wishes.job_district_id, 'd') SEPARATOR ',')",
+      :as => :intern_wish_job_district_ids
+    )
+    indexes("'j0'", :as => :match_all)
+    
     has(
       "GROUP_CONCAT(DISTINCT IF(intern_industry_blacklists.industry_id, '', intern_industry_blacklists.industry_category_id) SEPARATOR ',')",
       :as => :intern_blacklist_industry_category_id,
       :type => :multi
     )
     has intern_industry_blacklists.industry_id, :as => :intern_blacklist_industry_id
-    
-    has intern_job_category_wishes.job_category_class_id, :as => :intern_wish_job_category_class_id
-    has intern_job_category_wishes.job_category_id, :as => :intern_wish_job_category_id
     has(
       "GROUP_CONCAT(DISTINCT IF(intern_job_category_blacklists.job_category_id, '', intern_job_category_blacklists.job_category_class_id) SEPARATOR ',')",
       :as => :intern_blacklist_job_category_class_id,
       :type => :multi
     )
     has intern_job_category_blacklists.job_category_id, :as => :intern_blacklist_job_category_id
-    
-    has intern_corp_nature_wishes.nature_id, :as => :intern_wish_nature_id
     has intern_corp_nature_blacklists.nature_id, :as => :intern_blacklist_nature_id
-    
-    has intern_job_district_wishes.job_district_id, :as => :intern_wish_job_district_id
     has intern_job_district_blacklists.job_district_id, :as => :intern_blacklist_job_district_id
     
     set_property(
@@ -165,11 +188,27 @@ class Student < ActiveRecord::Base
     blacklists[:intern_blacklist_job_district_id] = job.district_id unless job.district_id.blank?
     blacklists[:intern_salary] = (job.salary.to_i + 1) .. 1010 unless job.salary.to_i > 1000
     
+    keywords = [%Q!"j0"!]
+    keywords << %Q!"j#{corporation_profile.industry_category_id}y"! unless corporation_profile.industry_category_id.blank?
+    keywords << %Q!"j#{corporation_profile.industry_id}i"! unless corporation_profile.industry_id.blank?
+    keywords << %Q!"j#{corporation_profile.nature_id}n"! unless corporation_profile.nature_id.blank?
+    keywords << %Q!"j#{job.category_class_id}s"! unless job.category_class_id.blank?
+    keywords << %Q!"j#{job.category_id}c"! unless job.category_id.blank?
+    keywords << %Q!"j#{job.district_id}d"! unless job.district_id.blank?
+    
     self.search(
+      keywords.join("|"),
       :page => page, :per_page => 10,
       :match_mode => Search_Match_Mode,
-      :order => "@weight DESC, updated_at DESC",
-      :field_weights => {},
+      :order => "@weight DESC",
+      :field_weights => {
+        :intern_wish_industry_category_ids => 4,
+        :intern_wish_industry_ids => 8,
+        :intern_wish_nature_ids => 2,
+        :intern_wish_job_category_class_ids => 10,
+        :intern_wish_job_category_ids => 10,
+        :intern_wish_job_district_ids => 6
+      },
       :with => filters,
       :without => blacklists,
       :include => options[:include] || []
