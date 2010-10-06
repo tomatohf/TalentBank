@@ -1,7 +1,12 @@
-<% talent_page_title("编辑个人信息") %>
+<%
+	student_name = h(@student.get_name)
+	page_title = "编辑学生 #{student_name} 的信息"
+
+	talent_page_title(page_title)
+%>
 
 
-<h2 class="page_title">简历基本信息 - 个人信息</h2>
+<h2 class="page_title"><%= page_title %></h2>
 
 <%= render :partial => "edit_nav", :locals => {:current_link => "edit_profile"} %>
 
@@ -21,8 +26,8 @@
 	</p>
 <% end %>
 
-<% form_tag "/students/#{@student.id}/update_profile", :method => :post do %>
+<% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/update_profile", :method => :post do %>
 
-	<%= render :partial => "profile_form", :locals => {:submit_label => "修改个人信息"} %>
+	<%= render :partial => "/students/profile_form", :locals => {:submit_label => "保存学生信息"} %>
 	
 <% end %>

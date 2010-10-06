@@ -50,21 +50,7 @@ class StudentsController < ApplicationController
   def update_profile
     @profile = StudentProfile.get_record(@student.id)
     
-    @profile.phone = params[:phone] && params[:phone].strip
-    @profile.email = params[:email] && params[:email].strip
-    
-    @profile.address = params[:address] && params[:address].strip
-    @profile.zip = params[:zip] && params[:zip].strip
-    
-    @profile.gender = case params[:gender]
-      when "true"
-        true
-      when "false"
-        false
-      else
-        nil
-    end
-    @profile.political_status_id = params[:political_status]
+    self.class.helpers.fill_student_profile(@profile, params)
     
     if @profile.save
       flash.now[:success_msg] = "修改成功, 个人信息已更新"

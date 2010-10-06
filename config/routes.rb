@@ -24,6 +24,9 @@ ActionController::Routing::Routes.draw do |map|
     teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get,
       
+      :edit_profile => :get,
+      :update_profile => :post,
+      
       :edit_intern_profile => :get,
       :update_intern_profile => :post,
       

@@ -1,0 +1,11 @@
+<div class="horizontal_nav">
+	<%
+		[
+			["edit", "编辑帐号"],
+	  		["edit_profile", "编辑信息"]
+		].each do |part|
+	%>
+		<a href="/teachers/<%= @teacher.id %>/students/<%= @student.id %>/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == current_link %>>
+			<%= part[1] %></a>
+	<% end %>
+</div>

@@ -248,40 +248,45 @@
 		
 		
 		<div class="align_r" style="margin: 15px 100px 5px 5px;">
-			<input type="submit" value="搜索" class="button" style="font-size: 14px;" />
+			<input type="submit" value="搜索" class="button" />
 		</div>
 	</div>
 <% end %>
 
 
 
-<% if @students %>
-	<div style="width: 550px; margin-top: 30px;">
-		<div class="corp_resumes_paging">
-			<div class="float_l">
-				搜索到约
-				<strong><%= @students.total_entries %></strong>
-				名学生
-			</div>
-
-			<%= paging_buttons(@students, :class => "mini_pagination") %>
-		</div>
-		
-		<%#= render :partial => "resume", :collection => @resumes, :locals => {:resume_tags => @resume_tags} %>
-		
-		<% unless @students.blank? %>
-			<div class="corp_resumes_paging" style="border-bottom: 0px none;">
-				<div class="float_l">
+<div style="margin-top: 30px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
+		<thead>
+			<tr>
+				<td>
 					搜索到约
-					<strong><%= @students.total_entries %></strong>
+					<b><%= @students.total_entries %></b>
 					名学生
-				</div>
-
-				<%= paging_buttons(@students, :class => "mini_pagination") %>
-			</div>
-		<% end %>
-	</div>
-<% end %>
+				</td>
+				<td>实习信息</td>
+				<td style="width: 350px;" align="right">
+					<%=
+						paging_buttons(
+							@students, :class => "mini_pagination",
+							:previous_label => "«", :next_label => "»"
+						)
+					%>
+				</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "student", :collection => @students %>
+		</tbody>
+	</table>
+	
+	<% unless @page == @students.total_pages %>
+		<div class="align_c">
+			<a href="#">更多</a>
+		</div>
+	<% end %>
+</div>
 
 
 

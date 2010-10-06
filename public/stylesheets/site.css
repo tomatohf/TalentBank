@@ -1168,3 +1168,15 @@ img.notification_icon {
 	color: #666666;
 	margin-right: 5px;
 }
+
+
+.matched_student_name {
+	font-size: 14px;
+	font-weight: bold;
+	margin-right: 10px;
+	color: #000000;
+}
+.matched_student_info {
+	color: #888888;
+	margin-top: 5px;
+}

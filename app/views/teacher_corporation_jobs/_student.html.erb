@@ -1,0 +1,83 @@
+<%
+	student_number = h(student.number)
+	university = University.find(student.university_id)
+	college = College.find(university[:id], student.college_id)
+	major = Major.find(college[:id], student.major_id)
+	edu_level = EduLevel.find(student.edu_level_id)
+	
+	profile = student.profile
+	intern_profile = student.intern_profile
+%>
+
+<tr<%= %Q! class="odd"! if student_counter.even? %>>
+	<td valign="top">
+		<div>
+			<span class="matched_student_name"><%= h(student.name) %></span>
+			<a href="/teachers/<%= @teacher.id %>/students?n=<%= student_number %>" target="_blank" class="none">
+				<%= student_number %></a>
+		</div>
+		
+		<div class="matched_student_info">
+			<% if profile %>
+				<%= h(profile.phone) %>
+				<br />
+				<%= h(profile.email) %>
+				<br />
+			<% end %>
+			
+			<%= university[:name] %>
+			›
+			<%= college[:name] %>
+			›
+			<%= major[:name] %>
+			
+			<br />
+			
+			<%= edu_level[:name] %>
+			›
+			<%= student.graduation_year %> 年毕业
+			<%=
+				year = @school.coming_graduation_year
+				if student.graduation_year == year
+					"(应届毕业)"
+				elsif student.graduation_year > year
+					"(在读学生)"
+				else
+					"(已经毕业)"
+				end
+			%>
+		</div>
+	</td>
+	
+	<td valign="top">
+		<% if intern_profile %>
+			<div class="matched_student_info">
+				<%= format_date(intern_profile.begin_at) %>
+				<% workday = JobWorkday.find(intern_profile.workday_id) %>
+				<% if workday %>
+					›
+					<%= workday[:name] %>
+				<% end %>
+			
+				<br />
+			
+				<% period = JobPeriod.find(intern_profile.period_id) %>
+				<% if period %>
+					<%= period[:name] %>
+					›
+				<% end %>
+				<%= intern_profile.salary %> 元/天
+				
+				<br />
+				<% job_major = JobMajor.find(intern_profile.major_id) %>
+				<% if job_major %>
+					<%= job_major[:name] %>
+				<% end %>
+			</div>
+		<% end %>
+	</td>
+	
+	<td valign="top">
+		
+	</td>
+</tr>
