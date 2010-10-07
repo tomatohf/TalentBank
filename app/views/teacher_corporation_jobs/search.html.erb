@@ -162,7 +162,7 @@
 		
 		
 		<div class="form_section">
-			<a href="#" title="展开/收起" class="none form_section_title">岗位要求</a>
+			<a href="#" title="展开/收起" class="none form_section_title" id="job_requirements_link">岗位要求</a>
 			
 			<div class="form_section_body">
 				<div class="field_row">
@@ -320,6 +320,13 @@
 			);
 		}
 		
+		function goto_job_requirements_link() {
+			if($.trim(window.location.href).indexOf("?") > 0) {
+				// $("html, body").animate({scrollTop: $("#job_requirements_link").position().top});
+				$("html, body").scrollTop($("#job_requirements_link").position().top);
+			}
+		}
+		
 		$(document).ready(
 			function() {
 				$("#industry_category").unbind("change").change(
@@ -335,6 +342,8 @@
 				);
 				
 				setup_toggle_form_section();
+				
+				goto_job_requirements_link();
 			}
 		);
 	</script>
