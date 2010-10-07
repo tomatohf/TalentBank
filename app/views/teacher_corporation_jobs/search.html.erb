@@ -118,7 +118,7 @@
 					
 					<span class="field">
 						<% if @naive %>
-							<label>岗位大类:</label>
+							<label>岗位细分:</label>
 							<% job_category = job_category_class && JobCategory.find(job_category_class[:id], @job.category_id) %>
 							<%= job_category && job_category[:name] %>
 							<input type="hidden" name="jc" value="<%= job_category && job_category[:id] %>" />
@@ -259,13 +259,15 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
 		<thead>
 			<tr>
-				<td>
+				<td style="width: 200px;">
 					搜索到约
 					<b><%= @students.total_entries %></b>
 					名学生
 				</td>
-				<td>实习信息</td>
-				<td style="width: 350px;" align="right">
+				<td style="width: 200px;">
+					实习信息
+				</td>
+				<td colspan="2" align="right">
 					<%=
 						paging_buttons(
 							@students, :class => "mini_pagination",
@@ -277,11 +279,18 @@
 		</thead>
 		
 		<tbody>
-			<%= render :partial => "student", :collection => @students %>
+			<% @students.each_with_match do |student, match, counter| %>
+				<%=
+					render(
+						:partial => "student",
+						:locals => {:student => student, :match => match, :counter => counter}
+					)
+				%>
+			<% end %>
 		</tbody>
 	</table>
 	
-	<% unless @page == @students.total_pages %>
+	<% if false %>
 		<div class="align_c">
 			<a href="#">更多</a>
 		</div>

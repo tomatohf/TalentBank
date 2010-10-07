@@ -6,13 +6,23 @@
 	edu_level = EduLevel.find(student.edu_level_id)
 	
 	profile = student.profile
-	intern_profile = student.intern_profile
+	
+	weight = match[:weight]
+	attributes = match[:attributes]
+	
+	matched_wishes = []
+	matched_wishes << "行业大类" if attributes["intern_wish_industry_category_id"].include?(@profile.industry_category_id)
+	matched_wishes << "行业细分" if attributes["intern_wish_industry_id"].include?(@profile.industry_id)
+	matched_wishes << "企业性质" if attributes["intern_wish_nature_id"].include?(@profile.nature_id)
+	matched_wishes << "岗位大类" if attributes["intern_wish_job_category_class_id"].include?(@job.category_class_id)
+	matched_wishes << "岗位细分" if attributes["intern_wish_job_category_id"].include?(@job.category_id)
+	matched_wishes << "工作区域" if attributes["intern_wish_job_district_id"].include?(@job.district_id)
 %>
 
-<tr<%= %Q! class="odd"! if student_counter.even? %>>
+<tr<%= %Q! class="odd"! if counter.even? %>>
 	<td valign="top">
 		<div>
-			<span class="matched_student_name"><%= h(student.name) %></span>
+			<span class="matched_student_title"><%= h(student.name) %></span>
 			<a href="/teachers/<%= @teacher.id %>/students?n=<%= student_number %>" target="_blank" class="none">
 				<%= student_number %></a>
 		</div>
@@ -26,13 +36,47 @@
 			<% end %>
 			
 			<%= university && university[:name] %>
+			
+			<br />
+			
 			<% if college %>
-				›
 				<%= college[:name] %>
 			<% end %>
 			<% if major %>
 				›
 				<%= major[:name] %>
+			<% end %>
+		</div>
+	</td>
+	
+	<td valign="top">
+		<div class="matched_student_info">
+			<% if matched_wishes.size > 0 %>
+				<% matched_wishes.each do |wish| %>
+					<span title="满足其对 <%= wish %> 的实习意愿" class="matched_wish"><%= wish %></span>
+				<% end %>
+			<% else %>
+				(不满足任何实习意愿)
+			<% end %>
+		</div>
+		
+		<div class="matched_student_info">
+			<%= format_date(Time.at(attributes["intern_begin_at"])) unless attributes["intern_begin_at"].blank? %>
+			<% workday = JobWorkday.find(attributes["intern_workday_id"]) %>
+			<% if workday %>
+				›
+				<%= workday[:name] %>
+			<% end %>
+		
+			<br />
+		
+			<% period = JobPeriod.find(attributes["intern_period_id"]) %>
+			<% if period %>
+				<%= period[:name] %>
+				›
+			<% end %>
+			<% unless attributes["intern_salary"].blank? %>
+				<%= attributes["intern_salary"] %> 元/天
 			<% end %>
 			
 			<br />
@@ -50,38 +94,22 @@
 					"(已经毕业)"
 				end
 			%>
+			
+			<br />
+			
+			<% job_major = JobMajor.find(attributes["intern_major_id"]) %>
+			<% if job_major %>
+				<%= job_major[:name] %>
+			<% end %>
 		</div>
 	</td>
 	
 	<td valign="top">
-		<% if intern_profile %>
-			<div class="matched_student_info">
-				<%= format_date(intern_profile.begin_at) %>
-				<% workday = JobWorkday.find(intern_profile.workday_id) %>
-				<% if workday %>
-					›
-					<%= workday[:name] %>
-				<% end %>
-			
-				<br />
-			
-				<% period = JobPeriod.find(intern_profile.period_id) %>
-				<% if period %>
-					<%= period[:name] %>
-					›
-				<% end %>
-				<%= intern_profile.salary %> 元/天
-				
-				<br />
-				<% job_major = JobMajor.find(intern_profile.major_id) %>
-				<% if job_major %>
-					<%= job_major[:name] %>
-				<% end %>
-			</div>
-		<% end %>
+		
 	</td>
 	
-	<td valign="top">
-		
+	<td valign="top" class="matched_student_actions">
+		<a href="#">刷新状态</a>
+		<a href="#">添加记录</a>
 	</td>
 </tr>

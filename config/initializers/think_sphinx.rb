@@ -94,6 +94,13 @@ end
 module ThinkingSphinx
   class Search
     
+    def each_with_match(&block)
+      populate
+      results[:matches].each_with_index do |match, index|
+        yield(self[index], match, index)
+      end
+    end
+    
     private
     
     alias original_populate populate

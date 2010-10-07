@@ -102,7 +102,7 @@ class TeacherCorporationJobsController < ApplicationController
     @page = 1 unless @page =~ /\d+/
     @students = Student.job_search(
       @corporation.school_id, @job, @profile, @page,
-      :include => [:profile, :intern_profile]
+      :include => [:profile]
     )
   end
   

@@ -1170,13 +1170,31 @@ img.notification_icon {
 }
 
 
-.matched_student_name {
+.matched_student_title {
 	font-size: 14px;
 	font-weight: bold;
 	margin-right: 10px;
 	color: #000000;
 }
 .matched_student_info {
-	color: #888888;
+	color: #666666;
 	margin-top: 5px;
+}
+.matched_student_info .matched_wish {
+	margin-right: 15px;
+	padding-left: 18px;
+	background: transparent url(/images/teachers/yes_icon.gif) no-repeat scroll left 0px;
+}
+.matched_student_actions {
+	width: 80px;
+}
+.matched_student_actions a {
+	display: block;
+	text-decoration: none;
+	padding: 4px 5px 2px;
+	border-bottom: 1px solid #D8DFEA;
+}
+.matched_student_actions a:hover {
+	background-color: #3B5998;
+	color: #FFFFFF;
 }
