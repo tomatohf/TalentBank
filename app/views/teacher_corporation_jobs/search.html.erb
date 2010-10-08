@@ -290,9 +290,13 @@
 		</tbody>
 	</table>
 	
-	<% if false %>
-		<div class="align_c">
-			<a href="#">更多</a>
+	<% if @page < @students.total_pages %>
+		<div class="matched_students_more">
+			<input type="hidden" id="current_page" value="<%= @page %>" />
+			<input type="hidden" id="total_page" value="<%= @students.total_pages %>" />
+			
+			<a href="#">更多搜索结果</a>
+			<span>正在搜索学生 ...</span>
 		</div>
 	<% end %>
 </div>
@@ -302,49 +306,5 @@
 <% content_for :scripts do %>
 	<%= render :partial => "/corporations/selects/var" %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-	<script language="JavaScript">
-		function setup_toggle_form_section() {
-			$(".form_section_title").unbind("click").click(
-				function() {
-					var section_body = $(this).siblings(".form_section_body");
-					if(section_body.css("display") == "none") {
-						section_body.slideDown();
-						$(this).css("backgroundImage", "url(/images/corporations/collapse_icon.gif)");
-					}
-					else {
-						section_body.slideUp();
-						$(this).css("backgroundImage", "url(/images/corporations/expand_icon.gif)");
-					}
-					return false;
-				}
-			);
-		}
-		
-		function goto_job_requirements_link() {
-			if($.trim(window.location.href).indexOf("?") > 0) {
-				// $("html, body").animate({scrollTop: $("#job_requirements_link").position().top});
-				$("html, body").scrollTop($("#job_requirements_link").position().top);
-			}
-		}
-		
-		$(document).ready(
-			function() {
-				$("#industry_category").unbind("change").change(
-					function() {
-						APP.fill_industries("#industry", $(this).val(), "");
-					}
-				);
-				
-				$("#job_category_class").unbind("change").change(
-					function() {
-						APP.fill_job_categories("#job_category", $(this).val(), "");
-					}
-				);
-				
-				setup_toggle_form_section();
-				
-				goto_job_requirements_link();
-			}
-		);
-	</script>
+	<script src="/javascripts/jobs/search.js" type="text/javascript" language="JavaScript"></script>
 <% end %>

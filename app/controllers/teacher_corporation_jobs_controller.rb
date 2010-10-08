@@ -74,7 +74,7 @@ class TeacherCorporationJobsController < ApplicationController
   def match
     @naive = true
     search
-    render :action => "search"
+    render :action => "search" unless request.xhr?
   end
   
   def search
@@ -99,11 +99,26 @@ class TeacherCorporationJobsController < ApplicationController
     
     
     @page = params[:page]
-    @page = 1 unless @page =~ /\d+/
+    @page = @page =~ /\d+/ ? @page.to_i : 1
     @students = Student.job_search(
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile]
     )
+    
+    
+    render(
+      :layout => false,
+      :inline => %Q!
+        <% @students.each_with_match do |student, match, counter| %>
+  				<%=
+  					render(
+  						:partial => "student",
+  						:locals => {:student => student, :match => match, :counter => counter}
+  					)
+  				%>
+  			<% end %>
+      !
+    ) if request.xhr?
   end
   
   
