@@ -13,7 +13,9 @@ class TeacherStudentInternLogsController < ApplicationController
   
   before_filter :check_student
   
-  before_filter :check_log, :except => [:index, :new, :create]
+  before_filter :check_log, :except => [:index, :new, :create,
+                                        :set_calling_mark, :clear_calling_mark,
+                                        :refresh_matched_student_status]
   
   
   def index
@@ -23,6 +25,13 @@ class TeacherStudentInternLogsController < ApplicationController
       :order => "occur_at DESC",
       :include => [:corporation]
     )
+    
+    marked_teacher_id = @student.get_calling_mark
+    @marked_teacher = if @teacher.id == marked_teacher_id
+      @teacher
+    else
+      marked_teacher_id && Teacher.try_find(marked_teacher_id)
+    end
   end
   
   
@@ -65,6 +74,30 @@ class TeacherStudentInternLogsController < ApplicationController
     @log.destroy
     
     render :nothing => true
+  end
+  
+  
+  def set_calling_mark
+    @student.mark_calling(@teacher.id) unless @student.get_calling_mark
+    
+    render :partial => "calling_mark", :locals => {:teacher => @teacher}
+  end
+  def clear_calling_mark
+    @student.clear_calling_mark if @teacher.id == @student.get_calling_mark
+    
+    render :partial => "calling_mark", :locals => {:teacher => nil}
+  end
+  
+  
+  def refresh_matched_student_status
+    render(
+      :layout => false,
+			:partial => "/teacher_corporation_jobs/matched_student_status",
+			:locals => {
+				:intern_log => InternLog.latest_by_students(@student, :include => [:corporation])[@student.id],
+				:student => @student
+			}
+		)
   end
   
   

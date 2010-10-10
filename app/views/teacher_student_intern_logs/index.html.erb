@@ -12,10 +12,20 @@
 
 
 <div>
-	<div class="align_r" style="margin: 0px 30px 20px;">
-		<a href="#" id="new_log_link" class="button">
-			添加实习记录</a>
-	</div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w" style="margin-bottom: 20px;">
+		<tr>
+			<td valign="top" style="padding-left: 30px;">
+				<div id="calling_mark">
+					<%= render :partial => "calling_mark", :locals => {:teacher => @marked_teacher} %>
+				</div>
+			</td>
+			
+			<td valign="top" align="right" style="width: 200px; padding-right: 30px;">
+				<a href="#" id="new_log_link" class="button">
+					添加实习记录</a>
+			</td>
+		</tr>
+	</table>
 	
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list" id="log_list">
 		<thead>

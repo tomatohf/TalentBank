@@ -18,12 +18,14 @@ class InternLog < ActiveRecord::Base
   
   
   
-  def self.latest_by_students(students)
+  def self.latest_by_students(students, options)
     Hash[
       self.find(
         :all,
-        :joins => "LEFT JOIN intern_logs logs ON intern_logs.student_id = logs.student_id AND intern_logs.occur_at > logs.occur_at",
-        :conditions => ["intern_logs.occur_at IS NULL and intern_logs.student_id in (?)", students]
+        {
+          :joins => "LEFT JOIN intern_logs logs ON intern_logs.student_id = logs.student_id AND intern_logs.occur_at > logs.occur_at",
+          :conditions => ["intern_logs.occur_at IS NULL and intern_logs.student_id in (?)", students]
+        }.merge(options)
       ).group_by { |log| log.student_id }.map { |student_id, logs|
         [student_id, logs.max { |x, y| x.updated_at <=> y.updated_at } ]
       }

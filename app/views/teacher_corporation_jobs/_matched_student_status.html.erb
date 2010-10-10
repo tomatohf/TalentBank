@@ -1,0 +1,57 @@
+<%
+	marked_teacher_id = student.get_calling_mark
+%>
+
+<td valign="top">
+	<div class="intern_status">
+		<div class="student_name">
+			<%= intern_log ? intern_log.determine_status : InternLog::Status[:unemployed] %>
+		</div>
+		
+		<div class="calling_mark">
+			<% if marked_teacher_id %>
+				与
+				<% if @teacher.id == marked_teacher_id %>
+					自己
+				<% else %>
+					其他人
+				<% end %>
+				通话中 ...
+			<% end %>
+		</div>
+		
+		<div class="intern_log">
+			<% if intern_log %>
+				<%= h(intern_log.corporation.get_name)%>
+				<br />
+				<%
+					event = InternLogEvent.find(intern_log.event_id)
+					result = event && InternLogEventResult.find(event[:id], intern_log.result_id)
+				%>
+				<%= event && event[:name] %>
+				›
+				<%= result && result[:name] %>
+				<br />
+				<%= format_datetime(intern_log.occur_at) %>
+			<% else %>
+				无实习记录
+			<% end %>
+		</div>
+	</div>
+</td>
+
+<td valign="top" class="actions">
+	<input type="hidden" value="<%= student.id %>" />
+	
+	<% if marked_teacher_id %>
+		<% if @teacher.id == marked_teacher_id %>
+			<a href="#" class="clear_calling_mark_link">清除标记</a>
+		<% else %>
+			<div class="info">标记通话</div>
+		<% end %>
+	<% else %>
+		<a href="#" class="mark_calling_link">标记通话</a>
+	<% end %>
+	<a href="#" class="interview_link">通知面试</a>
+	<a href="#" class="refresh_status_link">刷新状态</a>
+</td>

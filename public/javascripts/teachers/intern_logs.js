@@ -166,6 +166,52 @@ function setup_log_form() {
 }
 
 
+function set_calling_mark(marking) {
+	var url = "/teachers/" + TEACHER_ID + "/students/" + STUDENT_ID + "/intern_logs/";
+	if(marking) {
+		url += "set_calling_mark";
+	}
+	else {
+		url += "clear_calling_mark";
+	}
+	
+	$.ajax(
+		{
+			type: "POST",
+			url: url,
+			dataType: "html",
+			data: {},
+			success: function(data, text_status) {
+				$("#calling_mark").fadeOut(
+					"slow",
+					function() {
+						$(this).html(data).fadeIn("slow");
+						setup_calling_mark_link();
+					}
+				);
+			}
+		}
+	);
+}
+
+
+function setup_calling_mark_link() {
+	$("a.mark_calling_link").unbind("click").click(
+		function() {
+			set_calling_mark(true);
+			return false;
+		}
+	);
+	
+	$("a.clear_calling_mark_link").unbind("click").click(
+		function() {
+			set_calling_mark(false);
+			return false;
+		}
+	);
+}
+
+
 function hide_operating() {
 	$("#operating").fadeOut("slow");
 }
@@ -176,6 +222,7 @@ function show_operating() {
 
 $(document).ready(
 	function() {
+		setup_calling_mark_link();
 		setup_operation_links();
 	}
 );

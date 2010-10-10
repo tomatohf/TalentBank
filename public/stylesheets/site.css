@@ -1170,31 +1170,54 @@ img.notification_icon {
 }
 
 
-.matched_student_title {
+.matched_student .student_name {
 	font-size: 14px;
 	font-weight: bold;
 	margin-right: 10px;
 	color: #000000;
 }
-.matched_student_info {
+.matched_student .profile,
+.matched_student .intern_profile,
+.matched_student .intern_wish {
 	color: #666666;
 	margin-top: 5px;
 }
-.matched_student_info .matched_wish {
-	margin-right: 15px;
-	padding-left: 18px;
-	background: transparent url(/images/teachers/yes_icon.gif) no-repeat scroll left 0px;
+.matched_student .intern_profile {
+	padding-top: 10px;
 }
-.matched_student_actions {
-	width: 80px;
+.matched_student .intern_wish {
+	padding-top: 8px;
+	width: 100px;
 }
-.matched_student_actions a {
+.matched_student .intern_wish .matched_wish {
+	margin: 5px;
+	padding-left: 20px;
+	background: transparent url(/images/teachers/yes_icon.gif) no-repeat scroll left 2px;
+}
+.matched_student .intern_wish .no_matched_wish {
+	padding-top: 30px;
+	color: #BBBBBB;
+}
+.matched_student .intern_status {
+	margin-top: 5px;
+	text-align: center;
+}
+.matched_student .intern_status .calling_mark {
+	margin: 10px 0px;
+}
+.matched_student .intern_status .intern_log {
+	color: #888888;
+}
+.matched_student .actions {
+	width: 100px;
+}
+.matched_student .actions a, .matched_student .actions div {
 	display: block;
 	text-decoration: none;
 	padding: 4px 5px 2px;
 	border-bottom: 1px solid #DDDDDD;
 }
-.matched_student_actions a:hover {
+.matched_student .actions a:hover {
 	background-color: #3B5998;
 	color: #FFFFFF;
 }

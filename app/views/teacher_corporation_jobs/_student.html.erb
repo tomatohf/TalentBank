@@ -17,19 +17,17 @@
 	matched_wishes << "岗位大类" if attributes["intern_wish_job_category_class_id"].include?(@job.category_class_id)
 	matched_wishes << "岗位细分" if attributes["intern_wish_job_category_id"].include?(@job.category_id)
 	matched_wishes << "工作区域" if attributes["intern_wish_job_district_id"].include?(@job.district_id)
-	
-	marked_teacher_id = student.get_calling_mark
 %>
 
-<tr<%= %Q! class="odd"! if counter.even? %>>
+<tr id="matched_student_<%= student.id %>" class="matched_student<%= " odd" if counter.even? %>">
 	<td valign="top">
 		<div>
-			<span class="matched_student_title"><%= h(student.name) %></span>
+			<span class="student_name"><%= h(student.name) %></span>
 			<a href="/teachers/<%= @teacher.id %>/students?n=<%= student_number %>" target="_blank" class="none">
 				<%= student_number %></a>
 		</div>
 		
-		<div class="matched_student_info">
+		<div class="profile">
 			<% if profile %>
 				<%= h(profile.phone) %>
 				<br />
@@ -52,17 +50,7 @@
 	</td>
 	
 	<td valign="top">
-		<div class="matched_student_info">
-			<% if matched_wishes.size > 0 %>
-				<% matched_wishes.each do |wish| %>
-					<span title="满足其对 <%= wish %> 的实习意愿" class="matched_wish"><%= wish %></span>
-				<% end %>
-			<% else %>
-				(不满足任何实习意愿)
-			<% end %>
-		</div>
-		
-		<div class="matched_student_info">
+		<div class="intern_profile">
 			<%= format_date(Time.at(attributes["intern_begin_at"])) unless attributes["intern_begin_at"].blank? %>
 			<% workday = JobWorkday.find(attributes["intern_workday_id"]) %>
 			<% if workday %>
@@ -106,36 +94,27 @@
 		</div>
 	</td>
 	
-	<td valign="top">
-		<div>
-			<% if marked_teacher_id %>
-				通话中 ...
+	<td valign="top" class="intern_wish">
+		<% if matched_wishes.size > 0 %>
+			<% matched_wishes.each do |wish| %>
+				<div title="满足其对 <%= wish %> 的实习意愿" class="matched_wish">
+					<%= wish %>
+				</div>
 			<% end %>
-		</div>
-		
-		<div>
-			<%= intern_log ? intern_log.determine_status : InternLog::Status[:unemployed] %>
-		</div>
-		
-		<% if intern_log %>
-			<div>
-				最近状态:
-				
+		<% else %>
+			<div class="no_matched_wish">
+				无匹配的意愿
 			</div>
 		<% end %>
 	</td>
 	
-	<td valign="top" class="matched_student_actions">
-		<% if marked_teacher_id %>
-			<% if marked_teacher_id == @teacher.id %>
-				<a href="#">清除标记</a>
-			<% else %>
-				<span class="info">标记通话</span>
-			<% end %>
-		<% else %>
-			<a href="#">标记通话</a>
-		<% end %>
-		<a href="#">通知面试</a>
-		<a href="#">刷新状态</a>
-	</td>
+	<%=
+		render(
+			:partial => "matched_student_status",
+			:locals => {
+				:intern_log => intern_log,
+				:student => student
+			}
+		)
+	%>
 </tr>

@@ -3,6 +3,8 @@ class Teacher < ActiveRecord::Base
   acts_as_trashable
   
   
+  include Utils::ActiveRecordHelpers
+  
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
   
   has_many :resume_revisions, :class_name => "ResumeRevision", :foreign_key => "teacher_id", :dependent => :destroy

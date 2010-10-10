@@ -104,7 +104,7 @@ class TeacherCorporationJobsController < ApplicationController
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile]
     )
-    @intern_logs = InternLog.latest_by_students(@students)
+    @intern_logs = InternLog.latest_by_students(@students, :include => [:corporation])
     
     
     render(

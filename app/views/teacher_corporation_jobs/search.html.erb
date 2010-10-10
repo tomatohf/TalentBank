@@ -259,15 +259,15 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
 		<thead>
 			<tr>
-				<td style="width: 200px;">
+				<td style="width: 180px;">
 					搜索到约
 					<b><%= @students.total_entries %></b>
 					名学生
 				</td>
-				<td style="width: 200px;">
+				<td style="width: 180px;">
 					实习信息
 				</td>
-				<td colspan="2" align="right">
+				<td colspan="3" align="right">
 					<%=
 						paging_buttons(
 							@students, :class => "mini_pagination",
@@ -311,5 +311,10 @@
 <% content_for :scripts do %>
 	<%= render :partial => "/corporations/selects/var" %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
+	<script language="JavaScript">
+		var TEACHER_ID = <%= @teacher.id %>;
+		var CORPORATION_ID = <%= @corporation.id %>;
+		var JOB_ID = <%= @job.id %>;
+	</script>
 	<script src="/javascripts/jobs/search.js" type="text/javascript" language="JavaScript"></script>
 <% end %>
