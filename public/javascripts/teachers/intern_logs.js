@@ -85,7 +85,7 @@ function submit_log_form() {
 	);
 }
 
-function show_dialog(content, submit_label, ok_event) {
+function show_dialog(content, submit_label) {
 	DIALOG.appear(
 		{
 			title: submit_label + "实习记录",

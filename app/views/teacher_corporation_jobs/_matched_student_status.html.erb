@@ -1,11 +1,12 @@
 <%
 	marked_teacher_id = student.get_calling_mark
+	current_status = intern_log ? intern_log.determine_status : InternLog::Status[:unemployed]
 %>
 
 <td valign="top">
 	<div class="intern_status">
 		<div class="student_name">
-			<%= intern_log ? intern_log.determine_status : InternLog::Status[:unemployed] %>
+			<%= current_status %>
 		</div>
 		
 		<div class="calling_mark">
@@ -14,27 +15,31 @@
 				<% if @teacher.id == marked_teacher_id %>
 					自己
 				<% else %>
-					其他人
+					其他老师
 				<% end %>
-				通话中 ...
+				通话中
 			<% end %>
 		</div>
 		
 		<div class="intern_log">
 			<% if intern_log %>
-				<%= h(intern_log.corporation.get_name)%>
-				<br />
-				<%
-					event = InternLogEvent.find(intern_log.event_id)
-					result = event && InternLogEventResult.find(event[:id], intern_log.result_id)
-				%>
-				<%= event && event[:name] %>
-				›
-				<%= result && result[:name] %>
-				<br />
-				<%= format_datetime(intern_log.occur_at) %>
+				<div title="最近的实习记录 › 发生时间: <%= format_datetime(intern_log.occur_at) %>">
+					<%= h(intern_log.corporation.get_name)%>
+					<br />
+					<%
+						event = InternLogEvent.find(intern_log.event_id)
+						result = event && InternLogEventResult.find(event[:id], intern_log.result_id)
+					%>
+					<%= event && event[:name] %>
+					›
+					<%= result && result[:name] %>
+					<% unless marked_teacher_id %>
+						<br />
+						<%= format_datetime(intern_log.occur_at) %>
+					<% end %>
+				</div>
 			<% else %>
-				无实习记录
+				(无实习记录)
 			<% end %>
 		</div>
 	</div>
@@ -52,6 +57,12 @@
 	<% else %>
 		<a href="#" class="mark_calling_link">标记通话</a>
 	<% end %>
-	<a href="#" class="interview_link">通知面试</a>
+	
+	<% if InternLog::Status[:unemployed] == current_status %>
+		<a href="#" class="add_inform_interview_log_link">通知面试</a>
+	<% else %>
+		<div class="info">通知面试</div>
+	<% end %>
+	
 	<a href="#" class="refresh_status_link">刷新状态</a>
 </td>

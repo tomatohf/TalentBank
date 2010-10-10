@@ -8,4 +8,9 @@ class InternLogEvent < HashModel::Simple
     ]
   end
   
+  
+  def self.inform_interview
+    self.find(10)
+  end
+  
 end

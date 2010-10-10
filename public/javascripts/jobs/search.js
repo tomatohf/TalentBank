@@ -63,6 +63,8 @@ function add_more_search_result(table) {
 				success: function(data, text_status) {
 					table.find("tbody:first").append(data);
 					$("#current_page").val(next);
+					
+					setup_matched_student_actions(table);
 				}
 			}
 		);
@@ -73,15 +75,94 @@ function add_more_search_result(table) {
 }
 
 
-function mark_calling(student_id) {
+function set_calling_mark(student_id, marking) {
+	show_status_refreshing(student_id);
 	
+	var url = "/teachers/" + TEACHER_ID + "/students/" + student_id + "/intern_logs/";
+	if(marking) {
+		url += "set_calling_mark";
+	}
+	else {
+		url += "clear_calling_mark";
+	}
+	
+	$.ajax(
+		{
+			type: "POST",
+			url: url,
+			dataType: "html",
+			data: {
+				refresh_status: true
+			},
+			success: function(data, text_status) {
+				update_status_locally(student_id, data);
+			}
+		}
+	);
+}
+
+
+function add_inform_interview_log(student_id) {
+	DIALOG.appear(
+		{
+			title: "添加学生 " + $("#matched_student_" + student_id).find("td:first .student_name").text() + " 的通知面试记录",
+			content: function dialog_content(container, url) {
+				// remove height property to let content expand the container height
+				container.css( { height: "" } );
+				container.html(
+					'<img src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px 15px;" />' +
+					'正在载入, 请稍候 ...'
+				);
+				$.get(
+					"/teachers/" + TEACHER_ID + "/students/" + student_id + "/intern_logs/new",
+					{
+						corporation_id: CORPORATION_ID,
+						event_id: INFORM_INTERVIEW_LOG_EVENT_ID
+					},
+					function(data) {
+						container.html(data);
+					},
+					"html"
+				);
+			},
+			button_text: { ok: "添加", cancel: "取消" },
+			width: 400,
+			margin_top: 125,
+			fixed: false,
+			data: {},
+			modal: false,
+			ok_event: function(data) {
+				var form = $("form#log_form:first");
+				
+				// check occur_at field
+				var occur_at_field = form.find("input#occur_at");
+				if($.trim(occur_at_field.val()) == "") {
+					occur_at_field.siblings("div.info_with_icon").css("color", "#EE0000");
+					return;
+				}
+				
+				show_status_refreshing(student_id);
+				$.ajax(
+					{
+						type: form.attr("method"),
+						url: form.attr("action"),
+						dataType: "html",
+						data: form.serialize() + "&refresh_status=true",
+						success: function(data, text_status) {
+							update_status_locally(student_id, data);
+						}
+					}
+				);
+				
+				return true;
+			}
+		}
+	);
 }
 
 
 function refresh_status(student_id) {
-	$("#matched_student_" + student_id).find(".intern_status").html(
-		'<img src="/images/loading_icon.gif" border="0" title="刷新中" alt="刷新中" style="margin-top: 25px;" />'
-	);
+	show_status_refreshing(student_id);
 	
 	$.ajax(
 		{
@@ -89,43 +170,77 @@ function refresh_status(student_id) {
 			url: "/teachers/" + TEACHER_ID + "/students/" + student_id + "/intern_logs/refresh_matched_student_status",
 			dataType: "html",
 			data: {},
-			complete: function() {
-				
-			},
 			success: function(data, text_status) {
-				var student = $("#matched_student_" + student_id);
-				var data_dom = $("<tr>" + data + "</tr>");
-				
-				student.find(".intern_status").html(data_dom.find(".intern_status").html());
-				
-				student.find(".actions").html(data_dom.find(".actions").html());
-				setup_matched_student_actions(student);
+				update_status_locally(student_id, data);
 			}
 		}
 	);
 }
 
 
+function update_status_locally(student_id, data) {
+	var student = $("#matched_student_" + student_id),
+		data_dom = $("<tr>" + data + "</tr>"),
+		data_intern_status = data_dom.find(".intern_status"),
+		data_action = data_dom.find(".actions")
+	
+	if(data_intern_status.length > 0) {
+		student.find(".intern_status").html(data_intern_status.html());
+	}
+	
+	if(data_action.length > 0) {
+		student.find(".actions").html(data_action.html());
+		setup_matched_student_actions(student);
+	}
+}
+
+
 function setup_matched_student_actions(container) {
+	var get_student_id = function(link) {
+		return link.siblings("input:hidden:first").val();
+	}
+	
 	if(container == null || container.length <= 0) {
 		container = $("body");
 	}
 	
 	container.find("a.mark_calling_link").unbind("click").click(
 		function() {
-			mark_calling($(this).siblings("input:hidden:first").val());
+			set_calling_mark(get_student_id($(this)), true);
+			
+			return false;
+		}
+	);
+	
+	container.find("a.clear_calling_mark_link").unbind("click").click(
+		function() {
+			set_calling_mark(get_student_id($(this)), false);
+			
+			return false;
+		}
+	);
+	
+	container.find("a.add_inform_interview_log_link").unbind("click").click(
+		function() {
+			add_inform_interview_log(get_student_id($(this)));
+			
 			return false;
 		}
 	);
 	
 	container.find("a.refresh_status_link").unbind("click").click(
 		function() {
-			refresh_status(
-				$(this).siblings("input:hidden:first").val()
-			);
+			refresh_status(get_student_id($(this)));
 			
 			return false;
 		}
+	);
+}
+
+
+function show_status_refreshing(student_id) {
+	$("#matched_student_" + student_id).find(".intern_status").html(
+		'<img src="/images/loading_icon.gif" border="0" title="刷新中" alt="刷新中" style="margin-top: 25px;" />'
 	);
 }
 

@@ -1,4 +1,5 @@
 <%
+	corporation_name = h(@corporation.get_name)
 	job_name = h(@job.name)
 	page_title = "匹配岗位 #{job_name}"
 
@@ -22,7 +23,7 @@
 		<div class="form_section">
 			<a href="#" title="展开/收起" class="none form_section_title">公司信息</a>
 			<a title="查看完整公司信息" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>" class="none" target="_blank">
-				<%= h(@corporation.get_name) %></a>
+				<%= corporation_name %></a>
 			
 			<div class="form_section_body">
 				<div class="field_row">
@@ -315,6 +316,10 @@
 		var TEACHER_ID = <%= @teacher.id %>;
 		var CORPORATION_ID = <%= @corporation.id %>;
 		var JOB_ID = <%= @job.id %>;
+		
+		var INFORM_INTERVIEW_LOG_EVENT_ID = <%= InternLogEvent.inform_interview[:id] %>;
 	</script>
 	<script src="/javascripts/jobs/search.js" type="text/javascript" language="JavaScript"></script>
+	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
 <% end %>

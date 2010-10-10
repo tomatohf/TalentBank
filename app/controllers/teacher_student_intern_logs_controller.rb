@@ -37,11 +37,20 @@ class TeacherStudentInternLogsController < ApplicationController
   
   def new
     @log = InternLog.new(:student_id => @student.id, :teacher_id => @teacher.id)
+    
     render(
       :layout => false,
       :inline => %Q!
         <% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/intern_logs", :method => :post, :id => "log_form" do %>
-        	<%= render :partial => "log_form" %>
+        	<%=
+        	  render(
+        	    :partial => "log_form",
+        	    :locals => {
+        	      :corporation_id => params[:corporation_id],
+        	      :event_id => params[:event_id]
+        	    }
+        	  )
+        	%>
         <% end %>
       !
     )
@@ -59,7 +68,15 @@ class TeacherStudentInternLogsController < ApplicationController
       :layout => false,
       :inline => %Q!
         <% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/intern_logs/#{@log.id}", :method => :put, :id => "log_form" do %>
-        	<%= render :partial => "log_form" %>
+        	<%=
+        	  render(
+        	    :partial => "log_form",
+        	    :locals => {
+        	      :corporation_id => params[:corporation_id],
+        	      :event_id => params[:event_id]
+        	    }
+        	  )
+        	%>
         <% end %>
       !
     )
@@ -80,12 +97,20 @@ class TeacherStudentInternLogsController < ApplicationController
   def set_calling_mark
     @student.mark_calling(@teacher.id) unless @student.get_calling_mark
     
-    render :partial => "calling_mark", :locals => {:teacher => @teacher}
+    if params[:refresh_status]
+      refresh_matched_student_status
+    else
+      render :partial => "calling_mark", :locals => {:teacher => @teacher}
+    end
   end
   def clear_calling_mark
     @student.clear_calling_mark if @teacher.id == @student.get_calling_mark
     
-    render :partial => "calling_mark", :locals => {:teacher => nil}
+    if params[:refresh_status]
+      refresh_matched_student_status
+    else
+      render :partial => "calling_mark", :locals => {:teacher => nil}
+    end
   end
   
   
@@ -107,11 +132,17 @@ class TeacherStudentInternLogsController < ApplicationController
     corp = Corporation.get_from_uid(@school.abbr, params[:corporation])
     StudentsController.helpers.fill_student_intern_log(log, params, corp)
     
-    if log.save
-      log.corporation = corp
-      render :partial => "log", :collection => [log], :layout => false
+    log_saved = log.save
+    
+    if params[:refresh_status]
+      refresh_matched_student_status
     else
-      render :nothing => true
+      if log_saved
+        log.corporation = corp
+        render :partial => "log", :collection => [log], :layout => false
+      else
+        render :nothing => true
+      end
     end
   end
   

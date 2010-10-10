@@ -1,3 +1,8 @@
+<%
+	corporation = corporation_id.blank? ? nil : Corporation.try_find(corporation_id)
+	event = event_id.blank? ? nil : InternLogEvent.find(event_id.to_i)
+%>
+
 <table border="0" cellspacing="10" cellpadding="5">
 	<tr>
 		<td style="width: 80px;">
@@ -7,7 +12,14 @@
 		</td>
 		
 		<td>
-			<input type="text" id="corporation" name="corporation" class="text_field" size="20" value="<%= @log.corporation_id && h(@log.corporation.uid) %>" />
+			<% if corporation %>
+				<% corporation_uid = h(corporation.uid) %>
+				<input type="hidden" name="corporation" value="<%= corporation_uid %>" />
+				<%= h(corporation.get_name) %>
+				(<%= corporation_uid %>)
+			<% else %>
+				<input type="text" id="corporation" name="corporation" class="text_field" size="20" value="<%= @log.corporation_id && h(@log.corporation.uid) %>" />
+			<% end %>
 		</td>
 	</tr>
 	
@@ -19,16 +31,21 @@
 		</td>
 		
 		<td>
-			<%=
-				render(
-					:partial => "/teacher_student_intern_logs/selects/intern_log_event",
-					:locals => {
-						:event_id => @log.event_id,
-						:field_id => "event", :field_name => "event",
-						:hide_label => true
-					}
-				)
-			%>
+			<% if event %>
+				<input type="hidden" name="event" value="<%= event[:id] %>" />
+				<%= event[:name] %>
+			<% else %>
+				<%=
+					render(
+						:partial => "/teacher_student_intern_logs/selects/intern_log_event",
+						:locals => {
+							:event_id => @log.event_id,
+							:field_id => "event", :field_name => "event",
+							:hide_label => true
+						}
+					)
+				%>
+			<% end %>
 		</td>
 	</tr>
 	
@@ -44,7 +61,7 @@
 				render(
 					:partial => "/teacher_student_intern_logs/selects/intern_log_event_result",
 					:locals => {
-						:event_id => @log.event_id,
+						:event_id => event ? event[:id] : @log.event_id,
 						:result_id => @log.result_id,
 						:field_id => "result", :field_name => "result",
 						:hide_label => true

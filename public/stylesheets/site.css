@@ -1203,10 +1203,12 @@ img.notification_icon {
 	text-align: center;
 }
 .matched_student .intern_status .calling_mark {
-	margin: 10px 0px;
+	margin: 6px 0px;
+	font-weight: bold;
+	color: #EE0000;
 }
 .matched_student .intern_status .intern_log {
-	color: #888888;
+	color: #999999;
 }
 .matched_student .actions {
 	width: 100px;
