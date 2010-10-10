@@ -104,6 +104,7 @@ class TeacherCorporationJobsController < ApplicationController
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile]
     )
+    @intern_logs = InternLog.latest_by_students(@students)
     
     
     render(
@@ -113,7 +114,12 @@ class TeacherCorporationJobsController < ApplicationController
   				<%=
   					render(
   						:partial => "student",
-  						:locals => {:student => student, :match => match, :counter => counter}
+  						:locals => {
+  						  :student => student,
+  						  :match => match,
+  						  :counter => counter,
+  						  :intern_log => @intern_logs[student.id]
+  						}
   					)
   				%>
   			<% end %>

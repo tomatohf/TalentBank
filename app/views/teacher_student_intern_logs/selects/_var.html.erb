@@ -1,0 +1,9 @@
+<script language="JavaScript">
+	var INTERN_LOG_EVENTS = [];
+	var INTERN_LOG_EVENTS_RESULTS = {};
+	<% InternLogEvent.data.each do |event| %>
+		INTERN_LOG_EVENTS.push({id:<%= event[:id] %>, name:"<%= event[:name] %>"});
+		
+		INTERN_LOG_EVENTS_RESULTS["e_<%= event[:id] %>"] = [<%= InternLogEventResult.find_group(event[:id]).collect{|result| %Q!{id:#{result[:id]}, name:"#{result[:name]}"}!}.join(",") %>];
+	<% end %>
+</script>

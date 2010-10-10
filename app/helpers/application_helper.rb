@@ -57,6 +57,11 @@ module ApplicationHelper
   end
   
   
+  def exclude_page_js(keys)
+    content_for(:excluded_page_js) { keys }
+  end
+  
+  
   def list_model_validate_errors(model)
     model.errors.map { |attr, error|
       error

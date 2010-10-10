@@ -134,7 +134,13 @@ function setup_details_dialog_links(container, detail_type, detail_period, extra
 			return false;
 		}
 	);
-	
+	$("a.query_keyword").unbind("click").click(
+		function() {
+			$(this).siblings("form").submit();
+
+			return false;
+		}
+	);
 	
 	APP.setup_dropdown_menu(".operation_link", 120);
 }

@@ -1,0 +1,55 @@
+<%
+	student_name = h(@student.get_name)
+	page_title = "学生 #{student_name} 的实习记录"
+
+	talent_page_title(page_title)
+%>
+
+
+<h2 class="page_title"><%= page_title %></h2>
+
+<%= render :partial => "/teacher_students/edit_intern_nav", :locals => {:current_link => "intern_logs"} %>
+
+
+<div>
+	<div class="align_r" style="margin: 0px 30px 20px;">
+		<a href="#" id="new_log_link" class="button">
+			添加实习记录</a>
+	</div>
+	
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list" id="log_list">
+		<thead>
+			<tr>
+				<td>企业名称</td>
+				<td>记录事件</td>
+				<td>事件结果</td>
+				<td>发生时间</td>
+				<td style="width: 100px;">
+					操作
+					<img id="operating" src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" style="margin: 0px 8px -3px; display: none;" />
+				</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "log", :collection => @logs %>
+		</tbody>
+	</table>
+</div>
+
+
+<% exclude_page_js "jquery,app" %>
+<% content_for :scripts do %>
+	<link href="/lib/jquery/autocomplete/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/jquery/autocomplete/js/jquery.min.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/jquery/autocomplete/js/jquery-ui.min.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
+	<%= render :partial => "/teacher_student_intern_logs/selects/var" %>
+	<script language="JavaScript">
+		var TEACHER_ID = <%= @teacher.id %>;
+		var STUDENT_ID = <%= @student.id %>;
+	</script>
+	<script src="/javascripts/teachers/intern_logs.js" type="text/javascript" language="JavaScript"></script>
+	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+<% end %>

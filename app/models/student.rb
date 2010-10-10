@@ -22,6 +22,8 @@ class Student < ActiveRecord::Base
   has_many :intern_job_district_wishes, :class_name => "InternJobDistrictWish", :foreign_key => "student_id", :dependent => :destroy
   has_many :intern_job_district_blacklists, :class_name => "InternJobDistrictBlacklist", :foreign_key => "student_id", :dependent => :destroy
   
+  has_many :intern_logs, :class_name => "InternLog", :foreign_key => "student_id", :dependent => :destroy
+  
   
   include Utils::Searchable
   
@@ -213,6 +215,34 @@ class Student < ActiveRecord::Base
       :without => blacklists,
       :include => options[:include] || []
     )
+  end
+  
+  
+  CKP_calling_mark = "calling_mark"
+  
+  def self.calling_mark_key(student_id)
+    "#{CKP_calling_mark}_#{student_id}"
+  end
+  
+  def get_calling_mark
+    self.class.get_calling_mark(self.id)
+  end
+  def self.get_calling_mark(student_id)
+    Rails.cache.read(self.calling_mark_key(student_id))
+  end
+  
+  def mark_calling(teacher_id)
+    self.class.mark_calling(self.id, teacher_id)
+  end
+  def self.mark_calling(student_id, teacher_id)
+    Rails.cache.write(self.calling_mark_key(student_id), teacher_id, :expires_in => Cache_TTL[:short])
+  end
+  
+  def clear_calling_mark
+    self.class.clear_calling_mark(self.id)
+  end
+  def self.clear_calling_mark(student_id)
+    Rails.cache.delete(self.calling_mark_key(student_id))
   end
   
 end

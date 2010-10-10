@@ -12,9 +12,9 @@ class TeacherCorporationsController < ApplicationController
   
   before_filter :check_teacher
   
-  before_filter :check_teacher_admin
+  before_filter :check_teacher_admin, :except => [:autocomplete]
   
-  before_filter :check_corporation, :except => [:index, :new, :create]
+  before_filter :check_corporation, :except => [:index, :new, :create, :autocomplete]
   
   
   def index
@@ -142,6 +142,18 @@ class TeacherCorporationsController < ApplicationController
       @corporation.save
       jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}")
     end
+  end
+  
+  
+  def autocomplete
+    render :layout => false, :json => Corporation.school_search(
+      params[:term], @teacher.school_id, 1, Corporation_Page_Size
+    ).map { |corp|
+      {
+        :label => "#{corp.get_name} (#{corp.uid})",
+        :value => "#{corp.uid}"
+      }
+    }.to_json
   end
   
   

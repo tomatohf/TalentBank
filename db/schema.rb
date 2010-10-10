@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 19) do
+ActiveRecord::Schema.define(:version => 20) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -208,6 +208,20 @@ ActiveRecord::Schema.define(:version => 19) do
   end
 
   add_index "intern_job_district_wishes", ["student_id", "job_district_id"], :name => "index_intern_job_district_wishes_on_student_and_district", :unique => true
+
+  create_table "intern_logs", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "teacher_id"
+    t.integer  "corporation_id"
+    t.integer  "event_id",       :limit => 2
+    t.integer  "result_id",      :limit => 2
+    t.datetime "occur_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_logs", ["student_id", "occur_at"], :name => "index_intern_logs_on_student_id_and_occur_at"
+  add_index "intern_logs", ["updated_at"], :name => "index_intern_logs_on_updated_at"
 
   create_table "intern_profiles", :force => true do |t|
     t.integer  "student_id"

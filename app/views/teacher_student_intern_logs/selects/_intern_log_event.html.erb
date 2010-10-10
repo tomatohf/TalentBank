@@ -1,0 +1,18 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= ""
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		记录事件:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if event_id.blank? %>><%= empty_label %></option>
+	<% InternLogEvent.data.each do |event| %>
+		<option value="<%= event[:id] %>"<%= %Q! selected="selected"! if event_id.to_i == event[:id] %>><%= event[:name] %></option>
+	<% end %>
+</select>

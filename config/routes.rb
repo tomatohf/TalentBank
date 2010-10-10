@@ -33,7 +33,9 @@ ActionController::Routing::Routes.draw do |map|
       :edit_intern_wishes => :get,
       :add_intern_wish => :post,
       :remove_intern_wish => :post
-    }
+    } do |teacher_students|
+      teacher_students.resources :teacher_student_intern_logs, :as => :intern_logs
+    end
     
     teachers.resources :teacher_statistics, :as => :statistics, :collection => {
       :querying => :any,
@@ -56,7 +58,9 @@ ActionController::Routing::Routes.draw do |map|
       :keyword => :any
     }
     
-    teachers.resources :teacher_corporations, :as => :corporations, :member => {
+    teachers.resources :teacher_corporations, :as => :corporations, :collection => {
+      :autocomplete => :get
+    }, :member => {
       :adjust_permission => :post
     } do |teacher_corporations|
       teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs, :member => {

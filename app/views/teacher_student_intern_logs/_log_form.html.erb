@@ -1,0 +1,73 @@
+<table border="0" cellspacing="10" cellpadding="5">
+	<tr>
+		<td style="width: 80px;">
+			<label for="corporation">
+				企业<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="corporation" name="corporation" class="text_field" size="20" value="<%= @log.corporation_id && h(@log.corporation.uid) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="event">
+				记录事件<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_student_intern_logs/selects/intern_log_event",
+					:locals => {
+						:event_id => @log.event_id,
+						:field_id => "event", :field_name => "event",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="result">
+				事件结果<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_student_intern_logs/selects/intern_log_event_result",
+					:locals => {
+						:event_id => @log.event_id,
+						:result_id => @log.result_id,
+						:field_id => "result", :field_name => "result",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+			<label for="occur_at">
+				发生时间<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="occur_at" name="occur_at" class="text_field" size="20" value="<%= format_datetime(@log.occur_at) %>" />
+			
+			<div class="info_with_icon" style="margin-top: 10px;">
+				时间格式:
+				<b><%= format_datetime(Time.now) %></b>
+			</div>
+		</td>
+	</tr>
+</table>

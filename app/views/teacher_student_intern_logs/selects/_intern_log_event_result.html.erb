@@ -1,0 +1,18 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= ""
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		事件结果:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<option value=""<%= %Q! selected="selected"! if result_id.blank? %>><%= empty_label %></option>
+	<% InternLogEventResult.find_group(event_id.to_i).each do |result| %>
+		<option value="<%= result[:id] %>"<%= %Q! selected="selected"! if result_id.to_i == result[:id] %>><%= result[:name] %></option>
+	<% end %>
+</select>

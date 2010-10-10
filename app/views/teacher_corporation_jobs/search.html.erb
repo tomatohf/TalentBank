@@ -283,7 +283,12 @@
 				<%=
 					render(
 						:partial => "student",
-						:locals => {:student => student, :match => match, :counter => counter}
+						:locals => {
+							:student => student,
+							:match => match,
+							:counter => counter,
+							:intern_log => @intern_logs[student.id]
+						}
 					)
 				%>
 			<% end %>

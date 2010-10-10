@@ -14,7 +14,7 @@ class JobGraduation < HashModel::Simple
   def self.get_graduation_year_range(graduation_id)
     year = Schools::Base.instance.coming_graduation_year
     
-    case graduation
+    case graduation_id
     when 20
       2006 .. year
     when 30

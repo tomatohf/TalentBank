@@ -1,0 +1,31 @@
+<tr id="log_<%= log.id %>"<%= %Q! class="odd"! if log_counter.even? %>>
+	<td>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>" class="none">
+			<%= log.corporation.get_name %></a>
+	</td>
+	
+	<td>
+		<% event = InternLogEvent.find(log.event_id) %>
+		
+		<%= event && event[:name] %>
+	</td>
+	
+	<td>
+		<% result = event && InternLogEventResult.find(event[:id], log.result_id) %>
+		<%= result && result[:name] %>
+	</td>
+	
+	<td>
+		<%= format_datetime(log.occur_at) %>
+	</td>
+	
+	<td>
+		<input type="hidden" value="<%= log.id %>" />
+		
+		<a href="#" class="none delete_link">删除</a>
+		
+		<span class="info" style="margin: 0px 10px;">|</span>
+		
+		<a href="#" class="none edit_link">编辑</a>
+	</td>
+</tr>

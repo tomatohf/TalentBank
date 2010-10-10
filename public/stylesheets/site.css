@@ -1220,3 +1220,8 @@ img.notification_icon {
 	padding-left: 20px;
 	background: transparent url(/images/loading_icon.gif) no-repeat scroll left center;
 }
+
+
+.ui-autocomplete-loading {
+	background: transparent url(/images/loading_icon.gif) no-repeat scroll right center;
+}

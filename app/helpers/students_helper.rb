@@ -38,4 +38,12 @@ module StudentsHelper
     profile.salary = params[:salary] && params[:salary].strip
   end
   
+  
+  def fill_student_intern_log(log, params, corporation)
+    log.corporation_id = corporation && corporation.id
+    log.event_id = params[:event]
+    log.result_id = params[:result]
+    log.occur_at = Time.parse(params[:occur_at])
+  end
+  
 end
