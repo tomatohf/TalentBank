@@ -39,7 +39,7 @@
 					:locals => {
 						:job_category_class_id => @job.category_class_id,
 						:field_id => "job_category_class", :field_name => "job_category_class",
-						:hide_label => true
+						:hide_label => true, :empty_label => "选择岗位大类"
 					}
 				)
 			%>
@@ -61,7 +61,7 @@
 						:job_category_class_id => @job.category_class_id,
 						:job_category_id => @job.category_id,
 						:field_id => "job_category", :field_name => "job_category",
-						:hide_label => true
+						:hide_label => true, :empty_label => "选择岗位细分"
 					}
 				)
 			%>
@@ -106,7 +106,7 @@
 					:locals => {
 						:job_district_id => @job.district_id,
 						:field_id => "job_district", :field_name => "job_district",
-						:hide_label => true, :required => true
+						:hide_label => true, :empty_label => "选择工作区域"
 					}
 				)
 			%>
@@ -210,7 +210,7 @@
 					:locals => {
 						:job_period_id => @job.period_id,
 						:field_id => "job_period", :field_name => "job_period",
-						:hide_label => true, :required => true
+						:hide_label => true
 					}
 				)
 			%>
@@ -220,7 +220,7 @@
 	<tr>
 		<td>
 			<label for="job_workday">
-				每周工作时间
+				每周工作时间<%= required_mark %>
 			</label>
 		</td>
 		
@@ -252,7 +252,7 @@
 					:locals => {
 						:edu_level_id => @job.edu_level_id,
 						:field_id => "edu_level", :field_name => "edu_level",
-						:hide_label => true, :required => true
+						:hide_label => true
 					}
 				)
 			%>
@@ -262,7 +262,7 @@
 	<tr>
 		<td>
 			<label for="job_graduation">
-				毕业时间
+				毕业时间<%= required_mark %>
 			</label>
 		</td>
 		

@@ -14,8 +14,6 @@ class Job < ActiveRecord::Base
   validates_presence_of :place, :message => "请输入 工作地址"
   validates_presence_of :salary, :message => "请输入 薪酬"
   validates_presence_of :number, :message => "请输入 招聘人数"
-  validates_presence_of :period_id, :message => "请输入 工作期限"
-  validates_presence_of :edu_level_id, :message => "请输入 最低学历"
   validates_presence_of :recruit_end_at, :message => "请输入 招聘终止日期"
   
   validates_length_of :name, :maximum => 50, :message => "名称 超过长度限制", :allow_nil => false

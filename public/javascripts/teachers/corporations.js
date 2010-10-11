@@ -88,7 +88,7 @@ $(document).ready(
 		
 		$("#industry_category").unbind("change").change(
 			function() {
-				APP.fill_industries("#industry", $(this).val(), "");
+				APP.fill_industries("#industry", $(this).val(), "", "选择行业细分");
 			}
 		);
 		

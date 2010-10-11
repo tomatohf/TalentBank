@@ -24,7 +24,7 @@
 				:locals => {
 					:university_id => @student.university_id,
 					:field_id => "university", :field_name => "university_id",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择大学"
 				}
 			)
 		%>
@@ -46,7 +46,7 @@
 					:university_id => @student.university_id,
 					:college_id => @student.college_id,
 					:field_id => "college", :field_name => "college_id",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择学院"
 				}
 			)
 		%>
@@ -68,7 +68,7 @@
 					:college_id => @student.college_id,
 					:major_id => @student.major_id,
 					:field_id => "major", :field_name => "major_id",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择专业"
 				}
 			)
 		%>
@@ -89,7 +89,7 @@
 				:locals => {
 					:edu_level_id => @student.edu_level_id,
 					:field_id => "edu_level", :field_name => "edu_level_id",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择学历"
 				}
 			)
 		%>
@@ -110,7 +110,7 @@
 				:locals => {
 					:graduation_year => @student.graduation_year,
 					:field_id => "graduation_year", :field_name => "graduation_year",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择毕业时间"
 				}
 			)
 		%>

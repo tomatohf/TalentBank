@@ -18,10 +18,13 @@ var APP = {
 	},
 	
 	
-	fill_colleges: function(university_id, college_id) {
+	fill_colleges: function(university_id, college_id, college_empty_label, major_empty_label) {
+		if(college_empty_label == null) college_empty_label = "不限学院";
+		if(major_empty_label == null) major_empty_label = "不限专业";
+		
 		$("#college").html("");
 
-		$("#college").append("<option value=''>不限学院</option>");
+		$("#college").append("<option value=''>" + college_empty_label + "</option>");
 
 		var college_objs = COLLEGES["u_" + university_id];
 		if(college_objs != null && college_objs.length > 0) {
@@ -37,12 +40,14 @@ var APP = {
 			$("#college").val(college_id);
 		}
 
-		this.fill_majors(college_id, "");
+		this.fill_majors(college_id, "", major_empty_label);
 	},
-	fill_majors: function(college_id, major_id) {
+	fill_majors: function(college_id, major_id, empty_label) {
+		if(empty_label == null) empty_label = "不限专业";
+		
 		$("#major").html("");
 
-		$("#major").append("<option value=''>不限专业</option>");
+		$("#major").append("<option value=''>" + empty_label + "</option>");
 
 		var major_objs = MAJORS["c_" + college_id];
 		if(major_objs != null && major_objs.length > 0) {

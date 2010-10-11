@@ -313,7 +313,7 @@ module Utils
         }
         search_args[:without] = options[:without] if options[:without]
         
-        self.search_count(search_args)
+        self.search_count(search_args) || 0
       end
       
       

@@ -56,5 +56,16 @@
 
 <% content_for :scripts do %>
 	<%= render :partial => "/students/selects/var" %>
-	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
+	<script language="JavaScript">
+		$("#university").unbind("change").change(
+			function() {
+				APP.fill_colleges($(this).val(), "", "选择学院", "选择专业");
+			}
+		);
+		$("#college").unbind("change").change(
+			function() {
+				APP.fill_majors($(this).val(), "", "选择专业");
+			}
+		);
+	</script>
 <% end %>

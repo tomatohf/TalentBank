@@ -159,7 +159,7 @@
 				:locals => {
 					:industry_category_id => @profile.industry_category_id,
 					:field_id => "industry_category", :field_name => "industry_category",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择行业大类"
 				}
 			)
 		%>
@@ -181,7 +181,7 @@
 					:industry_category_id => @profile.industry_category_id,
 					:industry_id => @profile.industry_id,
 					:field_id => "industry", :field_name => "industry",
-					:hide_label => true
+					:hide_label => true, :empty_label => "选择行业细分"
 				}
 			)
 		%>

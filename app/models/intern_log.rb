@@ -15,7 +15,7 @@ class InternLog < ActiveRecord::Base
     
     indexes corporation.name
     
-    has student_id, teacher_id, corporation_id, event_id, result_id, occur_at
+    has student_id, teacher_id, corporation_id, event_id, result_id, occur_at, updated_at
     
     has student.school_id, :as => :school_id
     has student.university_id, :as => :university_id
@@ -49,6 +49,7 @@ class InternLog < ActiveRecord::Base
   
   def self.latest_by_students(students, options)
     Hash[
+      *
       self.find(
         :all,
         {
@@ -57,7 +58,7 @@ class InternLog < ActiveRecord::Base
         }.merge(options)
       ).group_by { |log| log.student_id }.map { |student_id, logs|
         [student_id, logs.max { |x, y| x.updated_at <=> y.updated_at } ]
-      }
+      }.flatten
     ]
   end
   

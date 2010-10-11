@@ -8,7 +8,7 @@ module Schools
     
     
     def universities
-      [100100]
+      University.data.map { |u| u[:id] }
     end
     
     
