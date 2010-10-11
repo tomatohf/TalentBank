@@ -6,7 +6,7 @@ class InternLogs < ActiveRecord::Migration
       
       t.column :teacher_id, :integer
       
-      t.column :corporation_id, :integer
+      t.column :job_id, :integer
       t.column :event_id, :integer, :limit => 2
       t.column :result_id, :integer, :limit => 2
       t.column :occur_at, :datetime

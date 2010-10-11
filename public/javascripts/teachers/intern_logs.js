@@ -10,13 +10,15 @@ function dialog_content(container, url) {
 	$.get(url, {}, function(data) { container.html(data); setup_log_form(); }, "html");
 }
 
-function new_log() {
+function new_log(job_id) {
+	var url = "/teachers/" + TEACHER_ID + "/students/" + STUDENT_ID + "/intern_logs/new";
+	if(job_id != null) {
+		url += "?job_id=" + job_id;
+	}
+	
 	show_dialog(
 		function(container) {
-			dialog_content(
-				container,
-				"/teachers/" + TEACHER_ID + "/students/" + STUDENT_ID + "/intern_logs/new"
-			);
+			dialog_content(container, url);
 		},
 		"添加"
 	);
@@ -157,12 +159,6 @@ function setup_log_form() {
 			APP.fill_intern_log_event_results("#result", $(this).val(), "");
 		}
 	);
-	
-	$("#corporation").autocomplete(
-		{
-			source: "/teachers/" + TEACHER_ID + "/corporations/autocomplete"
-		}
-	).autocomplete("widget").removeClass("ui-corner-all").addClass("ui-corner-tr ui-corner-bl ui-corner-br");
 }
 
 

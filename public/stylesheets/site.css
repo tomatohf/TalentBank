@@ -1203,7 +1203,7 @@ img.notification_icon {
 	text-align: center;
 }
 .matched_student .intern_status .calling_mark {
-	margin: 6px 0px;
+	background: transparent url(/images/teachers/calling_icon.png) no-repeat scroll left -1px;
 	font-weight: bold;
 	color: #EE0000;
 }
@@ -1244,9 +1244,4 @@ img.notification_icon {
 	color: #888888;
 	padding-left: 20px;
 	background: transparent url(/images/loading_icon.gif) no-repeat scroll left center;
-}
-
-
-.ui-autocomplete-loading {
-	background: transparent url(/images/loading_icon.gif) no-repeat scroll right center;
 }

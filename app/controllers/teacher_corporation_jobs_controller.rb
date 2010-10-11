@@ -4,6 +4,7 @@ class TeacherCorporationJobsController < ApplicationController
   
   
   Job_Page_Size = 10
+  Intern_Log_Page_Size = 30
   
   
   before_filter :check_login_for_teacher
@@ -28,6 +29,50 @@ class TeacherCorporationJobsController < ApplicationController
       :conditions => ["corporation_id = ?", @corporation.id],
       :order => "created_at DESC"
     )
+    
+    counts = Proc.new { |filters|
+      InternLog.period_group_counts(
+        @teacher.school_id, Date.parse(InternLog.intern_begin_at), Date.today,
+        :group_by => "job_id",
+        :group_function => :attr,
+        :with => {
+          :job_id => @jobs.map { |job| job.id }
+        }.merge(filters)
+      ).inject({}) { |hash, record|
+        hash[record[1]["@groupby"]] = record[1]["@count"]
+        hash
+      }
+    }
+    
+    @filters = {
+      :aii => {:event_id => 10, :result_id => 10},
+      :rii => {:event_id => 10, :result_id => 20},
+      :irp => {:event_id => 20, :result_id => 30},
+      :irf => {:event_id => 20, :result_id => 40},
+      :irm => {:event_id => 20, :result_id => 50},
+      :ie => {:event_id => 30, :result_id => 70},
+      :il => {:event_id => 30, :result_id => 80},
+      :if => {:event_id => 30, :result_id => 90}
+    }
+    
+    @aii = params[:aii] == "true"
+    @aii_counts = counts.call(@filters[:aii]) if @aii
+    @rii = params[:rii] == "true"
+    @rii_counts = counts.call(@filters[:rii]) if @rii
+    
+    @irp = params[:irp] == "true"
+    @irp_counts = counts.call(@filters[:irp]) if @irp
+    @irf = params[:irf] == "true"
+    @irf_counts = counts.call(@filters[:irf]) if @irf
+    @irm = params[:irm] == "true"
+    @irm_counts = counts.call(@filters[:irm]) if @irm
+    
+    @ie = params[:ie] == "true"
+    @ie_counts = counts.call(@filters[:ie]) if @ie
+    @il = params[:il] == "true"
+    @il_counts = counts.call(@filters[:il]) if @il
+    @if = params[:if] == "true"
+    @if_counts = counts.call(@filters[:if]) if @if
   end
   
   
@@ -104,7 +149,7 @@ class TeacherCorporationJobsController < ApplicationController
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile]
     )
-    @intern_logs = InternLog.latest_by_students(@students, :include => [:corporation])
+    @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])
     
     
     render(
@@ -125,6 +170,27 @@ class TeacherCorporationJobsController < ApplicationController
   			<% end %>
       !
     ) if request.xhr?
+  end
+  
+  
+  def intern_logs
+    filters = {
+      :school_id => @teacher.school_id,
+      :job_id => @job.id
+    }
+    filters[:event_id] = params[:event] unless params[:event].blank?
+    filters[:result_id] = params[:result] unless params[:result].blank?
+    
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @intern_logs = InternLog.search(
+      :page => page,
+      :per_page => Intern_Log_Page_Size,
+      :match_mode => InternLog::Search_Match_Mode,
+      :order => "@weight DESC, occur_at DESC",
+      :with => filters,
+      :include => [:student, :teacher]
+    )
   end
   
   

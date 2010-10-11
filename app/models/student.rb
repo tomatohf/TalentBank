@@ -174,7 +174,7 @@ class Student < ActiveRecord::Base
   
   def self.job_search(school_id, job, corporation_profile, page = 1, options = {})
     filters = {:school_id => school_id}
-    filters[:intern_begin_at] = Time.parse("2010-10-01") .. job.begin_at unless job.begin_at.blank?
+    filters[:intern_begin_at] = Time.parse(InternLog.intern_begin_at) .. job.begin_at unless job.begin_at.blank?
     filters[:intern_period_id] = job.period_id .. JobPeriod.data.last[:id] unless job.period_id.blank?
     filters[:intern_workday_id] = job.workday_id .. JobWorkday.data.last[:id] unless job.workday_id.blank?
     filters[:edu_level_id] = EduLevel.data.first[:id] .. job.edu_level_id unless job.edu_level_id.blank?

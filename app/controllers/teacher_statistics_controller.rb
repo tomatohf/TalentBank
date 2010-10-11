@@ -540,13 +540,13 @@ class TeacherStatisticsController < ApplicationController
       :match_mode => InternLog::Search_Match_Mode,
       :order => "@weight DESC, occur_at DESC",
       :with => {:school_id => @teacher.school_id},
-      :include => [:student, :corporation, :teacher]
+      :include => [:student, {:job => :corporation}, :teacher]
     )
   end
   
   
   def intern
-    prepare_period(Date.parse("2010-10-01"))
+    prepare_period(Date.parse(InternLog.intern_begin_at))
     compared_to = prepare_compare
     filters = prepare_filters
     

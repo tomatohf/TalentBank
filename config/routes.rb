@@ -74,7 +74,9 @@ ActionController::Routing::Routes.draw do |map|
     } do |teacher_corporations|
       teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs, :member => {
         :search => :get,
-        :match => :get
+        :match => :get,
+        
+        :intern_logs => :get
       }
     end
   end

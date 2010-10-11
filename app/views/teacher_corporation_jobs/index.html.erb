@@ -19,24 +19,169 @@
 <% end %>
 
 
-<div>
-	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
-		<thead>
-			<tr>
-				<td>岗位名称</td>
-				<td>招聘</td>
-				<td>提供面试</td>
+<% form_tag "", :method => :get do %>
+	<table border="0" cellspacing="10" cellpadding="0">
+		<tr>
+			<td>
+				<label for="aii">接受面试通知</label>
+				<%= check_box_tag :aii, value = "true", @aii %>
+			</td>
+			<td>
+				<label for="rii">拒绝面试通知</label>
+				<%= check_box_tag :rii, value = "true", @rii %>
+			</td>
+			<td>
+				<label for="irp">面试通过</label>
+				<%= check_box_tag :irp, value = "true", @irp %>
+			</td>
+			<td>
+				<label for="irf">面试失败</label>
+				<%= check_box_tag :irf, value = "true", @irf %>
+			</td>
+			<td>
+				<label for="irm">没去面试</label>
+				<%= check_box_tag :irm, value = "true", @irm %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="ie">实习结束留任</label>
+				<%= check_box_tag :ie, value = "true", @ie %>
+			</td>
+			<td>
+				<label for="il">实习中流动</label>
+				<%= check_box_tag :il, value = "true", @il %>
+			</td>
+			<td>
+				<label for="if">实习中劝退</label>
+				<%= check_box_tag :if, value = "true", @if %>
+			</td>
+			<td>
 				
-				<td>通知面试</td>
-				
-				<td style="width: 100px;">操作</td>
-			</tr>
-		</thead>
-		
-		<tbody>
-			<%= render :partial => "job", :collection => @jobs %>
-		</tbody>
+			</td>
+			<td>
+				<input type="submit" value="更新列表" class="button" />
+			</td>
+		</tr>
 	</table>
+<% end %>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<thead>
+		<tr>
+			<td>编号</td>
+			<td>岗位名称</td>
+			<td>招聘人数</td>
+			<td>提供面试</td>
+			<td style="width: 50px;">招聘终止</td>
+			
+			<% if @aii %>
+				<td>接受面试通知</td>
+			<% end %>
+			<% if @rii %>
+				<td>拒绝面试通知</td>
+			<% end %>
+			<% if @irp %>
+				<td>面试成功</td>
+			<% end %>
+			<% if @irf %>
+				<td>面试失败</td>
+			<% end %>
+			<% if @irm %>
+				<td>没去面试</td>
+			<% end %>
+			<% if @ie %>
+				<td>实习结束留任</td>
+			<% end %>
+			<% if @il %>
+				<td>实习中流动</td>
+			<% end %>
+			<% if @if %>
+				<td>实习中劝退</td>
+			<% end %>
+			
+			<td style="width: 100px;">操作</td>
+		</tr>
+	</thead>
 	
-	<%= paging_buttons(@jobs) %>
-</div>
+	<tbody>
+		<% @jobs.each_with_index do |job, i| %>
+			<tr<%= %Q! class="odd"! if i.odd? %>>
+				<td><%= job.id %></td>
+				<td>
+					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
+						<%= h(job.name) %></a>
+				</td>
+				<td align="right"><%= job.number %></td>
+				<td align="right"><%= job.interview_number %></td>
+				<td class="datetime">
+					<%= format_date(job.recruit_end_at) %>
+				</td>
+
+				<% if @aii %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:aii][:event_id] %>&result=<%= @filters[:aii][:result_id] %>" class="none">
+							<%= @aii_counts[job.id] || 0 %></a>
+					</td>
+				<% end %>
+				<% if @rii %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:rii][:event_id] %>&result=<%= @filters[:rii][:result_id] %>" class="none">
+							<%= @rii_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @irp %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irp][:event_id] %>&result=<%= @filters[:irp][:result_id] %>" class="none">
+							<%= @irp_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @irf %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irf][:event_id] %>&result=<%= @filters[:irf][:result_id] %>" class="none">
+							<%= @irf_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @irm %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irm][:event_id] %>&result=<%= @filters[:irm][:result_id] %>" class="none">
+							<%= @irm_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @ie %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:ie][:event_id] %>&result=<%= @filters[:ie][:result_id] %>" class="none">
+							<%= @ie_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @il %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:il][:event_id] %>&result=<%= @filters[:il][:result_id] %>" class="none">
+							<%= @il_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+				<% if @if %>
+					<td align="right" style="font-weight: bold;">
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:if][:event_id] %>&result=<%= @filters[:if][:result_id] %>" class="none">
+							<%= @if_counts[job.id] || 0 %>
+					</td>
+				<% end %>
+
+				<td>
+					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/edit" class="none">
+						编辑</a>
+
+					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank" style="margin: 0px 8px;">
+						查看</a>
+
+					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/match" class="none" target="_blank">
+						匹配</a>
+				</td>
+			</tr>
+			
+		<% end %>
+	</tbody>
+</table>
+
+<%= paging_buttons(@jobs) %>

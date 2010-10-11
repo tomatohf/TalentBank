@@ -23,7 +23,7 @@ class TeacherStudentInternLogsController < ApplicationController
       :all,
       :conditions => ["student_id = ?", @student.id],
       :order => "occur_at DESC",
-      :include => [:corporation]
+      :include => [:job => :corporation]
     )
     
     marked_teacher_id = @student.get_calling_mark
@@ -32,6 +32,8 @@ class TeacherStudentInternLogsController < ApplicationController
     else
       marked_teacher_id && Teacher.try_find(marked_teacher_id)
     end
+    
+    @job_id = params[:job_id]
   end
   
   
@@ -46,7 +48,7 @@ class TeacherStudentInternLogsController < ApplicationController
         	  render(
         	    :partial => "log_form",
         	    :locals => {
-        	      :corporation_id => params[:corporation_id],
+        	      :job_id => params[:job_id],
         	      :event_id => params[:event_id]
         	    }
         	  )
@@ -72,7 +74,7 @@ class TeacherStudentInternLogsController < ApplicationController
         	  render(
         	    :partial => "log_form",
         	    :locals => {
-        	      :corporation_id => params[:corporation_id],
+        	      :job_id => params[:job_id],
         	      :event_id => params[:event_id]
         	    }
         	  )
@@ -119,7 +121,7 @@ class TeacherStudentInternLogsController < ApplicationController
       :layout => false,
 			:partial => "/teacher_corporation_jobs/matched_student_status",
 			:locals => {
-				:intern_log => InternLog.latest_by_students(@student, :include => [:corporation])[@student.id],
+				:intern_log => InternLog.latest_by_students(@student, :include => [:job => :corporation])[@student.id],
 				:student => @student
 			}
 		)
@@ -129,8 +131,9 @@ class TeacherStudentInternLogsController < ApplicationController
   private
   
   def save_log(log)
-    corp = Corporation.get_from_uid(@school.abbr, params[:corporation])
-    StudentsController.helpers.fill_student_intern_log(log, params, corp)
+    job = Job.try_find(params[:job])
+    job = nil unless @teacher.school_id == (job.corporation && job.corporation.school_id)
+    StudentsController.helpers.fill_student_intern_log(log, params, job)
     
     log_saved = log.save
     
@@ -138,7 +141,7 @@ class TeacherStudentInternLogsController < ApplicationController
       refresh_matched_student_status
     else
       if log_saved
-        log.corporation = corp
+        log.job = job
         render :partial => "log", :collection => [log], :layout => false
       else
         render :nothing => true

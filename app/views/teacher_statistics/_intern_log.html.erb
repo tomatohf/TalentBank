@@ -1,6 +1,7 @@
 <%
 	student = intern_log.student
-	corporation = intern_log.corporation
+	job = intern_log.job
+	corporation = job.corporation
 	teacher = intern_log.teacher
 %>
 
@@ -17,6 +18,12 @@
 				</li>
 			</ul>
 		</div>
+	</td>
+	
+	<td>
+		<%= job.id %></a>
+		›
+		<%= h(job.name) %></a>
 	</td>
 	
 	<td>
@@ -43,7 +50,7 @@
 		<%= result && result[:name] %>
 	</td>
 	
-	<td>
+	<td class="datetime">
 		<%= format_datetime(intern_log.occur_at) %>
 	</td>
 	

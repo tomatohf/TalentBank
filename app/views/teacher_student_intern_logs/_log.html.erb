@@ -1,7 +1,22 @@
+<%
+	job = log.job
+	corporation = job.corporation
+%>
+
 <tr id="log_<%= log.id %>"<%= %Q! class="odd"! if log_counter.even? %>>
 	<td>
-		<a href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>" class="none">
-			<%= log.corporation.get_name %></a>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+			<%= h(corporation.get_name) %></a>
+	</td>
+	
+	<td>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>/jobs/<%= job.id %>" class="none">
+			<%= job.id %></a>
+	</td>
+	
+	<td>
+		<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>/jobs/<%= job.id %>" class="none">
+			<%= h(job.name) %></a>
 	</td>
 	
 	<td>

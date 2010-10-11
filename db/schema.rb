@@ -212,9 +212,9 @@ ActiveRecord::Schema.define(:version => 20) do
   create_table "intern_logs", :force => true do |t|
     t.integer  "student_id"
     t.integer  "teacher_id"
-    t.integer  "corporation_id"
-    t.integer  "event_id",       :limit => 2
-    t.integer  "result_id",      :limit => 2
+    t.integer  "job_id"
+    t.integer  "event_id",   :limit => 2
+    t.integer  "result_id",  :limit => 2
     t.datetime "occur_at"
     t.datetime "created_at"
     t.datetime "updated_at"

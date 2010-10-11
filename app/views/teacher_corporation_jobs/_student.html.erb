@@ -22,7 +22,7 @@
 <tr id="matched_student_<%= student.id %>" class="matched_student<%= " odd" if counter.even? %>">
 	<td valign="top">
 		<div>
-			<span class="student_name"><%= h(student.name) %></span>
+			<span class="student_name"><%= h(student.get_name) %></span>
 			<a href="/teachers/<%= @teacher.id %>/students?n=<%= student_number %>" target="_blank" class="none">
 				<%= student_number %></a>
 		</div>

@@ -116,7 +116,7 @@ function add_inform_interview_log(student_id) {
 				$.get(
 					"/teachers/" + TEACHER_ID + "/students/" + student_id + "/intern_logs/new",
 					{
-						corporation_id: CORPORATION_ID,
+						job_id: JOB_ID,
 						event_id: INFORM_INTERVIEW_LOG_EVENT_ID
 					},
 					function(data) {

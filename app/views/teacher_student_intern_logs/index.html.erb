@@ -31,6 +31,8 @@
 		<thead>
 			<tr>
 				<td>企业名称</td>
+				<td>岗位编号</td>
+				<td>岗位名称</td>
 				<td>记录事件</td>
 				<td>事件结果</td>
 				<td>发生时间</td>
@@ -48,11 +50,7 @@
 </div>
 
 
-<% exclude_page_js "jquery,app" %>
 <% content_for :scripts do %>
-	<link href="/lib/jquery/autocomplete/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/jquery/autocomplete/js/jquery.min.js" type="text/javascript" language="JavaScript"></script>
-	<script src="/lib/jquery/autocomplete/js/jquery-ui.min.js" type="text/javascript" language="JavaScript"></script>
 	<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
 	<%= render :partial => "/teacher_student_intern_logs/selects/var" %>
 	<script language="JavaScript">
@@ -62,4 +60,13 @@
 	<script src="/javascripts/teachers/intern_logs.js" type="text/javascript" language="JavaScript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
 	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<% unless @job_id.blank? %>
+		<script language="JavaScript">
+			$(document).ready(
+				function() {
+					new_log("<%= @job_id %>");
+				}
+			);
+		</script>
+	<% end %>
 <% end %>

@@ -1,24 +1,25 @@
 <%
-	corporation = corporation_id.blank? ? nil : Corporation.try_find(corporation_id)
+	job = job_id.blank? ? nil : Job.try_find(job_id)
 	event = event_id.blank? ? nil : InternLogEvent.find(event_id.to_i)
 %>
 
 <table border="0" cellspacing="10" cellpadding="5">
 	<tr>
 		<td style="width: 80px;">
-			<label for="corporation">
-				企业<%= required_mark %>
+			<label for="job">
+				岗位编号<%= required_mark %>
 			</label>
 		</td>
 		
 		<td>
-			<% if corporation %>
-				<% corporation_uid = h(corporation.uid) %>
-				<input type="hidden" name="corporation" value="<%= corporation_uid %>" />
-				<%= h(corporation.get_name) %>
-				(<%= corporation_uid %>)
+			<% if job %>
+				<input type="hidden" name="job" value="<%= job.id %>" />
+				<b><%= job.id %></b>
+				<span class="info" style="margin-left: 10px;">
+					<%= h(job.name) %>
+				</span>
 			<% else %>
-				<input type="text" id="corporation" name="corporation" class="text_field" size="20" value="<%= @log.corporation_id && h(@log.corporation.uid) %>" />
+				<input type="text" id="job" name="job" class="text_field" size="10" value="<%= @log.job_id %>" />
 			<% end %>
 		</td>
 	</tr>

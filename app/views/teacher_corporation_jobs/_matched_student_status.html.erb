@@ -24,7 +24,9 @@
 		<div class="intern_log">
 			<% if intern_log %>
 				<div title="最近的实习记录 › 发生时间: <%= format_datetime(intern_log.occur_at) %>">
-					<%= h(intern_log.corporation.get_name)%>
+					<%= h(intern_log.job.corporation.get_name)%>
+					<br />
+					<%= h(intern_log.job.name)%>
 					<br />
 					<%
 						event = InternLogEvent.find(intern_log.event_id)
@@ -33,10 +35,6 @@
 					<%= event && event[:name] %>
 					›
 					<%= result && result[:name] %>
-					<% unless marked_teacher_id %>
-						<br />
-						<%= format_datetime(intern_log.occur_at) %>
-					<% end %>
 				</div>
 			<% else %>
 				(无实习记录)

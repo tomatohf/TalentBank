@@ -1,0 +1,63 @@
+<%
+	page_title = "企业 #{h(@corporation.get_name)} 的岗位 #{h(@job.name)} 的实习记录"
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs">
+		返回岗位列表</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<thead>
+		<tr>
+			<td>学生</td>
+			<td>事件</td>
+			<td>结果</td>
+			<td>发生时间</td>
+			<td>老师</td>
+			
+			<td style="width: 100px;">操作</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @intern_logs.each_with_index do |log, i| %>
+			<tr<%= %Q! class="odd"! if i.odd? %>>
+				<%
+					student = log.student
+					teacher = log.teacher
+				%>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students?n=<%= h(student.number) %>" class="none">
+						<%= h(student.get_name) %></a>
+				</td>
+				<td>
+					<% event = InternLogEvent.find(log.event_id) %>
+					<%= event && event[:name] %>
+				</td>
+				<td>
+					<% result = event && InternLogEventResult.find(event[:id], log.result_id) %>
+					<%= result && result[:name] %>
+				</td>
+				<td>
+					<%= format_datetime(log.occur_at) %>
+				</td>
+				<td>
+					<%= h(teacher.get_name) %>
+				</td>
+
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs?job_id=<%= @job.id %>" class="none">
+						添加实习记录</a>
+				</td>
+			</tr>
+			
+		<% end %>
+	</tbody>
+</table>
+
+<%= paging_buttons(@intern_logs) %>

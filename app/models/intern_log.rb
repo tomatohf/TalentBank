@@ -5,7 +5,7 @@ class InternLog < ActiveRecord::Base
   belongs_to :student, :class_name => "Student", :foreign_key => "student_id"
   belongs_to :teacher, :class_name => "Teacher", :foreign_key => "teacher_id"
   
-  belongs_to :corporation, :class_name => "Corporation", :foreign_key => "corporation_id"
+  belongs_to :job, :class_name => "Job", :foreign_key => "job_id"
   
   
   
@@ -13,9 +13,9 @@ class InternLog < ActiveRecord::Base
   
   define_index do
     
-    indexes corporation.name
+    indexes job.name
     
-    has student_id, teacher_id, corporation_id, event_id, result_id, occur_at, updated_at
+    has student_id, teacher_id, job_id, event_id, result_id, occur_at, updated_at
     
     has student.school_id, :as => :school_id
     has student.university_id, :as => :university_id
@@ -23,6 +23,18 @@ class InternLog < ActiveRecord::Base
     has student.major_id, :as => :major_id
     has student.edu_level_id, :as => :edu_level_id
     has student.graduation_year, :as => :graduation_year
+    
+    has job.corporation_id, :as => :corporation_id
+    has job.category_class_id, :as => :job_category_class_id
+    has job.category_id, :as => :job_category_id
+    has job.district_id, :as => :job_district_id
+    has job.salary, :as => :job_salary
+    has job.number, :as => :job_number
+    has job.interview_number, :as => :job_interview_number
+    
+    has job.corporation.profile.industry_category_id, :as => :corporation_industry_category_id
+    has job.corporation.profile.industry_id, :as => :corporation_industry_id
+    has job.corporation.profile.nature_id, :as => :corporation_nature_id
     
     
     set_property(
@@ -40,11 +52,16 @@ class InternLog < ActiveRecord::Base
   
   validates_presence_of :student_id, :teacher_id
   
-  validates_presence_of :corporation_id, :message => "请输入 企业"
+  validates_presence_of :job_id, :message => "请输入 岗位编号"
   validates_presence_of :event_id, :message => "请输入 记录事件"
   validates_presence_of :result_id, :message => "请输入 事件结果"
   validates_presence_of :occur_at, :message => "请输入 发生时间"
   
+  
+  
+  def self.intern_begin_at
+    "2010-10-01"
+  end
   
   
   def self.latest_by_students(students, options)
