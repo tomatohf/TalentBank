@@ -530,6 +530,205 @@ class TeacherStatisticsController < ApplicationController
   end
   
   
+  
+  def intern_logs
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    @intern_logs = InternLog.search(
+      :page => page,
+      :per_page => Queries_Page_Size,
+      :match_mode => InternLog::Search_Match_Mode,
+      :order => "@weight DESC, occur_at DESC",
+      :with => {:school_id => @teacher.school_id},
+      :include => [:student, :corporation, :teacher]
+    )
+  end
+  
+  
+  def intern
+    prepare_period(Date.parse("2010-10-01"))
+    compared_to = prepare_compare
+    filters = prepare_filters
+    
+    generate_dataset = Proc.new { |event|
+      InternLogEventResult.find_group(event[:id]).map { |result|
+		    {
+		      :title => "#{event[:name]} - #{result[:name]}",
+		      :event_id => event[:id],
+		      :result_id => result[:id]
+		    }
+		  }
+    }
+    @datasets = [
+			{
+			  :title => "#{(event = InternLogEvent.inform_interview)[:name]} 数据",
+			  :rows => generate_dataset.call(event),
+			  :total => {
+			    :title => event[:name]
+			  }
+			},
+			
+			{
+			  :title => "#{(event = InternLogEvent.interview_result)[:name]} 数据",
+			  :rows => generate_dataset.call(event),
+			  :total => {
+			    :title => event[:name]
+			  }
+			},
+			
+			{
+			  :title => "实习结果 数据",
+			  :rows => [
+			    {
+			      :title => "实习后 #{InternLogEventResult.intern_end_employed[:name]}",
+			      :event_id => InternLogEvent.intern_end[:id],
+			      :result_id => InternLogEventResult.intern_end_employed[:id]
+			    },
+			    {
+			      :title => "实习中 #{InternLogEventResult.intern_end_leave[:name]}",
+			      :event_id => InternLogEvent.intern_end[:id],
+			      :result_id => InternLogEventResult.intern_end_leave[:id]
+			    },
+			    {
+			      :title => "实习中 #{InternLogEventResult.intern_end_fire[:name]}",
+			      :event_id => InternLogEvent.intern_end[:id],
+			      :result_id => InternLogEventResult.intern_end_fire[:id]
+			    }
+			  ],
+			  :total => {
+		      :title => "实习人次",
+		      :event_id => InternLogEvent.interview_result[:id],
+		      :result_id => InternLogEventResult.interview_result_passed[:id]
+		    }
+			}
+		]
+		
+		max_value = 0
+		
+		@datasets.each do |dataset|
+		  search_total_count = dataset[:total][:event_id] && dataset[:total][:result_id]
+		  total_count_options = {
+        :event_id => dataset[:total][:event_id],
+        :result_id => dataset[:total][:result_id]
+      } if search_total_count
+      
+		  total_count = if search_total_count
+		    InternLog.period_total_count(
+		      @teacher.school_id, @from, @to, :with => filters.merge(total_count_options)
+		    )
+	    else
+	      0
+      end
+      
+      if @compared_from
+        compared_total_count = if search_total_count
+  		    InternLog.period_total_count(
+    	      @teacher.school_id, @compared_from, compared_to, :with => filters.merge(total_count_options)
+    	    )
+  	    else
+  	      0
+        end
+      end
+      
+		  dataset[:rows].each do |row|
+		    count_options = {
+          :event_id => row[:event_id],
+          :result_id => row[:result_id]
+        }
+        
+		    count = InternLog.period_total_count(
+		      @teacher.school_id, @from, @to, :with => filters.merge(count_options)
+		    )
+		    row.merge!(:count => count)
+		    total_count += count unless search_total_count
+		    max_value = count if count > max_value
+		    
+		    if @compared_from
+          compared_count = InternLog.period_total_count(
+  		      @teacher.school_id, @compared_from, compared_to, :with => filters.merge(count_options)
+  		    )
+  		    row.merge!(:compared_count => compared_count)
+  		    compared_total_count += compared_count unless search_total_count
+  		    max_value = compared_count if compared_count > max_value
+        end
+	    end
+	    
+	    dataset[:total].merge!(:count => total_count)
+	    if @compared_from
+	      dataset[:total].merge!(:compared_count => compared_total_count)
+      end
+		  
+
+      # unless @view == "pie"
+      #   max_value = @counts.inject(0) { |max, record|
+      #     group = record[1]["@groupby"]
+      #     values = [max, record[1]["@count"]]
+      #     values << (@compared_counts[group] || 0) if @compared_from
+      #     values.max
+      #   }
+      #   @max = Utils.top_axis(max_value)
+      # else
+      #   total_shown_count = 0
+      #   if @compared_from
+      #     compared_total_shown_count = 0
+      #     compared_values = []
+      #   end
+      #   values = @counts.enum_with_index.collect { |count_record, i|
+      #     group = count_record[1]["@groupby"]
+      #           count = count_record[1]["@count"]
+      # 
+      #     total_shown_count += count
+      # 
+      #     if @compared_from
+      #             compared_count = @compared_counts[group] || 0
+      #             compared_total_shown_count += compared_count
+      #             compared_values << get_pie_chart_value(compared_count, @compared_total_count, "#{@group_titles[group]} (对比)", i)
+      #           end
+      # 
+      #           get_pie_chart_value(count, @total_count, @group_titles[group], i)
+      #   }
+      # 
+      #   else_count = @total_count - total_shown_count
+      #   values << get_pie_chart_value(else_count, @total_count, "其他#{@groups_name}", TeacherStatisticsHelper::Pie_Chart_Colors.size) if else_count > 0
+      # 
+      #   @chart_data = ofc_chart_data(
+      #     :elements => [
+      #       {
+      #         :type => "pie",
+      #         :radius => 100,
+      #         "on-click" => @detail_function,
+      #         :values => values
+      #       }
+      #     ]
+      #   )
+      #   @chart_data.delete(:x_axis)
+      #   @chart_data.delete(:y_axis)
+      # 
+      #   if @compared_from
+      #     compared_else_count = @compared_total_count - compared_total_shown_count
+      #     compared_values << get_pie_chart_value(compared_else_count, @compared_total_count, "其他#{@groups_name} (对比)", TeacherStatisticsHelper::Pie_Chart_Colors.size) if compared_else_count > 0
+      # 
+      #     @compared_chart_data = ofc_chart_data(
+      #       :elements => [
+      #         {
+      #           :type => "pie",
+      #           :alpha => 0.6,
+      #           :radius => 100,
+      #           "on-click" => "compared_#{@detail_function}",
+      #           :values => compared_values
+      #         }
+      #       ]
+      #     )
+      #     @compared_chart_data.delete(:x_axis)
+      #     @compared_chart_data.delete(:y_axis)
+      #   end
+      # end
+	  end
+	  
+	  @max = Utils.top_axis(max_value)
+  end
+  
+  
   private
   
   def check_teacher

@@ -13,4 +13,12 @@ class InternLogEvent < HashModel::Simple
     self.find(10)
   end
   
+  def self.interview_result
+    self.find(20)
+  end
+  
+  def self.intern_end
+    self.find(30)
+  end
+  
 end

@@ -1,0 +1,127 @@
+<%
+	page_title = "实习数据统计"
+	talent_page_title(page_title)
+%>
+
+
+<h2 class="page_title"><%= page_title %></h2>
+
+<%=
+	render(
+		:partial => "filters",
+		:locals => {
+			:hide => [:dataset, :order, :limit, :views, :tag, :skill, :domain, :keyword]
+		}
+	)
+%>
+
+<div>
+	<%
+		graph_width = 310
+		
+		dataset_color = "#0077CC"
+		
+		compared_label_color = "#666666"
+		compared_bar_color = "#AAAAAA"
+	%>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<% @datasets.each do |dataset| %>
+			<%
+				total_count = dataset[:total][:count]
+				if @compared_from
+					compared_total_count = dataset[:total][:compared_count]
+				end
+			%>
+		
+			<thead>
+				<tr>
+					<td><%= dataset[:title] %></td>
+					<td colspan="2">人次数</td>
+					<% if @compared_from %>
+						<td colspan="2">对比数</td>
+						<td>变化率</td>
+					<% end %>
+					<td style="width: <%= graph_width %>px;">
+						<%= dataset[:total][:title] %>总计: <%= total_count %>
+						<% if @compared_from %>
+							<span style="margin: 0px 8px;">-</span>
+							对比总计: <%= compared_total_count %>
+						<% end %>
+					</td>
+				</tr>
+			</thead>
+
+			<tbody>
+				<% dataset[:rows].each_with_index do |row, i| %>
+					<tr<%= %Q! class="odd"! if i.odd? %>>
+						<%
+							count = row[:count]
+							percent_label = Utils.percent(count, total_count, 1)
+
+							color = get_pie_chart_color(i)
+
+							if @compared_from
+								compared_count = row[:compared_count]
+								compared_percent_label = Utils.percent(compared_count, compared_total_count, 1)
+							end
+						%>
+						
+						<td><%= row[:title] %></td>
+
+						<td align="right" style="font-weight: bold;">
+							<a href="#" onclick="; return false;" class="none">
+								<%= count %></a>
+						</td>
+						<td align="right">
+							<%= percent_label %>
+						</td>
+
+						<% if @compared_from %>
+							<td align="right" style="font-weight: bold;">
+								<a href="#" onclick="; return false;" class="none">
+									<%= compared_count %></a>
+							</td>
+							<td align="right" style="color: <%= compared_label_color %>;">
+								<%= compared_percent_label %>
+							</td>
+
+							<td align="right" style="color: <%= compared_label_color %>;">
+								<%= Utils.growth(count, compared_count, 1) %>
+							</td>
+						<% end %>
+
+						<td>
+							<%
+								width = (graph_width-50) * (count.to_f/@max)
+								bar_title = "#{count} / #{total_count} = #{percent_label}"
+							%>
+
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= dataset_color %>; width: <%= width.round %>px;" onclick="<%=  %>(<%= i %>);"></div>
+							<%= count %>
+							
+							
+							<% if @compared_from %>
+								<div class="clear_l"></div>
+								
+								<%
+									compared_width = (graph_width-50) * (compared_count.to_f/@max)
+									compared_bar_title = "#{compared_count} / #{compared_total_count} = #{compared_percent_label}"
+								%>
+
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_<%=  %>(<%= i %>);"></div>
+								<%= compared_count %>
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+				
+				<tr>
+					<td colspan="<%= @compared_from ? 7 : 4 %>" style="border-bottom: none;"></td>
+				</tr>
+			</tbody>
+		<% end %>
+	</table>
+</div>
+
+
+<%= render :partial => "scripts" %>

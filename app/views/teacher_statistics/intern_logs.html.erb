@@ -1,0 +1,22 @@
+<%
+	page_title = "最近实习记录"
+	talent_page_title(page_title)
+%>
+
+
+<h2 class="page_title"><%= page_title %></h2>
+
+<%= render :partial => "recent_nav" %>
+
+<%= render :partial => "intern_logs_grid", :locals => {:records => @intern_logs} %>
+
+
+<% content_for :scripts do %>
+	<script language="JavaScript">
+		$(document).ready(
+			function() {
+				APP.setup_dropdown_menu(".operation_link", 120);
+			}
+		);
+	</script>
+<% end %>

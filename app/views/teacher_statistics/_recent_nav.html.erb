@@ -2,7 +2,8 @@
 	<%
 		[
 			["querying", "企业搜索操作"],
-			["viewing", "企业查看简历"]
+			["viewing", "企业查看简历"],
+			["intern_logs", "学生实习记录"]
 		].each do |part|
 	%>
 		<a href="/teachers/<%= @teacher.id %>/statistics/<%= part[0] %>"<%= %Q! class="selected_link"! if part[0] == action_name %>>

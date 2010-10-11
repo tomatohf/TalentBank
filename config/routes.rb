@@ -60,7 +60,11 @@ ActionController::Routing::Routes.draw do |map|
       :tag => :any,
       :skill => :any,
       :skill_value => :any,
-      :keyword => :any
+      :keyword => :any,
+      
+      
+      :intern_logs => :any,
+      :intern => :any
     }
     
     teachers.resources :teacher_corporations, :as => :corporations, :collection => {

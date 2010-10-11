@@ -8,42 +8,13 @@
 	<td>
 		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
 			<%= h(job.name) %></a>
-		<br />
-		<%= h(job.manager) %>
 	</td>
 	
-	<td>
-		<%
-			category_class = JobCategoryClass.find(job.category_class_id)
-			category = JobCategory.find(
-				job.category_class_id,
-				job.category_id
-			)
-		%>
-		
-		<%= category_class && category_class[:name] %>
-		<br />
-		›
-		<%= category && category[:name] %>
-	</td>
+	<td><%= job.number %></td>
 	
-	<td>
-		<% district = JobDistrict.find(job.district_id) %>
-		
-		<%= district && district[:name] %>
-		<br />
-		›
-		<%= h(job.place) %>
-	</td>
+	<td><%= job.interview_number %></td>
 	
-	<td>
-		<%= job.salary %>元/天
-	</td>
-	
-	<td>
-		<span title="招聘人数"><%= job.number %></span>
-		<span title="面试人数">(<%= job.interview_number %>)</span>
-	</td>
+	<td></td>
 	
 	<td>
 		<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/edit" class="none">

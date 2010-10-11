@@ -1,7 +1,10 @@
-<% talent_page_title("时段统计") %>
+<%
+	page_title = "简历时段统计"
+	talent_page_title(page_title)
+%>
 
 
-<h2 class="page_title">时段统计</h2>
+<h2 class="page_title"><%= page_title %></h2>
 
 <%=
 	render(
@@ -159,4 +162,4 @@
 </div>
 
 
-<%= render :partial => "scripts" %>
+<%= render :partial => "scripts", :locals => {:domain_tags => true, :skills => true} %>

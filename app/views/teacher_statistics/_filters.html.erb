@@ -8,8 +8,11 @@
 	hide_views = hide.include?(:views)
 	
 	hide_student = hide.include?(:student)
+	hide_domain = hide.include?(:domain)
 	hide_tag = hide.include?(:tag)
 	hide_skill = hide.include?(:skill)
+	
+	hide_keyword = hide.include?(:keyword)
 	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
@@ -33,7 +36,9 @@
 		<input type="hidden" id="v" name="v" value="<%= "f" unless @v %>" />
 	<% end %>
 	
-	<input type="hidden" id="view" name="view" value="<%= @view %>" />
+	<% unless hide_views %>
+		<input type="hidden" id="view" name="view" value="<%= @view %>" />
+	<% end %>
 	
 	<input type="hidden" id="level" name="level" value="<%= @level && @level[:id] %>" />
 	<input type="hidden" id="graduation" name="graduation" value="<%= graduation %>" />
@@ -45,14 +50,18 @@
 	<% end %>
 	
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
-	<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
+	<% unless hide_domain %>
+		<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
+	<% end %>
 	<% unless hide_tag %>
 		<input type="hidden" id="tag" name="tag" value="<%= @tag && @tag[:id] %>" />
 	<% end %>
 	<% unless hide_skill %>
 		<input type="hidden" id="skill" name="skill" value="<%= skill %>" />
 	<% end %>
-	<input type="hidden" id="keyword" name="keyword" value="<%= keyword %>" />
+	<% unless hide_keyword %>
+		<input type="hidden" id="keyword" name="keyword" value="<%= keyword %>" />
+	<% end %>
 	
 	<% unless hide_order %>
 		<input type="hidden" id="order" name="order" value="<%= @order %>" />

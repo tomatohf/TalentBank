@@ -1,0 +1,53 @@
+<%
+	student = intern_log.student
+	corporation = intern_log.corporation
+	teacher = intern_log.teacher
+%>
+
+<tr<%= %Q! class="odd"! if intern_log_counter.odd? %>>
+	<td>
+		<a href="#" title="查看学生的数据统计" class="none operation_link">
+			<%= h(student.name) %></a>
+			
+		<div class="dropdown_menu">
+			<ul class="dropdown_sub_menu">
+				<li>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics/intern?student=<%= student.id %>">
+						实习数据统计</a>
+				</li>
+			</ul>
+		</div>
+	</td>
+	
+	<td>
+		<a href="#" title="查看企业的数据统计" class="none operation_link">
+			<%= h(corporation.get_name) %></a>
+			
+		<div class="dropdown_menu">
+			<ul class="dropdown_sub_menu">
+				<li>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics/intern?corp=<%= corporation.id %>">
+						实习数据统计</a>
+				</li>
+			</ul>
+		</div>
+	</td>
+	
+	<td>
+		<% event = InternLogEvent.find(intern_log.event_id) %>
+		<%= event && event[:name] %>
+	</td>
+	
+	<td>
+		<% result = event && InternLogEventResult.find(event[:id], intern_log.result_id) %>
+		<%= result && result[:name] %>
+	</td>
+	
+	<td>
+		<%= format_datetime(intern_log.occur_at) %>
+	</td>
+	
+	<td>
+		<%= h(teacher.get_name) %>
+	</td>
+</tr>

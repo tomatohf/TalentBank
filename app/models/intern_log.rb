@@ -9,6 +9,35 @@ class InternLog < ActiveRecord::Base
   
   
   
+  include Utils::Searchable
+  
+  define_index do
+    
+    indexes corporation.name
+    
+    has student_id, teacher_id, corporation_id, event_id, result_id, occur_at
+    
+    has student.school_id, :as => :school_id
+    has student.university_id, :as => :university_id
+    has student.college_id, :as => :college_id
+    has student.major_id, :as => :major_id
+    has student.edu_level_id, :as => :edu_level_id
+    has student.graduation_year, :as => :graduation_year
+    
+    
+    set_property(
+      :delta => DailyDelta,
+      :column => :updated_at,
+      # :rate => 70.minutes,
+      :hour => Overall_Index_Hour,
+      :minute => Overall_Index_Minute,
+      :batch => 100
+    )
+    
+  end
+  
+  
+  
   validates_presence_of :student_id, :teacher_id
   
   validates_presence_of :corporation_id, :message => "请输入 企业"

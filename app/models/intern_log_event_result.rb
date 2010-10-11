@@ -29,4 +29,21 @@ class InternLogEventResult < HashModel::Grouped
     result && result[:intern_status]
   end
   
+  
+  def self.interview_result_passed
+    self.find(20, 30)
+  end
+  
+  def self.intern_end_employed
+    self.find(30, 70)
+  end
+  
+  def self.intern_end_leave
+    self.find(30, 80)
+  end
+  
+  def self.intern_end_fire
+    self.find(30, 90)
+  end
+  
 end

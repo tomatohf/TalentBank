@@ -1,0 +1,20 @@
+<div>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td>学生</td>
+				<td>企业</td>
+				<td>事件</td>
+				<td>结果</td>
+				<td>发生时间</td>
+				<td>老师</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<%= render :partial => "intern_log", :collection => records %>
+		</tbody>
+	</table>
+	
+	<%= paging_buttons(records) %>
+</div>
