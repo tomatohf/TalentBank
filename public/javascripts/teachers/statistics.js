@@ -65,6 +65,28 @@ function compared_group_query_detail(value_index) {
 }
 
 
+function intern_logs_detail(event_id, result_id) {
+	show_details(
+		"intern_log", $("input#period").val(),
+		{
+			event_id: event_id,
+			result_id: result_id
+		}
+	);
+}
+
+
+function compared_intern_logs_detail(event_id, result_id) {
+	show_details(
+		"intern_log", $("input#compared_period").val(),
+		{
+			event_id: event_id,
+			result_id: result_id
+		}
+	);
+}
+
+
 function get_extra_filters(value_index) {
 	var extra_filters = null;
 	
@@ -460,6 +482,27 @@ function show_static_filter_dialog(filter_name, filter_objs, title) {
 }
 
 
+function setup_toggle_intern_log_pie_chart_links() {
+	$("a.toggle_intern_log_pie_chart_link").unbind("click").click(
+		function() {
+			var link = $(this);
+			
+			var chart_container = link.siblings("div");
+			if(chart_container.css("display") == "none") {
+				chart_container.slideDown("slow");
+				link.text("隐藏饼图");
+			}
+			else {
+				chart_container.slideUp("slow");
+				link.text("显示饼图");
+			}
+			
+			return false;
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
 		init_date_range();
@@ -480,6 +523,8 @@ $(document).ready(
 		setup_period_detail_links();
 		
 		// setup_graph_bar_animation(1000);
+		
+		setup_toggle_intern_log_pie_chart_links();
 	}
 );
 

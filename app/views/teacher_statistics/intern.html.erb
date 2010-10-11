@@ -16,6 +16,10 @@
 %>
 
 <div>
+	<% if @compared_from %>
+		<input type="hidden" id="compared_period" value="<%= %Q!#{@compared_from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{get_compared_to(@from, @to, @compared_from).strftime("%Y%m%d")}! %>" />
+	<% end %>
+	
 	<%
 		graph_width = 310
 		
@@ -25,7 +29,7 @@
 		compared_bar_color = "#AAAAAA"
 	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
-		<% @datasets.each do |dataset| %>
+		<% @datasets.each_with_index do |dataset, dataset_index| %>
 			<%
 				total_count = dataset[:total][:count]
 				if @compared_from
@@ -69,7 +73,7 @@
 						<td><%= row[:title] %></td>
 
 						<td align="right" style="font-weight: bold;">
-							<a href="#" onclick="; return false;" class="none">
+							<a href="#" onclick="intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>); return false;" class="none">
 								<%= count %></a>
 						</td>
 						<td align="right">
@@ -78,7 +82,7 @@
 
 						<% if @compared_from %>
 							<td align="right" style="font-weight: bold;">
-								<a href="#" onclick="; return false;" class="none">
+								<a href="#" onclick="compared_intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>); return false;" class="none">
 									<%= compared_count %></a>
 							</td>
 							<td align="right" style="color: <%= compared_label_color %>;">
@@ -96,7 +100,7 @@
 								bar_title = "#{count} / #{total_count} = #{percent_label}"
 							%>
 
-							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= dataset_color %>; width: <%= width.round %>px;" onclick="<%=  %>(<%= i %>);"></div>
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= dataset_color %>; width: <%= width.round %>px;" onclick="intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>);"></div>
 							<%= count %>
 							
 							
@@ -108,7 +112,7 @@
 									compared_bar_title = "#{compared_count} / #{compared_total_count} = #{compared_percent_label}"
 								%>
 
-								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_<%=  %>(<%= i %>);"></div>
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px;" onclick="compared_intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>);"></div>
 								<%= compared_count %>
 							<% end %>
 						</td>
@@ -116,7 +120,46 @@
 				<% end %>
 				
 				<tr>
-					<td colspan="<%= @compared_from ? 7 : 4 %>" style="border-bottom: none;"></td>
+					<td colspan="<%= @compared_from ? 7 : 4 %>"<%= %Q! style="border-bottom: none;"! if dataset_index < (@datasets.size - 1) %>>
+						<a href="#" class="none float_r toggle_intern_log_pie_chart_link">
+							显示饼图</a>
+							
+							<div class="float_l info" style="display: none; width: <%= graph_width %>px;">
+								<% if dataset[:total][:count] > 0 %>
+									<%= 
+										render(
+											:partial => "ofc",
+											:locals => {
+												:chart_id => "pie_chart_#{dataset_index}",
+												:height => graph_width,
+												:data => dataset[:chart_data]
+											}
+										)
+									%>
+								<% else %>
+									(没有数据)
+								<% end %>
+							</div>
+
+							<% if @compared_from %>
+								<div class="float_l info" style="display: none; width: <%= graph_width %>px; margin-left: 15px;">
+									<% if dataset[:total][:count] > 0 %>
+										<%= 
+											render(
+												:partial => "ofc",
+												:locals => {
+													:chart_id => "compared_pie_chart_#{dataset_index}",
+													:height => graph_width,
+													:data => dataset[:compared_chart_data]
+												}
+											)
+										%>
+									<% else %>
+										(没有数据)
+									<% end %>
+								</div>
+							<% end %>
+					</td>
 				</tr>
 			</tbody>
 		<% end %>

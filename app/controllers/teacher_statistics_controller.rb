@@ -51,16 +51,22 @@ class TeacherStatisticsController < ApplicationController
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    detail_class, @detail_title, @detail_template, includes = {
-      "query" => [CorpQuery, "企业搜索操作", "queries_grid", [:corporation]],
-      "view" => [CorpViewedResume, "企业查看简历", "resumes_grid", [:corporation, {:resume => [:student]}]]
+    detail_class, @detail_title, @detail_template, includes, param_keys = {
+      "query" => [CorpQuery, "企业搜索操作", "queries_grid", [:corporation], []],
+      "view" => [CorpViewedResume, "企业查看简历", "resumes_grid", [:corporation, {:resume => [:student]}], []],
+      "intern_log" => [InternLog, "学生实习记录", "intern_logs_grid", [:student, {:job => :corporation}, :teacher], [:event_id, :result_id]],
     }[type]
+    
+    param_filters = param_keys.inject({}) do |hash, key|
+      hash[key] = params[key] unless params[key].blank?
+      hash
+    end
     
     options = {
       :includes => includes,
       :page => page,
       :per_page => 10,
-      :with => filters
+      :with => filters.merge(param_filters)
     }
     
     @records = (detail_class && detail_class.period_records(@teacher.school_id, @from, @to, options)) || []
@@ -659,70 +665,55 @@ class TeacherStatisticsController < ApplicationController
       end
 		  
 
-      # unless @view == "pie"
-      #   max_value = @counts.inject(0) { |max, record|
-      #     group = record[1]["@groupby"]
-      #     values = [max, record[1]["@count"]]
-      #     values << (@compared_counts[group] || 0) if @compared_from
-      #     values.max
-      #   }
-      #   @max = Utils.top_axis(max_value)
-      # else
-      #   total_shown_count = 0
-      #   if @compared_from
-      #     compared_total_shown_count = 0
-      #     compared_values = []
-      #   end
-      #   values = @counts.enum_with_index.collect { |count_record, i|
-      #     group = count_record[1]["@groupby"]
-      #           count = count_record[1]["@count"]
-      # 
-      #     total_shown_count += count
-      # 
-      #     if @compared_from
-      #             compared_count = @compared_counts[group] || 0
-      #             compared_total_shown_count += compared_count
-      #             compared_values << get_pie_chart_value(compared_count, @compared_total_count, "#{@group_titles[group]} (对比)", i)
-      #           end
-      # 
-      #           get_pie_chart_value(count, @total_count, @group_titles[group], i)
-      #   }
-      # 
-      #   else_count = @total_count - total_shown_count
-      #   values << get_pie_chart_value(else_count, @total_count, "其他#{@groups_name}", TeacherStatisticsHelper::Pie_Chart_Colors.size) if else_count > 0
-      # 
-      #   @chart_data = ofc_chart_data(
-      #     :elements => [
-      #       {
-      #         :type => "pie",
-      #         :radius => 100,
-      #         "on-click" => @detail_function,
-      #         :values => values
-      #       }
-      #     ]
-      #   )
-      #   @chart_data.delete(:x_axis)
-      #   @chart_data.delete(:y_axis)
-      # 
-      #   if @compared_from
-      #     compared_else_count = @compared_total_count - compared_total_shown_count
-      #     compared_values << get_pie_chart_value(compared_else_count, @compared_total_count, "其他#{@groups_name} (对比)", TeacherStatisticsHelper::Pie_Chart_Colors.size) if compared_else_count > 0
-      # 
-      #     @compared_chart_data = ofc_chart_data(
-      #       :elements => [
-      #         {
-      #           :type => "pie",
-      #           :alpha => 0.6,
-      #           :radius => 100,
-      #           "on-click" => "compared_#{@detail_function}",
-      #           :values => compared_values
-      #         }
-      #       ]
-      #     )
-      #     @compared_chart_data.delete(:x_axis)
-      #     @compared_chart_data.delete(:y_axis)
-      #   end
-      # end
+      values = []
+      total_shown_count = 0
+      if @compared_from
+        compared_values = []
+        compared_total_shown_count = 0
+      end
+      dataset[:rows].each_with_index { |row, i|
+        values << get_pie_chart_value(row[:count], dataset[:total][:count], row[:title], i)
+        total_shown_count += row[:count]
+        if @compared_from
+				  compared_values << get_pie_chart_value(row[:compared_count], dataset[:total][:compared_count], "#{row[:title]} (对比)", i)
+				  compared_total_shown_count += row[:compared_count]
+			  end
+      }
+      
+      else_count = dataset[:total][:count] - total_shown_count
+      values << get_pie_chart_value(else_count, dataset[:total][:count], "其他", TeacherStatisticsHelper::Pie_Chart_Colors.size) if else_count > 0
+      
+      chart_data = ofc_chart_data(
+        :elements => [
+          {
+            :type => "pie",
+            :radius => 100,
+            :values => values
+          }
+        ]
+      )
+      chart_data.delete(:x_axis)
+      chart_data.delete(:y_axis)
+      dataset.merge!(:chart_data => chart_data)
+      
+      if @compared_from
+        compared_else_count = dataset[:total][:compared_count] - compared_total_shown_count
+        compared_values << get_pie_chart_value(compared_else_count, dataset[:total][:compared_count], "其他 (对比)", TeacherStatisticsHelper::Pie_Chart_Colors.size) if compared_else_count > 0
+        
+        compared_chart_data = ofc_chart_data(
+          :elements => [
+            {
+              :type => "pie",
+              :alpha => 0.6,
+              :radius => 100,
+              :values => compared_values
+            }
+          ]
+        )
+        compared_chart_data.delete(:x_axis)
+        compared_chart_data.delete(:y_axis)
+        dataset.merge!(:compared_chart_data => compared_chart_data)
+      end
 	  end
 	  
 	  @max = Utils.top_axis(max_value)
