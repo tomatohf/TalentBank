@@ -308,24 +308,7 @@ module Utils
           # :order => "updated_at ASC",
           :with => {
             :school_id => school_id,
-            :updated_at => from_time..to_time
-          }.merge(options[:with] || {})
-        }
-        search_args[:without] = options[:without] if options[:without]
-        
-        self.search_count(search_args) || 0
-      end
-      
-      
-      def including_model.total_count_before(school_id, key, to, options = {})
-        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
-        
-        search_args = {
-          # :match_mode => self::Search_Match_Mode,
-          # :order => "updated_at ASC",
-          :with => {
-            :school_id => school_id,
-            key => Time.parse(InternLog.intern_begin_at)..to_time
+            (options[:period_key] || :updated_at) => from_time..to_time
           }.merge(options[:with] || {})
         }
         search_args[:without] = options[:without] if options[:without]

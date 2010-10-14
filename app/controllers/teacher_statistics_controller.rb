@@ -562,8 +562,16 @@ class TeacherStatisticsController < ApplicationController
         :conditions => ["corporations.school_id = ? and jobs.created_at < ?", @teacher.school_id, to]
       )
     }
-    student_count = Student.total_count_before(@teacher.school_id, :created_at, @to, filters)
-    compared_student_count = @compared_from && Student.total_count_before(@teacher.school_id, :created_at, compared_to, filters)
+    student_count = Student.period_total_count(
+      @teacher.school_id, @from, @to,
+      :with => filters,
+      :period_key => :created_at
+    )
+    compared_student_count = @compared_from && Student.period_total_count(
+      @teacher.school_id, @compared_from, compared_to,
+      :with => filters,
+      :period_key => :created_at
+    )
     @total_datasets = [
       {
         :title => "学生 总数",
@@ -572,8 +580,16 @@ class TeacherStatisticsController < ApplicationController
       },
       {
         :title => "企业 总数",
-        :count => @corporation_count = Corporation.total_count_before(@teacher.school_id, :created_at, @to, filters),
-        :compared_count => @compared_from && Corporation.total_count_before(@teacher.school_id, :created_at, compared_to, filters)
+        :count => @corporation_count = Corporation.period_total_count(
+          @teacher.school_id, @from, @to,
+          :with => filters,
+          :period_key => :created_at
+        ),
+        :compared_count => @compared_from && Corporation.period_total_count(
+          @teacher.school_id, @compared_from, compared_to,
+          :with => filters,
+          :period_key => :created_at
+        )
       },
       {
         :title => "岗位 总数",
@@ -589,8 +605,16 @@ class TeacherStatisticsController < ApplicationController
 		@total_dataset_color = "#599f2d"
 		
 		
-		intern_profile_count = Student.total_count_before(@teacher.school_id, :intern_created_at, @to, filters)
-		compared_intern_profile_count = @compared_from && Student.total_count_before(@teacher.school_id, :intern_created_at, compared_to, filters)
+		intern_profile_count = Student.period_total_count(
+		  @teacher.school_id, @from, @to,
+		  :with => filters,
+		  :period_key => :intern_created_at
+		)
+		compared_intern_profile_count = @compared_from && Student.period_total_count(
+		  @teacher.school_id, @compared_from, compared_to,
+		  :with => filters,
+		  :period_key => :intern_created_at
+		)
 		student_with_intern_log_count = InternLog.student_count(@teacher.school_id, @to)
 		compared_student_with_intern_log_count = @compared_from && InternLog.student_count(@teacher.school_id, compared_to)
 		@intern_datasets = [
