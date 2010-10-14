@@ -556,6 +556,8 @@ class TeacherStatisticsController < ApplicationController
     compared_to = prepare_compare
     filters = prepare_filters
     
+    intern_begin_at_time = Time.parse(InternLog.intern_begin_at)
+    
     count_job = Proc.new { |to|
       Job.count(
         :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
@@ -563,12 +565,12 @@ class TeacherStatisticsController < ApplicationController
       )
     }
     student_count = Student.period_total_count(
-      @teacher.school_id, @from, @to,
+      @teacher.school_id, intern_begin_at_time, @to,
       :with => filters,
       :period_key => :created_at
     )
     compared_student_count = @compared_from && Student.period_total_count(
-      @teacher.school_id, @compared_from, compared_to,
+      @teacher.school_id, intern_begin_at_time, compared_to,
       :with => filters,
       :period_key => :created_at
     )
@@ -581,12 +583,12 @@ class TeacherStatisticsController < ApplicationController
       {
         :title => "企业 总数",
         :count => @corporation_count = Corporation.period_total_count(
-          @teacher.school_id, @from, @to,
+          @teacher.school_id, intern_begin_at_time, @to,
           :with => filters,
           :period_key => :created_at
         ),
         :compared_count => @compared_from && Corporation.period_total_count(
-          @teacher.school_id, @compared_from, compared_to,
+          @teacher.school_id, intern_begin_at_time, compared_to,
           :with => filters,
           :period_key => :created_at
         )
@@ -606,12 +608,12 @@ class TeacherStatisticsController < ApplicationController
 		
 		
 		intern_profile_count = Student.period_total_count(
-		  @teacher.school_id, @from, @to,
+		  @teacher.school_id, intern_begin_at_time, @to,
 		  :with => filters,
 		  :period_key => :intern_created_at
 		)
 		compared_intern_profile_count = @compared_from && Student.period_total_count(
-		  @teacher.school_id, @compared_from, compared_to,
+		  @teacher.school_id, intern_begin_at_time, compared_to,
 		  :with => filters,
 		  :period_key => :intern_created_at
 		)

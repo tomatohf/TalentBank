@@ -60,7 +60,7 @@ class InternLog < ActiveRecord::Base
   
   
   def self.intern_begin_at
-    Rails.env.production? ? "2010-10-01" : "2009-10-01"
+    "2008-10-01"
   end
   
   
@@ -104,7 +104,7 @@ class InternLog < ActiveRecord::Base
       :group_function => :attr,
       :with => {
         :school_id => school_id,
-        :updated_at => Time.parse(InternLog.intern_begin_at)..to_time
+        :updated_at => Time.parse(self.intern_begin_at)..to_time
       }
     ) || 0
   end
