@@ -24,20 +24,223 @@
 	<%
 		graph_width = 310
 		
-		dataset_color = "#0077CC"
-		
 		compared_label_color = "#666666"
 		compared_bar_color = "#AAAAAA"
 	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
-		<% @datasets.each_with_index do |dataset, dataset_index| %>
+		<thead>
+			<tr>
+				<td>总数</td>
+				<td colspan="2">数目</td>
+				<% if @compared_from %>
+					<td colspan="2">对比数</td>
+					<td>变化率</td>
+				<% end %>
+				<td style="width: <%= graph_width %>px;"></td>
+			</tr>
+		</thead>
+		<tbody>
+			<% @total_datasets.each_with_index do |dataset, dataset_index| %>
+				<%
+					count = dataset[:count]
+					if @compared_from
+						compared_count = dataset[:compared_count]
+					end
+				%>
+				<tr<%= %Q! class="odd"! if dataset_index.odd? %>>
+					<td><%= dataset[:title] %></td>
+
+					<td colspan="2" align="right" style="font-weight: bold;">
+						<%= count %>
+					</td>
+
+					<% if @compared_from %>
+						<td colspan="2" align="right" style="font-weight: bold;">
+							<%= compared_count %>
+						</td>
+
+						<td align="right" style="color: <%= compared_label_color %>;">
+							<%= Utils.growth(count, compared_count, 1) %>
+						</td>
+					<% end %>
+
+					<td>
+						<%
+							width = (graph_width-50) * (count.to_f/@total_max)
+							bar_title = count
+						%>
+
+						<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @total_dataset_color %>; width: <%= width.round %>px; cursor: auto;"></div>
+						<%= count %>
+
+
+						<% if @compared_from %>
+							<div class="clear_l"></div>
+
+							<%
+								compared_width = (graph_width-50) * (compared_count.to_f/@total_max)
+								compared_bar_title = compared_count
+							%>
+
+							<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px; cursor: auto;"></div>
+							<%= compared_count %>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+			
+			<tr>
+				<td colspan="<%= @compared_from ? 7 : 4 %>" style="border: none; height: 50px;">
+				</td>
+			</tr>
+		</tbody>
+		
+		
+		<% @intern_datasets.each_with_index do |dataset, dataset_index| %>
 			<%
 				total_count = dataset[:total][:count]
 				if @compared_from
 					compared_total_count = dataset[:total][:compared_count]
 				end
 			%>
+			<thead>
+				<tr>
+					<td><%= dataset[:title] %></td>
+					<td colspan="2">人数</td>
+					<% if @compared_from %>
+						<td colspan="2">对比数</td>
+						<td>变化率</td>
+					<% end %>
+					<td style="width: <%= graph_width %>px;">
+						<%= dataset[:total][:title] %>总计: <b><%= total_count %></b>
+						<% if @compared_from %>
+							<span style="margin: 0px 8px;">-</span>
+							对比总计: <b><%= compared_total_count %></b>
+						<% end %>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<% dataset[:rows].each_with_index do |row, row_index| %>
+					<tr<%= %Q! class="odd"! if row_index.odd? %>>
+						<%
+							count = row[:count]
+							percent_label = Utils.percent(count, total_count, 1)
+
+							color = get_pie_chart_color(row_index)
+
+							if @compared_from
+								compared_count = row[:compared_count]
+								compared_percent_label = Utils.percent(compared_count, compared_total_count, 1)
+							end
+						%>
+						
+						<td><%= row[:title] %></td>
+
+						<td align="right" style="font-weight: bold;">
+							<%= count %>
+						</td>
+						<td align="right">
+							<%= percent_label %>
+						</td>
+
+						<% if @compared_from %>
+							<td align="right" style="font-weight: bold;">
+								<%= compared_count %>
+							</td>
+							<td align="right" style="color: <%= compared_label_color %>;">
+								<%= compared_percent_label %>
+							</td>
+
+							<td align="right" style="color: <%= compared_label_color %>;">
+								<%= Utils.growth(count, compared_count, 1) %>
+							</td>
+						<% end %>
+
+						<td>
+							<%
+								width = (graph_width-50) * (count.to_f/@intern_log_max)
+								bar_title = "#{count} / #{total_count} = #{percent_label}"
+							%>
+
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @intern_dataset_color %>; width: <%= width.round %>px; cursor: auto;"></div>
+							<%= count %>
+							
+							
+							<% if @compared_from %>
+								<div class="clear_l"></div>
+								
+								<%
+									compared_width = (graph_width-50) * (compared_count.to_f/@intern_log_max)
+									compared_bar_title = "#{compared_count} / #{compared_total_count} = #{compared_percent_label}"
+								%>
+
+								<div class="graph_bar" title="<%= compared_bar_title %>" style="background-color: <%= compared_bar_color %>; width: <%= compared_width.round %>px; cursor: auto;"></div>
+								<%= compared_count %>
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+				
+				<tr>
+					<td colspan="<%= @compared_from ? 7 : 4 %>"<%= %Q! style="border-bottom: none;"! if dataset_index < (@intern_datasets.size - 1) %>>
+						<a href="#" class="none float_r toggle_intern_log_pie_chart_link">
+							显示饼图</a>
+
+						<div class="float_l info" style="display: none; width: <%= graph_width %>px;">
+							<% if dataset[:total][:count] > 0 %>
+								<%= 
+									render(
+										:partial => "ofc",
+										:locals => {
+											:chart_id => "pie_chart_intern_#{dataset_index}",
+											:height => graph_width,
+											:data => dataset[:chart_data]
+										}
+									)
+								%>
+							<% else %>
+								(没有数据)
+							<% end %>
+						</div>
+
+						<% if @compared_from %>
+							<div class="float_l info" style="display: none; width: <%= graph_width %>px; margin-left: 15px;">
+								<% if dataset[:total][:count] > 0 %>
+									<%= 
+										render(
+											:partial => "ofc",
+											:locals => {
+												:chart_id => "compared_pie_chart_intern_#{dataset_index}",
+												:height => graph_width,
+												:data => dataset[:compared_chart_data]
+											}
+										)
+									%>
+								<% else %>
+									(没有数据)
+								<% end %>
+							</div>
+						<% end %>
+					</td>
+				</tr>
+			</tbody>
+		<% end %>
 		
+		
+		<tr>
+			<td colspan="<%= @compared_from ? 7 : 4 %>" style="border: none; height: 50px;">
+			</td>
+		</tr>
+		
+		
+		<% @intern_log_datasets.each_with_index do |dataset, dataset_index| %>
+			<%
+				total_count = dataset[:total][:count]
+				if @compared_from
+					compared_total_count = dataset[:total][:compared_count]
+				end
+			%>
 			<thead>
 				<tr>
 					<td><%= dataset[:title] %></td>
@@ -47,23 +250,22 @@
 						<td>变化率</td>
 					<% end %>
 					<td style="width: <%= graph_width %>px;">
-						<%= dataset[:total][:title] %>总计: <%= total_count %>
+						<%= dataset[:total][:title] %>总计: <b><%= total_count %></b>
 						<% if @compared_from %>
 							<span style="margin: 0px 8px;">-</span>
-							对比总计: <%= compared_total_count %>
+							对比总计: <b><%= compared_total_count %></b>
 						<% end %>
 					</td>
 				</tr>
 			</thead>
-
 			<tbody>
-				<% dataset[:rows].each_with_index do |row, i| %>
-					<tr<%= %Q! class="odd"! if i.odd? %>>
+				<% dataset[:rows].each_with_index do |row, row_index| %>
+					<tr<%= %Q! class="odd"! if row_index.odd? %>>
 						<%
 							count = row[:count]
 							percent_label = Utils.percent(count, total_count, 1)
 
-							color = get_pie_chart_color(i)
+							color = get_pie_chart_color(row_index)
 
 							if @compared_from
 								compared_count = row[:compared_count]
@@ -97,11 +299,11 @@
 
 						<td>
 							<%
-								width = (graph_width-50) * (count.to_f/@max)
+								width = (graph_width-50) * (count.to_f/@intern_log_max)
 								bar_title = "#{count} / #{total_count} = #{percent_label}"
 							%>
 
-							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= dataset_color %>; width: <%= width.round %>px;" onclick="intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>);"></div>
+							<div class="graph_bar" title="<%= bar_title %>" style="background-color: <%= @intern_log_dataset_color %>; width: <%= width.round %>px;" onclick="intern_logs_detail(<%= row[:event_id] %>, <%= row[:result_id] %>);"></div>
 							<%= count %>
 							
 							
@@ -109,7 +311,7 @@
 								<div class="clear_l"></div>
 								
 								<%
-									compared_width = (graph_width-50) * (compared_count.to_f/@max)
+									compared_width = (graph_width-50) * (compared_count.to_f/@intern_log_max)
 									compared_bar_title = "#{compared_count} / #{compared_total_count} = #{compared_percent_label}"
 								%>
 
@@ -121,19 +323,37 @@
 				<% end %>
 				
 				<tr>
-					<td colspan="<%= @compared_from ? 7 : 4 %>"<%= %Q! style="border-bottom: none;"! if dataset_index < (@datasets.size - 1) %>>
+					<td colspan="<%= @compared_from ? 7 : 4 %>"<%= %Q! style="border-bottom: none;"! if dataset_index < (@intern_log_datasets.size - 1) %>>
 						<a href="#" class="none float_r toggle_intern_log_pie_chart_link">
 							显示饼图</a>
 							
-							<div class="float_l info" style="display: none; width: <%= graph_width %>px;">
+						<div class="float_l info" style="display: none; width: <%= graph_width %>px;">
+							<% if dataset[:total][:count] > 0 %>
+								<%= 
+									render(
+										:partial => "ofc",
+										:locals => {
+											:chart_id => "pie_chart_intern_log_#{dataset_index}",
+											:height => graph_width,
+											:data => dataset[:chart_data]
+										}
+									)
+								%>
+							<% else %>
+								(没有数据)
+							<% end %>
+						</div>
+
+						<% if @compared_from %>
+							<div class="float_l info" style="display: none; width: <%= graph_width %>px; margin-left: 15px;">
 								<% if dataset[:total][:count] > 0 %>
 									<%= 
 										render(
 											:partial => "ofc",
 											:locals => {
-												:chart_id => "pie_chart_#{dataset_index}",
+												:chart_id => "compared_pie_chart_intern_log_#{dataset_index}",
 												:height => graph_width,
-												:data => dataset[:chart_data]
+												:data => dataset[:compared_chart_data]
 											}
 										)
 									%>
@@ -141,25 +361,7 @@
 									(没有数据)
 								<% end %>
 							</div>
-
-							<% if @compared_from %>
-								<div class="float_l info" style="display: none; width: <%= graph_width %>px; margin-left: 15px;">
-									<% if dataset[:total][:count] > 0 %>
-										<%= 
-											render(
-												:partial => "ofc",
-												:locals => {
-													:chart_id => "compared_pie_chart_#{dataset_index}",
-													:height => graph_width,
-													:data => dataset[:compared_chart_data]
-												}
-											)
-										%>
-									<% else %>
-										(没有数据)
-									<% end %>
-								</div>
-							<% end %>
+						<% end %>
 					</td>
 				</tr>
 			</tbody>

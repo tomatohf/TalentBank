@@ -31,13 +31,14 @@ class Student < ActiveRecord::Base
     
     indexes number, name
     
-    has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at
+    has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at, created_at
     
     has intern_profile.begin_at, :as => :intern_begin_at
     has intern_profile.period_id, :as => :intern_period_id
     has intern_profile.workday_id, :as => :intern_workday_id
     has intern_profile.major_id, :as => :intern_major_id
     has intern_profile.salary, :as => :intern_salary
+    has intern_profile.created_at, :as => :intern_created_at
     
     has intern_industry_wishes.industry_category_id, :as => :intern_wish_industry_category_id
     has intern_industry_wishes.industry_id, :as => :intern_wish_industry_id

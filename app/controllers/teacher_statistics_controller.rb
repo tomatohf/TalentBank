@@ -556,6 +556,93 @@ class TeacherStatisticsController < ApplicationController
     compared_to = prepare_compare
     filters = prepare_filters
     
+    count_job = Proc.new { |to|
+      Job.count(
+        :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
+        :conditions => ["corporations.school_id = ? and jobs.created_at < ?", @teacher.school_id, to]
+      )
+    }
+    student_count = Student.total_count_before(@teacher.school_id, :created_at, @to, filters)
+    compared_student_count = @compared_from && Student.total_count_before(@teacher.school_id, :created_at, compared_to, filters)
+    @total_datasets = [
+      {
+        :title => "学生 总数",
+        :count => student_count,
+        :compared_count => compared_student_count
+      },
+      {
+        :title => "企业 总数",
+        :count => @corporation_count = Corporation.total_count_before(@teacher.school_id, :created_at, @to, filters),
+        :compared_count => @compared_from && Corporation.total_count_before(@teacher.school_id, :created_at, compared_to, filters)
+      },
+      {
+        :title => "岗位 总数",
+        :count => count_job.call(@to),
+        :compared_count => @compared_from && count_job.call(compared_to)
+      }
+    ]
+    @total_max = @total_datasets.map{|d| d[:count]}.max
+		if @compared_from
+			@total_max = [@total_max, @total_datasets.map{|d| d[:compared_count]}.max].max
+		end
+		@total_max = Utils.top_axis(@total_max)
+		@total_dataset_color = "#599f2d"
+		
+		
+		intern_profile_count = Student.total_count_before(@teacher.school_id, :intern_created_at, @to, filters)
+		compared_intern_profile_count = @compared_from && Student.total_count_before(@teacher.school_id, :intern_created_at, compared_to, filters)
+		student_with_intern_log_count = InternLog.student_count(@teacher.school_id, @to)
+		compared_student_with_intern_log_count = @compared_from && InternLog.student_count(@teacher.school_id, compared_to)
+		@intern_datasets = [
+		  {
+		    :title => "实习信息收集 统计",
+		    :total => {
+		      :title => "学生人数",
+		      :count => student_count,
+		      :compared_count => compared_student_count
+		    },
+		    :rows => [
+		      {
+		        :title => "已经填写实习信息",
+		        :count => intern_profile_count,
+		        :compared_count => compared_intern_profile_count
+		      },
+		      {
+		        :title => "尚未填写实习信息",
+		        :count => student_count - intern_profile_count,
+		        :compared_count => @compared_from && (compared_student_count - compared_intern_profile_count)
+		      }
+		    ]
+		  },
+		  {
+		    :title => "实习推荐情况 统计",
+		    :total => {
+		      :title => "学生人数",
+		      :count => student_count,
+		      :compared_count => compared_student_count
+		    },
+		    :rows => [
+		      {
+		        :title => "已经推荐过实习岗位",
+		        :count => student_with_intern_log_count,
+		        :compared_count => compared_student_with_intern_log_count
+		      },
+		      {
+		        :title => "尚未推荐过实习岗位",
+		        :count => student_count - student_with_intern_log_count,
+		        :compared_count => @compared_from && (compared_student_count - compared_student_with_intern_log_count)
+		      }
+		    ]
+		  }
+		]
+		@intern_max = @intern_datasets.map{|d| d[:rows].map{|r| r[:count]}}.flatten.max
+		if @compared_from
+			@intern_max = [@intern_max, @intern_datasets.map{|d| d[:rows].map{|r| r[:compared_count]}}.flatten.max].max
+		end
+		@intern_max = Utils.top_axis(@intern_max)
+		@intern_dataset_color = "#FF6600"
+		
+    
     generate_dataset = Proc.new { |event|
       InternLogEventResult.find_group(event[:id]).map { |result|
 		    {
@@ -565,9 +652,9 @@ class TeacherStatisticsController < ApplicationController
 		    }
 		  }
     }
-    @datasets = [
+    @intern_log_datasets = [
 			{
-			  :title => "#{(event = InternLogEvent.inform_interview)[:name]} 数据",
+			  :title => "#{(event = InternLogEvent.inform_interview)[:name]} 统计",
 			  :rows => generate_dataset.call(event),
 			  :total => {
 			    :title => event[:name]
@@ -575,7 +662,7 @@ class TeacherStatisticsController < ApplicationController
 			},
 			
 			{
-			  :title => "#{(event = InternLogEvent.interview_result)[:name]} 数据",
+			  :title => "#{(event = InternLogEvent.interview_result)[:name]} 统计",
 			  :rows => generate_dataset.call(event),
 			  :total => {
 			    :title => event[:name]
@@ -583,7 +670,7 @@ class TeacherStatisticsController < ApplicationController
 			},
 			
 			{
-			  :title => "实习结果 数据",
+			  :title => "实习结果 统计",
 			  :rows => [
 			    {
 			      :title => "实习后 #{InternLogEventResult.intern_end_employed[:name]}",
@@ -611,7 +698,7 @@ class TeacherStatisticsController < ApplicationController
 		
 		max_value = 0
 		
-		@datasets.each do |dataset|
+		@intern_log_datasets.each do |dataset|
 		  search_total_count = dataset[:total][:event_id] && dataset[:total][:result_id]
 		  total_count_options = {
         :event_id => dataset[:total][:event_id],
@@ -663,9 +750,13 @@ class TeacherStatisticsController < ApplicationController
 	    if @compared_from
 	      dataset[:total].merge!(:compared_count => compared_total_count)
       end
-		  
-
-      values = []
+	  end
+	  @intern_log_max = Utils.top_axis(max_value)
+	  @intern_log_dataset_color = "#0077CC"
+	  
+	  
+	  (@intern_datasets + @intern_log_datasets).each do |dataset|
+	    values = []
       total_shown_count = 0
       if @compared_from
         compared_values = []
@@ -714,9 +805,7 @@ class TeacherStatisticsController < ApplicationController
         compared_chart_data.delete(:y_axis)
         dataset.merge!(:compared_chart_data => compared_chart_data)
       end
-	  end
-	  
-	  @max = Utils.top_axis(max_value)
+    end
   end
   
   

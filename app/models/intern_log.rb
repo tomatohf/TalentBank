@@ -15,7 +15,7 @@ class InternLog < ActiveRecord::Base
     
     indexes job.name
     
-    has student_id, teacher_id, job_id, event_id, result_id, occur_at, updated_at
+    has student_id, teacher_id, job_id, event_id, result_id, occur_at, updated_at, created_at
     
     has student.school_id, :as => :school_id
     has student.university_id, :as => :university_id
@@ -60,7 +60,7 @@ class InternLog < ActiveRecord::Base
   
   
   def self.intern_begin_at
-    "2010-10-01"
+    Rails.env.production? ? "2010-10-01" : "2009-10-01"
   end
   
   
@@ -92,6 +92,21 @@ class InternLog < ActiveRecord::Base
   def self.determine_status(event_id, result_id)
     status_key = InternLogEventResult.determine_intern_status(event_id, result_id)
     status_key && Status[status_key]
+  end
+  
+  
+  def self.student_count(school_id, to)
+    to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+    self.search_count(
+      :with_attributes => false,
+      
+      :group_by => "student_id",
+      :group_function => :attr,
+      :with => {
+        :school_id => school_id,
+        :updated_at => Time.parse(InternLog.intern_begin_at)..to_time
+      }
+    ) || 0
   end
   
 end

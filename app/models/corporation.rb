@@ -23,7 +23,7 @@ class Corporation < ActiveRecord::Base
     indexes profile.desc, :as => :desc
     
     
-    has school_id, allow_query, updated_at
+    has school_id, allow_query, updated_at, created_at
     
     has profile.nature_id, :as => :nature_id
     has profile.size_id, :as => :size_id
