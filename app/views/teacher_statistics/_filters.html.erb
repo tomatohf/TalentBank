@@ -2,6 +2,16 @@
 	views ||= []
 	views_style ||= {}
 	hide ||= []
+	show ||= []
+	
+	if @q
+		hide << :student unless hide.include?(:student)
+	end
+	if @v
+		hide << :tag unless hide.include?(:tag)
+		hide << :skill unless hide.include?(:skill)
+	end
+	
 	hide_dataset = hide.include?(:dataset)
 	hide_order = hide.include?(:order)
 	hide_limit = hide.include?(:limit)
@@ -13,6 +23,10 @@
 	hide_skill = hide.include?(:skill)
 	
 	hide_keyword = hide.include?(:keyword)
+	
+	show_job_category_class = show.include?(:job_category_class)
+	show_job_category = show.include?(:job_category)
+	show_job_district = show.include?(:job_district)
 	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
@@ -61,6 +75,16 @@
 	<% end %>
 	<% unless hide_keyword %>
 		<input type="hidden" id="keyword" name="keyword" value="<%= keyword %>" />
+	<% end %>
+	
+	<% if show_job_category_class %>
+		<input type="hidden" id="job_category_class" name="job_category_class" value="<%= @job_category_class && @job_category_class[:id] %>" />
+	<% end %>
+	<% if show_job_category %>
+		<input type="hidden" id="job_category" name="job_category" value="<%= @job_category && @job_category[:id] %>" />
+	<% end %>
+	<% if show_job_district %>
+		<input type="hidden" id="job_district" name="job_district" value="<%= @job_district && @job_district[:id] %>" />
 	<% end %>
 	
 	<% unless hide_order %>
@@ -137,6 +161,10 @@
 			
 			["skill", "技能和证书"]
 		]
+		
+		filters << ["job_category_class", "岗位大类"] if show_job_category_class
+		filters << ["job_category", "岗位细分"] if show_job_category
+		filters << ["job_district", "工作区域"] if show_job_district
 	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
@@ -147,12 +175,7 @@
 					
 				<div class="dropdown_menu" style="font-size: 12px;">
 					<ul class="dropdown_sub_menu">
-						<%
-							filters_in_menu = filters
-							filters_in_menu = filters_in_menu[0..5] + filters_in_menu[7..-1] if @q
-							filters_in_menu = filters_in_menu[0..-3] if @v
-						%>
-						<% filters_in_menu.each do |filter| %>
+						<% filters.each do |filter| %>
 							<% unless hide.include?(filter[0].to_sym) %>
 								<%# record = self.instance_variable_get("@#{filter[0]}") %>
 								<%# if record.blank? %>
@@ -169,9 +192,8 @@
 
 			<td>
 				<% no_filter = true %>
-				<% filters[0..-2].each do |filter| %>
-					<% record = self.instance_variable_get("@#{filter[0]}") %>
-					<% unless record.blank? %>
+				<% filters.each do |filter| %>
+					<% unless filter[0] == "skill" || (record = self.instance_variable_get("@#{filter[0]}")).blank? %>
 						<%
 							record_name = if record.kind_of?(String)
 								record

@@ -10,6 +10,7 @@
 	<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
 	<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
 	<%= render :partial => "/students/selects/var" %>
+	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
 	<script language="JavaScript">
 		var TEACHER_ID = <%= @teacher.id %>;
 	
@@ -27,6 +28,8 @@
 		<% end %>
 	
 		var SKILLS = [<%= Skill.data.collect{|skill| %Q!{id:#{skill[:id]}, name:"#{skill[:name]}"}!}.join(",") %>];
+		
+		var JOB_DISTRICTS = [<%= JobDistrict.data.collect{|district| %Q!{id:#{district[:id]}, name:"#{district[:name]}"}!}.join(",") %>];
 	</script>
 	<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />

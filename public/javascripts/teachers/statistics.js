@@ -5,7 +5,8 @@ var period_date_format = "yymmdd";
 
 var FILTERS = [
 	"level", "graduation", "university", "college", "major", "student",
-	"corp", "domain", "tag", "skill", "keyword"
+	"corp", "domain", "tag", "skill", "keyword",
+	"job_category_class", "job_category", "job_district"
 ];
 
 
@@ -283,7 +284,7 @@ function filter_graduation() {
 
 
 function filter_university() {
-	show_static_filter_dialog("university", UNIVERSITIES, "过滤大学")
+	show_static_filter_dialog("university", UNIVERSITIES, "过滤大学");
 }
 
 
@@ -415,11 +416,40 @@ function filter_skill() {
 }
 
 
+function filter_job_category_class() {
+	show_static_filter_dialog("job_category_class", JOB_CATEGORY_CLASSES, "过滤岗位大类");
+}
+
+
+function filter_job_category() {
+	var job_category_objs = JOB_CATEGORIES["c_" + $("input#job_category_class").val()];
+	if(job_category_objs == null) {
+		job_category_objs = [];
+		$.each(
+			JOB_CATEGORIES,
+			function(key, value) {
+				$.merge(job_category_objs, value);
+			}
+		);
+	}
+	
+	show_static_filter_dialog("job_category", job_category_objs, "过滤岗位细分");
+}
+
+
+function filter_job_district() {
+	show_static_filter_dialog("job_district", JOB_DISTRICTS, "过滤工作区域");
+}
+
+
 function setup_filter_links(container) {
 	container.find("a[id^='filter_']").unbind("click").click(
 		function() {
-			var filter = $(this).attr("id").substr("filter_".length).split("_");
-			change_filter(filter[0], filter[1]);
+			var filter = $(this).attr("id").substr("filter_".length),
+				last_underscore_index = filter.lastIndexOf("_"),
+				filter_name = filter.substring(0, last_underscore_index),
+				filter_value = filter.substring(last_underscore_index + 1);
+			change_filter(filter_name, filter_value);
 			// DIALOG.disappear();
 			
 			return false;

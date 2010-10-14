@@ -774,6 +774,15 @@ class TeacherStatisticsController < ApplicationController
     
     @keyword = params[:keyword] && params[:keyword].strip
     
+    job_category_class_id = params[:job_category_class] && params[:job_category_class].strip
+    @job_category_class = JobCategoryClass.find(job_category_class_id.to_i)
+    
+    job_category_id = params[:job_category] && params[:job_category].strip
+	  @job_category = JobCategory.find_by_id(job_category_id.to_i)
+	  
+	  job_district_id = params[:job_district] && params[:job_district].strip
+    @job_district = JobDistrict.find(job_district_id.to_i)
+    
     
     filters = {}
     
@@ -795,6 +804,10 @@ class TeacherStatisticsController < ApplicationController
       end
     end
     filters[:keyword] = @keyword.to_crc32 unless @keyword.blank?
+    
+    filters[:job_category_class_id] = @job_category_class[:id] if @job_category_class
+    filters[:job_category_id] = @job_category[:id] if @job_category
+    filters[:job_district_id] = @job_district[:id] if @job_district
     
     filters
   end

@@ -10,7 +10,8 @@
 	render(
 		:partial => "filters",
 		:locals => {
-			:hide => [:dataset, :order, :limit, :views, :tag, :skill, :domain, :keyword]
+			:hide => [:dataset, :order, :limit, :views, :tag, :skill, :domain, :keyword],
+			:show => [:job_category_class, :job_category, :job_district]
 		}
 	)
 %>
