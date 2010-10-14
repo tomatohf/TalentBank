@@ -755,6 +755,15 @@ class TeacherStatisticsController < ApplicationController
     corp_id = params[:corp] && params[:corp].strip
     @corp = corp_id.blank? ? nil : Corporation.try_find(corp_id)
     
+    corp_industry_category_id = params[:corp_industry_category] && params[:corp_industry_category].strip
+    @corp_industry_category = IndustryCategory.find(corp_industry_category_id.to_i)
+    
+    corp_industry_id = params[:corp_industry] && params[:corp_industry].strip
+	  @corp_industry = Industry.find_by_id(corp_industry_id.to_i)
+	  
+	  corp_nature_id = params[:corp_nature] && params[:corp_nature].strip
+    @corp_nature = CorporationNature.find(corp_nature_id.to_i)
+    
     domain_id = params[:domain] && params[:domain].strip
     @domain = ResumeDomain.find(domain_id.to_i)
     
@@ -794,6 +803,10 @@ class TeacherStatisticsController < ApplicationController
     filters[:student_id] = @student.id if @student
     
     filters[:corporation_id] = @corp.id if @corp
+    filters[:corporation_industry_category_id] = @corp_industry_category[:id] if @corp_industry_category
+    filters[:corporation_industry_id] = @corp_industry[:id] if @corp_industry
+    filters[:corporation_nature_id] = @corp_nature[:id] if @corp_nature
+    
     filters[:domain_id] = @domain[:id] if @domain
     filters[:exp_tag_id] = @tag[:id] if @tag
     if @skill

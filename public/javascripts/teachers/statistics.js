@@ -5,7 +5,8 @@ var period_date_format = "yymmdd";
 
 var FILTERS = [
 	"level", "graduation", "university", "college", "major", "student",
-	"corp", "domain", "tag", "skill", "keyword",
+	"corp", "corp_industry_category", "corp_industry", "corp_nature",
+	"domain", "tag", "skill", "keyword",
 	"job_category_class", "job_category", "job_district"
 ];
 
@@ -376,7 +377,11 @@ function filter_corp_dialog_content(container, url) {
 			type: "GET",
 			url: url || ("/teachers/" + TEACHER_ID + "/corporations"),
 			dataType: "html",
-			data: {},
+			data: {
+				ic: $("input#corp_industry_category").val(),
+				i: $("input#corp_industry").val(),
+				n: $("input#corp_nature").val()
+			},
 			error: function() {
 				show_filter_dialog('<p class="error_msg">载入失败, 再试一次吧</p>');
 			},
@@ -387,6 +392,32 @@ function filter_corp_dialog_content(container, url) {
 			}
 		}
 	);
+}
+
+
+function filter_corp_industry_category() {
+	show_static_filter_dialog("corp_industry_category", INDUSTRY_CATEGORIES, "过滤企业行业大类");
+}
+
+
+function filter_corp_industry() {
+	var corp_industry_objs = INDUSTRIES["c_" + $("input#corp_industry_category").val()];
+	if(corp_industry_objs == null) {
+		corp_industry_objs = [];
+		$.each(
+			INDUSTRIES,
+			function(key, value) {
+				$.merge(corp_industry_objs, value);
+			}
+		);
+	}
+	
+	show_static_filter_dialog("corp_industry", corp_industry_objs, "过滤企业行业细分");
+}
+
+
+function filter_corp_nature() {
+	show_static_filter_dialog("corp_nature", CORP_NATURES, "过滤企业性质");
 }
 
 
@@ -865,7 +896,7 @@ function setup_compare() {
 
 
 function setup_filters_dropdown_menu() {
-	APP.setup_dropdown_menu("#filters_link", 120);
+	APP.setup_dropdown_menu("#filters_link", 120, 350);
 }
 
 

@@ -64,6 +64,10 @@
 	<% end %>
 	
 	<input type="hidden" id="corp" name="corp" value="<%= @corp && @corp.id %>" />
+	<input type="hidden" id="corp_industry_category" name="corp_industry_category" value="<%= @corp_industry_category && @corp_industry_category[:id] %>" />
+	<input type="hidden" id="corp_industry" name="corp_industry" value="<%= @corp_industry && @corp_industry[:id] %>" />
+	<input type="hidden" id="corp_nature" name="corp_nature" value="<%= @corp_nature && @corp_nature[:id] %>" />
+	
 	<% unless hide_domain %>
 		<input type="hidden" id="domain" name="domain" value="<%= @domain && @domain[:id] %>" />
 	<% end %>
@@ -147,6 +151,10 @@
 	<%
 		filters = [
 			["corp", "企业"],
+			
+			["corp_industry_category", "企业行业大类"],
+			["corp_industry", "企业行业细分"],
+			["corp_nature", "企业性质"],
 			
 			["level", "学历"],
 			["graduation", "毕业时间"],

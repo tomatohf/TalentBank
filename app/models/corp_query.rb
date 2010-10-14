@@ -41,6 +41,10 @@ class CorpQuery < ActiveRecord::Base
       :type => :multi
     )
     
+    has corporation.profile.industry_category_id, :as => :corporation_industry_category_id
+    has corporation.profile.industry_id, :as => :corporation_industry_id
+    has corporation.profile.nature_id, :as => :corporation_nature_id
+    
     set_property(
       :delta => DailyDelta,
       :column => :updated_at,

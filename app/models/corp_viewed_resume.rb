@@ -22,6 +22,10 @@ class CorpViewedResume < ActiveRecord::Base
     has resume.student.edu_level_id, :as => :edu_level_id
     has resume.student.graduation_year, :as => :graduation_year
     
+    has corporation.profile.industry_category_id, :as => :corporation_industry_category_id
+    has corporation.profile.industry_id, :as => :corporation_industry_id
+    has corporation.profile.nature_id, :as => :corporation_nature_id
+    
     set_property(
       :delta => DailyDelta,
       :column => :updated_at,
