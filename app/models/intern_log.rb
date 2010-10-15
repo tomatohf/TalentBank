@@ -94,19 +94,4 @@ class InternLog < ActiveRecord::Base
     status_key && Status[status_key]
   end
   
-  
-  def self.student_count(school_id, to)
-    to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
-    self.search_count(
-      :with_attributes => false,
-      
-      :group_by => "student_id",
-      :group_function => :attr,
-      :with => {
-        :school_id => school_id,
-        :updated_at => Time.parse(self.intern_begin_at)..to_time
-      }
-    ) || 0
-  end
-  
 end

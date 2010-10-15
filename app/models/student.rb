@@ -87,6 +87,13 @@ class Student < ActiveRecord::Base
     has intern_corp_nature_blacklists.nature_id, :as => :intern_blacklist_nature_id
     has intern_job_district_blacklists.job_district_id, :as => :intern_blacklist_job_district_id
     
+    has intern_logs.created_at, :as => :intern_logs_created_at
+    has(
+      "GROUP_CONCAT(IFNULL(intern_logs.result_id, 0) ORDER BY intern_logs.occur_at DESC SEPARATOR ',')",
+      :as => :intern_log_latest_result_id,
+      :type => :integer
+    )
+    
     set_property(
       :delta => DailyDelta,
       :column => :updated_at,
@@ -181,6 +188,9 @@ class Student < ActiveRecord::Base
     filters[:edu_level_id] = EduLevel.data.first[:id] .. job.edu_level_id unless job.edu_level_id.blank?
     filters[:graduation_year] = JobGraduation.get_graduation_year_range(job.graduation_id) unless job.graduation_id.blank?
     filters[:intern_major_id] = job.major_id unless job.major_id.blank?
+    filters[:intern_log_latest_result_id] = InternLogEventResult.find_by_intern_status(:unemployed).map { |result|
+      result[:id]
+    } << 0 if options[:only_unemployed]
     
     blacklists = {}
     blacklists[:intern_blacklist_industry_category_id] = corporation_profile.industry_category_id unless corporation_profile.industry_category_id.blank?

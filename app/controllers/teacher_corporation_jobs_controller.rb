@@ -143,11 +143,15 @@ class TeacherCorporationJobsController < ApplicationController
     @job.major_id = params[:jm].strip unless params[:jm].nil?
     
     
+    @not_only_unemployed = (params[:not_only_unemployed] == "true")
+    
+    
     @page = params[:page]
     @page = @page =~ /\d+/ ? @page.to_i : 1
     @students = Student.job_search(
       @corporation.school_id, @job, @profile, @page,
-      :include => [:profile]
+      :include => [:profile],
+      :only_unemployed => !@not_only_unemployed
     )
     @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])
     

@@ -617,8 +617,16 @@ class TeacherStatisticsController < ApplicationController
 		  :with => filters,
 		  :period_key => :intern_created_at
 		)
-		student_with_intern_log_count = InternLog.student_count(@teacher.school_id, @to)
-		compared_student_with_intern_log_count = @compared_from && InternLog.student_count(@teacher.school_id, compared_to)
+		student_with_intern_log_count = Student.period_total_count(
+		  @teacher.school_id, intern_begin_at_time, @to,
+		  :with => filters,
+		  :period_key => :intern_logs_created_at
+		)
+		compared_student_with_intern_log_count = @compared_from && Student.period_total_count(
+		  @teacher.school_id, intern_begin_at_time, compared_to,
+		  :with => filters,
+		  :period_key => :intern_logs_created_at
+		)
 		@intern_datasets = [
 		  {
 		    :title => "实习信息收集 统计",

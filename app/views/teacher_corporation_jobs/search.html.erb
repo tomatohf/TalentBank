@@ -249,6 +249,11 @@
 		
 		
 		<div class="align_r" style="margin: 15px 100px 5px 5px;">
+			<span style="margin-right: 50px;">
+				<%= check_box_tag :not_only_unemployed, value = "true", @not_only_unemployed %>
+				<label for="not_only_unemployed">搜索结果包含非待业学生</label>
+			</span>
+			
 			<input type="submit" value="搜索" class="button" />
 		</div>
 	</div>

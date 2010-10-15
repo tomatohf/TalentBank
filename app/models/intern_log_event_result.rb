@@ -30,6 +30,11 @@ class InternLogEventResult < HashModel::Grouped
   end
   
   
+  def self.find_by_intern_status(status_key)
+    (self.data.values || []).flatten.select { |result| result[:intern_status] == status_key }
+  end
+  
+  
   def self.interview_result_passed
     self.find(20, 30)
   end
