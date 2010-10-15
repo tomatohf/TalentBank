@@ -212,7 +212,7 @@ class Student < ActiveRecord::Base
     self.search(
       keywords.join("|"),
       :page => page, :per_page => 10,
-      :match_mode => Search_Match_Mode,
+      :match_mode => :extended2,
       :order => "@weight DESC",
       :field_weights => {
         :intern_wish_industry_category_ids => 4,
