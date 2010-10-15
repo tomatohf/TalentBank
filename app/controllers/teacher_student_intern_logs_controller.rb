@@ -19,9 +19,8 @@ class TeacherStudentInternLogsController < ApplicationController
   
   
   def index
-    @logs = InternLog.find(
-      :all,
-      :conditions => ["student_id = ?", @student.id],
+    @logs = InternLog.list_from_student(
+      @student.id,
       :order => "occur_at DESC",
       :include => [:job => :corporation]
     )

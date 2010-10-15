@@ -344,10 +344,12 @@ module Utils
   module InternWishHelpers
     def self.included(including_model)
       
-      def including_model.list_from_student(student_id)
+      def including_model.list_from_student(student_id, options = {})
         self.find(
           :all,
-          :conditions => ["student_id = ?", student_id]
+          {
+            :conditions => ["student_id = ?", student_id]
+          }.merge(options)
         )
       end
       
