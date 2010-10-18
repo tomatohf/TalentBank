@@ -47,7 +47,7 @@ class Student < ActiveRecord::Base
     has intern_corp_nature_wishes.nature_id, :as => :intern_wish_nature_id
     has intern_job_district_wishes.job_district_id, :as => :intern_wish_job_district_id
     indexes(
-      "GROUP_CONCAT(DISTINCT IF(intern_industry_wishes.industry_id, '', CONCAT('j', intern_industry_wishes.industry_category_id, 'y')) SEPARATOR ',')",
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_industry_wishes.industry_category_id, 'y') SEPARATOR ',')",
       :as => :intern_wish_industry_category_ids
     )
     indexes(
@@ -55,7 +55,7 @@ class Student < ActiveRecord::Base
       :as => :intern_wish_industry_ids
     )
     indexes(
-      "GROUP_CONCAT(DISTINCT IF(intern_job_category_wishes.job_category_id, '', CONCAT('j', intern_job_category_wishes.job_category_class_id, 's')) SEPARATOR ',')",
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_category_wishes.job_category_class_id, 's') SEPARATOR ',')",
       :as => :intern_wish_job_category_class_ids
     )
     indexes(
@@ -70,7 +70,7 @@ class Student < ActiveRecord::Base
       "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_district_wishes.job_district_id, 'd') SEPARATOR ',')",
       :as => :intern_wish_job_district_ids
     )
-    indexes("'j0'", :as => :match_all)
+    indexes("'j0j'", :as => :match_all)
     
     has(
       "GROUP_CONCAT(DISTINCT IF(intern_industry_blacklists.industry_id, '', intern_industry_blacklists.industry_category_id) SEPARATOR ',')",
@@ -201,7 +201,7 @@ class Student < ActiveRecord::Base
     blacklists[:intern_blacklist_job_district_id] = job.district_id unless job.district_id.blank?
     blacklists[:intern_salary] = (job.salary.to_i + 1) .. 1010 unless job.salary.to_i > 1000
     
-    keywords = [%Q!"j0"!]
+    keywords = [%Q!"j0j"!]
     keywords << %Q!"j#{corporation_profile.industry_category_id}y"! unless corporation_profile.industry_category_id.blank?
     keywords << %Q!"j#{corporation_profile.industry_id}i"! unless corporation_profile.industry_id.blank?
     keywords << %Q!"j#{corporation_profile.nature_id}n"! unless corporation_profile.nature_id.blank?

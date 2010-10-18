@@ -7,16 +7,16 @@
 	
 	profile = student.profile
 	
-	weight = match[:weight]
+	# weight = match[:weight]
 	attributes = match[:attributes]
 	
 	matched_wishes = []
-	matched_wishes << "行业大类" if attributes["intern_wish_industry_category_id"].include?(@profile.industry_category_id)
-	matched_wishes << "行业细分" if attributes["intern_wish_industry_id"].include?(@profile.industry_id)
-	matched_wishes << "企业性质" if attributes["intern_wish_nature_id"].include?(@profile.nature_id)
 	matched_wishes << "岗位大类" if attributes["intern_wish_job_category_class_id"].include?(@job.category_class_id)
 	matched_wishes << "岗位细分" if attributes["intern_wish_job_category_id"].include?(@job.category_id)
+	matched_wishes << "行业细分" if attributes["intern_wish_industry_id"].include?(@profile.industry_id)
 	matched_wishes << "工作区域" if attributes["intern_wish_job_district_id"].include?(@job.district_id)
+	matched_wishes << "行业大类" if attributes["intern_wish_industry_category_id"].include?(@profile.industry_category_id)
+	matched_wishes << "企业性质" if attributes["intern_wish_nature_id"].include?(@profile.nature_id)
 %>
 
 <tr id="matched_student_<%= student.id %>" class="matched_student<%= " odd" if counter.even? %>">
