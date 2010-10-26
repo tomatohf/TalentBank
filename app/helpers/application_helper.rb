@@ -2,27 +2,27 @@
 module ApplicationHelper
   
   def format_datetime(datetime)
-    datetime && datetime.getlocal.strftime("%Y-%m-%d %H:%M:%S")
+    datetime && datetime.to_time.getlocal.strftime("%Y-%m-%d %H:%M:%S")
   end
   
   def format_date(date)
-    date && date.getlocal.strftime("%Y-%m-%d")
+    date && date.to_time.getlocal.strftime("%Y-%m-%d")
   end
   
   def format_short_date(date)
-    date && date.getlocal.strftime("%y-%m-%d")
+    date && date.to_time.getlocal.strftime("%y-%m-%d")
   end
   
   def format_short_datetime(date)
-    date && date.getlocal.strftime("%y-%m-%d %H:%M:%S")
+    date && date.to_time.getlocal.strftime("%y-%m-%d %H:%M:%S")
   end
   
   def format_zh_date(date)
-    date && (date = date.getlocal) && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
+    date && (date = date.to_time.getlocal) && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
   end
   
   def format_time(date)
-    date && date.getlocal.strftime("%H:%M:%S")
+    date && date.to_time.getlocal.strftime("%H:%M:%S")
   end
   
   
