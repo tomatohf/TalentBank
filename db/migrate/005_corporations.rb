@@ -39,7 +39,7 @@ class Corporations < ActiveRecord::Migration
       t.column :province_id, :integer, :limit => 2
       t.column :city_id, :integer, :limit => 2
       
-      t.column :desc, :string, :limit => 500
+      t.column :desc, :string, :limit => 1000
       
       t.column :created_at, :datetime
       t.column :updated_at, :datetime

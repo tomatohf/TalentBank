@@ -20,11 +20,21 @@ class TeacherCorporationsController < ApplicationController
   def index
     @uid = params[:u] && params[:u].strip
     
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
     @corporations = unless @uid.blank?
-      Corporation.search(
-        :conditions => {:uid => @uid},
-        :with => {:school_id => @teacher.school_id}
-      )
+      if @uid.to_i > 0 && (corps = Corporation.paginate(
+        :page => page,
+        :per_page => Corporation_Page_Size,
+        :conditions => ["id = ?", @uid]
+      )).size > 0
+        corps
+      else
+        Corporation.search(
+          :conditions => {:uid => @uid},
+          :with => {:school_id => @teacher.school_id}
+        )
+      end
     else
       @nature_id = params[:n] && params[:n].strip
       @size_id = params[:s] && params[:s].strip
@@ -42,8 +52,6 @@ class TeacherCorporationsController < ApplicationController
         nil
       end
       
-      page = params[:page]
-      page = 1 unless page =~ /\d+/
       if @nature_id.blank? && @size_id.blank? && @industry_category_id.blank? && @industry_id.blank? &&
         @province_id.blank? && @keyword.blank? && @allow_query.blank?
         Corporation.paginate(

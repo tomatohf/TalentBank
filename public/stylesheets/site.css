@@ -1004,6 +1004,7 @@ img.notification_icon {
 	margin-left: -21px;
 	position: relative;
 	width: 21px;
+	cursor: pointer;
 }
 .search_form_of_teachers #search_form {
 	background-color: #F2F2F2;

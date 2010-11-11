@@ -1,5 +1,9 @@
 <tr<%= %Q! class="even"! if corporation_counter.even? %>>
 	<td>
+		<%= corporation.id %>
+	</td>
+	
+	<td>
 		<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
 			<%= h(corporation.uid) %></a>
 	</td>

@@ -25,7 +25,7 @@ class CorporationProfile < ActiveRecord::Base
   
   validates_length_of :website, :maximum => 250, :message => "企业网站 超过长度限制", :allow_nil => true
   
-  validates_length_of :desc, :maximum => 500, :message => "企业简介 超过长度限制", :allow_nil => true
+  validates_length_of :desc, :maximum => 1000, :message => "企业简介 超过长度限制", :allow_nil => true
   
   validates_length_of :business_scope, :maximum => 250, :message => "经营范围 超过长度限制", :allow_nil => true
   

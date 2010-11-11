@@ -8,6 +8,7 @@ class CorporationNature < HashModel::Simple
     [
       {:id => 10, :name => "外资(欧美)"},
       {:id => 20, :name => "外资(非欧美)"},
+      {:id => 25, :name => "中外合资"},
       {:id => 30, :name => "国有企业"},
       {:id => 40, :name => "私营企业"},
       {:id => 50, :name => "事业单位"},
