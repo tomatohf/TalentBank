@@ -68,6 +68,11 @@ module Schools
       all_graduation_years.delete_if { |graduation_year| graduation_year < year }
     end
     
+    
+    def job_districts
+      JobDistrict.data
+    end
+    
   end
 
 end

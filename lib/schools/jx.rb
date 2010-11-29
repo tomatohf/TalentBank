@@ -21,6 +21,11 @@ module Schools
       [10]
     end
     
+    
+    def job_districts
+      super.select{ |district| district[:id] < 200 }
+    end
+    
   end
   
 end

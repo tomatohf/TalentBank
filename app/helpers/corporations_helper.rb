@@ -15,6 +15,7 @@ module CorporationsHelper
     profile.contact_title = params[:contact_title] && params[:contact_title].strip
     
     profile.business_scope = params[:business_scope] && params[:business_scope].strip
+    profile.job_district_id = params[:job_district] && params[:job_district].strip
     profile.address = params[:address] && params[:address].strip
     profile.zip = params[:zip] && params[:zip].strip
     profile.website = params[:website] && params[:website].strip

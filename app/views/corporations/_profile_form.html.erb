@@ -72,6 +72,28 @@
 
 <tr>
 	<td>
+		<label for="job_district">
+			区域
+		</label>
+	</td>
+	
+	<td>
+		<%=
+			render(
+				:partial => "/teacher_corporation_jobs/selects/job_district",
+				:locals => {
+					:job_district_id => @profile.job_district_id,
+					:field_id => "job_district", :field_name => "job_district",
+					:hide_label => true, :empty_label => "选择区域"
+				}
+			)
+		%>
+	</td>
+</tr>
+
+
+<tr>
+	<td>
 		<label for="address">
 			地址
 		</label>

@@ -15,7 +15,7 @@
 	<% unless required %>
 		<option value=""<%= %Q! selected="selected"! if job_district_id.blank? %>><%= empty_label %></option>
 	<% end %>
-	<% JobDistrict.data.each do |district| %>
+	<% @school.job_districts.each do |district| %>
 		<option value="<%= district[:id] %>"<%= %Q! selected="selected"! if job_district_id.to_i == district[:id] %>><%= district[:name] %></option>
 	<% end %>
 </select>
