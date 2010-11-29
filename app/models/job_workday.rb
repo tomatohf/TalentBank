@@ -7,7 +7,8 @@ class JobWorkday < HashModel::Simple
       {:id => 40, :name => "3个工作日"},
       {:id => 50, :name => "4个工作日"},
       {:id => 60, :name => "5个工作日"},
-      {:id => 70, :name => "周末上班"}
+      {:id => 70, :name => "6个工作日"},
+      {:id => 80, :name => "7个工作日"}
     ]
   end
   
