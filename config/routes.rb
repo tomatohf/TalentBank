@@ -72,6 +72,8 @@ ActionController::Routing::Routes.draw do |map|
     }, :member => {
       :adjust_permission => :post
     } do |teacher_corporations|
+      teacher_corporations.resources :teacher_corporation_records, :as => :records
+      
       teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs, :member => {
         :search => :get,
         :match => :get,

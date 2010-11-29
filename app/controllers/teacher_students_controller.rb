@@ -127,6 +127,7 @@ class TeacherStudentsController < ApplicationController
   end
   
   def update
+    @student.number = params[:number] && params[:number].strip
     StudentsController.helpers.fill_student_editable_fields(@student, params)
     
     if @student.save

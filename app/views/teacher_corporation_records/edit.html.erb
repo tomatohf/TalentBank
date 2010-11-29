@@ -1,0 +1,36 @@
+<%
+	page_title = "修改企业 #{h(@corporation.uid)} 的记录"
+	talent_page_title(page_title)
+%>
+
+<div class="float_r">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>">
+		返回企业</a>
+</div>
+
+<div>
+	<h2 class="page_title"><%= page_title %></h2>
+	
+	
+	<div>
+		<% if flash[:error_msg] %>
+			<p class="error_msg"><%= flash[:error_msg] %></p>
+		<% end %>
+		<% if @record.errors.size > 0 %>
+			<p class="error_msg">
+				<%= list_model_validate_errors(@record) %>
+			</p>
+		<% end %>
+		<% if flash[:message] %>
+		    <p class="info_msg"><%= flash[:message] %></p>
+		<% end %>
+	</div>
+	
+	<br />
+	
+	<div>
+		<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}/records/#{@record.id}", :method => :put do %>
+			<%= render :partial => "record_form", :locals => {:submit_label => "修改"} %>
+		<% end %>
+	</div>
+</div>

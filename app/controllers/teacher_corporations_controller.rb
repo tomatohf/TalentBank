@@ -118,6 +118,7 @@ class TeacherCorporationsController < ApplicationController
   def update
     @profile = CorporationProfile.get_record(@corporation.id)
     
+    @corporation.uid = params[:uid] && params[:uid].strip
     @corporation.name = params[:name] && params[:name].strip
     
     # corporation profile
@@ -135,6 +136,12 @@ class TeacherCorporationsController < ApplicationController
   
   def show
     @profile = @corporation.profile || CorporationProfile.new
+    
+    @records = CorporationRecord.find(
+      :all,
+      :conditions => ["corporation_id = ?", @corporation.id],
+      :order => "created_at DESC"
+    )
   end
   
   

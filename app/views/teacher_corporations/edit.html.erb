@@ -28,12 +28,16 @@
 
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
 		<tr>
-			<td style="width: 100px;">
-				企业帐号
+			<td style="width: 120px;">
+				企业用户名<%= required_mark %>
 			</td>
 
 			<td>
-				<%= h(@corporation.uid) %>
+				<input type="text" id="uid" name="uid" class="text_field" size="30" value="<%= h(@corporation.uid) %>" />
+				&nbsp;
+				<span class="info_with_icon">
+					企业用户名不可重复
+				</span>
 			</td>
 		</tr>
 		

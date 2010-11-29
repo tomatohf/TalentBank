@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20) do
+ActiveRecord::Schema.define(:version => 21) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(:version => 20) do
     t.integer  "industry_id",          :limit => 2
     t.integer  "province_id",          :limit => 2
     t.integer  "city_id",              :limit => 2
-    t.string   "desc",                 :limit => 500
+    t.string   "desc",                 :limit => 1000
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "industry_category_id", :limit => 2
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(:version => 20) do
   end
 
   add_index "corporation_profiles", ["corporation_id"], :name => "index_corporation_profiles_on_corporation_id", :unique => true
+
+  create_table "corporation_records", :force => true do |t|
+    t.integer  "corporation_id"
+    t.string   "notes",          :limit => 500
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "corporation_records", ["corporation_id", "created_at"], :name => "index_corporation_records_on_corporation_id_and_created_at"
 
   create_table "corporations", :force => true do |t|
     t.string   "uid",         :limit => 25

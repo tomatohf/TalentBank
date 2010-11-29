@@ -30,11 +30,15 @@
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
 		<tr>
 			<td style="width: 100px;">
-				学号
+				学号<%= required_mark %>
 			</td>
 
 			<td>
-				<%= h(@student.number) %>
+				<input type="text" id="number" name="number" class="text_field" size="30" value="<%= h(@student.number) %>" />
+				&nbsp;
+				<span class="info_with_icon">
+					学号不可重复
+				</span>
 			</td>
 		</tr>
 		

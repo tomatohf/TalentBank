@@ -1,0 +1,34 @@
+<table border="0" cellspacing="5" cellpadding="5">
+	<tr>
+		<td valign="top">
+			<label for="notes">
+				内容(<span style="color: red;">*</span>)
+			</label>
+		</td>
+		
+		<td>
+			<textarea id="notes" name="notes" class="text_field" cols="50" rows="8"><%= h(@record.notes) %></textarea>
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td></td>
+		<td>
+			<div class="info_with_icon">
+				500 字以内
+			</div>
+		</td>
+	</tr>
+	
+
+	<tr>
+		<td>
+
+		</td>
+
+		<td>
+			<%= submit_tag submit_label, :class => "button", :disabled => !@account_active %>
+		</td>
+	</tr>
+</table>
