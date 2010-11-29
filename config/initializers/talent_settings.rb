@@ -26,6 +26,9 @@ require "pathname"
 require "fileutils"
 require "redcloth"
 
+require "fastercsv"
+Mime::Type.register "text/csv; charset=UTF-8; header=present", :csv
+
 
 # require "digest/sha1"
 # 

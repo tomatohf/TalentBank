@@ -1,0 +1,74 @@
+<%
+	page_title = "全部岗位"
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/jobs.csv" class="button">
+		导出为 CSV</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<%= render :partial => "/teacher_corporation_jobs/intern_log_count_form", :locals => {:counts => @counts} %>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<thead>
+		<tr>
+			<td>企业编号</td>
+			<td>企业名称</td>
+			<td>企业性质</td>
+			
+			<td>岗位编号</td>
+			<td>岗位名称</td>
+			<td>招聘人数</td>
+
+			<% @counts.titles.each do |key, value| %>
+				<% if @counts.send(key) %>
+					<td><%= value %></td>
+				<% end %>
+			<% end %>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @jobs.each_with_index do |job, i| %>
+			<tr<%= %Q! class="odd"! if i.odd? %>>
+				<%
+					corporation = job.corporation
+					profile = corporation.profile
+				%>
+
+				<td><%= corporation.id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+						<%= h(corporation.name || corporation.uid) %></a>
+				</td>
+				<td>
+					<% nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id) %>
+					<%= nature && nature[:name] %>
+				</td>
+
+				<td><%= job.id %></td>
+				<td>
+					<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
+						<%= h(job.name) %></a>
+				</td>
+				<td align="right"><%= job.number %></td>
+
+				<% @counts.filters.each do |key, value| %>
+					<% if @counts.send(key) %>
+						<td align="right" style="font-weight: bold;">
+							<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= value[:event_id] %>&result=<%= value[:result_id] %>" class="none">
+								<%= @counts.get_counts(key)[job.id] || 0 %></a>
+						</td>
+					<% end %>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= paging_buttons(@jobs) %>

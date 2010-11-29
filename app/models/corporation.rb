@@ -6,6 +6,8 @@ class Corporation < ActiveRecord::Base
   
   has_one :profile, :class_name => "CorporationProfile", :foreign_key => "corporation_id", :dependent => :destroy
   
+  has_many :jobs, :class_name => "Job", :foreign_key => "corporation_id", :dependent => :destroy
+  
   
   include Utils::Searchable
   

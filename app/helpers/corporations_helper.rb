@@ -55,4 +55,88 @@ module CorporationsHelper
     job.recruit_end_at = params[:recruit_end_at] && params[:recruit_end_at].strip
   end
   
+  
+  def count_intern_log(school_id, group_field, group_values, filters)
+    with = {}
+    with[group_field] = group_values unless group_values.nil?
+    
+    InternLog.period_group_counts(
+      school_id, Date.parse(InternLog.intern_begin_at), Date.today,
+      :group_by => group_field.to_s,
+      :group_function => :attr,
+      :with => with.merge(filters)
+    ).inject({}) { |hash, record|
+      hash[record[1]["@groupby"]] = record[1]["@count"]
+      hash
+    }
+  end
+  
+  class InternLogCounts
+    def self.filters
+      {
+        :aii => {:event_id => 10, :result_id => 10},
+        :rii => {:event_id => 10, :result_id => 20},
+        :irp => {:event_id => 20, :result_id => 30},
+        :irf => {:event_id => 20, :result_id => 40},
+        :irm => {:event_id => 20, :result_id => 50},
+        :ie => {:event_id => 30, :result_id => 70},
+        :il => {:event_id => 30, :result_id => 80},
+        :if => {:event_id => 30, :result_id => 90}
+      }
+    end
+    def filters
+      self.class.filters
+    end
+    
+    def self.titles
+      {
+        :aii => "接受面试通知",
+        :rii => "拒绝面试通知",
+        :irp => "面试成功",
+        :irf => "面试失败",
+        :irm => "没去面试",
+        :ie => "实习结束留任",
+        :il => "实习中流动",
+        :if => "实习中劝退"
+      }
+    end
+    def titles
+      self.class.titles
+    end
+    
+    def self.postfix
+      "_counts"
+    end
+    
+    def self.counts_field_name(key)
+      "#{key}#{self.postfix}"
+    end
+    def counts_field_name(key)
+      self.class.counts_field_name(key)
+    end
+    
+    filters.each do |key, value|
+      attr_reader key
+      attr_reader "#{key}#{self.postfix}".to_sym
+    end
+    
+    def initialize(count_proc, params = {})
+      filters.each do |key, value|
+        needed = (params == :all) || (params[key] == "true")
+        self.instance_variable_set("@#{key}", needed)
+        self.instance_variable_set(
+          "@#{self.counts_field_name(key)}",
+          needed ? count_proc.call(filters[key]) : {}
+        )
+      end
+    end
+    
+    def get_counts(key)
+      send(counts_field_name(key))
+    end
+  end
+  def prepare_intern_log_counts(count_proc, params = :all)
+    InternLogCounts.new(count_proc, params)
+  end
+  
 end

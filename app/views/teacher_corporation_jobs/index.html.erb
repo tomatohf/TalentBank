@@ -19,52 +19,7 @@
 <% end %>
 
 
-<% form_tag "", :method => :get do %>
-	<table border="0" cellspacing="10" cellpadding="0">
-		<tr>
-			<td>
-				<label for="aii">接受面试通知</label>
-				<%= check_box_tag :aii, value = "true", @aii %>
-			</td>
-			<td>
-				<label for="rii">拒绝面试通知</label>
-				<%= check_box_tag :rii, value = "true", @rii %>
-			</td>
-			<td>
-				<label for="irp">面试通过</label>
-				<%= check_box_tag :irp, value = "true", @irp %>
-			</td>
-			<td>
-				<label for="irf">面试失败</label>
-				<%= check_box_tag :irf, value = "true", @irf %>
-			</td>
-			<td>
-				<label for="irm">没去面试</label>
-				<%= check_box_tag :irm, value = "true", @irm %>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label for="ie">实习结束留任</label>
-				<%= check_box_tag :ie, value = "true", @ie %>
-			</td>
-			<td>
-				<label for="il">实习中流动</label>
-				<%= check_box_tag :il, value = "true", @il %>
-			</td>
-			<td>
-				<label for="if">实习中劝退</label>
-				<%= check_box_tag :if, value = "true", @if %>
-			</td>
-			<td>
-				
-			</td>
-			<td>
-				<input type="submit" value="更新列表" class="button" />
-			</td>
-		</tr>
-	</table>
-<% end %>
+<%= render :partial => "intern_log_count_form", :locals => {:counts => @counts} %>
 
 
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
@@ -76,29 +31,10 @@
 			<td>提供面试</td>
 			<td style="width: 65px;">招聘终止</td>
 			
-			<% if @aii %>
-				<td>接受面试通知</td>
-			<% end %>
-			<% if @rii %>
-				<td>拒绝面试通知</td>
-			<% end %>
-			<% if @irp %>
-				<td>面试成功</td>
-			<% end %>
-			<% if @irf %>
-				<td>面试失败</td>
-			<% end %>
-			<% if @irm %>
-				<td>没去面试</td>
-			<% end %>
-			<% if @ie %>
-				<td>实习结束留任</td>
-			<% end %>
-			<% if @il %>
-				<td>实习中流动</td>
-			<% end %>
-			<% if @if %>
-				<td>实习中劝退</td>
+			<% @counts.titles.each do |key, value| %>
+				<% if @counts.send(key) %>
+					<td><%= value %></td>
+				<% end %>
 			<% end %>
 			
 			<td style="width: 100px;">操作</td>
@@ -119,53 +55,13 @@
 					<%= format_date(job.recruit_end_at) %>
 				</td>
 
-				<% if @aii %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:aii][:event_id] %>&result=<%= @filters[:aii][:result_id] %>" class="none">
-							<%= @aii_counts[job.id] || 0 %></a>
-					</td>
-				<% end %>
-				<% if @rii %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:rii][:event_id] %>&result=<%= @filters[:rii][:result_id] %>" class="none">
-							<%= @rii_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @irp %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irp][:event_id] %>&result=<%= @filters[:irp][:result_id] %>" class="none">
-							<%= @irp_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @irf %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irf][:event_id] %>&result=<%= @filters[:irf][:result_id] %>" class="none">
-							<%= @irf_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @irm %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:irm][:event_id] %>&result=<%= @filters[:irm][:result_id] %>" class="none">
-							<%= @irm_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @ie %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:ie][:event_id] %>&result=<%= @filters[:ie][:result_id] %>" class="none">
-							<%= @ie_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @il %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:il][:event_id] %>&result=<%= @filters[:il][:result_id] %>" class="none">
-							<%= @il_counts[job.id] || 0 %>
-					</td>
-				<% end %>
-				<% if @if %>
-					<td align="right" style="font-weight: bold;">
-						<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= @filters[:if][:event_id] %>&result=<%= @filters[:if][:result_id] %>" class="none">
-							<%= @if_counts[job.id] || 0 %>
-					</td>
+				<% @counts.filters.each do |key, value| %>
+					<% if @counts.send(key) %>
+						<td align="right" style="font-weight: bold;">
+							<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= value[:event_id] %>&result=<%= value[:result_id] %>" class="none">
+								<%= @counts.get_counts(key)[job.id] || 0 %></a>
+						</td>
+					<% end %>
 				<% end %>
 
 				<td>

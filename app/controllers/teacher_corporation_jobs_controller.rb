@@ -30,49 +30,17 @@ class TeacherCorporationJobsController < ApplicationController
       :order => "created_at DESC"
     )
     
-    counts = Proc.new { |filters|
-      InternLog.period_group_counts(
-        @teacher.school_id, Date.parse(InternLog.intern_begin_at), Date.today,
-        :group_by => "job_id",
-        :group_function => :attr,
-        :with => {
-          :job_id => @jobs.map { |job| job.id }
-        }.merge(filters)
-      ).inject({}) { |hash, record|
-        hash[record[1]["@groupby"]] = record[1]["@count"]
-        hash
-      }
-    }
-    
-    @filters = {
-      :aii => {:event_id => 10, :result_id => 10},
-      :rii => {:event_id => 10, :result_id => 20},
-      :irp => {:event_id => 20, :result_id => 30},
-      :irf => {:event_id => 20, :result_id => 40},
-      :irm => {:event_id => 20, :result_id => 50},
-      :ie => {:event_id => 30, :result_id => 70},
-      :il => {:event_id => 30, :result_id => 80},
-      :if => {:event_id => 30, :result_id => 90}
-    }
-    
-    @aii = params[:aii] == "true"
-    @aii_counts = counts.call(@filters[:aii]) if @aii
-    @rii = params[:rii] == "true"
-    @rii_counts = counts.call(@filters[:rii]) if @rii
-    
-    @irp = params[:irp] == "true"
-    @irp_counts = counts.call(@filters[:irp]) if @irp
-    @irf = params[:irf] == "true"
-    @irf_counts = counts.call(@filters[:irf]) if @irf
-    @irm = params[:irm] == "true"
-    @irm_counts = counts.call(@filters[:irm]) if @irm
-    
-    @ie = params[:ie] == "true"
-    @ie_counts = counts.call(@filters[:ie]) if @ie
-    @il = params[:il] == "true"
-    @il_counts = counts.call(@filters[:il]) if @il
-    @if = params[:if] == "true"
-    @if_counts = counts.call(@filters[:if]) if @if
+    @counts = CorporationsController.helpers.prepare_intern_log_counts(
+      Proc.new { |filters|
+        CorporationsController.helpers.count_intern_log(
+          @teacher.school_id,
+          :job_id,
+          @jobs.map { |job| job.id },
+          filters
+        )
+      },
+      params
+    )
   end
   
   

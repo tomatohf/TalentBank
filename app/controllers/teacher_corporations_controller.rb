@@ -4,6 +4,7 @@ class TeacherCorporationsController < ApplicationController
   
   
   Corporation_Page_Size = 10
+  Job_Page_Size = 15
   
   
   before_filter :check_login_for_teacher
@@ -14,7 +15,7 @@ class TeacherCorporationsController < ApplicationController
   
   before_filter :check_teacher_admin, :except => [:autocomplete]
   
-  before_filter :check_corporation, :except => [:index, :new, :create, :autocomplete]
+  before_filter :check_corporation, :except => [:index, :new, :create, :autocomplete, :jobs]
   
   
   def index
@@ -169,6 +170,93 @@ class TeacherCorporationsController < ApplicationController
         :value => "#{corp.uid}"
       }
     }.to_json
+  end
+  
+  
+  def jobs
+    respond_to do |format|
+      format.html {
+        page = params[:page]
+        page = 1 unless page =~ /\d+/
+        @jobs = Job.paginate(
+          :page => page,
+          :per_page => Job_Page_Size,
+          :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
+          :conditions => ["school_id = ?", @teacher.school_id],
+          :include => [:corporation => [:profile]],
+          :order => "corporations.created_at DESC"
+        )
+
+        @counts = CorporationsController.helpers.prepare_intern_log_counts(
+          Proc.new { |filters|
+            CorporationsController.helpers.count_intern_log(
+              @teacher.school_id,
+              :job_id,
+              @jobs.map { |job| job.id },
+              filters
+            )
+          },
+          params
+        )
+      }
+      
+      format.csv {
+        jobs = Job.find(
+          :all,
+          :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
+          :conditions => ["school_id = ?", @teacher.school_id],
+          :include => [:corporation => [:profile]],
+          :order => "corporations.created_at DESC"
+        )
+        
+        counts = CorporationsController.helpers.prepare_intern_log_counts(
+          Proc.new { |filters|
+            CorporationsController.helpers.count_intern_log(
+              @teacher.school_id,
+              :job_id,
+              nil,
+              filters
+            )
+          }
+        )
+        
+        csv_data = FasterCSV.generate do |csv|
+          header = ["企业编号", "企业名称", "企业性质", "岗位编号", "岗位名称", "招聘人数"]
+    			counts.titles.each do |key, value|
+            header << value
+          end
+    			
+          csv << header
+          
+          jobs.each do |job|
+            corporation = job.corporation
+  					profile = corporation.profile
+  					nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id)
+
+  					row = [
+  					  corporation.id,
+  					  corporation.name || corporation.uid,
+  					  nature && nature[:name],
+  					  job.id,
+  					  job.name,
+  					  job.number
+  					]
+  					counts.filters.each do |key, value|
+    				  row << (counts.get_counts(key)[job.id] || 0).to_s
+            end
+  					
+            csv << row
+          end
+        end
+        
+        send_data(
+          csv_data,
+          :filename => "jobs.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
   end
   
   

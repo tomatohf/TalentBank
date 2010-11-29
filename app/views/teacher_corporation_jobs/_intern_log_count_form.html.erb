@@ -1,0 +1,31 @@
+<%
+	titles = counts.titles
+	
+	cells = Proc.new { |keys|
+		keys.map { |key|
+			%Q!
+				<td>
+					<label for="#{key}">#{titles[key]}</label>
+					#{check_box_tag key, value = "true", counts.send(key)}
+				</td>
+			!
+		}.join
+	}
+%>
+
+<% form_tag "", :method => :get do %>
+	<table border="0" cellspacing="10" cellpadding="0">
+		<tr>
+			<%= cells.call([:aii, :rii, :irp, :irf, :irm]) %>
+		</tr>
+		<tr>
+			<%= cells.call([:ie, :il, :if]) %>
+			<td>
+				
+			</td>
+			<td>
+				<input type="submit" value="更新列表" class="button" />
+			</td>
+		</tr>
+	</table>
+<% end %>

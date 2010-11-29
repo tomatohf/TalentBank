@@ -62,3 +62,4 @@ Denpendencies besides CareerCommunity's:
 	prawn-core (0.8.4)
 	prawn-layout (0.8.4)
 	differ (0.1.1)
+	fastercsv (1.5.3)
