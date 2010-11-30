@@ -37,6 +37,7 @@ class TeacherCorporationsController < ApplicationController
         )
       end
     else
+      @district_id = params[:d] && params[:d].strip
       @nature_id = params[:n] && params[:n].strip
       @size_id = params[:s] && params[:s].strip
       @province_id = params[:p] && params[:p].strip
@@ -53,7 +54,8 @@ class TeacherCorporationsController < ApplicationController
         nil
       end
       
-      if @nature_id.blank? && @size_id.blank? && @industry_category_id.blank? && @industry_id.blank? &&
+      if @district_id.blank? && @nature_id.blank? && @size_id.blank? &&
+        @industry_category_id.blank? && @industry_id.blank? &&
         @province_id.blank? && @keyword.blank? && @allow_query.blank?
         Corporation.paginate(
           :page => page,
@@ -67,6 +69,7 @@ class TeacherCorporationsController < ApplicationController
           @teacher.school_id,
           page, Corporation_Page_Size,
           :allow_query => @allow_query,
+          :job_district_id => @district_id,
           :nature_id => @nature_id,
           :size_id => @size_id,
           :industry_category_id => @industry_category_id,

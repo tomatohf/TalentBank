@@ -27,6 +27,7 @@ class Corporation < ActiveRecord::Base
     
     has school_id, allow_query, updated_at, created_at
     
+    has profile.job_district_id, :as => :job_district_id
     has profile.nature_id, :as => :nature_id
     has profile.size_id, :as => :size_id
     has profile.province_id, :as => :province_id
@@ -79,7 +80,10 @@ class Corporation < ActiveRecord::Base
   def self.school_search(keyword, school_id, page = 1, per_page = 10, options = {})
     filters = {:school_id => school_id}
     filters.merge!(:allow_query => options[:allow_query]) unless options[:allow_query].nil?
-    [:nature_id, :size_id, :industry_category_id, :industry_id, :province_id].each do |filter_key|
+    [
+      :job_district_id, :nature_id, :size_id,
+      :industry_category_id, :industry_id, :province_id
+    ].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?
     end

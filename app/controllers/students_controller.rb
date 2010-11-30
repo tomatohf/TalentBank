@@ -168,6 +168,7 @@ class StudentsController < ApplicationController
   end
   
   def new_blocked_corp
+    @district_id = params[:d] && params[:d].strip
     @nature_id = params[:n] && params[:n].strip
     @size_id = params[:s] && params[:s].strip
     @industry_category_id = params[:ic] && params[:ic].strip
@@ -182,6 +183,7 @@ class StudentsController < ApplicationController
       @keyword,
       @student.school_id,
       page, 20,
+      :job_district_id => @district_id,
       :nature_id => @nature_id,
       :size_id => @size_id,
       :industry_category_id => @industry_category_id,

@@ -81,10 +81,10 @@
 				</span>
 			</div>
 			
-			<div style="margin-top: 15px;">
+			<div style="margin: 15px 0px;">
 				<span class="field">
 					<label for="nature_id">
-						性质:
+						企业性质:
 					</label>
 					<select name="n" id="nature_id" class="dropdown_list">
 						<option value=""<%= %Q! selected="selected"! if @nature_id.blank? %>>不限性质</option>
@@ -96,7 +96,7 @@
 				
 				<span class="field">
 					<label for="size_id">
-						规模:
+						企业规模:
 					</label>
 					<select name="s" id="size_id" class="dropdown_list">
 						<option value=""<%= %Q! selected="selected"! if @size_id.blank? %>>不限规模</option>
@@ -106,6 +106,24 @@
 					</select>
 				</span>
 				
+				<span class="field">
+					<label for="district_id">
+						所在区域:
+					</label>
+					<%=
+						render(
+							:partial => "/teacher_corporation_jobs/selects/job_district",
+							:locals => {
+								:job_district_id => @district_id,
+								:field_id => "district_id", :field_name => "d",
+								:hide_label => true, :empty_label => "不限区域"
+							}
+						)
+					%>
+				</span>
+			</div>
+			
+			<div>
 				<span class="field">
 					<label for="keyword">
 						关键词:
