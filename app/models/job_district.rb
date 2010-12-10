@@ -18,7 +18,8 @@ class JobDistrict < HashModel::Simple
       {:id => 140, :name => "上海市 松江区"},
       {:id => 150, :name => "上海市 青浦区"},
       {:id => 160, :name => "上海市 金山区"},
-      {:id => 170, :name => "上海市 崇明区"}
+      {:id => 170, :name => "上海市 崇明区"},
+      {:id => 180, :name => "上海市 奉贤区"}
     ]
   end
   
