@@ -114,15 +114,6 @@ ActiveRecord::Schema.define(:version => 22) do
 
   add_index "corporation_profiles", ["corporation_id"], :name => "index_corporation_profiles_on_corporation_id", :unique => true
 
-  create_table "corporation_records", :force => true do |t|
-    t.integer  "corporation_id"
-    t.string   "notes",          :limit => 500
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "corporation_records", ["corporation_id", "created_at"], :name => "index_corporation_records_on_corporation_id_and_created_at"
-
   create_table "corporations", :force => true do |t|
     t.string   "uid",         :limit => 25
     t.string   "password"
@@ -524,6 +515,17 @@ ActiveRecord::Schema.define(:version => 22) do
   add_index "students", ["school_id", "created_at"], :name => "index_students_on_school_id_and_created_at"
   add_index "students", ["school_id", "number"], :name => "index_students_on_school_id_and_number", :unique => true
   add_index "students", ["updated_at"], :name => "index_students_on_updated_at"
+
+  create_table "teacher_notes", :force => true do |t|
+    t.integer  "target_type_id", :limit => 2
+    t.integer  "target_id"
+    t.integer  "teacher_id"
+    t.string   "content",        :limit => 500
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "teacher_notes", ["target_type_id", "target_id", "created_at"], :name => "index_teacher_notes_on_target_and_created_at"
 
   create_table "teachers", :force => true do |t|
     t.string   "uid",        :limit => 25

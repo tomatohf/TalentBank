@@ -1,0 +1,33 @@
+<div class="teacher_note">
+	<div>
+		<span class="float_r">
+			<a title="删除备注" href="#" onclick="delete_note(<%= note.id %>); return false;" class="none">
+				删除</a>
+			
+			<a title="修改备注" href="/<%= target_type[:id] %>/<%= target.id %>/teacher_notes/<%= note.id %>/edit" class="none" style="margin: 0px 10px;">
+				修改</a>
+		</span>
+		
+		<%= format_datetime(note.created_at) %>
+		的备注:
+	</div>
+	
+	<div>
+		<%=
+			simple_format(
+				auto_link(
+					h(note.content),
+					:urls,
+					:target => "_blank"
+				)
+			)
+		%>
+	</div>
+		
+	<div class="teacher_note_info">
+		<span><%= note.teacher.get_name %></span>
+		
+		最后更新于
+		<%= format_datetime(note.updated_at) %>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<%
+	page_title = "修改 #{@target_type[:title]} #{h(@target.get_name)} 的备注"
+	talent_page_title(page_title)
+%>
+
+<div class="float_r">
+	<a href="/teachers/<%= @teacher.id %><%= @target_type[:url].call(@target) %>">
+		返回<%= @target_type[:title] %></a>
+</div>
+
+<div>
+	<h2 class="page_title"><%= page_title %></h2>
+	
+	
+	<div>
+		<% if flash[:error_msg] %>
+			<p class="error_msg"><%= flash[:error_msg] %></p>
+		<% end %>
+		<% if @note.errors.size > 0 %>
+			<p class="error_msg">
+				<%= list_model_validate_errors(@note) %>
+			</p>
+		<% end %>
+		<% if flash[:message] %>
+		    <p class="info_msg"><%= flash[:message] %></p>
+		<% end %>
+	</div>
+	
+	<br />
+	
+	<div>
+		<% form_tag "/#{@target_type[:id]}/#{@target.id}/teacher_notes/#{@note.id}", :method => :put do %>
+			<%= render :partial => "note_form", :locals => {:submit_label => "修改"} %>
+		<% end %>
+	</div>
+</div>

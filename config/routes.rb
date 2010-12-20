@@ -74,8 +74,6 @@ ActionController::Routing::Routes.draw do |map|
     }, :member => {
       :adjust_permission => :post
     } do |teacher_corporations|
-      teacher_corporations.resources :teacher_corporation_records, :as => :records
-      
       teacher_corporations.resources :teacher_corporation_jobs, :as => :jobs, :member => {
         :search => :get,
         :match => :get,
@@ -200,6 +198,12 @@ ActionController::Routing::Routes.draw do |map|
       :sent => :get
     }
   end
+  
+  
+  map.resources :teacher_notes, :path_prefix => "/:target_type_id/:target_id", :requirements => {
+    :target_type_id => /\d+/,
+    :target_id => /\d+/
+  }, :except => [:index, :show]
   
   
   

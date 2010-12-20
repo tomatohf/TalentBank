@@ -1246,3 +1246,22 @@ img.notification_icon {
 	padding-left: 20px;
 	background: transparent url(/images/loading_icon.gif) no-repeat scroll left center;
 }
+
+
+.teacher_note {
+	margin: 6px;
+	color: #888888;
+}
+.teacher_note p {
+	color: #000000;
+	margin: 10px 15px;
+}
+.teacher_note_info {
+	text-align: right;
+	margin: 0px 30px;
+	border-bottom: 1px solid #EEEEEE;
+	padding-bottom: 5px;
+}
+.teacher_note_info span {
+	color: #333333;
+}

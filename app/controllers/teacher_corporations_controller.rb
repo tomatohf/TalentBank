@@ -141,9 +141,11 @@ class TeacherCorporationsController < ApplicationController
   def show
     @profile = @corporation.profile || CorporationProfile.new
     
-    @records = CorporationRecord.find(
+    @target_type = TeacherNoteTargetType.find_by(:name, "corporations")
+    @notes = TeacherNote.find(
       :all,
-      :conditions => ["corporation_id = ?", @corporation.id],
+      :conditions => ["target_type_id = ? and target_id = ?", @target_type[:id], @corporation.id],
+      :include => [:teacher],
       :order => "created_at DESC"
     )
   end

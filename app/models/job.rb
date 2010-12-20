@@ -37,4 +37,9 @@ class Job < ActiveRecord::Base
     )
   end
   
+  
+  def get_name
+    self.name
+  end
+  
 end

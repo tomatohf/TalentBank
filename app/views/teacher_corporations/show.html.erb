@@ -215,33 +215,16 @@
 			</td>
 			
 			<td style="width: 50%; vertical-align: top; padding: 15px 0px 15px 10px; border-left: 1px dashed #CCCCCC;">
-				<div style="font-size: 14px; color: #333333;">
-					有
-					<b>
-						<%= @records.size %>
-					</b>
-					条记录 ...
-					
-					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/records/new" class="none" style="margin-left: 20px; font-size: 12px;">
-						添加记录</a>
-				</div>
-				<br />
-				<div>
-					<% form_tag "", :method => :delete, :id => "delete_record_form" do %>
-					<% end %>
-					<script language="JavaScript">
-						function delete_record(record_id) {
-							if(confirm("确定要删除这条记录么 ?")) {
-								$("#delete_record_form").attr(
-									"action",
-									"/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/records/" + record_id
-								).submit();
-							}
+				<%=
+					render(
+						:partial => "/teacher_notes/notes",
+						:locals => {
+							:notes => @notes,
+							:target_type => @target_type,
+							:target => @corporation
 						}
-					</script>
-					
-					<%= render :partial => "record", :collection => @records %>
-				</div>
+					)
+				%>
 			</td>
 		</tr>
 	</table>

@@ -86,7 +86,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= h(@profile.salary) %>" />
+			<input type="text" id="salary" name="salary" class="text_field" size="3" value="<%= h(@profile.salary || 0) %>" />
 			元/天
 		</td>
 	</tr>

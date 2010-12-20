@@ -1,0 +1,36 @@
+<div style="font-size: 14px; color: #333333;">
+	有
+	<b>
+		<%= notes.size %>
+	</b>
+	条备注 ...
+	
+	<a href="/<%= target_type[:id] %>/<%= target.id %>/teacher_notes/new" class="none" style="margin-left: 20px; font-size: 12px;">
+		添加备注</a>
+</div>
+<br />
+<div>
+	<% form_tag "", :method => :delete, :id => "delete_note_form" do %>
+	<% end %>
+	<script language="JavaScript">
+		function delete_note(note_id) {
+			if(confirm("确定要删除这条备注么 ?")) {
+				$("#delete_note_form").attr(
+					"action",
+					"/<%= target_type[:id] %>/<%= target.id %>/teacher_notes/" + note_id
+				).submit();
+			}
+		}
+	</script>
+	
+	<%=
+		render(
+			:partial => "/teacher_notes/note",
+			:collection => notes,
+			:locals => {
+				:target_type => target_type,
+				:target => target
+			}
+		)
+	%>
+</div>
