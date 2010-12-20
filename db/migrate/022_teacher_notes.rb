@@ -1,4 +1,4 @@
-class Notes < ActiveRecord::Migration
+class TeacherNotes < ActiveRecord::Migration
   def self.up
     
     create_table :teacher_notes, :force => true do |t|
