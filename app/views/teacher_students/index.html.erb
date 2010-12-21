@@ -64,6 +64,17 @@
 						)
 					%>
 				</span>
+				
+				<span class="field">
+					<label for="complete">
+						信息完整:
+					</label>
+					<select name="co" id="complete" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @complete.nil? %>>不限</option>
+						<option value="t"<%= %Q! selected="selected"! if @complete == true %>>是</option>
+						<option value="f"<%= %Q! selected="selected"! if @complete == false %>>否</option>
+					</select>
+				</span>
 			</div>
 			
 			<div style="margin-top: 15px;">
@@ -143,6 +154,10 @@
 				<td class="grey">专业</td>
 				<td class="grey" style="width: 30px;">学历</td>
 				<td class="grey" style="width: 85px;">毕业时间</td>
+				<td style="width: 28px;">
+					<span title="单击进行修改">完整</span>
+					<img src="/images/teachers/search/loading_icon.gif" id="status_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
+				</td>
 			</tr>
 		</thead>
 
@@ -164,5 +179,8 @@
 
 <% content_for :scripts do %>
 	<%= render :partial => "/students/selects/var" %>
+	<script language="JavaScript">
+		var	TEACHER_ID = <%= @teacher.id %>;
+	</script>
 	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
 <% end %>

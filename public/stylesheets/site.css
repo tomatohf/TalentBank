@@ -1265,3 +1265,8 @@ img.notification_icon {
 .teacher_note_info span {
 	color: #333333;
 }
+
+
+.status_field img {
+	vertical-align: -5px;
+}

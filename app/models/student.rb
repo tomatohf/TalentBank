@@ -37,6 +37,7 @@ class Student < ActiveRecord::Base
     indexes number, name
     
     has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at, created_at
+    has complete
     
     has intern_profile.begin_at, :as => :intern_begin_at
     has intern_profile.period_id, :as => :intern_period_id
@@ -179,6 +180,7 @@ class Student < ActiveRecord::Base
   
   def self.school_search(name, school_id, includes, page = 1, per_page = 10, options = {})
     filters = {:school_id => school_id}
+    filters.merge!(:complete => options[:complete]) unless options[:complete].nil?
     [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?

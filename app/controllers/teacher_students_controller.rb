@@ -9,7 +9,7 @@ class TeacherStudentsController < ApplicationController
   before_filter :check_login_for_teacher
   
   before_filter :check_active, :only => [:create, :update, :update_profile, :update_intern_profile,
-                                          :add_intern_wish, :remove_intern_wish]
+                                          :add_intern_wish, :remove_intern_wish, :adjust_status]
   
   before_filter :check_teacher
   
@@ -40,12 +40,20 @@ class TeacherStudentsController < ApplicationController
       
       @name = params[:name] && params[:name].strip
       
+      @complete = if (co = params[:co] && params[:co].strip) == "t"
+        true
+      elsif co == "f"
+        false
+      else
+        nil
+      end
+      
       includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
       
       page = params[:page]
       page = 1 unless page =~ /\d+/
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
-          @graduation_year.blank? && @name.blank?
+          @graduation_year.blank? && @name.blank? && @complete.nil?
         Student.paginate(
           :page => page,
           :per_page => Student_Page_Size,
@@ -62,7 +70,8 @@ class TeacherStudentsController < ApplicationController
           :college_id => @college_id,
           :major_id => @major_id,
           :edu_level_id => @edu_level_id,
-          :graduation_year => @graduation_year
+          :graduation_year => @graduation_year,
+          :complete => @complete
         )
       end
     end
@@ -250,6 +259,17 @@ class TeacherStudentsController < ApplicationController
     
     @target_type = TeacherNoteTargetType.find_by(:name, "students")
     @notes = TeacherNote.get_from_target(@target_type[:id], @student.id)
+  end
+  
+  
+  def adjust_status
+    field = params[:status] && params[:status].strip
+    
+    @student.send("#{field}=", params[:yes] == "true")
+    
+    @student.save!
+    
+    render :partial => "status_field", :locals => {:student => @student, :field => field}
   end
   
   

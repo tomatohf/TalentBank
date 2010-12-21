@@ -56,7 +56,7 @@ class TeacherCorporationsController < ApplicationController
       
       if @district_id.blank? && @nature_id.blank? && @size_id.blank? &&
         @industry_category_id.blank? && @industry_id.blank? &&
-        @province_id.blank? && @keyword.blank? && @allow_query.blank?
+        @province_id.blank? && @keyword.blank? && @allow_query.nil?
         Corporation.paginate(
           :page => page,
           :per_page => Corporation_Page_Size,

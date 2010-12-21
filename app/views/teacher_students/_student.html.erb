@@ -130,4 +130,13 @@
 	<td class="grey">
 		<%= graduation_year %> 年 <%= %Q! (应届)! if graduation_year == @school.coming_graduation_year %>
 	</td>
+	
+	
+	<td>
+		<%
+			["complete"].each do |field|
+		%>
+			<%= render :partial => "status_field", :locals => {:student => student, :field => field} %>
+		<% end %>
+	</td>
 </tr>

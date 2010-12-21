@@ -1,3 +1,39 @@
+function adjust_status(student_id, status, yes) {
+	show_status_loading();
+	
+	$.ajax(
+		{
+			type: "POST",
+			url: "/teachers/" + TEACHER_ID + "/students/" + student_id + "/adjust_status",
+			dataType: "html",
+			data: {
+				status: status,
+				yes: yes
+			},
+			complete: function() {
+				hide_status_loading();
+			},
+			success: function(data, text_status) {
+				$("#" + status + "_field_" + student_id).replaceWith(data);
+			}
+		}
+	);
+}
+
+
+function show_status_loading() {
+	var loading = $("#status_loading");
+	loading.siblings("span").hide();
+	loading.show();
+}
+
+function hide_status_loading() {
+	var loading = $("#status_loading");
+	loading.hide();
+	loading.siblings("span").show();
+}
+
+
 function setup_number_input() {
 	var number_input_tip = "请输入学号";
 	

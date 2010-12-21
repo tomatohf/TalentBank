@@ -1,0 +1,13 @@
+<%
+	yes = student.send("#{field}")
+	
+	name = {
+		"query" => "查询简历"
+	}[field]
+%>
+
+<span class="status_field" id="<%= field %>_field_<%= student.id %>">
+	<a href="#" onclick="adjust_status(<%= student.id %>, '<%= field %>', '<%= !yes %>'); return false;" class="none">
+		<img src="/images/teachers/<%= yes ? "yes" : "no" %>_icon.gif" border="0" />
+	</a>
+</span>

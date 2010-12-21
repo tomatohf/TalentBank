@@ -32,7 +32,9 @@ ActionController::Routing::Routes.draw do |map|
       
       :edit_intern_wishes => :get,
       :add_intern_wish => :post,
-      :remove_intern_wish => :post
+      :remove_intern_wish => :post,
+      
+      :adjust_status => :post
     } do |teacher_students|
       teacher_students.resources :teacher_student_intern_logs, :as => :intern_logs, :collection => {
         :set_calling_mark => :post,

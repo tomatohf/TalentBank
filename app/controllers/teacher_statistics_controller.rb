@@ -617,6 +617,17 @@ class TeacherStatisticsController < ApplicationController
 		  :with => filters,
 		  :period_key => :intern_created_at
 		)
+		complete_student_filters = filters.merge(:complete => true)
+		complete_student_count = Student.period_total_count(
+      @teacher.school_id, intern_begin_at_time, @to,
+      :with => complete_student_filters,
+      :period_key => :created_at
+    )
+    compared_complete_student_count = @compared_from && Student.period_total_count(
+      @teacher.school_id, intern_begin_at_time, compared_to,
+      :with => complete_student_filters,
+      :period_key => :created_at
+    )
 		student_with_intern_log_count = Student.period_total_count(
 		  @teacher.school_id, intern_begin_at_time, @to,
 		  :with => filters,
@@ -645,6 +656,26 @@ class TeacherStatisticsController < ApplicationController
 		        :title => "尚未填写实习信息",
 		        :count => student_count - intern_profile_count,
 		        :compared_count => @compared_from && (compared_student_count - compared_intern_profile_count)
+		      }
+		    ]
+		  },
+		  {
+		    :title => "学生信息完整性 统计",
+		    :total => {
+		      :title => "学生人数",
+		      :count => student_count,
+		      :compared_count => compared_student_count
+		    },
+		    :rows => [
+		      {
+		        :title => "学生信息已经完整",
+		        :count => complete_student_count,
+		        :compared_count => compared_complete_student_count
+		      },
+		      {
+		        :title => "学生信息尚未完整",
+		        :count => student_count - complete_student_count,
+		        :compared_count => @compared_from && (compared_student_count - compared_complete_student_count)
 		      }
 		    ]
 		  },
