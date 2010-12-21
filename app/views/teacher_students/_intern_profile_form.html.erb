@@ -1,6 +1,6 @@
 <table border="0" cellspacing="10" cellpadding="5">
 	<tr>
-		<td style="width: 100px;" valign="top">
+		<td style="width: 120px;" valign="top">
 			<label for="begin_at">
 				上岗时间<%= required_mark %>
 			</label>
@@ -9,9 +9,9 @@
 		<td>
 			<input type="text" id="begin_at" name="begin_at" class="text_field" size="15" value="<%= format_date(@profile.begin_at) %>" />
 			
-			<div class="info_with_icon" style="margin-top: 10px;">
+			<span class="info_with_icon" style="margin-left: 20px;">
 				日期格式: <%= format_date(Date.today) %>
-			</div>
+			</span>
 		</td>
 	</tr>
 	
@@ -90,6 +90,93 @@
 			元/天
 		</td>
 	</tr>
+	
+	
+	<tr>
+		<td valign="top">
+			<label for="birthplace">
+				籍贯
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="birthplace" name="birthplace" class="text_field" size="15" value="<%= h(@profile.birthplace) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+			<label for="birthmonth">
+				出生年月
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="birthmonth" name="birthmonth" class="text_field" size="15" value="<%= h(@profile.birthmonth) %>" />
+			
+			<span class="info_with_icon" style="margin-left: 20px;">
+				<% today = Date.today %>
+				格式: <%= today.year %>-<%= today.month %>
+				或: <%= format_date(today) %>
+			</span>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="intention">
+				实习意向
+			</label>
+		</td>
+
+		<td>
+			<textarea id="intention" name="intention" class="text_field" cols="50" rows="3"><%= h(@profile.intention) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="skill">
+				技能证书
+			</label>
+		</td>
+
+		<td>
+			<textarea id="skill" name="skill" class="text_field" cols="50" rows="3"><%= h(@profile.skill) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="experience">
+				以往工作/实习经历
+			</label>
+			
+			<br />
+			<br />
+			
+			<span class="info_with_icon" style="margin-top: 10px;">
+				包括获奖情况、社会实践、实习经历等
+			</span>
+		</td>
+
+		<td>
+			<textarea id="experience" name="experience" class="text_field" cols="50" rows="5"><%= h(@profile.experience) %></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="desc">
+				其它信息
+			</label>
+		</td>
+
+		<td>
+			<textarea id="desc" name="desc" class="text_field" cols="50" rows="3"><%= h(@profile.desc) %></textarea>
+		</td>
+	</tr>
+	
 	
 	<tr>
 		<td>

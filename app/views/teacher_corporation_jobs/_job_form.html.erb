@@ -121,7 +121,7 @@
 		</td>
 		
 		<td>
-			<input type="text" id="place" name="place" class="text_field" size="50" value="<%= h(@job.place || (@corporation.profile && @corporation.profile.address)) %>" />
+			<input type="text" id="place" name="place" class="text_field" size="50" value="<%= h(@job.place || CorporationProfile.get_record(@job.corporation_id).address) %>" />
 		</td>
 	</tr>
 	

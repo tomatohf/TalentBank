@@ -139,15 +139,10 @@ class TeacherCorporationsController < ApplicationController
   
   
   def show
-    @profile = @corporation.profile || CorporationProfile.new
+    @profile = CorporationProfile.get_record(@corporation.id)
     
     @target_type = TeacherNoteTargetType.find_by(:name, "corporations")
-    @notes = TeacherNote.find(
-      :all,
-      :conditions => ["target_type_id = ? and target_id = ?", @target_type[:id], @corporation.id],
-      :include => [:teacher],
-      :order => "created_at DESC"
-    )
+    @notes = TeacherNote.get_from_target(@target_type[:id], @corporation.id)
   end
   
   

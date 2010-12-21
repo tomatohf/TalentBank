@@ -91,7 +91,7 @@ class TeacherCorporationJobsController < ApplicationController
   end
   
   def search
-    @profile = @corporation.profile
+    @profile = CorporationProfile.get_record(@corporation.id)
     
     
     @profile.industry_category_id = params[:ic].strip unless params[:ic].nil?

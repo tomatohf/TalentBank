@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 22) do
+ActiveRecord::Schema.define(:version => 23) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -230,9 +230,15 @@ ActiveRecord::Schema.define(:version => 22) do
     t.integer  "period_id",  :limit => 2
     t.integer  "workday_id", :limit => 2
     t.integer  "major_id",   :limit => 2
-    t.integer  "salary",     :limit => 10, :precision => 10, :scale => 0
+    t.integer  "salary",     :limit => 10,  :precision => 10, :scale => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "birthplace", :limit => 25
+    t.string   "birthmonth", :limit => 10
+    t.string   "intention",  :limit => 300
+    t.string   "skill",      :limit => 300
+    t.string   "experience", :limit => 600
+    t.string   "desc",       :limit => 300
   end
 
   add_index "intern_profiles", ["student_id"], :name => "index_intern_profiles_on_student_id", :unique => true

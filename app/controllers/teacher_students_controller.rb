@@ -234,6 +234,15 @@ class TeacherStudentsController < ApplicationController
   end
   
   
+  def show
+    @profile = StudentProfile.get_record(@student.id)
+    @inter_profile = InternProfile.get_record(@student.id)
+    
+    @target_type = TeacherNoteTargetType.find_by(:name, "students")
+    @notes = TeacherNote.get_from_target(@target_type[:id], @student.id)
+  end
+  
+  
   private
   
   def check_teacher

@@ -71,8 +71,10 @@
 			
 			<br />
 			
-			<%= edu_level[:name] %>
-			›
+			<% if edu_level %>
+				<%= edu_level[:name] %>
+				›
+			<% end %>
 			<%= student.graduation_year %> 年毕业
 			<%=
 				year = @school.coming_graduation_year

@@ -220,7 +220,7 @@ class StudentsController < ApplicationController
   
   
   def show_corporation
-    @profile = @corporation.profile || CorporationProfile.new
+    @profile = CorporationProfile.get_record(@corporation.id)
     @blocked_corp = BlockedCorp.get_record(@student.id, @corporation.id)
   end
   

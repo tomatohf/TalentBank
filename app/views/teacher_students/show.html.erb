@@ -1,0 +1,183 @@
+<%
+	student_name = h(@student.name)
+	page_title = "学生 #{student_name} 的资料"
+	
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/students/<%= @student.id %>/edit">
+		编辑学生资料</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<div style="margin: 5px;">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td style="width: 50%; vertical-align: top; padding-right: 5px;">
+				<table border="0" cellspacing="0" cellpadding="5">
+					<tr>
+						<td style="width: 80px;">
+							学号:
+						</td>
+
+						<td>
+							<%= h(@student.number) %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							姓名:
+						</td>
+
+						<td>
+							<%= student_name %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							大学:
+						</td>
+
+						<td>
+							<% university = University.find(@student.university_id) %>
+							<%= university && university[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							学院:
+						</td>
+
+						<td>
+							<% college = university && College.find(university[:id], @student.college_id) %>
+							<%= college && college[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							专业:
+						</td>
+
+						<td>
+							<% major = college && Major.find(college[:id], @student.major_id) %>
+							<%= major && major[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							学历:
+						</td>
+
+						<td>
+							<% edu_level = EduLevel.find(@student.edu_level_id) %>
+							<%= edu_level && edu_level[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							毕业时间:
+						</td>
+
+						<td>
+							<%= @student.graduation_year %> 年
+							<%=
+								year = @school.coming_graduation_year
+								if @student.graduation_year == year
+									"(应届毕业)"
+								elsif @student.graduation_year > year
+									"(在读学生)"
+								else
+									"(已经毕业)"
+								end
+							%>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>
+							电话:
+						</td>
+
+						<td>
+							<%= h(@profile.phone) %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							电子邮件:
+						</td>
+
+						<td>
+							<%= h(@profile.email) %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							地址:
+						</td>
+
+						<td>
+							<%= h(@profile.address) %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							邮编:
+						</td>
+
+						<td>
+							<%= h(@profile.zip) %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							性别:
+						</td>
+
+						<td>
+							<%= @profile.gender ? "男" : "女" unless @profile.gender.nil? %>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							政治面貌 :
+						</td>
+
+						<td>
+							<% political_status = PoliticalStatus.find(@profile.political_status_id) %>
+							<%= political_status && political_status[:name] %>
+						</td>
+					</tr>
+				</table>
+			</td>
+			
+			<td style="width: 50%; vertical-align: top; padding: 15px 0px 15px 10px; border-left: 1px dashed #CCCCCC;">
+				<%=
+					render(
+						:partial => "/teacher_notes/notes",
+						:locals => {
+							:notes => @notes,
+							:target_type => @target_type,
+							:target => @student
+						}
+					)
+				%>
+			</td>
+		</tr>
+	</table>
+</div>

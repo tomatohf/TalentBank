@@ -36,6 +36,13 @@ module StudentsHelper
     profile.workday_id = params[:job_workday]
     profile.major_id = params[:job_major]
     profile.salary = params[:salary] && params[:salary].strip
+    
+    profile.birthplace = params[:birthplace] && params[:birthplace].strip
+    profile.birthmonth = params[:birthmonth] && params[:birthmonth].strip
+    profile.intention = params[:intention] && params[:intention].strip
+    profile.skill = params[:skill] && params[:skill].strip
+    profile.experience = params[:experience] && params[:experience].strip
+    profile.desc = params[:desc] && params[:desc].strip
   end
   
   
