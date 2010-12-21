@@ -10,6 +10,8 @@
 	attributes = match[:attributes]
 	
 	matched_wishes = []
+	matched_wishes << "具体公司" if attributes["intern_wish_corporation_id"].include?(@job.corporation_id)
+	matched_wishes << "具体岗位" if attributes["intern_wish_job_id"].include?(@job.id)
 	matched_wishes << "岗位大类" if attributes["intern_wish_job_category_class_id"].include?(@job.category_class_id)
 	matched_wishes << "岗位细分" if attributes["intern_wish_job_category_id"].include?(@job.category_id)
 	matched_wishes << "行业细分" if attributes["intern_wish_industry_id"].include?(@profile.industry_id)

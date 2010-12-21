@@ -187,6 +187,10 @@ class TeacherStudentsController < ApplicationController
     @corp_nature_blacklists = InternCorpNatureBlacklist.list_from_student(@student.id)
     @job_district_wishes = InternJobDistrictWish.list_from_student(@student.id)
     @job_district_blacklists = InternJobDistrictBlacklist.list_from_student(@student.id)
+    @corporation_wishes = InternCorporationWish.list_from_student(@student.id, :include => [:corporation])
+    @corporation_blacklists = InternCorporationBlacklist.list_from_student(@student.id, :include => [:corporation])
+    @job_wishes = InternJobWish.list_from_student(@student.id, :include => [:job])
+    @job_blacklists = InternJobBlacklist.list_from_student(@student.id, :include => [:job])
   end
   
   def add_intern_wish
@@ -213,6 +217,10 @@ class TeacherStudentsController < ApplicationController
       "InternCorpNature#{type}".constantize.get_record(@student.id, params[:corp_nature])
     when "job_district"
       "InternJobDistrict#{type}".constantize.get_record(@student.id, params[:job_district])
+    when "corporation"
+      "InternCorporation#{type}".constantize.get_record(@student.id, params[:corporation])
+    when "job"
+      "InternJob#{type}".constantize.get_record(@student.id, params[:job])
     else
       return jump_to(url)
     end
@@ -225,7 +233,9 @@ class TeacherStudentsController < ApplicationController
   def remove_intern_wish
     aspect = params[:aspect]
     if ["wish", "blacklist"].map { |t|
-      ["industry", "job_category", "corp_nature", "job_district"].map { |a| "#{a}_#{t}" }
+      ["industry", "job_category", "corp_nature", "job_district", "corporation", "job"].map do |a|
+        "#{a}_#{t}"
+      end
     }.flatten.include?(aspect)
       "intern_#{aspect}".camelize.constantize.find(params[:remove_id]).destroy
     end

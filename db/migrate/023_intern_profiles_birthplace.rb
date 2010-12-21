@@ -6,7 +6,7 @@ class InternProfilesBirthplace < ActiveRecord::Migration
     
     add_column :intern_profiles, :intention, :string, :limit => 300
     add_column :intern_profiles, :skill, :string, :limit => 300
-    add_column :intern_profiles, :experience, :string, :limit => 600
+    add_column :intern_profiles, :experience, :string, :limit => 1000
     
     add_column :intern_profiles, :desc, :string, :limit => 300
     

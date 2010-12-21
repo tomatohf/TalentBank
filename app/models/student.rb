@@ -22,6 +22,11 @@ class Student < ActiveRecord::Base
   has_many :intern_job_district_wishes, :class_name => "InternJobDistrictWish", :foreign_key => "student_id", :dependent => :destroy
   has_many :intern_job_district_blacklists, :class_name => "InternJobDistrictBlacklist", :foreign_key => "student_id", :dependent => :destroy
   
+  has_many :intern_corporation_wishes, :class_name => "InternCorporationWish", :foreign_key => "student_id", :dependent => :destroy
+  has_many :intern_corporation_blacklists, :class_name => "InternCorporationBlacklist", :foreign_key => "student_id", :dependent => :destroy
+  has_many :intern_job_wishes, :class_name => "InternJobWish", :foreign_key => "student_id", :dependent => :destroy
+  has_many :intern_job_blacklists, :class_name => "InternJobBlacklist", :foreign_key => "student_id", :dependent => :destroy
+  
   has_many :intern_logs, :class_name => "InternLog", :foreign_key => "student_id", :dependent => :destroy
   
   
@@ -46,6 +51,8 @@ class Student < ActiveRecord::Base
     has intern_job_category_wishes.job_category_id, :as => :intern_wish_job_category_id
     has intern_corp_nature_wishes.nature_id, :as => :intern_wish_nature_id
     has intern_job_district_wishes.job_district_id, :as => :intern_wish_job_district_id
+    has intern_corporation_wishes.corporation_id, :as => :intern_wish_corporation_id
+    has intern_job_wishes.job_id, :as => :intern_wish_job_id
     indexes(
       "GROUP_CONCAT(DISTINCT CONCAT('j', intern_industry_wishes.industry_category_id, 'y') SEPARATOR ',')",
       :as => :intern_wish_industry_category_ids
@@ -70,6 +77,14 @@ class Student < ActiveRecord::Base
       "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_district_wishes.job_district_id, 'd') SEPARATOR ',')",
       :as => :intern_wish_job_district_ids
     )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_corporation_wishes.corporation_id, 'o') SEPARATOR ',')",
+      :as => :intern_wish_corporation_ids
+    )
+    indexes(
+      "GROUP_CONCAT(DISTINCT CONCAT('j', intern_job_wishes.job_id, 'b') SEPARATOR ',')",
+      :as => :intern_wish_job_ids
+    )
     indexes("'j0j'", :as => :match_all)
     
     has(
@@ -86,6 +101,8 @@ class Student < ActiveRecord::Base
     has intern_job_category_blacklists.job_category_id, :as => :intern_blacklist_job_category_id
     has intern_corp_nature_blacklists.nature_id, :as => :intern_blacklist_nature_id
     has intern_job_district_blacklists.job_district_id, :as => :intern_blacklist_job_district_id
+    has intern_corporation_blacklists.corporation_id, :as => :intern_blacklist_corporation_id
+    has intern_job_blacklists.job_id, :as => :intern_blacklist_job_id
     
     has intern_logs.created_at, :as => :intern_logs_created_at
     has(
@@ -199,6 +216,8 @@ class Student < ActiveRecord::Base
     blacklists[:intern_blacklist_job_category_class_id] = job.category_class_id unless job.category_class_id.blank?
     blacklists[:intern_blacklist_job_category_id] = job.category_id unless job.category_id.blank?
     blacklists[:intern_blacklist_job_district_id] = job.district_id unless job.district_id.blank?
+    blacklists[:intern_blacklist_corporation_id] = job.corporation_id
+    blacklists[:intern_blacklist_job_id] = job.id
     blacklists[:intern_salary] = (job.salary.to_i + 1) .. 1010 unless job.salary.to_i > 1000
     
     keywords = [%Q!"j0j"!]
@@ -208,6 +227,8 @@ class Student < ActiveRecord::Base
     keywords << %Q!"j#{job.category_class_id}s"! unless job.category_class_id.blank?
     keywords << %Q!"j#{job.category_id}c"! unless job.category_id.blank?
     keywords << %Q!"j#{job.district_id}d"! unless job.district_id.blank?
+    keywords << %Q!"j#{job.corporation_id}o"!
+    keywords << %Q!"j#{job.id}b"!
     
     self.search(
       keywords.join("|"),
@@ -220,7 +241,9 @@ class Student < ActiveRecord::Base
         :intern_wish_nature_ids => 2,
         :intern_wish_job_category_class_ids => 10,
         :intern_wish_job_category_ids => 10,
-        :intern_wish_job_district_ids => 6
+        :intern_wish_job_district_ids => 6,
+        :intern_wish_corporation_ids => 20,
+        :intern_wish_job_ids => 30
       },
       :with => filters,
       :without => blacklists,

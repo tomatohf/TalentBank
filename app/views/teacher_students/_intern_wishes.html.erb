@@ -121,3 +121,69 @@
 		</tbody>
 	</table>
 <% end %>
+
+
+<% if corporation_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td style="width: 120px;">公司编号</td>
+				<td>公司名称</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% corporation_wishes.each_with_index do |corporation_wish, i| %>
+				<%
+					corporation = corporation_wish.corporation
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= corporation.id %></td>
+					<td>
+						<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
+							<%= h(corporation.get_name) %></a>
+					</td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('corporation_<%= type %>', <%= corporation_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+
+
+<% if job_wishes.size > 0 %>
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+		<thead>
+			<tr>
+				<td style="width: 120px;">岗位编号</td>
+				<td>岗位名称</td>
+				<td style="width: 100px;">操作</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% job_wishes.each_with_index do |job_wish, i| %>
+				<%
+					job = job_wish.job
+				%>
+				<tr<%= %Q! class="odd"! if i.odd? %>>
+					<td><%= job.id %></td>
+					<td>
+						<a href="/teachers/<%= @teacher.id %>/corporations/<%= job.corporation_id %>/jobs/<%= job.id %>" class="none">
+							<%= h(job.get_name) %></a>
+					</td>
+					<td align="center">
+						<a href="#" class="none" onclick="remove_wish('job_<%= type %>', <%= job_wish.id %>); return false;">
+							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
+							删除</a>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>

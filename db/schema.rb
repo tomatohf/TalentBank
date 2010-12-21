@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 23) do
+ActiveRecord::Schema.define(:version => 24) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -158,6 +158,22 @@ ActiveRecord::Schema.define(:version => 23) do
 
   add_index "intern_corp_nature_wishes", ["student_id", "nature_id"], :name => "index_intern_corp_nature_wishes_on_student_and_nature", :unique => true
 
+  create_table "intern_corporation_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "corporation_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_corporation_blacklists", ["student_id", "corporation_id"], :name => "index_intern_corporation_blacklists_on_student_and_corporation", :unique => true
+
+  create_table "intern_corporation_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "corporation_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_corporation_wishes", ["student_id", "corporation_id"], :name => "index_intern_corporation_wishes_on_student_id_and_corporation_id", :unique => true
+
   create_table "intern_industry_blacklists", :force => true do |t|
     t.integer  "student_id"
     t.integer  "industry_category_id", :limit => 2
@@ -175,6 +191,14 @@ ActiveRecord::Schema.define(:version => 23) do
   end
 
   add_index "intern_industry_wishes", ["student_id", "industry_category_id", "industry_id"], :name => "index_intern_industry_wishes_on_student_and_industry", :unique => true
+
+  create_table "intern_job_blacklists", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_blacklists", ["student_id", "job_id"], :name => "index_intern_job_blacklists_on_student_id_and_job_id", :unique => true
 
   create_table "intern_job_category_blacklists", :force => true do |t|
     t.integer  "student_id"
@@ -209,6 +233,14 @@ ActiveRecord::Schema.define(:version => 23) do
   end
 
   add_index "intern_job_district_wishes", ["student_id", "job_district_id"], :name => "index_intern_job_district_wishes_on_student_and_district", :unique => true
+
+  create_table "intern_job_wishes", :force => true do |t|
+    t.integer  "student_id"
+    t.integer  "job_id"
+    t.datetime "updated_at"
+  end
+
+  add_index "intern_job_wishes", ["student_id", "job_id"], :name => "index_intern_job_wishes_on_student_id_and_job_id", :unique => true
 
   create_table "intern_logs", :force => true do |t|
     t.integer  "student_id"
