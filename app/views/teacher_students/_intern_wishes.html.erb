@@ -82,7 +82,7 @@
 					corp_nature = CorporationNature.find(corp_nature_wish.nature_id)
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
-					<td><%= corp_nature[:name] %></td>
+					<td><%= corp_nature && corp_nature[:name] %></td>
 					<td align="center">
 						<a href="#" class="none" onclick="remove_wish('corp_nature_<%= type %>', <%= corp_nature_wish.id %>); return false;">
 							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
@@ -110,7 +110,7 @@
 					job_district = JobDistrict.find(job_district_wish.job_district_id)
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
-					<td><%= job_district[:name] %></td>
+					<td><%= job_district && job_district[:name] %></td>
 					<td align="center">
 						<a href="#" class="none" onclick="remove_wish('job_district_<%= type %>', <%= job_district_wish.id %>); return false;">
 							<img src="/images/teachers/delete_icon.gif" border="0" alt="删除" />
@@ -136,7 +136,7 @@
 		<tbody>
 			<% corporation_wishes.each_with_index do |corporation_wish, i| %>
 				<%
-					corporation = corporation_wish.corporation
+					corporation = corporation_wish.corporation || Corporation.new
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<td><%= corporation.id %></td>
@@ -169,7 +169,7 @@
 		<tbody>
 			<% job_wishes.each_with_index do |job_wish, i| %>
 				<%
-					job = job_wish.job
+					job = job_wish.job || Job.new
 				%>
 				<tr<%= %Q! class="odd"! if i.odd? %>>
 					<td><%= job.id %></td>
