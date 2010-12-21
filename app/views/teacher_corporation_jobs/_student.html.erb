@@ -76,17 +76,19 @@
 				<%= edu_level[:name] %>
 				›
 			<% end %>
-			<%= student.graduation_year %> 年毕业
-			<%=
-				year = @school.coming_graduation_year
-				if student.graduation_year == year
-					"(应届毕业)"
-				elsif student.graduation_year > year
-					"(在读学生)"
-				else
-					"(已经毕业)"
-				end
-			%>
+			<% if student.graduation_year %>
+				<%= student.graduation_year %> 年毕业
+				<%=
+					year = @school.coming_graduation_year
+					if student.graduation_year == year
+						"(应届毕业)"
+					elsif student.graduation_year > year
+						"(在读学生)"
+					else
+						"(已经毕业)"
+					end
+				%>
+			<% end %>
 			
 			<br />
 			
