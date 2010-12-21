@@ -159,7 +159,7 @@
 
 						<td>
 							<%
-								width = (graph_width-50) * (count.to_f/@intern_log_max)
+								width = (graph_width-50) * (count.to_f/@intern_max)
 								bar_title = "#{count} / #{total_count} = #{percent_label}"
 							%>
 
@@ -171,7 +171,7 @@
 								<div class="clear_l"></div>
 								
 								<%
-									compared_width = (graph_width-50) * (compared_count.to_f/@intern_log_max)
+									compared_width = (graph_width-50) * (compared_count.to_f/@intern_max)
 									compared_bar_title = "#{compared_count} / #{compared_total_count} = #{compared_percent_label}"
 								%>
 
