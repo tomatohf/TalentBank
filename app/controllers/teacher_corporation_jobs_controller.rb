@@ -80,7 +80,8 @@ class TeacherCorporationJobsController < ApplicationController
   
   
   def show
-    
+    @target_type = TeacherNoteTargetType.find_by(:name, "jobs")
+    @notes = TeacherNote.get_from_target(@target_type[:id], @job.id)
   end
   
   

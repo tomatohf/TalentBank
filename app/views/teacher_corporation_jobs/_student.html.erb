@@ -1,5 +1,4 @@
 <%
-	student_number = h(student.number)
 	university = University.find(student.university_id)
 	college = university && College.find(university[:id], student.college_id)
 	major = college && Major.find(college[:id], student.major_id)
@@ -23,8 +22,8 @@
 	<td valign="top">
 		<div>
 			<span class="student_name"><%= h(student.get_name) %></span>
-			<a href="/teachers/<%= @teacher.id %>/students?n=<%= student_number %>" target="_blank" class="none">
-				<%= student_number %></a>
+			<a href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" target="_blank" class="none">
+				<%= h(student.number) %></a>
 		</div>
 		
 		<div class="profile">

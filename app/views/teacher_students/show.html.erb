@@ -17,9 +17,15 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>
 			<td style="width: 50%; vertical-align: top; padding-right: 5px;">
-				<table border="0" cellspacing="0" cellpadding="5">
+				<table border="0" cellspacing="6" cellpadding="5" class="main_part_w">
 					<tr>
-						<td style="width: 80px;">
+						<td colspan="2" class="job_form_title_section">
+							学生帐号
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="width: 90px;">
 							学号:
 						</td>
 
@@ -104,6 +110,12 @@
 
 
 					<tr>
+						<td colspan="2" class="job_form_title_section">
+							学生信息
+						</td>
+					</tr>
+					
+					<tr>
 						<td>
 							电话:
 						</td>
@@ -161,6 +173,127 @@
 						<td>
 							<% political_status = PoliticalStatus.find(@profile.political_status_id) %>
 							<%= political_status && political_status[:name] %>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td colspan="2" class="job_form_title_section">
+							实习信息
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							上岗时间:
+						</td>
+
+						<td>
+							<%= format_date(@inter_profile.begin_at) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							工作期限:
+						</td>
+
+						<td>
+							<% job_period = JobPeriod.find(@inter_profile.period_id) %>
+							<%= job_period && job_period[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							每周工作时间:
+						</td>
+
+						<td>
+							<% job_workday = JobWorkday.find(@inter_profile.workday_id) %>
+							<%= job_workday && job_workday[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							相关专业:
+						</td>
+
+						<td>
+							<% job_major = JobMajor.find(@inter_profile.major_id) %>
+							<%= job_major && job_major[:name] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							最低薪酬:
+						</td>
+
+						<td>
+							<%= h(@inter_profile.salary || 0) %>
+							元/天
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							籍贯:
+						</td>
+
+						<td>
+							<%= h(@inter_profile.birthplace) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							出生年月:
+						</td>
+
+						<td>
+							<%= h(@inter_profile.birthmonth) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							实习意向:
+						</td>
+
+						<td>
+							<%= simple_format(h(@inter_profile.intention)) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							技能证书:
+						</td>
+
+						<td>
+							<%= simple_format(h(@inter_profile.skill)) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							以往工作/实习经历 :
+						</td>
+
+						<td>
+							<%= simple_format(h(@inter_profile.experience)) %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							其它信息:
+						</td>
+
+						<td>
+							<%= simple_format(h(@inter_profile.desc)) %>
 						</td>
 					</tr>
 				</table>

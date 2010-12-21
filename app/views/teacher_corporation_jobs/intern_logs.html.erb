@@ -32,7 +32,7 @@
 					teacher = log.teacher
 				%>
 				<td>
-					<a target="_blank" href="/teachers/<%= @teacher.id %>/students?n=<%= h(student.number) %>" class="none">
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" class="none">
 						<%= h(student.get_name) %></a>
 				</td>
 				<td>
