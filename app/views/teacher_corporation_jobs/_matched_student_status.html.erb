@@ -26,7 +26,7 @@
 				<div title="最近的实习记录 › 发生时间: <%= format_datetime(intern_log.occur_at) %>">
 					<%= h(intern_log.job.corporation.get_name)%>
 					<br />
-					<%= h(intern_log.job.name)%>
+					<%= h(intern_log.job.get_name)%>
 					<br />
 					<%
 						event = InternLogEvent.find(intern_log.event_id)

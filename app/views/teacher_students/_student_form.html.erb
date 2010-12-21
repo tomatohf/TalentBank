@@ -28,6 +28,38 @@
 				}
 			)
 		%>
+		
+		<label style="margin-left: 20px; font-size: 12px;" class="info" for="university_filter">
+			过滤:
+		</label>
+		<input type="text" id="university_filter" class="text_field" size="20" />
+		<% content_for :scripts do %>
+			<script language="JavaScript">
+				var UNIVERSITY_OPTIONS = $("#university option");
+				$("#university_filter").unbind("keypress").keypress(
+					function(event) {
+						if (event.which === 13) {
+							$(this).change();
+							return false;
+						}
+					}
+				).unbind("change").change(
+					function() {
+						var value = $.trim($(this).val());
+						$("#university").html(
+							UNIVERSITY_OPTIONS.filter(
+								function(index) {
+									var option = $(this);
+									return option.val() == "" ||
+											$.trim(option.text()).indexOf(value) >= 0
+								}
+							)
+						);
+						return false;
+					}
+				);
+			</script>
+		<% end %>
 	</td>
 </tr>
 

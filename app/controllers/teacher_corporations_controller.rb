@@ -238,7 +238,7 @@ class TeacherCorporationsController < ApplicationController
   					  corporation.name || corporation.uid,
   					  nature && nature[:name],
   					  job.id,
-  					  job.name,
+  					  job.get_name,
   					  job.number
   					]
   					counts.filters.each do |key, value|

@@ -16,7 +16,7 @@
 				<input type="hidden" name="job" value="<%= job.id %>" />
 				<b><%= job.id %></b>
 				<span class="info" style="margin-left: 10px;">
-					<%= h(job.name) %>
+					<%= h(job.get_name) %>
 				</span>
 			<% else %>
 				<input type="text" id="job" name="job" class="text_field" size="10" value="<%= @log.job_id %>" />

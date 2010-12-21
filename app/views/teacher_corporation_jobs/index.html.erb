@@ -47,7 +47,7 @@
 				<td><%= job.id %></td>
 				<td>
 					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
-						<%= h(job.name) %></a>
+						<%= h(job.get_name) %></a>
 				</td>
 				<td align="right"><%= job.number %></td>
 				<td align="right"><%= job.interview_number %></td>

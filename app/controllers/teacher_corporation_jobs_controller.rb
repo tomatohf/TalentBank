@@ -54,7 +54,7 @@ class TeacherCorporationJobsController < ApplicationController
     CorporationsController.helpers.fill_corporation_job(@job, params)
     
     if @job.save
-      flash[:success_msg] = "操作成功, 已添加企业岗位 #{@job.name}"
+      flash[:success_msg] = "操作成功, 已添加企业岗位 #{@job.get_name}"
       return jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}/jobs")
     end
     

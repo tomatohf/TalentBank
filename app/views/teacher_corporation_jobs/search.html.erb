@@ -1,6 +1,6 @@
 <%
 	corporation_name = h(@corporation.get_name)
-	job_name = h(@job.name)
+	job_name = h(@job.get_name)
 	page_title = "匹配岗位 #{job_name}"
 
 	talent_page_title(page_title)
@@ -95,6 +95,9 @@
 			<a href="#" title="展开/收起" class="none form_section_title">岗位信息</a>
 			<a title="查看完整岗位信息" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>" class="none" target="_blank">
 				<%= job_name %></a>
+			<span class="info" style="margin-left: 10px;">
+				(招聘人数: <%= @job.number %> ; 面试人数: <%= @job.interview_number %>)
+			</span>
 			
 			<div class="form_section_body">
 				<div class="field_row">
