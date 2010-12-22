@@ -18,7 +18,7 @@
 		var LEVELS = [<%= EduLevel.data.collect{|level| %Q!{id:#{level[:id]}, name:"#{level[:name]}"}!}.join(",") %>];
 	
 		<% year = @school.coming_graduation_year %>
-		var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}"}!}.join(",") %>];
+		var GRADUATIONS = [<%= @school.graduation_years.collect{|graduation_year| %Q!{id:#{graduation_year}, name:"#{graduation_year} 年#{' (应届)' if graduation_year == year}#{' (已毕业)' if graduation_year < year}"}!}.join(",") %>];
 	
 		var DOMAINS = [];
 		var TAGS = {};

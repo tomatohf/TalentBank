@@ -21,11 +21,6 @@ module Schools
       [10]
     end
     
-    
-    def all_graduation_years
-      [2011]
-    end
-    
   end
   
 end

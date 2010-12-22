@@ -22,12 +22,6 @@ module Schools
       [10, 110, 120, 130, 140, 150, 160, 170, 180, 200, 210, 220]
     end
     
-    
-    def all_graduation_years
-      # TODO - MUST BE OVERRIDED
-      super
-    end
-    
   end
   
 end

@@ -106,7 +106,11 @@
 							<option value=""<%= %Q! selected="selected"! if @query.graduation_year.blank? %>>不限毕业时间</option>
 							<% year = @school.coming_graduation_year %>
 							<% @school.graduation_years.each do |graduation_year| %>
-								<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == graduation_year %>><%= graduation_year %> 年<%= %Q! (应届)! if graduation_year == year %></option>
+								<option value="<%= graduation_year %>"<%= %Q! selected="selected"! if @query.graduation_year == graduation_year %>>
+									<%= graduation_year %> 年
+									<%= %Q!(应届)! if graduation_year == year %>
+									<%= %Q!(已毕业)! if graduation_year < year %>
+								</option>
 							<% end %>
 						</select>
 					</span>

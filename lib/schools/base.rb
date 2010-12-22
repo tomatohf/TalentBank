@@ -54,18 +54,9 @@ module Schools
     end
     
     
-    def all_graduation_years
-			year = self.coming_graduation_year
-      Array.new(4) { |i| year + i }
-    end
-    
-    def show_past_graduation_years
-      false
-    end
-    
     def graduation_years
       year = self.coming_graduation_year
-      all_graduation_years.delete_if { |graduation_year| graduation_year < year }
+      ((year - 4)..(year + 4)).to_a
     end
     
     
