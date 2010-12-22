@@ -20,7 +20,7 @@ class InternProfile < ActiveRecord::Base
   validates_length_of :birthmonth, :maximum => 10, :message => "出生年月 超过长度限制", :allow_nil => true
   validates_length_of :intention, :maximum => 300, :message => "实习意向 超过长度限制", :allow_nil => true
   validates_length_of :skill, :maximum => 300, :message => "技能证书 超过长度限制", :allow_nil => true
-  validates_length_of :experience, :maximum => 1200, :message => "以往工作/实习经历 超过长度限制", :allow_nil => true
+  validates_length_of :experience, :maximum => 1500, :message => "以往工作/实习经历 超过长度限制", :allow_nil => true
   validates_length_of :desc, :maximum => 300, :message => "其它信息 超过长度限制", :allow_nil => true
   
   
