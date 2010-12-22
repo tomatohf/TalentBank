@@ -64,6 +64,15 @@ module Schools
       JobDistrict.data
     end
     
+    
+    def intern_register_labels
+      {
+        :title => "实习岗位申请表",
+        :number => "学号",
+        :intern => "实习"
+      }
+    end
+    
   end
 
 end

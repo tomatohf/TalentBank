@@ -1,0 +1,386 @@
+<div class="intern_register">
+	<% if flash[:success_msg] %>
+		<p class="success_msg">
+		    <%= flash[:success_msg] %>
+		</p>
+	<% end %>
+	<% if flash[:error_msg] %>
+		<p class="error_msg">
+		    <%= flash[:error_msg] %>
+		</p>
+	<% end %>
+	<% if @student.errors.size > 0 %>
+		<p class="error_msg">
+			<%= list_model_validate_errors(@student) %>
+		</p>
+	<% end %>
+	<% if @profile.errors.size > 0 %>
+		<p class="error_msg">
+			<%= list_model_validate_errors(@profile) %>
+		</p>
+	<% end %>
+	<% if @intern_profile.errors.size > 0 %>
+		<p class="error_msg">
+			<%= list_model_validate_errors(@intern_profile) %>
+		</p>
+	<% end %>
+
+	<% form_tag "", :method => :post do %>
+	
+		<% labels = @school.intern_register_labels %>
+	
+		<div class="form_title">
+			<%= labels[:title] %>
+		</div>
+
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<th colspan="6">
+					基本信息<%= required_mark(false) %>
+				</th>
+			</tr>
+			
+			<tr>
+				<td style="width: 65px;">
+					<label for="name">
+						姓名<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<input type="text" id="name" name="name" class="text_field" value="<%= h(@student.name) %>" style="width: 55px;" />
+				</td>
+				
+				<td style="width: 70px;">
+					<label for="gender">
+						性别<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<select name="gender" id="gender" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @profile.gender.nil? %>>选择性别</option>
+						<option value="true"<%= %Q! selected="selected"! if @profile.gender == true %>>男 - ♂</option>
+						<option value="false"<%= %Q! selected="selected"! if @profile.gender == false %>>女 - ♀</option>
+					</select>
+				</td>
+				
+				<td style="width: 60px;">
+					<label for="birthmonth">
+						出生年月<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<% birthmonth = (@intern_profile.birthmonth || "").split("-") %>
+					<select name="birthmonth_year" id="birthmonth_year" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if birthmonth[0].blank? %>>年</option>
+						<% (Date.today.year - 10).downto(1984) do |year| %>
+							<option value="<%= year %>"<%= %Q! selected="selected"! if year.to_s == birthmonth[0] %>><%= year %></option>
+						<% end %>
+					</select>
+					<select name="birthmonth_month" id="birthmonth_month" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if birthmonth[1].blank? %>>月</option>
+						<% 1.upto(12) do |month| %>
+							<option value="<%= month %>"<%= %Q! selected="selected"! if month.to_s == birthmonth[1] %>><%= month %></option>
+						<% end %>
+					</select>
+					<select name="birthmonth_date" id="birthmonth_date" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if birthmonth[2].blank? %>>日</option>
+						<% 1.upto(31) do |date| %>
+							<option value="<%= date %>"<%= %Q! selected="selected"! if date.to_s == birthmonth[2] %>><%= date %></option>
+						<% end %>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="birthplace">
+						籍贯<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<input type="text" id="birthplace" name="birthplace" class="text_field" value="<%= h(@intern_profile.birthplace) %>" style="width: 55px;" />
+				</td>
+				
+				<td>
+					<label for="number">
+						<%= labels[:number] %><%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<input type="text" id="number" name="number" class="text_field" value="<%= h(@student.number) %>" style="width: 100px;" />
+				</td>
+				
+				<td>
+					<label for="edu_level">
+						学历<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<%=
+						render(
+							:partial => "/students/selects/edu_level",
+							:locals => {
+								:edu_level_id => @student.edu_level_id,
+								:field_id => "edu_level", :field_name => "edu_level_id",
+								:hide_label => true, :empty_label => "选择学历"
+							}
+						)
+					%>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="phone">
+						手机<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<input type="text" id="phone" name="phone" class="text_field" value="<%= h(@profile.phone) %>" style="width: 125px;" />
+				</td>
+				
+				<td>
+					<label for="email">
+						邮箱<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<input type="text" id="email" name="email" class="text_field" value="<%= h(@profile.email) %>" style="width: 200px;" />
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="political_status">
+						政治面貌<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<select name="political_status" id="political_status" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @profile.political_status_id.blank? %>>选择政治面貌</option>
+						<% PoliticalStatus.data.each do |status| %>
+							<option value="<%= status[:id] %>"<%= %Q! selected="selected"! if @profile.political_status_id == status[:id] %>><%= status[:name] %></option>
+						<% end %>
+					</select>
+				</td>
+				
+				<td>
+					<label for="university">
+						学校<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<%=
+						render(
+							:partial => "/students/selects/university",
+							:locals => {
+								:university_id => @student.university_id,
+								:field_id => "university", :field_name => "university_id",
+								:hide_label => true, :empty_label => "选择大学"
+							}
+						)
+					%>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="graduation_year">
+						毕业时间<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<%=
+						render(
+							:partial => "/students/selects/graduation_year",
+							:locals => {
+								:graduation_year => @student.graduation_year,
+								:field_id => "graduation_year", :field_name => "graduation_year",
+								:hide_label => true, :empty_label => "选择毕业时间"
+							}
+						)
+					%>
+				</td>
+				
+				<td>
+					<label for="job_major">
+						专业<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<%=
+						render(
+							:partial => "/teacher_corporation_jobs/selects/job_major",
+							:locals => {
+								:job_major_id => @intern_profile.major_id,
+								:field_id => "job_major", :field_name => "job_major",
+								:hide_label => true, :required => true
+							}
+						)
+					%>
+				</td>
+			</tr>
+		</table>
+		
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<th colspan="6">
+					<%= labels[:intern] %>意向<%= required_mark(false) %>
+				</th>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<label>
+						是否服从岗位调剂<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="4">
+					<input type="radio" value="true" name="allow_adjust" id="allow_adjust_true"<%= %Q! checked="checked"! if @allow_adjust == true %> />
+					<label for="allow_adjust_true" style="margin-right: 30px;">
+						是
+					</label>
+					
+					<input type="radio" value="false" name="allow_adjust" id="allow_adjust_false"<%= %Q! checked="checked"! if @allow_adjust == false %> />
+					<label for="allow_adjust_false">
+						否
+					</label>
+				</td>
+			</tr>
+			
+			<tr>
+				<td style="width: 60px;">
+					<label for="begin_at">
+						上岗时间<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<%
+						today = Date.today
+						begin_at = @intern_profile.begin_at || today
+					%>
+					<select name="begin_at_year" id="begin_at_year" class="dropdown_list">
+						<% today.year.upto(today.year + 1) do |year| %>
+							<option value="<%= year %>"<%= %Q! selected="selected"! if year == begin_at.year %>><%= year %>年</option>
+						<% end %>
+					</select>
+					<select name="begin_at_month" id="begin_at_month" class="dropdown_list">
+						<% 1.upto(12) do |month| %>
+							<option value="<%= month %>"<%= %Q! selected="selected"! if month == begin_at.month %>><%= month %>月</option>
+						<% end %>
+					</select>
+					<select name="begin_at_date" id="begin_at_date" class="dropdown_list">
+						<% 1.upto(31) do |date| %>
+							<option value="<%= date %>"<%= %Q! selected="selected"! if date == begin_at.day %>><%= date %>日</option>
+						<% end %>
+					</select>
+				</td>
+				
+				<td>
+					<label for="job_period">
+						工作期限<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<%=
+						render(
+							:partial => "/teacher_corporation_jobs/selects/job_period",
+							:locals => {
+								:job_period_id => @intern_profile.period_id,
+								:field_id => "job_period", :field_name => "job_period",
+								:hide_label => true, :required => true
+							}
+						)
+					%>
+				</td>
+				
+				<td>
+					<label for="job_workday">
+						每周工作时间<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<%=
+						render(
+							:partial => "/teacher_corporation_jobs/selects/job_workday",
+							:locals => {
+								:job_workday_id => @intern_profile.workday_id,
+								:field_id => "job_workday", :field_name => "job_workday",
+								:hide_label => true, :required => true
+							}
+						)
+					%>
+				</td>
+			</tr>
+			
+			<tr>
+				<td style="width: 60px;">
+					<label for="desc">
+						其他说明
+					</label>
+				</td>
+				<td colspan="5">
+					<textarea id="desc" name="desc" class="text_field" rows="3" style="width: 480px;"><%= h(@intern_profile.desc) %></textarea>
+				</td>
+			</tr>
+		</table>
+		
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<th>
+					<label for="skill">
+						技能证书
+					</label>
+				</th>
+			</tr>
+			
+			<tr>
+				<td style="text-align: center;">
+					<textarea id="skill" name="skill" class="text_field" rows="3" style="width: 560px;"><%= h(@intern_profile.skill) %></textarea>
+				</td>
+			</tr>
+		</table>
+		
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<th>
+					<label for="experience">
+						以往工作/实习经历（包括获奖情况、社会实践、实习经历等）
+					</label>
+				</th>
+			</tr>
+			
+			<tr>
+				<td style="text-align: center;">
+					<textarea id="experience" name="experience" class="text_field" rows="10" style="width: 560px;"><%= h(@intern_profile.experience) %></textarea>
+				</td>
+			</tr>
+		</table>
+		
+		<div class="info_with_icon">
+			请尽量详细的填写，以便为您更好的匹配到适合的企业和岗位；打<%= required_mark(false) %>的项目为必填项。
+		</div>
+		
+		<div class="form_action">
+			<%= submit_tag "提交申请表", :class => "button" %>
+		</div>
+
+	<% end %>
+
+
+	<% content_for :scripts do %>
+		<%= render :partial => "/students/selects/var" %>
+		<script language="JavaScript">
+			$("#university").unbind("change").change(
+				function() {
+					APP.fill_colleges($(this).val(), "", "选择学院", "选择专业");
+				}
+			);
+			$("#college").unbind("change").change(
+				function() {
+					APP.fill_majors($(this).val(), "", "选择专业");
+				}
+			);
+		</script>
+	<% end %>
+</div>

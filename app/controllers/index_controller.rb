@@ -171,4 +171,22 @@ class IndexController < ApplicationController
     send_data(image.code_image, :type => "image/jpeg", :disposition => "inline")
   end
   
+  
+  def intern_register
+    @student = Student.new(:school_id => School.get_school_info(@school.abbr)[0])
+    @profile = StudentProfile.new
+    @intern_profile = InternProfile.new
+    
+    @allow_adjust = (params[:allow_adjust] == "true")
+    params[:birthmonth] = "#{params[:birthmonth_year]}-#{params[:birthmonth_month]}-#{params[:birthmonth_date]}"
+    params[:begin_at] = "#{params[:begin_at_year]}-#{params[:begin_at_month]}-#{params[:begin_at_date]}"
+    
+    @student.number = params[:number] && params[:number].strip
+    StudentsController.helpers.fill_student_editable_fields(@student, params)
+    StudentsController.helpers.fill_student_profile(@profile, params)
+    StudentsController.helpers.fill_student_intern_profile(@intern_profile, params)
+    
+    render :layout => "empty"
+  end
+  
 end
