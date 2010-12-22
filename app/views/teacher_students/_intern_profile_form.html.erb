@@ -1,6 +1,37 @@
 <table border="0" cellspacing="10" cellpadding="5">
 	<tr>
 		<td style="width: 120px;" valign="top">
+			<label for="birthplace">
+				籍贯
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="birthplace" name="birthplace" class="text_field" size="15" value="<%= h(@profile.birthplace) %>" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+			<label for="birthmonth">
+				出生年月
+			</label>
+		</td>
+		
+		<td>
+			<input type="text" id="birthmonth" name="birthmonth" class="text_field" size="15" value="<%= h(@profile.birthmonth) %>" />
+			
+			<span class="info_with_icon" style="margin-left: 20px;">
+				<% today = Date.today %>
+				格式: <%= today.year %>-<%= today.month %>
+				或: <%= format_date(today) %>
+			</span>
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td valign="top">
 			<label for="begin_at">
 				上岗时间<%= required_mark %>
 			</label>
@@ -91,36 +122,6 @@
 		</td>
 	</tr>
 	
-	
-	<tr>
-		<td valign="top">
-			<label for="birthplace">
-				籍贯
-			</label>
-		</td>
-		
-		<td>
-			<input type="text" id="birthplace" name="birthplace" class="text_field" size="15" value="<%= h(@profile.birthplace) %>" />
-		</td>
-	</tr>
-	
-	<tr>
-		<td valign="top">
-			<label for="birthmonth">
-				出生年月
-			</label>
-		</td>
-		
-		<td>
-			<input type="text" id="birthmonth" name="birthmonth" class="text_field" size="15" value="<%= h(@profile.birthmonth) %>" />
-			
-			<span class="info_with_icon" style="margin-left: 20px;">
-				<% today = Date.today %>
-				格式: <%= today.year %>-<%= today.month %>
-				或: <%= format_date(today) %>
-			</span>
-		</td>
-	</tr>
 	
 	<tr>
 		<td>
