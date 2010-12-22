@@ -3,6 +3,7 @@ class Corporation < ActiveRecord::Base
   include Utils::ActiveRecordHelpers
   
   belongs_to :school, :class_name => "School", :foreign_key => "school_id"
+  belongs_to :teacher, :class_name => "Teacher", :foreign_key => "teacher_id"
   
   has_one :profile, :class_name => "CorporationProfile", :foreign_key => "corporation_id", :dependent => :destroy
   

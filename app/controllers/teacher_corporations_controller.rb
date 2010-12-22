@@ -102,6 +102,8 @@ class TeacherCorporationsController < ApplicationController
   def create
     @corporation = Corporation.new(:school_id => @teacher.school_id)
     
+    @corporation.teacher_id = params[:teacher] && params[:teacher].strip
+    
     @corporation.uid = params[:uid] && params[:uid].strip
     @corporation.password = params[:password] && params[:password].strip
     @corporation.allow_query = (params[:allow_query] == "true")
@@ -121,6 +123,8 @@ class TeacherCorporationsController < ApplicationController
   
   def update
     @profile = CorporationProfile.get_record(@corporation.id)
+    
+    @corporation.teacher_id = params[:teacher] && params[:teacher].strip
     
     @corporation.uid = params[:uid] && params[:uid].strip
     @corporation.name = params[:name] && params[:name].strip

@@ -558,6 +558,13 @@ class TeacherStatisticsController < ApplicationController
     
     intern_begin_at_time = Time.parse(InternLog.intern_begin_at)
     
+    count_job_number_sum = Proc.new { |to|
+      Job.sum(
+        :number,
+        :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
+        :conditions => ["corporations.school_id = ? and jobs.created_at < ?", @teacher.school_id, to]
+      )
+    }
     count_job = Proc.new { |to|
       Job.count(
         :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
@@ -597,6 +604,11 @@ class TeacherStatisticsController < ApplicationController
         :title => "岗位 总数",
         :count => count_job.call(@to),
         :compared_count => @compared_from && count_job.call(compared_to)
+      },
+      {
+        :title => "岗位招聘 总人数",
+        :count => count_job_number_sum.call(@to),
+        :compared_count => @compared_from && count_job_number_sum.call(compared_to)
       }
     ]
     @total_max = @total_datasets.map{|d| d[:count]}.max

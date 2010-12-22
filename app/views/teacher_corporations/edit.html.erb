@@ -29,7 +29,32 @@
 	<table border="0" cellspacing="10" cellpadding="5" style="font-size: 14px;">
 		<tr>
 			<td style="width: 120px;">
-				企业用户名<%= required_mark %>
+				<label for="teacher">
+					负责老师
+				</label>
+			</td>
+
+			<td>
+				<select name="teacher" id="teacher" class="dropdown_list">
+					<option value=""<%= %Q! selected="selected"! if @corporation.teacher_id.blank? %>></option>
+					<%
+						Teacher.find(
+							:all,
+							:conditions => ["school_id = ?", @teacher.school_id],
+							:order => "created_at DESC"
+						).each do |teacher|
+					%>
+						<option value="<%= teacher.id %>"<%= %Q! selected="selected"! if @corporation.teacher_id == teacher.id %>><%= h(teacher.get_name) %></option>
+					<% end %>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<label for="uid">
+					企业用户名<%= required_mark %>
+				</label>
 			</td>
 
 			<td>
