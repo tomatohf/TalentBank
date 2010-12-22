@@ -1300,6 +1300,9 @@ img.notification_icon {
 .intern_register table textarea {
 	margin: 8px 0px;
 }
+.intern_register table select {
+	margin-left: -1px;
+}
 .intern_register table th {
 	text-align: left;
 	font-weight: bold;
