@@ -20,7 +20,7 @@
 <div>
 	<% form_tag "", :method => :delete, :id => "del_exp_form" do %>
 	<% end %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		function del_exp(exp_id, exp_period) {
 			if(confirm("确定要删除 " + exp_period + " 的经历么 ?")) {
 				var del_form = document.getElementById("del_exp_form");

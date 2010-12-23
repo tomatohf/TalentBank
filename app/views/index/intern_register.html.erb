@@ -229,6 +229,28 @@
 				</th>
 			</tr>
 			
+			<% if false %>
+			<tr>
+				<td>
+					<label>
+						意向单位<%= required_mark(false) %>
+					</label>
+				</td>
+				<td>
+					<input type="text" class="text_field" style="width: 150px;" />
+				</td>
+				
+				<td>
+					<label>
+						意向岗位<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="3">
+					<input type="text" class="text_field" style="width: 200px;" />
+				</td>
+			</tr>
+			<% end %>
+			
 			<tr>
 				<td colspan="2">
 					<label>
@@ -369,18 +391,8 @@
 
 
 	<% content_for :scripts do %>
-		<%= render :partial => "/students/selects/var" %>
-		<script language="JavaScript">
-			$("#university").unbind("change").change(
-				function() {
-					APP.fill_colleges($(this).val(), "", "选择学院", "选择专业");
-				}
-			);
-			$("#college").unbind("change").change(
-				function() {
-					APP.fill_majors($(this).val(), "", "选择专业");
-				}
-			);
+		<script type="text/javascript">
+			
 		</script>
 	<% end %>
 </div>

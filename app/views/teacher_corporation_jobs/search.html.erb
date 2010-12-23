@@ -320,14 +320,14 @@
 <% content_for :scripts do %>
 	<%= render :partial => "/corporations/selects/var" %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		var TEACHER_ID = <%= @teacher.id %>;
 		var CORPORATION_ID = <%= @corporation.id %>;
 		var JOB_ID = <%= @job.id %>;
 		
 		var INFORM_INTERVIEW_LOG_EVENT_ID = <%= InternLogEvent.inform_interview[:id] %>;
 	</script>
-	<script src="/javascripts/jobs/search.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/jobs/search.js" type="text/javascript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/dialog/dialog.js" type="text/javascript"></script>
 <% end %>

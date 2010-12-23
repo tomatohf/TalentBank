@@ -34,7 +34,7 @@
 		</label>
 		<input type="text" id="university_filter" class="text_field" size="20" />
 		<% content_for :scripts do %>
-			<script language="JavaScript">
+			<script type="text/javascript">
 				var UNIVERSITY_OPTIONS = $("#university option");
 				$("#university_filter").unbind("keypress").keypress(
 					function(event) {

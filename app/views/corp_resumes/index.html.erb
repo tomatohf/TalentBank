@@ -209,7 +209,7 @@
 
 <% content_for :scripts do %>
 	<%= render :partial => "/students/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		var CORPORATION_ID = <%= @corporation.id %>;
 	
 		var ALL_DOMAINS = [<%= domains.collect{|domain| domain[:id] }.join(",") %>];
@@ -221,8 +221,8 @@
 	
 		var required_mark = '<%= required_mark(false).strip %>';
 	</script>
-	<script src="/javascripts/corp_resumes/query.js" type="text/javascript" language="JavaScript"></script>
-	<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/corp_resumes/query.js" type="text/javascript"></script>
+	<script src="/javascripts/corp_resumes/save_resume.js" type="text/javascript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/dialog/dialog.js" type="text/javascript"></script>
 <% end %>

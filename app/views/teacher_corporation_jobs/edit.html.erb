@@ -36,7 +36,7 @@
 
 <% content_for :scripts do %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		$("#job_category_class").unbind("change").change(
 			function() {
 				APP.fill_job_categories("#job_category", $(this).val(), "", "选择行业细分");

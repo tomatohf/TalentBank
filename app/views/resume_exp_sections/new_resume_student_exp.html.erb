@@ -19,7 +19,7 @@
 	<% form_tag "/students/#{@student.id}/resumes/#{@resume.id}/exp_sections/#{@section.id}/create_resume_student_exp", :method => :post, :id => "add_exp_form" do %>
 		<input type="hidden" id="student_exp_id" name="student_exp_id" />
 	<% end %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		function add_student_exp(student_exp_id) {
 			document.getElementById("student_exp_id").value = student_exp_id;
 			document.getElementById("add_exp_form").submit();

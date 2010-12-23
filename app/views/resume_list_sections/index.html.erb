@@ -20,7 +20,7 @@
 <div>
 	<% form_tag "", :method => :delete, :id => "del_section_form" do %>
 	<% end %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		function del_section(section_id, section_title) {
 			if(confirm("确定要删除附加信息 " + section_title + " 么 ?")) {
 				var del_form = document.getElementById("del_section_form");

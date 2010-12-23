@@ -6,13 +6,13 @@
 
 <% content_for :scripts do %>
 	<link href="/lib/jquery/css/cupertino/jquery-ui.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/jquery/ui/jquery-ui.datepicker<%= "_slider" if slider %>.min.js" type="text/javascript"></script>
 	<link href="/lib/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/daterangepicker/daterangepicker.js" type="text/javascript"></script>
 	<%= render :partial => "/students/selects/var" %>
 	<%= render :partial => "/corporations/selects/var" %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		var TEACHER_ID = <%= @teacher.id %>;
 	
 		var LEVELS = [<%= EduLevel.data.collect{|level| %Q!{id:#{level[:id]}, name:"#{level[:name]}"}!}.join(",") %>];
@@ -34,7 +34,7 @@
 		
 		var JOB_DISTRICTS = [<%= @school.job_districts.collect{|district| %Q!{id:#{district[:id]}, name:"#{district[:name]}"}!}.join(",") %>];
 	</script>
-	<script src="/javascripts/teachers/statistics.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/teachers/statistics.js" type="text/javascript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/dialog/dialog.js" type="text/javascript"></script>
 <% end %>

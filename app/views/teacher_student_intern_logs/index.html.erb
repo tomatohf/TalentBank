@@ -51,17 +51,17 @@
 
 
 <% content_for :scripts do %>
-	<script src="/javascripts/app.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/app.js" type="text/javascript"></script>
 	<%= render :partial => "/teacher_student_intern_logs/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		var TEACHER_ID = <%= @teacher.id %>;
 		var STUDENT_ID = <%= @student.id %>;
 	</script>
-	<script src="/javascripts/teachers/intern_logs.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/teachers/intern_logs.js" type="text/javascript"></script>
 	<link href="/lib/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
-	<script src="/lib/dialog/dialog.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/lib/dialog/dialog.js" type="text/javascript"></script>
 	<% unless @job_id.blank? %>
-		<script language="JavaScript">
+		<script type="text/javascript">
 			$(document).ready(
 				function() {
 					new_log("<%= @job_id %>");

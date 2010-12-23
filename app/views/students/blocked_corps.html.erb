@@ -32,7 +32,7 @@
 			<input type="hidden" id="corporation_id" name="corporation_id" />
 		<% end %>
 
-		<script language="JavaScript">
+		<script type="text/javascript">
 			function destroy_blocked_corp(corp_id, corp_name) {
 				if(confirm("确定要将企业 " + corp_name + " 从黑名单中移除么 ?")) {
 					document.getElementById("corporation_id").value = corp_id;

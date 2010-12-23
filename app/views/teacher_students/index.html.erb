@@ -179,8 +179,8 @@
 
 <% content_for :scripts do %>
 	<%= render :partial => "/students/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		var	TEACHER_ID = <%= @teacher.id %>;
 	</script>
-	<script src="/javascripts/teachers/students.js" type="text/javascript" language="JavaScript"></script>
+	<script src="/javascripts/teachers/students.js" type="text/javascript"></script>
 <% end %>

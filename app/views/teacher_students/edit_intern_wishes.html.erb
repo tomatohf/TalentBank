@@ -61,7 +61,7 @@
 <% content_for :scripts do %>
 	<%= render :partial => "/corporations/selects/var" %>
 	<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		function remove_wish(aspect, remove_id) {
 			if(confirm("确定要删除么 ?")) {
 				$("#remove_intern_wish_form_aspect").val(aspect);

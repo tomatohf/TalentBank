@@ -12,7 +12,7 @@
 <div>
 	<% form_tag "", :method => :delete, :id => "delete_note_form" do %>
 	<% end %>
-	<script language="JavaScript">
+	<script type="text/javascript">
 		function delete_note(note_id) {
 			if(confirm("确定要删除这条备注么 ?")) {
 				$("#delete_note_form").attr(
