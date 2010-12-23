@@ -1,0 +1,15 @@
+<input type="hidden" name="corporation" value="<%= field.id %>" />
+
+<label>公司:</label>
+<%= h(field.get_name) %>
+
+<span class="sep">›</span>
+
+<% field_id = "job_#{Utils.get_unique_id}" %>
+<label for="<%= field_id %>">岗位:</label>
+<select class="dropdown_list" id="<%= field_id %>" name="job">
+	<option value="" selected="selected">不限岗位</option>
+	<% Job.list_from_corporation(field.id).each do |job| %>
+		<option value="<%= job.id %>"><%= h(job.get_name) %></option>
+	<% end %>
+</select>

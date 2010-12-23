@@ -346,7 +346,7 @@
 				</td>
 			</tr>
 			
-			<tr id="wish_row">
+			<tr id="add_wish">
 				<td>
 					<label>
 						意向岗位<%= required_mark(false) %>
@@ -354,8 +354,7 @@
 				</td>
 				<td colspan="5">
 					<select class="dropdown_list aspect" name="aspect">
-						<option value="corporation">按 公司名称</option>
-						<option value="job">按 岗位名称</option>
+						<option value="corporation">按 公司岗位</option>
 						<option value="industry">按 行业类别</option>
 						<option value="job_category">按 岗位类别</option>
 						<option value="corp_nature">按 企业性质</option>
@@ -368,19 +367,8 @@
 								:partial => "/corporations/selects/industry_category",
 								:locals => {
 									:industry_category_id => nil,
-									:field_id => "industry_category_wish", :field_name => "industry_category",
+									:field_id => "industry_category_wish", :field_name => "industry_category_wish",
 									:hide_label => true, :empty_label => "选择行业大类"
-								}
-							)
-						%>
-						<%=
-							render(
-								:partial => "/corporations/selects/industry",
-								:locals => {
-									:industry_category_id => nil,
-									:industry_id => nil,
-									:field_id => "industry_wish", :field_name => "industry",
-									:hide_label => true, :empty_label => "选择行业细分"
 								}
 							)
 						%>
@@ -392,19 +380,8 @@
 								:partial => "/teacher_corporation_jobs/selects/job_category_class",
 								:locals => {
 									:job_category_class_id => nil,
-									:field_id => "job_category_class_wish", :field_name => "job_category_class",
+									:field_id => "job_category_class_wish", :field_name => "job_category_class_wish",
 									:hide_label => true, :empty_label => "选择岗位大类"
-								}
-							)
-						%>
-						<%=
-							render(
-								:partial => "/teacher_corporation_jobs/selects/job_category",
-								:locals => {
-									:job_category_class_id => nil,
-									:job_category_id => nil,
-									:field_id => "job_category_wish", :field_name => "job_category",
-									:hide_label => true, :empty_label => "选择岗位细分"
 								}
 							)
 						%>
@@ -416,8 +393,8 @@
 								:partial => "/corporations/selects/nature",
 								:locals => {
 									:nature_id => nil,
-									:field_id => "corp_nature", :field_name => "corp_nature",
-									:hide_label => true, :required => true
+									:field_id => "corp_nature_wish", :field_name => "corp_nature_wish",
+									:hide_label => true, :empty_label => "选择企业性质"
 								}
 							)
 						%>
@@ -429,8 +406,8 @@
 								:partial => "/teacher_corporation_jobs/selects/job_district",
 								:locals => {
 									:job_district_id => nil,
-									:field_id => "job_district", :field_name => "job_district",
-									:hide_label => true, :required => true
+									:field_id => "job_district_wish", :field_name => "job_district_wish",
+									:hide_label => true, :empty_label => "选择工作区域"
 								}
 							)
 						%>
@@ -441,14 +418,11 @@
 						<input type="text" id="corporation" name="corporation" class="text_field" style="width: 200px;" />
 					</span>
 
-					<span class="job" style="display: none;">
-						<label for="job">岗位名称:</label>
-						<input type="text" id="job" name="job" class="text_field" style="width: 200px;" />
-					</span>
-
 					<a href="#" title="添加意向" class="none add_wish_link">
 						<img src="/images/students/add_icon.gif" border="0" alt="添加意向" style="margin-bottom: -1px;" />
 						添加意向</a>
+					
+					<img class="operating" src="/images/loading_icon.gif" border="0" title="操作中" alt="操作中" />
 				</td>
 			</tr>
 			
@@ -509,20 +483,174 @@
 
 	<% content_for :scripts do %>
 		<script src="/lib/jquery/jquery-ui_autocomplete.min.js" type="text/javascript"></script>
-		<script src="/javascripts/app.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			var UNIVERSITY_NAMES = [
-				<%=
-					@school.universities.map { |u_id|
-						%Q!"#{University.find(u_id)[:name]}"!
-					}.join(",")
-				%>
-			];
+			$("select.aspect").unbind("change").change(
+				function() {
+					var aspect_select = $(this);
+					$.each(
+						aspect_select.find("option"),
+						function(i, option) {
+							aspect_select.siblings("." + $(option).val()).hide();
+						}
+					);
+					aspect_select.siblings("." + aspect_select.val()).show().find(":input:first").focus();
+				}
+			).change();
+
+			function fix_autocomplete(field) {
+				var interval = null,
+					content = field.val();
+
+				field.bind(
+					"autocompleteopen",
+					function() {
+						var minHeight = 300,
+							popup = field.autocomplete("widget");
+
+						popup.removeClass("ui-corner-all").css(
+							{
+								height: "auto",
+								overflow: "auto"
+							}
+						);
+
+						if(popup.outerHeight() > minHeight) {
+							popup.css(
+								{
+									height: minHeight + "px"
+								}
+							);
+						}
+						else {
+							popup.css(
+								{
+									height: "auto"
+								}
+							);
+						}
+					}
+				).bind(
+					"autocompletefocus",
+					function() {
+						return false;
+					}
+				).bind(
+					"autocompleteselect",
+					function(event, ui) {
+						content = ui.item.value;
+					}
+				).focus(
+					function() {
+						window.clearInterval(interval);
+						interval = window.setInterval(
+							function() {
+								var new_content = field.val();
+								if(new_content != content) {
+									content = new_content;
+									field.autocomplete("search");
+								}
+							},
+							300
+						);
+					}
+				).blur(
+					function() {
+						window.clearInterval(interval);
+					}
+				);
+			}
+
+			fix_autocomplete(
+				$("#university").autocomplete(
+					{
+						delay: 100,
+						minLength: 0,
+						source: [
+							<%=
+								@school.universities.map { |u_id|
+									%Q!"#{University.find(u_id)[:name]}"!
+								}.join(",")
+							%>
+						]
+					}
+				)
+			);
+
+			$("tr#add_wish img.operating").ajaxStart(
+				function() {
+					$(this).fadeIn();
+				}
+			).ajaxStop(
+				function() {
+					$(this).fadeOut();
+				}
+			);
+
+			fix_autocomplete(
+				$("#corporation").autocomplete(
+					{
+						delay: 100,
+						minLength: 1,
+						source: "/index/corporation_autocomplete"
+					}
+				)
+			);
+
+			function add_wish(wish) {
+				var	add_wish_row = $("tr#add_wish"),
+					update_add_wish_row = function() {
+						add_wish_row.find("td:first").attr("rowspan", $(".wish").length + 1);
+					}
+					unique_id = new Date().getTime();
+
+				wish.insertAfter(add_wish_row).find("a.remove_wish_link").unbind("click").click(
+					function() {
+						if(confirm("确定要删除么 ?")) {
+							wish.remove();
+							update_add_wish_row();
+						}
+
+						return false;
+					}
+				);
+				update_add_wish_row();
+				$.each(
+					wish.find(":input"),
+					function(i, element) {
+						var input = $(element);
+						input.attr("name", input.attr("name") + "_" + unique_id);
+					}
+				);
+			}
+
+			$("a.add_wish_link").unbind("click").click(
+				function() {
+					var aspect_select = $("select.aspect"),
+						aspect_value = aspect_select.val(),
+						field_input = aspect_select.siblings("." + aspect_value + ":first").find(":input:first"),
+						field_value = field_input.val();
+
+					if(field_value != "") {
+						$.post(
+							"/index/add_wish",
+							{
+								aspect: aspect_value,
+								field: field_value
+							},
+							function(data) {
+								field_input.val("");
+								add_wish($(data));
+							},
+							"html"
+						);
+					}
+
+					return false;
+				}
+			);
+
+			$("#name").focus();
 		</script>
-		
-		<%= render :partial => "/corporations/selects/var" %>
-		<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
-		<script src="/javascripts/intern_register.js" type="text/javascript"></script>
 		<link href="/lib/jquery/css/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
 	<% end %>
 </div>

@@ -192,5 +192,43 @@ class IndexController < ApplicationController
     
     render :layout => "empty"
   end
+  def corporation_autocomplete
+    render :layout => false, :json => Corporation.school_search(
+      params[:term], School.get_school_info(@school.abbr)[0], 1, 30
+    ).map { |corp|
+      {
+        :value => corp.get_name
+      }
+    }.to_json
+  end
+  def add_wish
+    return jump_to("/") unless request.post?
+      
+    @aspect = params[:aspect] && params[:aspect].strip
+    @field = params[:field] && params[:field].strip
+    
+    return render(:nothing => true) if @field.blank?
+    
+    if @aspect == "corporation"
+      @field = Corporation.school_search_first_by_name(@field, School.get_school_info(@school.abbr)[0])
+      return render(
+        :text => %Q!<script type="text/javascript">alert("不存在名称为 #{params[:field]} 的公司");</script>!
+      ) unless @field
+    else
+      @field = @field.to_i
+    end
+    
+    render :layout => false, :inline => %Q!
+      <tr class="wish">
+        <td colspan="5">
+          <input type="hidden" name="aspect" value="<%= @aspect %>" />
+          <%= render :partial => "/index/intern_wish/#{@aspect}", :locals => {:field => @field} %>
+          <a href="#" title="删除意向" class="none remove_wish_link">
+          	<img src="/images/teachers/delete_icon.gif" border="0" alt="删除意向" />
+          	删除</a>
+        </td>
+      </tr>
+    !
+  end
   
 end

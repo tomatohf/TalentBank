@@ -101,6 +101,18 @@ class Corporation < ActiveRecord::Base
   end
   
   
+  def self.school_search_first_by_name(corp_name, school_id)
+    self.search(
+      :conditions => {:name => corp_name},
+      :page => 1,
+      :per_page => 1,
+      :match_mode => Search_Match_Mode,
+      :order => "@weight DESC, updated_at DESC",
+      :with => {:school_id => school_id}
+    ).first
+  end
+  
+  
   def name?
     !self.name.blank?
   end

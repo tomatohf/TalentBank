@@ -1,0 +1,22 @@
+<input type="hidden" name="job_category_class" value="<%= field %>" />
+
+<label>岗位大类:</label>
+
+<% job_category_class = JobCategoryClass.find(field) %>
+<% if job_category_class %>
+	<%= job_category_class[:name] %>
+	
+	<span class="sep">›</span>
+	
+	<%=
+		render(
+			:partial => "/teacher_corporation_jobs/selects/job_category",
+			:locals => {
+				:job_category_class_id => job_category_class[:id],
+				:job_category_id => nil,
+				:field_id => "job_category_#{Utils.get_unique_id}", :field_name => "job_category",
+				:hide_label => false, :empty_label => "不限岗位细分"
+			}
+		)
+	%>
+<% end %>

@@ -1,0 +1,22 @@
+<input type="hidden" name="industry_category" value="<%= field %>" />
+
+<label>行业大类:</label>
+
+<% industry_category = IndustryCategory.find(field) %>
+<% if industry_category %>
+	<%= industry_category[:name] %>
+	
+	<span class="sep">›</span>
+	
+	<%=
+		render(
+			:partial => "/corporations/selects/industry",
+			:locals => {
+				:industry_category_id => industry_category[:id],
+				:industry_id => nil,
+				:field_id => "industry_#{Utils.get_unique_id}", :field_name => "industry",
+				:hide_label => false, :empty_label => "不限行业细分"
+			}
+		)
+	%>
+<% end %>

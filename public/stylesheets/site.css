@@ -1309,11 +1309,25 @@ img.notification_icon {
 	border: 1px solid #333333;
 	padding: 5px;
 }
-.intern_register table tr#wish_row select,
-.intern_register table tr#wish_row input {
-	margin-right: 5px;
+.intern_register table tr#add_wish select,
+.intern_register table tr#add_wish input {
+	margin-right: 10px;
 }
-.intern_register table tr#wish_row a.add_wish_link {
+.intern_register table tr#add_wish a.add_wish_link {
 	font-size: 14px;
 	margin-left: 5px;
+}
+.intern_register table tr#add_wish img.operating {
+	display: none;
+	margin: 0px 0px -3px 10px;
+}
+.intern_register table tr.wish label {
+	margin-right: 3px;
+}
+.intern_register table tr.wish .sep {
+	color: #666666;
+	margin: 0px 8px;
+}
+.intern_register table tr.wish a.remove_wish_link {
+	margin-left: 10px;
 }

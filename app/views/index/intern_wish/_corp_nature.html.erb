@@ -1,0 +1,6 @@
+<input type="hidden" name="corp_nature" value="<%= field %>" />
+
+<label>企业性质:</label>
+
+<% nature = CorporationNature.find(field) %>
+<%= nature && nature[:name] %>

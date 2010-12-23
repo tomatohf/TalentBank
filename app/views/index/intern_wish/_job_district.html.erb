@@ -1,0 +1,6 @@
+<input type="hidden" name="job_district" value="<%= field %>" />
+
+<label>企业性质:</label>
+
+<% district = JobDistrict.find(field) %>
+<%= district && district[:name] %>
