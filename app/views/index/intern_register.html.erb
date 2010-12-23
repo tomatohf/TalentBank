@@ -41,16 +41,16 @@
 			</tr>
 			
 			<tr>
-				<td style="width: 65px;">
+				<td style="width: 70px;">
 					<label for="name">
 						姓名<%= required_mark(false) %>
 					</label>
 				</td>
 				<td>
-					<input type="text" id="name" name="name" class="text_field" value="<%= h(@student.name) %>" style="width: 55px;" />
+					<input type="text" id="name" name="name" class="text_field" value="<%= h(@student.name) %>" style="width: 80px;" />
 				</td>
 				
-				<td style="width: 70px;">
+				<td style="width: 50px;">
 					<label for="gender">
 						性别<%= required_mark(false) %>
 					</label>
@@ -63,7 +63,7 @@
 					</select>
 				</td>
 				
-				<td style="width: 60px;">
+				<td style="width: 70px;">
 					<label for="birthmonth">
 						出生年月<%= required_mark(false) %>
 					</label>
@@ -98,7 +98,7 @@
 					</label>
 				</td>
 				<td>
-					<input type="text" id="birthplace" name="birthplace" class="text_field" value="<%= h(@intern_profile.birthplace) %>" style="width: 55px;" />
+					<input type="text" id="birthplace" name="birthplace" class="text_field" value="<%= h(@intern_profile.birthplace) %>" style="width: 80px;" />
 				</td>
 				
 				<td>
@@ -342,7 +342,7 @@
 					</label>
 				</td>
 				<td colspan="5">
-					<textarea id="desc" name="desc" class="text_field" rows="3" style="width: 480px;"><%= h(@intern_profile.desc) %></textarea>
+					<textarea id="desc" name="desc" class="text_field" rows="3" style="width: 500px; margin-left: 10px;"><%= h(@intern_profile.desc) %></textarea>
 				</td>
 			</tr>
 		</table>
@@ -358,7 +358,7 @@
 			
 			<tr>
 				<td style="text-align: center;">
-					<textarea id="skill" name="skill" class="text_field" rows="3" style="width: 560px;"><%= h(@intern_profile.skill) %></textarea>
+					<textarea id="skill" name="skill" class="text_field" rows="3" style="width: 600px;"><%= h(@intern_profile.skill) %></textarea>
 				</td>
 			</tr>
 		</table>
@@ -374,7 +374,7 @@
 			
 			<tr>
 				<td style="text-align: center;">
-					<textarea id="experience" name="experience" class="text_field" rows="10" style="width: 560px;"><%= h(@intern_profile.experience) %></textarea>
+					<textarea id="experience" name="experience" class="text_field" rows="10" style="width: 600px;"><%= h(@intern_profile.experience) %></textarea>
 				</td>
 			</tr>
 		</table>
