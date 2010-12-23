@@ -72,7 +72,7 @@
 					<% birthmonth = (@intern_profile.birthmonth || "").split("-") %>
 					<select name="birthmonth_year" id="birthmonth_year" class="dropdown_list">
 						<option value=""<%= %Q! selected="selected"! if birthmonth[0].blank? %>>年</option>
-						<% (Date.today.year - 10).downto(1984) do |year| %>
+						<% (Date.today.year - 10).downto(1980) do |year| %>
 							<option value="<%= year %>"<%= %Q! selected="selected"! if year.to_s == birthmonth[0] %>><%= year %></option>
 						<% end %>
 					</select>
@@ -136,7 +136,7 @@
 					</label>
 				</td>
 				<td colspan="2">
-					<input type="text" id="phone" name="phone" class="text_field" value="<%= h(@profile.phone) %>" style="width: 125px;" />
+					<input type="text" id="phone" name="phone" class="text_field" value="<%= h(@profile.phone) %>" style="width: 150px;" />
 				</td>
 				
 				<td>
@@ -146,40 +146,6 @@
 				</td>
 				<td colspan="2">
 					<input type="text" id="email" name="email" class="text_field" value="<%= h(@profile.email) %>" style="width: 200px;" />
-				</td>
-			</tr>
-			
-			<tr>
-				<td>
-					<label for="political_status">
-						政治面貌<%= required_mark(false) %>
-					</label>
-				</td>
-				<td colspan="2">
-					<select name="political_status" id="political_status" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @profile.political_status_id.blank? %>>选择政治面貌</option>
-						<% PoliticalStatus.data.each do |status| %>
-							<option value="<%= status[:id] %>"<%= %Q! selected="selected"! if @profile.political_status_id == status[:id] %>><%= status[:name] %></option>
-						<% end %>
-					</select>
-				</td>
-				
-				<td>
-					<label for="university">
-						学校<%= required_mark(false) %>
-					</label>
-				</td>
-				<td colspan="2">
-					<%=
-						render(
-							:partial => "/students/selects/university",
-							:locals => {
-								:university_id => @student.university_id,
-								:field_id => "university", :field_name => "university_id",
-								:hide_label => true, :empty_label => "选择大学"
-							}
-						)
-					%>
 				</td>
 			</tr>
 			
@@ -203,8 +169,53 @@
 				</td>
 				
 				<td>
-					<label for="job_major">
+					<label for="political_status">
+						政治面貌<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<select name="political_status" id="political_status" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @profile.political_status_id.blank? %>>选择政治面貌</option>
+						<% PoliticalStatus.data.each do |status| %>
+							<option value="<%= status[:id] %>"<%= %Q! selected="selected"! if @profile.political_status_id == status[:id] %>><%= status[:name] %></option>
+						<% end %>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="university">
+						学校<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<input type="text" id="university" name="university" class="text_field" value="<%= h(@university) %>" style="width: 150px;" />
+				</td>
+				
+				<td>
+					<label for="college">
+						学院<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<input type="text" id="college" name="college" class="text_field" value="<%= h(@college) %>" style="width: 150px;" />
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label for="major">
 						专业<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="2">
+					<input type="text" id="major" name="major" class="text_field" value="<%= h(@major) %>" style="width: 150px;" />
+				</td>
+				
+				<td>
+					<label for="job_major">
+						专业类别<%= required_mark(false) %>
 					</label>
 				</td>
 				<td colspan="2">
@@ -335,6 +346,112 @@
 				</td>
 			</tr>
 			
+			<tr id="wish_row">
+				<td>
+					<label>
+						意向岗位<%= required_mark(false) %>
+					</label>
+				</td>
+				<td colspan="5">
+					<select class="dropdown_list aspect" name="aspect">
+						<option value="corporation">按 公司名称</option>
+						<option value="job">按 岗位名称</option>
+						<option value="industry">按 行业类别</option>
+						<option value="job_category">按 岗位类别</option>
+						<option value="corp_nature">按 企业性质</option>
+						<option value="job_district">按 工作区域</option>
+					</select>
+
+					<span class="industry" style="display: none;">
+						<%=
+							render(
+								:partial => "/corporations/selects/industry_category",
+								:locals => {
+									:industry_category_id => nil,
+									:field_id => "industry_category_wish", :field_name => "industry_category",
+									:hide_label => true, :empty_label => "选择行业大类"
+								}
+							)
+						%>
+						<%=
+							render(
+								:partial => "/corporations/selects/industry",
+								:locals => {
+									:industry_category_id => nil,
+									:industry_id => nil,
+									:field_id => "industry_wish", :field_name => "industry",
+									:hide_label => true, :empty_label => "选择行业细分"
+								}
+							)
+						%>
+					</span>
+
+					<span class="job_category" style="display: none;">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_category_class",
+								:locals => {
+									:job_category_class_id => nil,
+									:field_id => "job_category_class_wish", :field_name => "job_category_class",
+									:hide_label => true, :empty_label => "选择岗位大类"
+								}
+							)
+						%>
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_category",
+								:locals => {
+									:job_category_class_id => nil,
+									:job_category_id => nil,
+									:field_id => "job_category_wish", :field_name => "job_category",
+									:hide_label => true, :empty_label => "选择岗位细分"
+								}
+							)
+						%>
+					</span>
+
+					<span class="corp_nature" style="display: none;">
+						<%=
+							render(
+								:partial => "/corporations/selects/nature",
+								:locals => {
+									:nature_id => nil,
+									:field_id => "corp_nature", :field_name => "corp_nature",
+									:hide_label => true, :required => true
+								}
+							)
+						%>
+					</span>
+
+					<span class="job_district" style="display: none;">
+						<%=
+							render(
+								:partial => "/teacher_corporation_jobs/selects/job_district",
+								:locals => {
+									:job_district_id => nil,
+									:field_id => "job_district", :field_name => "job_district",
+									:hide_label => true, :required => true
+								}
+							)
+						%>
+					</span>
+
+					<span class="corporation" style="display: none;">
+						<label for="corporation">公司名称:</label>
+						<input type="text" id="corporation" name="corporation" class="text_field" style="width: 200px;" />
+					</span>
+
+					<span class="job" style="display: none;">
+						<label for="job">岗位名称:</label>
+						<input type="text" id="job" name="job" class="text_field" style="width: 200px;" />
+					</span>
+
+					<a href="#" title="添加意向" class="none add_wish_link">
+						<img src="/images/students/add_icon.gif" border="0" alt="添加意向" style="margin-bottom: -1px;" />
+						添加意向</a>
+				</td>
+			</tr>
+			
 			<tr>
 				<td style="width: 60px;">
 					<label for="desc">
@@ -391,8 +508,21 @@
 
 
 	<% content_for :scripts do %>
+		<script src="/lib/jquery/jquery-ui_autocomplete.min.js" type="text/javascript"></script>
+		<script src="/javascripts/app.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			
+			var UNIVERSITY_NAMES = [
+				<%=
+					@school.universities.map { |u_id|
+						%Q!"#{University.find(u_id)[:name]}"!
+					}.join(",")
+				%>
+			];
 		</script>
+		
+		<%= render :partial => "/corporations/selects/var" %>
+		<%= render :partial => "/teacher_corporation_jobs/selects/var" %>
+		<script src="/javascripts/intern_register.js" type="text/javascript"></script>
+		<link href="/lib/jquery/css/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
 	<% end %>
 </div>

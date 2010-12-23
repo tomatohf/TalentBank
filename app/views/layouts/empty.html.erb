@@ -8,11 +8,11 @@
 		<%= stylesheet_link_tag("site") %>
     </head>
     <body>
-	
+		
 		<%= yield %>
 		
 		
-		<%= render :partial => "/common/page_js" %>
+		<%= yield(:scripts) %>
 		
 		
 		<%= render_school_partial("page_track", @school.abbr) if Rails.env.production? %>

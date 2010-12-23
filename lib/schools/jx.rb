@@ -37,6 +37,7 @@ module Schools
     
     def intern_register_labels
       {
+        :number_prefix => "zy",
         :title => "世博会志愿者见习岗位申请表",
         :number => "志愿者证号",
         :intern => "见习"

@@ -177,11 +177,15 @@ class IndexController < ApplicationController
     @profile = StudentProfile.new
     @intern_profile = InternProfile.new
     
-    @allow_adjust = (params[:allow_adjust] == "true")
+    @student.number = params[:number] && params[:number].strip
+    @student.number = "#{@school.intern_register_labels[:number_prefix]}#{@student.number}" unless @student.number.blank?
     params[:birthmonth] = "#{params[:birthmonth_year]}-#{params[:birthmonth_month]}-#{params[:birthmonth_date]}"
+    @university = params[:university] && params[:university].strip
+    @college = params[:college] && params[:college].strip
+    @major = params[:major] && params[:major].strip
+    @allow_adjust = (params[:allow_adjust] == "true")
     params[:begin_at] = "#{params[:begin_at_year]}-#{params[:begin_at_month]}-#{params[:begin_at_date]}"
     
-    @student.number = params[:number] && params[:number].strip
     StudentsController.helpers.fill_student_editable_fields(@student, params)
     StudentsController.helpers.fill_student_profile(@profile, params)
     StudentsController.helpers.fill_student_intern_profile(@intern_profile, params)

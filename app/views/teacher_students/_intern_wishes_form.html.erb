@@ -1,7 +1,7 @@
 <% form_tag "/teachers/#{@teacher.id}/students/#{@student.id}/add_intern_wish", :method => :post do %>
 	<select class="dropdown_list aspect" name="aspect">
-		<option value="corporation">按具体公司</option>
-		<option value="job">按具体岗位</option>
+		<option value="corporation">按公司名称</option>
+		<option value="job">按岗位名称</option>
 		<option value="industry">按行业类别</option>
 		<option value="job_category">按岗位类别</option>
 		<option value="corp_nature">按企业性质</option>

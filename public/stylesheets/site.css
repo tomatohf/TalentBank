@@ -1280,7 +1280,7 @@ img.notification_icon {
 	text-align: center;
 	font-size: 16px;
 	font-weight: bold;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 }
 .intern_register .form_action {
 	text-align: center;
@@ -1308,4 +1308,12 @@ img.notification_icon {
 .intern_register table td, .intern_register table th {
 	border: 1px solid #333333;
 	padding: 5px;
+}
+.intern_register table tr#wish_row select,
+.intern_register table tr#wish_row input {
+	margin-right: 5px;
+}
+.intern_register table tr#wish_row a.add_wish_link {
+	font-size: 14px;
+	margin-left: 5px;
 }
