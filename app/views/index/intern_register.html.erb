@@ -578,11 +578,11 @@
 
 			$("tr#add_wish img.operating").ajaxStart(
 				function() {
-					$(this).fadeIn();
+					$(this).fadeIn("fast");
 				}
 			).ajaxStop(
 				function() {
-					$(this).fadeOut();
+					$(this).fadeOut("fast");
 				}
 			);
 
@@ -599,8 +599,17 @@
 			function add_wish(wish) {
 				var	add_wish_row = $("tr#add_wish"),
 					update_add_wish_row = function() {
-						add_wish_row.find("td:first").attr("rowspan", $(".wish").length + 1);
-					}
+						var wish_count = $(".wish").length,
+							add_wish_link = add_wish_row.find("a.add_wish_link");
+							
+						add_wish_row.find("td:first").attr("rowspan", wish_count + 1);
+						if(wish_count < 50) {
+							add_wish_link.show();
+						}
+						else {
+							add_wish_link.hide();
+						}
+					},
 					unique_id = new Date().getTime();
 
 				wish.insertAfter(add_wish_row).find("a.remove_wish_link").unbind("click").click(

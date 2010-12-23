@@ -220,9 +220,11 @@ class IndexController < ApplicationController
     
     render :layout => false, :inline => %Q!
       <tr class="wish">
-        <td colspan="5">
-          <input type="hidden" name="aspect" value="<%= @aspect %>" />
+        <td colspan="4">
           <%= render :partial => "/index/intern_wish/#{@aspect}", :locals => {:field => @field} %>
+        </td>
+        <td>
+          <input type="hidden" name="aspect" value="<%= @aspect %>" />
           <a href="#" title="删除意向" class="none remove_wish_link">
           	<img src="/images/teachers/delete_icon.gif" border="0" alt="删除意向" />
           	删除</a>
