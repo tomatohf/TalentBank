@@ -1,0 +1,32 @@
+<%
+	labels = @school.intern_register_labels
+	
+	talent_page_title(labels[:title])
+%>
+
+<div class="intern_register">
+	<div class="form_title">
+		<%= labels[:title] %>
+	</div>
+
+	<div style="background-color: #FCF9E6; border: 1px solid #F0F0E0; margin: 5px 30px;">
+		<img class="float_l" src="/images/index/<%= @icon %>" border="0" style="margin: 20px;" />
+		
+		<div style="margin: 20px 10px 10px 100px; font-size: 14px; font-weight: bold;">
+			<%= @text %>
+			
+			<p>
+				有任何疑问可通过咨询电话：021-6051-7703 与我们联系
+			</p>
+			<p>
+				工作时间：周一至周五 9:30-18:00
+			</p>
+			
+			<div class="align_r">
+				<a href="http://www.51cy.sh.cn/expo2010">返回继续浏览岗位</a>
+			</div>
+		</div>
+		
+		<div class="clear_l"></div>
+	</div>
+</div>

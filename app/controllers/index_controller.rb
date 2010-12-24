@@ -336,34 +336,20 @@ class IndexController < ApplicationController
     }
   end
   def intern_register_success
-    @labels = @school.intern_register_labels
-    
-    render :layout => "empty", :inline => %Q!
-      <div class="intern_register">
-      	<div class="form_title">
-      		<%= @labels[:title] %>
-      	</div>
-
-      	<div>
-          岗位信息已保存
-      	</div>
-      </div>
+    @icon = "intern_register_success.gif"
+    @text = %Q!
+      <p>你的申请信息已经保存，我们会尽快为你匹配适合的岗位，并及时与你联系。</p>
     !
+    
+    render :layout => "empty", :action => "intern_register_result"
   end
   def intern_register_taken
-    @labels = @school.intern_register_labels
-    
-    render :layout => "empty", :inline => %Q!
-      <div class="intern_register">
-      	<div class="form_title">
-      		<%= @labels[:title] %>
-      	</div>
-
-      	<div>
-          此帐号已经提交过申请
-      	</div>
-      </div>
+    @icon = "intern_register_taken.gif"
+    @text = %Q!
+      <p>你的申请信息已经存在，无需重复提交申请。</p>
     !
+    
+    render :layout => "empty", :action => "intern_register_result"
   end
   
 end
