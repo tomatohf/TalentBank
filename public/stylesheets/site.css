@@ -1280,7 +1280,25 @@ img.notification_icon {
 	text-align: center;
 	font-size: 16px;
 	font-weight: bold;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
+}
+.intern_register .form_desc {
+	margin: 0px 20px;
+}
+.intern_register .form_desc ul {
+	margin: 5px 35px;
+	padding: 0px;
+}
+.intern_register .form_desc ul li {
+	margin: 5px 0px;
+}
+.intern_register .form_tip {
+	display: inline-block;
+	position: relative;
+	background: transparent url(/images/index/question_icon.gif) no-repeat scroll 0 0;
+	width: 13px;
+	height: 13px;
+	top: 2px;
 }
 .intern_register .form_action {
 	text-align: center;
@@ -1308,6 +1326,7 @@ img.notification_icon {
 .intern_register table td, .intern_register table th {
 	border: 1px solid #333333;
 	padding: 5px;
+	font-weight: normal;
 }
 .intern_register table tr#add_wish select,
 .intern_register table tr#add_wish input {

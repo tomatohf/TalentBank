@@ -67,7 +67,6 @@ module Schools
     
     def intern_register_labels
       {
-        :number_prefix => "",
         :title => "实习岗位申请表",
         :number => "学号",
         :intern => "实习"

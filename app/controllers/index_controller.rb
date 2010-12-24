@@ -187,16 +187,14 @@ class IndexController < ApplicationController
     @labels = @school.intern_register_labels
     
     if request.post?
-      @student.number = params[:number] && params[:number].strip
-      @student.number = "#{@labels[:number_prefix]}#{@student.number}" unless @student.number.blank?
-      
+      @number = params[:number] && params[:number].strip
       params[:birthmonth] = "#{params[:birthmonth_year]}-#{params[:birthmonth_month]}-#{params[:birthmonth_date]}"
       @university = params[:university] && params[:university].strip
       @college = params[:college] && params[:college].strip
       @major = params[:major] && params[:major].strip
       @allow_adjust = (params[:allow_adjust] == "true")
       params[:begin_at] = "#{params[:begin_at_year]}-#{params[:begin_at_month]}-#{params[:begin_at_date]}"
-      params[:desc] = %Q!学校:#{@university}\n学院:#{@college}\n专业:#{@major}\n服从岗位调剂:#{@allow_adjust ? "是" : "否"}!
+      params[:desc] = %Q!#{@labels[:number]}:#{@number}\n学校:#{@university}\n学院:#{@college}\n专业:#{@major}\n服从岗位调剂:#{@allow_adjust ? "是" : "否"}!
       
       university_model = @universities.detect { |u|
         u[:name] == @university
@@ -276,6 +274,7 @@ class IndexController < ApplicationController
       
       @student.password = "111111"
       @intern_profile.salary = 0
+      @student.number = @profile.phone
       if @student.save
         @profile.student_id = @student.id
         @intern_profile.student_id = @student.id
@@ -294,6 +293,12 @@ class IndexController < ApplicationController
             wish[:wish].save
           end
         end
+        
+        return jump_to("/index/intern_register_success")
+      else
+        @student.errors.each_error do |attr, error|
+          return jump_to("/index/intern_register_taken") if attr == "number" && error.type == :taken
+        end
       end
     end
     
@@ -301,7 +306,7 @@ class IndexController < ApplicationController
   end
   def corporation_autocomplete
     render :layout => false, :json => Corporation.school_search(
-      params[:term], School.get_school_info(@school.abbr)[0], 1, 30
+      params[:term], School.get_school_info(@school.abbr)[0], 1, 50
     ).map { |corp|
       {
         :value => corp.get_name
@@ -329,6 +334,36 @@ class IndexController < ApplicationController
       :aspect => @aspect,
       :field => @field
     }
+  end
+  def intern_register_success
+    @labels = @school.intern_register_labels
+    
+    render :layout => "empty", :inline => %Q!
+      <div class="intern_register">
+      	<div class="form_title">
+      		<%= @labels[:title] %>
+      	</div>
+
+      	<div>
+          岗位信息已保存
+      	</div>
+      </div>
+    !
+  end
+  def intern_register_taken
+    @labels = @school.intern_register_labels
+    
+    render :layout => "empty", :inline => %Q!
+      <div class="intern_register">
+      	<div class="form_title">
+      		<%= @labels[:title] %>
+      	</div>
+
+      	<div>
+          此帐号已经提交过申请
+      	</div>
+      </div>
+    !
   end
   
 end

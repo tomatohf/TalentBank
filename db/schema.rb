@@ -270,7 +270,7 @@ ActiveRecord::Schema.define(:version => 26) do
     t.string   "birthmonth", :limit => 10
     t.string   "intention",  :limit => 300
     t.string   "skill",      :limit => 300
-    t.string   "experience", :limit => 1000
+    t.string   "experience", :limit => 2000
     t.string   "desc",       :limit => 300
   end
 

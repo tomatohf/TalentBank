@@ -1,36 +1,37 @@
 <div class="intern_register">
-	<% if flash[:success_msg] %>
-		<p class="success_msg">
-		    <%= flash[:success_msg] %>
-		</p>
-	<% end %>
-	<% if flash[:error_msg] %>
-		<p class="error_msg">
-		    <%= flash[:error_msg] %>
-		</p>
-	<% end %>
 	<% if @student.errors.size > 0 %>
 		<p class="error_msg">
 			<%= list_model_validate_errors(@student).gsub("学号", @labels[:number]) %>
 		</p>
 	<% end %>
-	<% if @profile.errors.size > 0 %>
-		<p class="error_msg">
-			<%= list_model_validate_errors(@profile) %>
-		</p>
-	<% end %>
-	<% if @intern_profile.errors.size > 0 %>
-		<p class="error_msg">
-			<%= list_model_validate_errors(@intern_profile) %>
-		</p>
-	<% end %>
+	
+	<div class="form_title">
+		<%= @labels[:title] %>
+	</div>
+	
+	<div class="form_desc info">
+		<div class="info_with_icon">
+			填写说明
+		</div>
+		
+		<ul>
+			<li>
+				请尽量详细的填写，以便为你更好的匹配到适合的企业和岗位；
+			</li>
+			<li>
+				打<%= required_mark(false) %>的项目为必填项；
+			</li>
+			<li>
+				鼠标滑过<span class="form_tip" title="我是填写提示"></span>，显示该项填写帮助；
+			</li>
+			<li>
+				咨询电话：021-6051-7703（工作时间：周一至周五 9:30-18:00）
+			</li>
+		</ul>
+	</div>
 
 	<% form_tag "", :method => :post do %>
 	
-		<div class="form_title">
-			<%= @labels[:title] %>
-		</div>
-
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<th colspan="6">
@@ -105,7 +106,7 @@
 					</label>
 				</td>
 				<td>
-					<input type="text" id="number" name="number" class="text_field" value="<%= h(@student.number) %>" style="width: 100px;" />
+					<input type="text" id="number" name="number" class="text_field" value="<%= h(@number) %>" style="width: 100px;" />
 				</td>
 				
 				<td>
@@ -186,6 +187,7 @@
 					<label for="university">
 						学校<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="输入学校全称，在下选框中选择你的学校；若没有你的学校，请直接在输入框中填写你的学校全称。"></span>
 				</td>
 				<td colspan="2">
 					<input type="text" id="university" name="university" class="text_field" value="<%= h(@university) %>" style="width: 150px;" />
@@ -195,6 +197,7 @@
 					<label for="college">
 						学院<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="填写学院全称。"></span>
 				</td>
 				<td colspan="2">
 					<input type="text" id="college" name="college" class="text_field" value="<%= h(@college) %>" style="width: 150px;" />
@@ -206,6 +209,7 @@
 					<label for="major">
 						专业<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="填写专业全称；如果是双学位或多学位，可填写多个专业。"></span>
 				</td>
 				<td colspan="2">
 					<input type="text" id="major" name="major" class="text_field" value="<%= h(@major) %>" style="width: 150px;" />
@@ -215,6 +219,7 @@
 					<label for="job_major">
 						专业类别<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="选择最符合你专业的专业类别，以便更好的为你匹配岗位。"></span>
 				</td>
 				<td colspan="2">
 					<%=
@@ -280,12 +285,13 @@
 			</tr>
 			
 			<tr>
-				<td style="width: 60px;">
+				<td style="width: 75px;">
 					<label for="begin_at">
 						上岗时间<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="选择最近的可上岗时间；如只可以在寒暑假实习，请填写最近可开始实习的寒/暑假时间，并在其他说明中注明“参加寒暑假实习”。"></span>
 				</td>
-				<td>
+				<td style="width: 200px;">
 					<%
 						today = Date.today
 						begin_at = @intern_profile.begin_at || today
@@ -311,6 +317,7 @@
 					<label for="job_period">
 						工作期限<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="选择从上岗时间开始，可以连续工作的时间段。"></span>
 				</td>
 				<td>
 					<%=
@@ -329,6 +336,7 @@
 					<label for="job_workday">
 						每周工作时间<%= required_mark(false) %>
 					</label>
+					<span class="form_tip" title="选择在工作期限内，每周最少可工作的天数。"></span>
 				</td>
 				<td>
 					<%=
@@ -442,6 +450,8 @@
 					<label for="intention">
 						其他说明
 					</label>
+					<br />
+					<span>(300字以内)</span>
 				</td>
 				<td colspan="5">
 					<textarea id="intention" name="intention" class="text_field" rows="3" style="width: 500px; margin-left: 10px;"><%= h(@intern_profile.intention) %></textarea>
@@ -455,6 +465,8 @@
 					<label for="skill">
 						技能证书
 					</label>
+					
+					<span>(300字以内)</span>
 				</th>
 			</tr>
 			
@@ -471,6 +483,8 @@
 					<label for="experience">
 						以往工作/实习经历（包括获奖情况、社会实践、实习经历等）
 					</label>
+					
+					<span>(2000字以内)</span>
 				</th>
 			</tr>
 			
@@ -480,10 +494,6 @@
 				</td>
 			</tr>
 		</table>
-		
-		<div class="info_with_icon">
-			请尽量详细的填写，以便为您更好的匹配到适合的企业和岗位；打<%= required_mark(false) %>的项目为必填项。
-		</div>
 		
 		<div class="form_action">
 			<%= submit_tag "提交申请表", :class => "button" %>
@@ -741,6 +751,18 @@
 					}
 					else if(is_field_empty("major")) {
 						alert("请填写专业");
+						return false;
+					}
+					else if($("#intention").val().length > 300) {
+						alert("实习意向中的其他说明超过300字的长度限制");
+						return false;
+					}
+					else if($("#skill").val().length > 300) {
+						alert("技能证书超过300字的长度限制");
+						return false;
+					}
+					else if($("#experience").val().length > 2000) {
+						alert("以往工作/实习经历超过2000字的长度限制");
 						return false;
 					}
 					else if(!confirm("确定要提交么 ?")) {
