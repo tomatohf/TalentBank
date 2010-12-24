@@ -13,7 +13,7 @@
 			:partial => "/corporations/selects/industry",
 			:locals => {
 				:industry_category_id => industry_category[:id],
-				:industry_id => nil,
+				:industry_id => field2,
 				:field_id => "industry_#{Utils.get_unique_id}", :field_name => "industry",
 				:hide_label => false, :empty_label => "不限行业细分"
 			}

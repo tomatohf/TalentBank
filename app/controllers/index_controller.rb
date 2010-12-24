@@ -176,19 +176,126 @@ class IndexController < ApplicationController
     @student = Student.new(:school_id => School.get_school_info(@school.abbr)[0])
     @profile = StudentProfile.new
     @intern_profile = InternProfile.new
+    @wishes = []
     
-    @student.number = params[:number] && params[:number].strip
-    @student.number = "#{@school.intern_register_labels[:number_prefix]}#{@student.number}" unless @student.number.blank?
-    params[:birthmonth] = "#{params[:birthmonth_year]}-#{params[:birthmonth_month]}-#{params[:birthmonth_date]}"
-    @university = params[:university] && params[:university].strip
-    @college = params[:college] && params[:college].strip
-    @major = params[:major] && params[:major].strip
-    @allow_adjust = (params[:allow_adjust] == "true")
-    params[:begin_at] = "#{params[:begin_at_year]}-#{params[:begin_at_month]}-#{params[:begin_at_date]}"
+    @university = ""
+    @college = ""
+    @major = ""
+    @allow_adjust = true
     
-    StudentsController.helpers.fill_student_editable_fields(@student, params)
-    StudentsController.helpers.fill_student_profile(@profile, params)
-    StudentsController.helpers.fill_student_intern_profile(@intern_profile, params)
+    @universities = @school.universities.map { |u_id| University.find(u_id) }
+    @labels = @school.intern_register_labels
+    
+    if request.post?
+      @student.number = params[:number] && params[:number].strip
+      @student.number = "#{@labels[:number_prefix]}#{@student.number}" unless @student.number.blank?
+      
+      params[:birthmonth] = "#{params[:birthmonth_year]}-#{params[:birthmonth_month]}-#{params[:birthmonth_date]}"
+      @university = params[:university] && params[:university].strip
+      @college = params[:college] && params[:college].strip
+      @major = params[:major] && params[:major].strip
+      @allow_adjust = (params[:allow_adjust] == "true")
+      params[:begin_at] = "#{params[:begin_at_year]}-#{params[:begin_at_month]}-#{params[:begin_at_date]}"
+      params[:desc] = %Q!学校:#{@university}\n学院:#{@college}\n专业:#{@major}\n服从岗位调剂:#{@allow_adjust ? "是" : "否"}!
+      
+      university_model = @universities.detect { |u|
+        u[:name] == @university
+      }
+      params[:university_id] = university_model[:id] if university_model
+
+      StudentsController.helpers.fill_student_editable_fields(@student, params)
+      StudentsController.helpers.fill_student_profile(@profile, params)
+      StudentsController.helpers.fill_student_intern_profile(@intern_profile, params)
+      @wishes = params.keys.select { |key|
+        key =~ /aspect_\d+/
+      }.map { |key|
+        aspect = params[key]
+        index = key["aspect_".size .. -1]
+        
+        wish = case aspect
+          when "industry"
+            industry_category_id = params["industry_category_#{index}"]
+            industry_id = params["industry_#{index}"]
+            {
+              :field => industry_category_id.to_i,
+              :field2 => industry_id.to_i,
+              :wish => InternIndustryWish.new(
+                :industry_category_id => industry_category_id,
+                :industry_id => industry_id
+              )
+            }
+          when "job_category"
+            job_category_class_id = params["job_category_class_#{index}"]
+            job_category_id = params["job_category_#{index}"]
+            {
+              :field => job_category_class_id.to_i,
+              :field2 => job_category_id.to_i,
+              :wish => InternJobCategoryWish.new(
+                :job_category_class_id => job_category_class_id,
+                :job_category_id => job_category_id
+              )
+            }
+          when "corp_nature"
+            nature_id = params["corp_nature_#{index}"]
+            {
+              :field => nature_id.to_i,
+              :field2 => nil,
+              :wish => InternCorpNatureWish.new(:nature_id => nature_id)
+            }
+          when "job_district"
+            job_district_id = params["job_district_#{index}"]
+            {
+              :field => job_district_id.to_i,
+              :field2 => nil,
+              :wish => InternJobDistrictWish.new(
+                :job_district_id => job_district_id
+              )
+            }
+          when "corporation"
+            corporation_id = params["corporation_#{index}"]
+            job_id = params["job_#{index}"]
+            corporation = Corporation.new(
+              :name => params["corporation_name_#{index}"]
+            )
+            corporation.id = corporation_id
+            {
+              :field => corporation,
+              :field2 => job_id.to_i,
+              :corporation => InternCorporationWish.new(:corporation_id => corporation_id),
+              :job => InternJobWish.new(:job_id => job_id)
+            }
+        end
+        
+        wish[:aspect] = aspect
+        wish[:index] = index.to_i
+        
+        wish
+      }.sort { |x, y|
+        x[:index] <=> y[:index]
+      }
+      
+      @student.password = "111111"
+      @intern_profile.salary = 0
+      if @student.save
+        @profile.student_id = @student.id
+        @intern_profile.student_id = @student.id
+        
+        @profile.save
+        @intern_profile.save
+        
+        @wishes.each do |wish|
+          if wish[:aspect] == "corporation"
+            wish[:corporation].student_id = @student.id
+            wish[:job].student_id = @student.id
+            wish[:corporation].save
+            wish[:job].save
+          else
+            wish[:wish].student_id = @student.id
+            wish[:wish].save
+          end
+        end
+      end
+    end
     
     render :layout => "empty"
   end
@@ -218,19 +325,10 @@ class IndexController < ApplicationController
       @field = @field.to_i
     end
     
-    render :layout => false, :inline => %Q!
-      <tr class="wish">
-        <td colspan="4">
-          <%= render :partial => "/index/intern_wish/#{@aspect}", :locals => {:field => @field} %>
-        </td>
-        <td>
-          <input type="hidden" name="aspect" value="<%= @aspect %>" />
-          <a href="#" title="删除意向" class="none remove_wish_link">
-          	<img src="/images/teachers/delete_icon.gif" border="0" alt="删除意向" />
-          	删除</a>
-        </td>
-      </tr>
-    !
+    render :layout => false, :partial => "/index/intern_wish/wish", :locals => {
+      :aspect => @aspect,
+      :field => @field
+    }
   end
   
 end

@@ -13,7 +13,7 @@
 			:partial => "/teacher_corporation_jobs/selects/job_category",
 			:locals => {
 				:job_category_class_id => job_category_class[:id],
-				:job_category_id => nil,
+				:job_category_id => field2,
 				:field_id => "job_category_#{Utils.get_unique_id}", :field_name => "job_category",
 				:hide_label => false, :empty_label => "不限岗位细分"
 			}

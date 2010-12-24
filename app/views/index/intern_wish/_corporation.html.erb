@@ -1,7 +1,10 @@
+<% corporation_name = h(field.get_name) %>
+
 <input type="hidden" name="corporation" value="<%= field.id %>" />
+<input type="hidden" name="corporation_name" value="<%= corporation_name %>" />
 
 <label>公司:</label>
-<%= h(field.get_name) %>
+<%= corporation_name %>
 
 <span class="sep">»</span>
 
@@ -10,6 +13,6 @@
 <select class="dropdown_list" id="<%= field_id %>" name="job">
 	<option value="" selected="selected">不限岗位</option>
 	<% Job.list_from_corporation(field.id).each do |job| %>
-		<option value="<%= job.id %>"><%= h(job.get_name) %></option>
+		<option value="<%= job.id %>"<%= %Q! selected="selected"! if job.id == field2 %>><%= h(job.get_name) %></option>
 	<% end %>
 </select>

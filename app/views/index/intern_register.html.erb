@@ -11,7 +11,7 @@
 	<% end %>
 	<% if @student.errors.size > 0 %>
 		<p class="error_msg">
-			<%= list_model_validate_errors(@student) %>
+			<%= list_model_validate_errors(@student).gsub("学号", @labels[:number]) %>
 		</p>
 	<% end %>
 	<% if @profile.errors.size > 0 %>
@@ -27,10 +27,8 @@
 
 	<% form_tag "", :method => :post do %>
 	
-		<% labels = @school.intern_register_labels %>
-	
 		<div class="form_title">
-			<%= labels[:title] %>
+			<%= @labels[:title] %>
 		</div>
 
 		<table border="0" cellspacing="0" cellpadding="0">
@@ -103,7 +101,7 @@
 				
 				<td>
 					<label for="number">
-						<%= labels[:number] %><%= required_mark(false) %>
+						<%= @labels[:number] %><%= required_mark(false) %>
 					</label>
 				</td>
 				<td>
@@ -236,7 +234,7 @@
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<th colspan="6">
-					<%= labels[:intern] %>意向<%= required_mark(false) %>
+					<%= @labels[:intern] %>意向<%= required_mark(false) %>
 				</th>
 			</tr>
 			
@@ -347,7 +345,7 @@
 			</tr>
 			
 			<tr id="add_wish">
-				<td>
+				<td rowspan="<%= @wishes.size + 1 %>">
 					<label>
 						意向岗位<%= required_mark(false) %>
 					</label>
@@ -426,14 +424,27 @@
 				</td>
 			</tr>
 			
+			<% @wishes.reverse.each do |wish| %>
+				<%=
+					render(
+						:partial => "/index/intern_wish/wish",
+						:locals => {
+							:aspect => wish[:aspect],
+							:field => wish[:field],
+							:field2 => wish[:field2]
+						}
+					)
+				%>
+			<% end %>
+			
 			<tr>
 				<td style="width: 60px;">
-					<label for="desc">
+					<label for="intention">
 						其他说明
 					</label>
 				</td>
 				<td colspan="5">
-					<textarea id="desc" name="desc" class="text_field" rows="3" style="width: 500px; margin-left: 10px;"><%= h(@intern_profile.desc) %></textarea>
+					<textarea id="intention" name="intention" class="text_field" rows="3" style="width: 500px; margin-left: 10px;"><%= h(@intern_profile.intention) %></textarea>
 				</td>
 			</tr>
 		</table>
@@ -565,13 +576,7 @@
 					{
 						delay: 100,
 						minLength: 0,
-						source: [
-							<%=
-								@school.universities.map { |u_id|
-									%Q!"#{University.find(u_id)[:name]}"!
-								}.join(",")
-							%>
-						]
+						source: [<%= @universities.map { |u| %Q!"#{u[:name]}"! }.join(",") %>]
 					}
 				)
 			);
@@ -595,24 +600,17 @@
 					}
 				)
 			);
-
-			function add_wish(wish) {
-				var	add_wish_row = $("tr#add_wish"),
-					update_add_wish_row = function() {
-						var wish_count = $(".wish").length,
-							add_wish_link = add_wish_row.find("a.add_wish_link");
-							
-						add_wish_row.find("td:first").attr("rowspan", wish_count + 1);
-						if(wish_count < 50) {
-							add_wish_link.show();
-						}
-						else {
-							add_wish_link.hide();
-						}
-					},
-					unique_id = new Date().getTime();
-
-				wish.insertAfter(add_wish_row).find("a.remove_wish_link").unbind("click").click(
+			
+			function setup_wish(wish, index) {
+				$.each(
+					wish.find(":input"),
+					function(i, element) {
+						var input = $(element);
+						input.attr("name", input.attr("name") + "_" + (index+1));
+					}
+				);
+				
+				wish.find("a.remove_wish_link").unbind("click").click(
 					function() {
 						if(confirm("确定要删除么 ?")) {
 							wish.remove();
@@ -622,14 +620,32 @@
 						return false;
 					}
 				);
-				update_add_wish_row();
-				$.each(
-					wish.find(":input"),
-					function(i, element) {
-						var input = $(element);
-						input.attr("name", input.attr("name") + "_" + unique_id);
-					}
+				
+				return wish;
+			}
+			
+			function update_add_wish_row() {
+				var add_wish_row = $("tr#add_wish"),
+					wish_count = $("tr.wish").length,
+					add_wish_link = add_wish_row.find("a.add_wish_link");
+					
+				add_wish_row.find("td:first").attr("rowspan", wish_count + 1);
+				if(wish_count < 50) {
+					add_wish_link.show();
+				}
+				else {
+					add_wish_link.hide();
+				}
+			}
+
+			function add_wish(wish) {
+				var wish_index = $("tr.wish").length;
+				
+				setup_wish(
+					wish.insertAfter($("tr#add_wish")),
+					new Date().getTime()
 				);
+				update_add_wish_row();
 			}
 
 			$("a.add_wish_link").unbind("click").click(
@@ -655,6 +671,87 @@
 					}
 
 					return false;
+				}
+			);
+			
+			$.each(
+				$("tr.wish"),
+				function(i, element) {
+					setup_wish($(element), $("tr.wish").length - 1 - i);
+				}
+			);
+			
+			function is_field_empty(field_id) {
+				return $.trim($("#" + field_id).val()) == "";
+			}
+			
+			$("form:first").submit(
+				function() {
+					if(is_field_empty("name")) {
+						alert("请填写姓名");
+						return false;
+					}
+					else if(is_field_empty("gender")) {
+						alert("请选择性别");
+						return false;
+					}
+					else if(is_field_empty("birthmonth_year") || is_field_empty("birthmonth_month")) {
+						alert("请填写出生年月");
+						return false;
+					}
+					else if(is_field_empty("birthplace")) {
+						alert("请填写籍贯");
+						return false;
+					}
+					else if(is_field_empty("birthplace")) {
+						alert("请填写籍贯");
+						return false;
+					}
+					else if(is_field_empty("number")) {
+						alert("请填写<%= @labels[:number] %>");
+						return false;
+					}
+					else if(is_field_empty("edu_level")) {
+						alert("请选择学历");
+						return false;
+					}
+					else if(is_field_empty("phone")) {
+						alert("请填写手机");
+						return false;
+					}
+					else if(is_field_empty("email")) {
+						alert("请填写邮箱");
+						return false;
+					}
+					else if(is_field_empty("graduation_year")) {
+						alert("请选择毕业时间");
+						return false;
+					}
+					else if(is_field_empty("political_status")) {
+						alert("请选择政治面貌");
+						return false;
+					}
+					else if(is_field_empty("university")) {
+						alert("请填写学校");
+						return false;
+					}
+					else if(is_field_empty("college")) {
+						alert("请填写学院");
+						return false;
+					}
+					else if(is_field_empty("major")) {
+						alert("请填写专业");
+						return false;
+					}
+					else if(!confirm("确定要提交么 ?")) {
+						return false;
+					}
+				}
+			);
+			
+			$("#number").unbind("change").change(
+				function() {
+					
 				}
 			);
 
