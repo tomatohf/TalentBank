@@ -220,7 +220,8 @@ class IndexController < ApplicationController
               :wish => InternIndustryWish.new(
                 :industry_category_id => industry_category_id,
                 :industry_id => industry_id
-              )
+              ),
+              :key => "#{industry_category_id}-#{industry_id}"
             }
           when "job_category"
             job_category_class_id = params["job_category_class_#{index}"]
@@ -231,14 +232,16 @@ class IndexController < ApplicationController
               :wish => InternJobCategoryWish.new(
                 :job_category_class_id => job_category_class_id,
                 :job_category_id => job_category_id
-              )
+              ),
+              :key => "#{job_category_class_id}-#{job_category_id}"
             }
           when "corp_nature"
             nature_id = params["corp_nature_#{index}"]
             {
               :field => nature_id.to_i,
               :field2 => nil,
-              :wish => InternCorpNatureWish.new(:nature_id => nature_id)
+              :wish => InternCorpNatureWish.new(:nature_id => nature_id),
+              :key => nature_id
             }
           when "job_district"
             job_district_id = params["job_district_#{index}"]
@@ -247,7 +250,8 @@ class IndexController < ApplicationController
               :field2 => nil,
               :wish => InternJobDistrictWish.new(
                 :job_district_id => job_district_id
-              )
+              ),
+              :key => job_district_id
             }
           when "corporation"
             corporation_id = params["corporation_#{index}"]
@@ -260,7 +264,9 @@ class IndexController < ApplicationController
               :field => corporation,
               :field2 => job_id.to_i,
               :corporation => InternCorporationWish.new(:corporation_id => corporation_id),
-              :job => InternJobWish.new(:job_id => job_id)
+              :job => InternJobWish.new(:job_id => job_id),
+              :corporation_key => corporation_id,
+              :job_key => job_id
             }
         end
         
@@ -282,15 +288,36 @@ class IndexController < ApplicationController
         @profile.save
         @intern_profile.save
         
+        saved_keys = {}
+        is_key_saved_by_aspect = Proc.new { |aspect, key|
+          keys = saved_keys[aspect] || []
+          keys.include?(key)
+        }
+        add_saved_key_by_aspect = Proc.new { |aspect, key|
+          keys = saved_keys[aspect] || []
+          keys << key
+          saved_keys[aspect] = keys
+        }
         @wishes.each do |wish|
           if wish[:aspect] == "corporation"
             wish[:corporation].student_id = @student.id
             wish[:job].student_id = @student.id
-            wish[:corporation].save
-            wish[:job].save
+            
+            unless is_key_saved_by_aspect.call("corporation", wish[:corporation_key])
+              add_saved_key_by_aspect.call(
+                "corporation",
+                wish[:corporation_key]
+              ) if wish[:corporation].save rescue false
+            end
+            unless is_key_saved_by_aspect.call("job", wish[:job_key])
+              add_saved_key_by_aspect.call("job", wish[:job_key]) if wish[:job].save rescue false
+            end
           else
             wish[:wish].student_id = @student.id
-            wish[:wish].save
+            
+            unless is_key_saved_by_aspect.call(wish[:aspect], wish[:key])
+              add_saved_key_by_aspect.call(wish[:aspect], wish[:key]) if wish[:wish].save rescue false
+            end
           end
         end
         
@@ -322,7 +349,15 @@ class IndexController < ApplicationController
     return render(:nothing => true) if @field.blank?
     
     if @aspect == "corporation"
-      @field = Corporation.school_search_first_by_name(@field, School.get_school_info(@school.abbr)[0])
+      school_id = School.get_school_info(@school.abbr)[0]
+      
+      found = Corporation.school_search_first_by_name(@field, school_id)
+      @field = if found && found.name == @field
+        found
+      else
+        Corporation.get_from_name(school_id, @field)
+      end
+                
       return render(
         :text => %Q!<script type="text/javascript">alert("不存在名称为 #{params[:field]} 的公司");</script>!
       ) unless @field

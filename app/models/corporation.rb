@@ -55,10 +55,10 @@ class Corporation < ActiveRecord::Base
   validates_presence_of :password, :message => "请输入 密码"
   
   validates_length_of :uid, :maximum => 25, :message => "用户名 超过长度限制", :allow_nil => false
-  
   validates_length_of :name, :maximum => 50, :message => "企业名称 超过长度限制", :allow_nil => true
   
   validates_uniqueness_of :uid, :case_sensitive => false, :scope => :school_id, :message => "用户名 已经存在"
+  validates_uniqueness_of :name, :case_sensitive => false, :scope => :school_id, :message => "企业名称 已经存在"
   
   attr_accessor :password_confirmation
   validates_confirmation_of :password, :message => "密码 与 确认密码 不相同"
@@ -75,6 +75,11 @@ class Corporation < ActiveRecord::Base
   
   def self.get_from_uid(abbr, uid)
     self.find(:first, :conditions => ["school_id = ? and uid = ?", School.get_school_info(abbr)[0], uid])
+  end
+  
+  
+  def self.get_from_name(school_id, name)
+    self.find(:first, :conditions => ["school_id = ? and name = ?", school_id, name])
   end
   
   

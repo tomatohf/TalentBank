@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 26) do
+ActiveRecord::Schema.define(:version => 27) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(:version => 26) do
   end
 
   add_index "corporations", ["school_id", "created_at"], :name => "index_corporations_on_school_id_and_created_at"
+  add_index "corporations", ["school_id", "name"], :name => "index_corporations_on_school_id_and_name", :unique => true
   add_index "corporations", ["school_id", "uid"], :name => "index_corporations_on_school_id_and_uid", :unique => true
   add_index "corporations", ["updated_at"], :name => "index_corporations_on_updated_at"
 
