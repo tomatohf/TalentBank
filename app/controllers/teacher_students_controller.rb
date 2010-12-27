@@ -25,10 +25,14 @@ class TeacherStudentsController < ApplicationController
   def index
     @number = params[:n] && params[:n].strip
     
+    page = params[:page]
+    page = 1 unless page =~ /\d+/
+    
     @students = unless @number.blank?
-      Student.search(
-        :conditions => {:number => @number},
-        :with => {:school_id => @teacher.school_id},
+      Student.paginate(
+        :page => page,
+        :per_page => Student_Page_Size,
+        :conditions => ["school_id = ? and number = ?", @teacher.school_id, @number],
         :include => request.xhr? ? [] : [:resumes]
       )
     else
@@ -47,13 +51,18 @@ class TeacherStudentsController < ApplicationController
       else
         nil
       end
+      @gender = if (ge = params[:ge] && params[:ge].strip) == "t"
+        true
+      elsif ge == "f"
+        false
+      else
+        nil
+      end
       
       includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
       
-      page = params[:page]
-      page = 1 unless page =~ /\d+/
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
-          @graduation_year.blank? && @name.blank? && @complete.nil?
+          @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil?
         Student.paginate(
           :page => page,
           :per_page => Student_Page_Size,
@@ -71,7 +80,8 @@ class TeacherStudentsController < ApplicationController
           :major_id => @major_id,
           :edu_level_id => @edu_level_id,
           :graduation_year => @graduation_year,
-          :complete => @complete
+          :complete => @complete,
+          :gender => @gender
         )
       end
     end

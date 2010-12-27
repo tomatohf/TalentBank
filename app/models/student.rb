@@ -39,6 +39,13 @@ class Student < ActiveRecord::Base
     has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at, created_at
     has complete
     
+    has profile.phone, :as => :phone
+    has profile.email, :as => :email
+    has profile.address, :as => :address
+    has profile.zip, :as => :zip
+    has "IFNULL(student_profiles.gender, 2)", :type => :integer, :as => :gender
+    has profile.political_status_id, :as => :political_status_id
+    
     has intern_profile.begin_at, :as => :intern_begin_at
     has intern_profile.period_id, :as => :intern_period_id
     has intern_profile.workday_id, :as => :intern_workday_id
@@ -181,6 +188,7 @@ class Student < ActiveRecord::Base
   def self.school_search(name, school_id, includes, page = 1, per_page = 10, options = {})
     filters = {:school_id => school_id}
     filters.merge!(:complete => options[:complete]) unless options[:complete].nil?
+    filters.merge!(:gender => options[:gender] ? 1 : 0) unless options[:gender].nil?
     [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?
@@ -206,6 +214,7 @@ class Student < ActiveRecord::Base
     filters[:intern_workday_id] = job.workday_id .. JobWorkday.data.last[:id] unless job.workday_id.blank?
     filters[:edu_level_id] = EduLevel.data.first[:id] .. job.edu_level_id unless job.edu_level_id.blank?
     filters[:graduation_year] = JobGraduation.get_graduation_year_range(job.graduation_id) unless job.graduation_id.blank?
+    filters[:gender] = job.gender ? 1 : 0 unless job.gender.nil?
     filters[:intern_major_id] = job.major_id unless job.major_id.blank?
     filters[:intern_log_latest_result_id] = InternLogEventResult.find_by_intern_status(:unemployed).map { |result|
       result[:id]

@@ -109,6 +109,14 @@ class TeacherCorporationJobsController < ApplicationController
     @job.workday_id = params[:jw].strip unless params[:jw].nil?
     @job.edu_level_id = params[:el].strip unless params[:el].nil?
     @job.graduation_id = params[:jg].strip unless params[:jg].nil?
+    @job.gender = case params[:g]
+      when "true"
+        true
+      when "false"
+        false
+      else
+        nil
+    end
     @job.major_id = params[:jm].strip unless params[:jm].nil?
     
     

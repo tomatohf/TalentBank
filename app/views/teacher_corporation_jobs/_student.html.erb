@@ -24,6 +24,9 @@
 	<td valign="top">
 		<div>
 			<span class="student_name"><%= h(student.get_name) %></span>
+			<span class="student_gender">
+				<%= profile.gender ? "(男)" : "(女)" if profile && !profile.gender.nil? %>
+			</span>
 			<a href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" target="_blank" class="none">
 				<%= h(student.number) %></a>
 		</div>

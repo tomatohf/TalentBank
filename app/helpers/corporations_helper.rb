@@ -50,6 +50,14 @@ module CorporationsHelper
     job.workday_id = params[:job_workday]
     job.edu_level_id = params[:edu_level]
     job.graduation_id = params[:job_graduation]
+    job.gender = case params[:gender]
+      when "true"
+        true
+      when "false"
+        false
+      else
+        nil
+    end
     job.major_id = params[:job_major]
     job.requirement = params[:requirement] && params[:requirement].strip
     job.recruit_end_at = params[:recruit_end_at] && params[:recruit_end_at].strip

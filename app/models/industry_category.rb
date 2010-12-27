@@ -2,7 +2,7 @@ class IndustryCategory < HashModel::Simple
   
   def self.data
     [
-      {:id => 10, :name => "计算机/物联网/通信/电子"},
+      {:id => 10, :name => "计算机/互联网/通信/电子"},
       {:id => 20, :name => "会计/金融/银行/保险"},
       {:id => 30, :name => "贸易/消费/制造/营运"},
       {:id => 40, :name => "制药/医疗"},

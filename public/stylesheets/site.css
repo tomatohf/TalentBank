@@ -1174,8 +1174,10 @@ img.notification_icon {
 .matched_student .student_name {
 	font-size: 14px;
 	font-weight: bold;
-	margin-right: 10px;
 	color: #000000;
+}
+.matched_student .student_gender {
+	margin: 0px 5px;
 }
 .matched_student .profile,
 .matched_student .intern_profile,

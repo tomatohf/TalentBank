@@ -37,7 +37,7 @@
 				<% end %>
 			<% end %>
 			
-			<td style="width: 100px;">操作</td>
+			<td style="width: 75px;">操作</td>
 		</tr>
 	</thead>
 	
@@ -68,8 +68,7 @@
 					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/edit" class="none">
 						编辑</a>
 
-					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank" style="margin: 0px 8px;">
-						查看</a>
+					<span style="margin: 0px 5px; color: #888888;">|</span>
 
 					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/match" class="none" target="_blank">
 						匹配</a>

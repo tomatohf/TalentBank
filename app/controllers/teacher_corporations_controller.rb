@@ -23,6 +23,7 @@ class TeacherCorporationsController < ApplicationController
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
+    
     @corporations = unless @uid.blank?
       if @uid.to_i > 0 && (corps = Corporation.paginate(
         :page => page,
@@ -31,9 +32,10 @@ class TeacherCorporationsController < ApplicationController
       )).size > 0
         corps
       else
-        Corporation.search(
-          :conditions => {:uid => @uid},
-          :with => {:school_id => @teacher.school_id}
+        Corporation.paginate(
+          :page => page,
+          :per_page => Corporation_Page_Size,
+          :conditions => ["school_id = ? and uid = ?", @teacher.school_id, @uid]
         )
       end
     else

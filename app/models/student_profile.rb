@@ -18,7 +18,8 @@ class StudentProfile < ActiveRecord::Base
   
   
   after_save { |student_profile|
-    Student.renew_resume_updated_at(student_profile.student_id, student_profile.updated_at)
+    student_profile.student.renew_updated_at(student_profile.updated_at)
+    student_profile.student.renew_resume_updated_at(student_profile.updated_at)
     
     StudentProfileCopy.copy_profile(student_profile)
   }
