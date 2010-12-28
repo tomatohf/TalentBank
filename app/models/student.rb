@@ -39,10 +39,18 @@ class Student < ActiveRecord::Base
     has school_id, university_id, college_id, major_id, edu_level_id, graduation_year, updated_at, created_at
     has complete
     
-    has profile.phone, :as => :phone
-    has profile.email, :as => :email
-    has profile.address, :as => :address
-    has profile.zip, :as => :zip
+    indexes profile.phone, :as => :phone
+    indexes profile.email, :as => :email
+    indexes profile.address, :as => :address
+    indexes profile.zip, :as => :zip
+    
+    indexes intern_profile.birthplace, :as => :intern_birthplace
+    indexes intern_profile.birthmonth, :as => :intern_birthmonth
+    indexes intern_profile.intention, :as => :intern_intention
+    indexes intern_profile.skill, :as => :intern_skill
+    indexes intern_profile.experience, :as => :intern_experience
+    indexes intern_profile.desc, :as => :intern_desc
+    
     has "IFNULL(student_profiles.gender, 2)", :type => :integer, :as => :gender
     has profile.political_status_id, :as => :political_status_id
     
@@ -231,18 +239,21 @@ class Student < ActiveRecord::Base
     blacklists[:intern_blacklist_job_id] = job.id
     blacklists[:intern_salary] = (job.salary.to_i + 1) .. 1010 unless job.salary.to_i > 1000
     
-    keywords = [%Q!"j0j"!]
-    keywords << %Q!"j#{corporation_profile.industry_category_id}y"! unless corporation_profile.industry_category_id.blank?
-    keywords << %Q!"j#{corporation_profile.industry_id}i"! unless corporation_profile.industry_id.blank?
-    keywords << %Q!"j#{corporation_profile.nature_id}n"! unless corporation_profile.nature_id.blank?
-    keywords << %Q!"j#{job.category_class_id}s"! unless job.category_class_id.blank?
-    keywords << %Q!"j#{job.category_id}c"! unless job.category_id.blank?
-    keywords << %Q!"j#{job.district_id}d"! unless job.district_id.blank?
-    keywords << %Q!"j#{job.corporation_id}o"!
-    keywords << %Q!"j#{job.id}b"!
+    wishes = [%Q!"j0j"!]
+    wishes << %Q!"j#{corporation_profile.industry_category_id}y"! unless corporation_profile.industry_category_id.blank?
+    wishes << %Q!"j#{corporation_profile.industry_id}i"! unless corporation_profile.industry_id.blank?
+    wishes << %Q!"j#{corporation_profile.nature_id}n"! unless corporation_profile.nature_id.blank?
+    wishes << %Q!"j#{job.category_class_id}s"! unless job.category_class_id.blank?
+    wishes << %Q!"j#{job.category_id}c"! unless job.category_id.blank?
+    wishes << %Q!"j#{job.district_id}d"! unless job.district_id.blank?
+    wishes << %Q!"j#{job.corporation_id}o"!
+    wishes << %Q!"j#{job.id}b"!
+    wishes = wishes.join("|")
+    
+    keyword = options[:keyword]
     
     self.search(
-      keywords.join("|"),
+      keyword.blank? ? wishes : "#{keyword} (#{wishes})",
       :page => page, :per_page => 10,
       :match_mode => :extended2,
       :order => "@weight DESC",

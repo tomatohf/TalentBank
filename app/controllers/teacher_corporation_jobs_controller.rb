@@ -121,6 +121,7 @@ class TeacherCorporationJobsController < ApplicationController
     
     
     @not_only_unemployed = (params[:not_only_unemployed] == "true")
+    @keyword = params[:kw] && params[:kw].strip
     
     
     @page = params[:page]
@@ -128,7 +129,8 @@ class TeacherCorporationJobsController < ApplicationController
     @students = Student.job_search(
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile],
-      :only_unemployed => !@not_only_unemployed
+      :only_unemployed => !@not_only_unemployed,
+      :keyword => @keyword
     )
     @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])
     
