@@ -1214,7 +1214,7 @@ img.notification_icon {
 	color: #999999;
 }
 .matched_student .actions {
-	width: 100px;
+	width: 80px;
 }
 .matched_student .actions a, .matched_student .actions div {
 	display: block;
