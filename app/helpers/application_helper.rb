@@ -38,7 +38,7 @@ module ApplicationHelper
       # :outer_window => 1, # how many links are around the first and the last page (default: 1)
       :class => params.delete(:class) || "pagination", # CSS class name for the generated DIV (default: "pagination")
       :params => params # additional parameters when generating pagination links (eg. :controller => "foo", :action => nil)
-    )
+    ) if collection && collection.size > 0
   end
   
   

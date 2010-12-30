@@ -50,7 +50,7 @@ module StudentsHelper
     log.job_id = job && job.id
     log.event_id = params[:event]
     log.result_id = params[:result]
-    log.occur_at = Time.parse(params[:occur_at])
+    log.occur_at = params[:occur_at]
   end
   
 end
