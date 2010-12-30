@@ -775,9 +775,20 @@
 				}
 			);
 			
-			$("#number").unbind("change").change(
+			// to check presence
+			$("#name, #number, #phone, #email").unbind("change").change(
 				function() {
-					
+					$.post(
+						"/index/check_presence",
+						{
+							name: $(this).attr("id"),
+							value: $(this).val()
+						},
+						function(data) {
+							$("body").append(data);
+						},
+						"html"
+					);
 				}
 			);
 

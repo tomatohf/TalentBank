@@ -370,6 +370,26 @@ class IndexController < ApplicationController
       :field => @field
     }
   end
+  def check_presence
+    name = params[:name] && params[:name].strip
+    value = params[:value] && params[:value].strip
+    
+    if name == "phone" && !value.blank? && Student.get_from_number(@school.abbr, value)
+      render :text => %Q!
+        <script type="text/javascript">
+          window.setTimeout(
+            function() {
+              alert("你的信息已经存在，无需再提交申请。\\n页面将跳转至见习行动首页。\\n\\n有任何疑问可通过咨询电话：021-6051-7701 与我们联系。\\n\\n工作时间：周一至周五 9:30-18:00");
+              window.location.href = "http://www.51cy.sh.cn/expo2010";
+            },
+            3000
+          );
+        </script>
+      !
+    else
+      render :nothing => true
+    end
+  end
   def intern_register_success
     @icon = "intern_register_success.gif"
     @text = %Q!
