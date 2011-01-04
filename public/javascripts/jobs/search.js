@@ -136,7 +136,7 @@ function add_inform_interview_log(student_id) {
 				
 				// check occur_at field
 				var occur_at_field = form.find("input#occur_at");
-				if($.trim(occur_at_field.val()) == "") {
+				if(!$.trim(occur_at_field.val()).match(/^\d{2,4}-\d{1,2}-\d{1,2}\s\d{1,2}/i)) {
 					occur_at_field.siblings("div.info_with_icon").css("color", "#EE0000");
 					return;
 				}

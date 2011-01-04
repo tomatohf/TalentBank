@@ -2,6 +2,14 @@
 	titles = counts.titles
 	
 	cells = Proc.new { |keys|
+		ids = keys.map { |key| %Q!'#{key}'! }.join(", ")
+		%Q!
+			<td style="color: #aaaaaa; word-spacing: 5px;">
+				<a href="#" onclick="toggle_cells([#{ids}], true); return false;" class="none">全选</a>
+				<a href="#" onclick="toggle_cells([#{ids}], false); return false;" class="none">不选</a>
+				»
+			</td>
+		! +
 		keys.map { |key|
 			%Q!
 				<td>
@@ -28,4 +36,19 @@
 			</td>
 		</tr>
 	</table>
+	<% content_for :scripts do %>
+		<script type="text/javascript">
+			function toggle_cells(cell_ids, selected) {
+				$.each(
+					cell_ids,
+					function(i, cell_id) {
+						var checkbox = $("#" + cell_id);
+						if(checkbox.length > 0) {
+							checkbox.get(0).checked = selected;
+						}
+					}
+				);
+			}
+		</script>
+	<% end %>
 <% end %>
