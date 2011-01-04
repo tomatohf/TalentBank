@@ -116,7 +116,7 @@ class TeacherCorporationJobsController < ApplicationController
         false
       else
         nil
-    end
+    end unless params[:g].nil?
     @job.major_id = params[:jm].strip unless params[:jm].nil?
     
     
