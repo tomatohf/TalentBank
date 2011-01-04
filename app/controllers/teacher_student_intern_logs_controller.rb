@@ -131,7 +131,7 @@ class TeacherStudentInternLogsController < ApplicationController
   
   def save_log(log)
     job = Job.try_find(params[:job])
-    job = nil unless @teacher.school_id == (job.corporation && job.corporation.school_id)
+    job = nil unless @teacher.school_id == (job && job.corporation && job.corporation.school_id)
     StudentsController.helpers.fill_student_intern_log(log, params, job)
     
     log_saved = log.save

@@ -61,7 +61,7 @@ class InternLog < ActiveRecord::Base
   
   
   def self.intern_begin_at
-    "2008-10-01"
+    Rails.env.production? ? "2010-10-01" : "2008-10-01"
   end
   
   

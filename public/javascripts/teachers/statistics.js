@@ -1,4 +1,5 @@
 var range_date_format = "y年m月d日";
+var short_year_cutoff = 80;
 var range_splitter = "-";
 
 var period_date_format = "yymmdd";
@@ -235,8 +236,8 @@ function change_period() {
 		var from = null;
 		var to = null;
 		try {
-			from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]));
-			to = $.datepicker.parseDate(range_date_format, $.trim(ranges[1]));
+			from = $.datepicker.parseDate(range_date_format, $.trim(ranges[0]), {shortYearCutoff: short_year_cutoff});
+			to = $.datepicker.parseDate(range_date_format, $.trim(ranges[1]), {shortYearCutoff: short_year_cutoff});
 		}
 		catch(e) {
 			from = null;
@@ -596,8 +597,8 @@ function init_date_range() {
 	
 	try {
 		var ranges = $("input#period").val().split(range_splitter);
-		from = $.datepicker.parseDate(period_date_format, $.trim(ranges[0]));
-		to = $.datepicker.parseDate(period_date_format, $.trim(ranges[1]));
+		from = $.datepicker.parseDate(period_date_format, $.trim(ranges[0]), {shortYearCutoff: short_year_cutoff});
+		to = $.datepicker.parseDate(period_date_format, $.trim(ranges[1]), {shortYearCutoff: short_year_cutoff});
 	}
 	catch(e) {
 		from = null;
