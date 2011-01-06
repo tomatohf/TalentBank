@@ -334,7 +334,7 @@ module Utils
             :updated_at => from_time..to_time
           }.merge(options[:with] || {}),
           :include => options[:includes] || []
-        )
+        ).compact
       end
       
     end

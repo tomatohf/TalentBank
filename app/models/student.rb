@@ -211,7 +211,7 @@ class Student < ActiveRecord::Base
       :field_weights => {},
       :with => filters,
       :include => includes
-    )
+    ).compact
   end
   
   
@@ -270,7 +270,7 @@ class Student < ActiveRecord::Base
       :with => filters,
       :without => blacklists,
       :include => options[:include] || []
-    )
+    ).compact
   end
   
   

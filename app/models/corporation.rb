@@ -102,7 +102,7 @@ class Corporation < ActiveRecord::Base
       :order => "@weight DESC, updated_at DESC",
       :field_weights => {},
       :with => filters
-    )
+    ).compact
   end
   
   

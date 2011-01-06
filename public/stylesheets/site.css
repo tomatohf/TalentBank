@@ -404,6 +404,7 @@ a.none:hover {
 .horizontal_nav {
 	background: transparent url(/images/ui/horizontal_nav_bg.gif) repeat-x scroll 0 0;
 	height: 26px;
+	border: 1px solid #ddd;
 	margin: 10px 0px 15px;
 	padding: 6px 10px;
 	position: relative;

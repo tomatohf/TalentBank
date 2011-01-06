@@ -162,7 +162,7 @@ class Resume < ActiveRecord::Base
       :include => [
         {:student => :job_photo}
       ]
-    )
+    ).compact
   end
   
   def self.weights
