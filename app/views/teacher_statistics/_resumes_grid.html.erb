@@ -16,7 +16,7 @@
 		</thead>
 		
 		<tbody>
-			<%= render :partial => "viewed_resume", :collection => records %>
+			<%= render :partial => "viewed_resume", :collection => records.compact %>
 		</tbody>
 	</table>
 	

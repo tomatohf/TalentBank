@@ -13,7 +13,7 @@
 		</thead>
 		
 		<tbody>
-			<%= render :partial => "intern_log", :collection => records %>
+			<%= render :partial => "intern_log", :collection => records.compact %>
 		</tbody>
 	</table>
 	

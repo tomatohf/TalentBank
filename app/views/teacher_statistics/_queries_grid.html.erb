@@ -16,7 +16,7 @@
 		</thead>
 		
 		<tbody>
-			<%= render :partial => "query", :collection => records %>
+			<%= render :partial => "query", :collection => records.compact %>
 		</tbody>
 	</table>
 	

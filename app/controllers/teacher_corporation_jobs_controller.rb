@@ -173,7 +173,7 @@ class TeacherCorporationJobsController < ApplicationController
       :order => "@weight DESC, occur_at DESC",
       :with => filters,
       :include => [:student, :teacher]
-    ).compact
+    )
   end
   
   

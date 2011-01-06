@@ -27,7 +27,7 @@ class TeacherStatisticsController < ApplicationController
       :order => "@weight DESC, updated_at DESC",
       :with => {:school_id => @teacher.school_id},
       :include => [:corporation]
-    ).compact
+    )
   end
   
   def viewing
@@ -40,7 +40,7 @@ class TeacherStatisticsController < ApplicationController
       :order => "@weight DESC, updated_at DESC",
       :with => {:school_id => @teacher.school_id},
       :include => [:corporation, {:resume => [:student]}]
-    ).compact
+    )
   end
   
   
@@ -547,7 +547,7 @@ class TeacherStatisticsController < ApplicationController
       :order => "@weight DESC, occur_at DESC",
       :with => {:school_id => @teacher.school_id},
       :include => [:student, {:job => :corporation}, :teacher]
-    ).compact
+    )
   end
   
   
