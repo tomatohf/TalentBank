@@ -291,7 +291,7 @@ class Student < ActiveRecord::Base
     self.class.mark_calling(self.id, teacher_id)
   end
   def self.mark_calling(student_id, teacher_id)
-    Rails.cache.write(self.calling_mark_key(student_id), teacher_id, :expires_in => Cache_TTL[:short])
+    Rails.cache.write(self.calling_mark_key(student_id), teacher_id, :expires_in => Cache_TTL[:normal])
   end
   
   def clear_calling_mark

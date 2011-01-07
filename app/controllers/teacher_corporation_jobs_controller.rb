@@ -157,21 +157,16 @@ class TeacherCorporationJobsController < ApplicationController
   
   
   def intern_logs
-    filters = {
-      :school_id => @teacher.school_id,
-      :job_id => @job.id
-    }
-    filters[:event_id] = params[:event] unless params[:event].blank?
-    filters[:result_id] = params[:result] unless params[:result].blank?
-    
     page = params[:page]
     page = 1 unless page =~ /\d+/
-    @intern_logs = InternLog.search(
+    @intern_logs = InternLog.paginate(
       :page => page,
       :per_page => Intern_Log_Page_Size,
-      :match_mode => InternLog::Search_Match_Mode,
-      :order => "@weight DESC, occur_at DESC",
-      :with => filters,
+      :conditions => [
+        "job_id = ? and event_id = ? and result_id = ?",
+        @job.id, params[:event], params[:result]
+      ],
+      :order => "occur_at DESC",
       :include => [:student, :teacher]
     )
   end

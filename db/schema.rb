@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 28) do
+ActiveRecord::Schema.define(:version => 29) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(:version => 28) do
     t.datetime "updated_at"
   end
 
+  add_index "intern_logs", ["job_id", "event_id", "result_id", "occur_at"], :name => "index_intern_logs_on_job_and_event_and_result_and_occur"
   add_index "intern_logs", ["student_id", "occur_at"], :name => "index_intern_logs_on_student_id_and_occur_at"
   add_index "intern_logs", ["updated_at"], :name => "index_intern_logs_on_updated_at"
 
