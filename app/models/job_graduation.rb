@@ -16,11 +16,11 @@ class JobGraduation < HashModel::Simple
     
     case graduation_id
     when 20
-      2006 .. year
+      2006 .. (year - 1)
     when 30
       year
     when 40
-      year .. (year + 10)
+      (year + 1) .. (year + 10)
     else
       raise "Invalid Job Graduation Id"
     end
