@@ -40,6 +40,17 @@
 					
 					<tr>
 						<td>
+							岗位状态:
+						</td>
+
+						<td>
+							<% intern_status = CorporationInternStatus.find(@corporation.intern_status_id) %>
+							<%= intern_status && intern_status[:label] %>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
 							企业用户名:
 						</td>
 

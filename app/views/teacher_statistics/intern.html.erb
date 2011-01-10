@@ -106,7 +106,7 @@
 			<thead>
 				<tr>
 					<td><%= dataset[:title] %></td>
-					<td colspan="2">人数</td>
+					<td colspan="2"><%= dataset[:unit] || "人数" %></td>
 					<% if @compared_from %>
 						<td colspan="2">对比数</td>
 						<td>变化率</td>

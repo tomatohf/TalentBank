@@ -45,6 +45,7 @@ class TeacherCorporationsController < ApplicationController
       @province_id = params[:p] && params[:p].strip
       @industry_category_id = params[:ic] && params[:ic].strip
       @industry_id = params[:i] && params[:i].strip
+      @intern_status_id = params[:is] && params[:is].strip
       
       @keyword = params[:k] && params[:k].strip
       
@@ -58,7 +59,8 @@ class TeacherCorporationsController < ApplicationController
       
       if @district_id.blank? && @nature_id.blank? && @size_id.blank? &&
         @industry_category_id.blank? && @industry_id.blank? &&
-        @province_id.blank? && @keyword.blank? && @allow_query.nil?
+        @province_id.blank? && @keyword.blank? && @allow_query.nil? &&
+        @intern_status_id.blank?
         Corporation.paginate(
           :page => page,
           :per_page => Corporation_Page_Size,
@@ -76,6 +78,7 @@ class TeacherCorporationsController < ApplicationController
           :size_id => @size_id,
           :industry_category_id => @industry_category_id,
           :industry_id => @industry_id,
+          :intern_status_id => @intern_status_id,
           :province_id => @province_id
         )
       end
@@ -104,8 +107,6 @@ class TeacherCorporationsController < ApplicationController
   def create
     @corporation = Corporation.new(:school_id => @teacher.school_id)
     
-    @corporation.teacher_id = params[:teacher] && params[:teacher].strip
-    
     @corporation.uid = params[:uid] && params[:uid].strip
     @corporation.password = params[:password] && params[:password].strip
     @corporation.allow_query = (params[:allow_query] == "true")
@@ -127,6 +128,7 @@ class TeacherCorporationsController < ApplicationController
     @profile = CorporationProfile.get_record(@corporation.id)
     
     @corporation.teacher_id = params[:teacher] && params[:teacher].strip
+    @corporation.intern_status_id = params[:intern_status] && params[:intern_status].strip
     
     @corporation.uid = params[:uid] && params[:uid].strip
     @corporation.name = params[:name] && params[:name].strip

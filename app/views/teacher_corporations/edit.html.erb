@@ -52,6 +52,27 @@
 		
 		<tr>
 			<td>
+				<label for="intern_status">
+					岗位状态
+				</label>
+			</td>
+
+			<td>
+				<%=
+					render(
+						:partial => "/corporations/selects/intern_status",
+						:locals => {
+							:intern_status_id => @corporation.intern_status_id,
+							:field_id => "intern_status", :field_name => "intern_status",
+							:hide_label => true, :empty_label => ""
+						}
+					)
+				%>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
 				<label for="uid">
 					企业用户名<%= required_mark %>
 				</label>

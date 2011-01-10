@@ -27,6 +27,7 @@ class Corporation < ActiveRecord::Base
     
     
     has school_id, allow_query, updated_at, created_at
+    has intern_status_id
     
     has profile.job_district_id, :as => :job_district_id
     has profile.nature_id, :as => :nature_id
@@ -88,7 +89,8 @@ class Corporation < ActiveRecord::Base
     filters.merge!(:allow_query => options[:allow_query]) unless options[:allow_query].nil?
     [
       :job_district_id, :nature_id, :size_id,
-      :industry_category_id, :industry_id, :province_id
+      :industry_category_id, :industry_id, :province_id,
+      :intern_status_id
     ].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?

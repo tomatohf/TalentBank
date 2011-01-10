@@ -125,6 +125,18 @@
 			
 			<div>
 				<span class="field">
+					<%=
+						render(
+							:partial => "/corporations/selects/intern_status",
+							:locals => {
+								:intern_status_id => @intern_status_id,
+								:field_id => "intern_status", :field_name => "is"
+							}
+						)
+					%>
+				</span>
+				
+				<span class="field">
 					<label for="keyword">
 						关键词:
 					</label>

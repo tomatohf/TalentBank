@@ -581,6 +581,16 @@ class TeacherStatisticsController < ApplicationController
       :with => filters,
       :period_key => :created_at
     )
+    corporation_count = Corporation.period_total_count(
+      @teacher.school_id, intern_begin_at_time, @to,
+      :with => filters,
+      :period_key => :created_at
+    )
+    compared_corporation_count = @compared_from && Corporation.period_total_count(
+      @teacher.school_id, intern_begin_at_time, compared_to,
+      :with => filters,
+      :period_key => :created_at
+    )
     @total_datasets = [
       {
         :title => "学生 总数",
@@ -589,16 +599,8 @@ class TeacherStatisticsController < ApplicationController
       },
       {
         :title => "企业 总数",
-        :count => @corporation_count = Corporation.period_total_count(
-          @teacher.school_id, intern_begin_at_time, @to,
-          :with => filters,
-          :period_key => :created_at
-        ),
-        :compared_count => @compared_from && Corporation.period_total_count(
-          @teacher.school_id, intern_begin_at_time, compared_to,
-          :with => filters,
-          :period_key => :created_at
-        )
+        :count => corporation_count,
+        :compared_count => compared_corporation_count
       },
       {
         :title => "岗位 总数",
@@ -650,6 +652,13 @@ class TeacherStatisticsController < ApplicationController
 		  :with => filters,
 		  :period_key => :intern_logs_created_at
 		)
+		count_corporation_by_intern_status = Proc.new { |to, intern_status_id|
+		  Corporation.period_total_count(
+        @teacher.school_id, intern_begin_at_time, to,
+        :with => filters.merge(:intern_status_id => intern_status_id),
+        :period_key => :created_at
+      )
+		}
 		@intern_datasets = [
 		  {
 		    :title => "实习信息收集 统计",
@@ -710,6 +719,35 @@ class TeacherStatisticsController < ApplicationController
 		        :compared_count => @compared_from && (compared_student_count - compared_student_with_intern_log_count)
 		      }
 		    ]
+		  },
+		  {
+		    :title => "企业岗位状态 统计",
+		    :unit => "企业数",
+		    :total => {
+		      :title => "企业数目",
+		      :count => corporation_count,
+		      :compared_count => compared_corporation_count
+		    },
+		    :rows => (total_status_count ||= 0) && (total_compared_status_count ||= 0) &&
+		              CorporationInternStatus.data.map { |intern_status|
+		      status_count = count_corporation_by_intern_status.call(@to, intern_status[:id])
+		      total_status_count += status_count
+		      
+		      if @compared_from
+  		      compared_status_count = count_corporation_by_intern_status.call(compared_to, intern_status[:id])
+  		      total_compared_status_count += compared_status_count
+  	      end
+		      
+		      {
+		        :title => intern_status[:label],
+		        :count => status_count,
+		        :compared_count => @compared_from && compared_status_count
+		      }
+		    } << {
+        :title => "尚未填写状态",
+        :count => corporation_count - total_status_count,
+        :compared_count => @compared_from && (compared_corporation_count - total_compared_status_count)
+        }
 		  }
 		]
 		@intern_max = @intern_datasets.map{|d| d[:rows].map{|r| r[:count]}}.flatten.max
