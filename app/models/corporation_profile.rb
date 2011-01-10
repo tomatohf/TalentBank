@@ -10,10 +10,10 @@ class CorporationProfile < ActiveRecord::Base
   validates_length_of :email, :maximum => 250, :message => "邮箱 超过长度限制", :allow_nil => false
   
   validates_presence_of :phone, :message => "请输入 联系电话"
-  validates_length_of :phone, :maximum => 25, :message => "联系电话 超过长度限制", :allow_nil => false
+  validates_length_of :phone, :maximum => 250, :message => "联系电话 超过长度限制", :allow_nil => false
   
   validates_presence_of :contact, :message => "请输入 联系人"
-  validates_length_of :contact, :maximum => 15, :message => "联系人 超过长度限制", :allow_nil => false
+  validates_length_of :contact, :maximum => 100, :message => "联系人 超过长度限制", :allow_nil => false
   
   
   validates_length_of :contact_title, :maximum => 15, :message => "联系人职位 超过长度限制", :allow_nil => true

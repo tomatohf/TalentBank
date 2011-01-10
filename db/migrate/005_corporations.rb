@@ -25,8 +25,8 @@ class Corporations < ActiveRecord::Migration
       t.column :corporation_id, :integer
       
       t.column :email, :string
-      t.column :phone, :string, :limit => 25
-      t.column :contact, :string, :limit => 15
+      t.column :phone, :string
+      t.column :contact, :string, :limit => 100
       t.column :contact_gender, :boolean
       t.column :contact_title, :string, :limit => 15
       t.column :address, :string
