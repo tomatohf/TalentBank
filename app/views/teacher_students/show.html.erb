@@ -44,57 +44,66 @@
 						</td>
 					</tr>
 					
-					<tr>
-						<td>
-							大学:
-						</td>
+					<% university = University.find(@student.university_id) %>
+					<% if university %>
+						<tr>
+							<td>
+								大学:
+							</td>
 
-						<td>
-							<% university = University.find(@student.university_id) %>
-							<%= university && university[:name] %>
-						</td>
-					</tr>
+							<td>
+							
+								<%= university[:name] %>
+							</td>
+						</tr>
+					<% end %>
 					
-					<tr>
-						<td>
-							学院:
-						</td>
+					<% college = university && College.find(university[:id], @student.college_id) %>
+					<% if college %>
+						<tr>
+							<td>
+								学院:
+							</td>
 
-						<td>
-							<% college = university && College.find(university[:id], @student.college_id) %>
-							<%= college && college[:name] %>
-						</td>
-					</tr>
+							<td>
+								<%= college[:name] %>
+							</td>
+						</tr>
+					<% end %>
 					
-					<tr>
-						<td>
-							专业:
-						</td>
+					<% major = college && Major.find(college[:id], @student.major_id) %>
+					<% if major %>
+						<tr>
+							<td>
+								专业:
+							</td>
 
-						<td>
-							<% major = college && Major.find(college[:id], @student.major_id) %>
-							<%= major && major[:name] %>
-						</td>
-					</tr>
+							<td>
+								<%= major[:name] %>
+							</td>
+						</tr>
+					<% end %>
 					
-					<tr>
-						<td>
-							学历:
-						</td>
+					<% edu_level = EduLevel.find(@student.edu_level_id) %>
+					<% if edu_level %>
+						<tr>
+							<td>
+								学历:
+							</td>
 
-						<td>
-							<% edu_level = EduLevel.find(@student.edu_level_id) %>
-							<%= edu_level && edu_level[:name] %>
-						</td>
-					</tr>
+							<td>
+								<%= edu_level[:name] %>
+							</td>
+						</tr>
+					<% end %>
 					
-					<tr>
-						<td>
-							毕业时间:
-						</td>
+					<% if @student.graduation_year %>
+						<tr>
+							<td>
+								毕业时间:
+							</td>
 
-						<td>
-							<% if @student.graduation_year %>
+							<td>
 								<%= @student.graduation_year %> 年
 								<%=
 									year = @school.coming_graduation_year
@@ -106,9 +115,9 @@
 										"(已经毕业)"
 									end
 								%>
-							<% end %>
-						</td>
-					</tr>
+							</td>
+						</tr>
+					<% end %>
 
 
 					<tr>
@@ -137,46 +146,229 @@
 						</td>
 					</tr>
 
-					<tr>
-						<td>
-							地址:
-						</td>
+					<% unless @profile.address.blank? %>
+						<tr>
+							<td>
+								地址:
+							</td>
 
-						<td>
-							<%= h(@profile.address) %>
-						</td>
-					</tr>
+							<td>
+								<%= h(@profile.address) %>
+							</td>
+						</tr>
+					<% end %>
 
-					<tr>
-						<td>
-							邮编:
-						</td>
+					<% unless @profile.zip.blank? %>
+						<tr>
+							<td>
+								邮编:
+							</td>
 
-						<td>
-							<%= h(@profile.zip) %>
-						</td>
-					</tr>
+							<td>
+								<%= h(@profile.zip) %>
+							</td>
+						</tr>
+					<% end %>
 
-					<tr>
-						<td>
-							性别:
-						</td>
+					<% unless @profile.gender.nil? %>
+						<tr>
+							<td>
+								性别:
+							</td>
 
-						<td>
-							<%= @profile.gender ? "男" : "女" unless @profile.gender.nil? %>
-						</td>
-					</tr>
+							<td>
+								<%= @profile.gender ? "男" : "女" %>
+							</td>
+						</tr>
+					<% end %>
 
-					<tr>
-						<td>
-							政治面貌 :
-						</td>
+					<% political_status = PoliticalStatus.find(@profile.political_status_id) %>
+					<% if political_status %>
+						<tr>
+							<td>
+								政治面貌 :
+							</td>
 
-						<td>
-							<% political_status = PoliticalStatus.find(@profile.political_status_id) %>
-							<%= political_status && political_status[:name] %>
-						</td>
-					</tr>
+							<td>
+								<%= political_status[:name] %>
+							</td>
+						</tr>
+					<% end %>
+					
+					
+					<tbody style="background-color: #FFFDCF;">
+						<tr>
+							<td colspan="2" class="job_form_title_section">
+								实习意愿
+							</td>
+						</tr>
+						
+						<% if @corporation_wishes.size > 0 %>
+							<%
+								render_corporation_wish = Proc.new { |wish|
+									corporation = wish.corporation
+									%Q!
+										<a href="/teachers/#{@teacher.id}/corporations/#{corporation.id}" class="none">
+											[#{corporation.id}]
+											#{h(corporation.get_name)}</a>
+									!
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @corporation_wishes.size %>">
+									公司名称:
+								</td>
+
+								<td>
+									<%= render_corporation_wish.call(@corporation_wishes.first) %>
+								</td>
+							</tr>
+							<% @corporation_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_corporation_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+						
+						<% if @job_wishes.size > 0 %>
+							<%
+								render_job_wish = Proc.new { |wish|
+									job = wish.job
+									%Q!
+										<a href="/teachers/#{@teacher.id}/corporations/#{job.corporation_id}/jobs/#{job.id}" class="none">
+											[#{job.id}]
+											#{h(job.get_name)}</a>
+									!
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @job_wishes.size %>">
+									岗位名称:
+								</td>
+
+								<td>
+									<%= render_job_wish.call(@job_wishes.first) %>
+								</td>
+							</tr>
+							<% @job_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_job_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+						
+						<% if @industry_wishes.size > 0 %>
+							<%
+								render_industry_wish = Proc.new { |wish|
+									industry_category = IndustryCategory.find(wish.industry_category_id)
+									industry = Industry.find(wish.industry_category_id, wish.industry_id)
+									%Q!
+										#{industry_category && industry_category[:name]}
+										»
+										#{industry && industry[:name]}
+									!
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @industry_wishes.size %>">
+									行业类别:
+								</td>
+
+								<td>
+									<%= render_industry_wish.call(@industry_wishes.first) %>
+								</td>
+							</tr>
+							<% @industry_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_industry_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+						
+						<% if @job_category_wishes.size > 0 %>
+							<%
+								render_job_category_wish = Proc.new { |wish|
+									job_category_class = JobCategoryClass.find(wish.job_category_class_id)
+									job_category = JobCategory.find(wish.job_category_class_id, wish.job_category_id)
+									%Q!
+										#{job_category_class && job_category_class[:name]}
+										»
+										#{job_category && job_category[:name]}
+									!
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @job_category_wishes.size %>">
+									岗位类别:
+								</td>
+
+								<td>
+									<%= render_job_category_wish.call(@job_category_wishes.first) %>
+								</td>
+							</tr>
+							<% @job_category_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_job_category_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+						
+						<% if @job_district_wishes.size > 0 %>
+							<%
+								render_job_district_wish = Proc.new { |wish|
+									job_district = JobDistrict.find(wish.job_district_id)
+									job_district && job_district[:name]
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @job_district_wishes.size %>">
+									工作区域:
+								</td>
+
+								<td>
+									<%= render_job_district_wish.call(@job_district_wishes.first) %>
+								</td>
+							</tr>
+							<% @job_district_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_job_district_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+						
+						<% if @corp_nature_wishes.size > 0 %>
+							<%
+								render_corp_nature_wish = Proc.new { |wish|
+									corp_nature = CorporationNature.find(wish.nature_id)
+									corp_nature && corp_nature[:name]
+								}
+							%>
+							<tr>
+								<td rowspan="<%= @corp_nature_wishes.size %>">
+									企业性质:
+								</td>
+
+								<td>
+									<%= render_corp_nature_wish.call(@corp_nature_wishes.first) %>
+								</td>
+							</tr>
+							<% @corp_nature_wishes[1..-1].each do |wish| %>
+								<td>
+									<%= render_corp_nature_wish.call(wish) %>
+								</td>
+							<% end %>
+						<% end %>
+					
+						<tr>
+							<td>
+								实习意向:
+							</td>
+
+							<td>
+								<%= simple_format(h(@inter_profile.intention)) %>
+							</td>
+						</tr>
+					</tbody>
 					
 					
 					<tr>
@@ -256,16 +448,6 @@
 
 						<td>
 							<%= h(@inter_profile.birthmonth) %>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>
-							实习意向:
-						</td>
-
-						<td>
-							<%= simple_format(h(@inter_profile.intention)) %>
 						</td>
 					</tr>
 					

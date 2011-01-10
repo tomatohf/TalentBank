@@ -269,6 +269,13 @@ class TeacherStudentsController < ApplicationController
     
     @target_type = TeacherNoteTargetType.find_by(:name, "students")
     @notes = TeacherNote.get_from_target(@target_type[:id], @student.id)
+    
+    @industry_wishes = InternIndustryWish.list_from_student(@student.id)
+    @job_category_wishes = InternJobCategoryWish.list_from_student(@student.id)
+    @corp_nature_wishes = InternCorpNatureWish.list_from_student(@student.id)
+    @job_district_wishes = InternJobDistrictWish.list_from_student(@student.id)
+    @corporation_wishes = InternCorporationWish.list_from_student(@student.id, :include => [:corporation])
+    @job_wishes = InternJobWish.list_from_student(@student.id, :include => [:job])
   end
   
   

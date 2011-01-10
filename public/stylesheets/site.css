@@ -1132,6 +1132,10 @@ img.notification_icon {
 	font-weight: normal;
 	margin-right: 10px;
 }
+.intern_wishes_title label {
+	font-size: 12px;
+	font-weight: normal;
+}
 
 
 .job_form_title_section {
