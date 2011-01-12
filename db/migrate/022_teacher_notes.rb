@@ -7,7 +7,7 @@ class TeacherNotes < ActiveRecord::Migration
       
       t.column :teacher_id, :integer
       
-      t.column :content, :string, :limit => 500
+      t.column :content, :string, :limit => 1000
       
       
       t.column :created_at, :datetime
