@@ -206,7 +206,7 @@
 						<% if @corporation_wishes.size > 0 %>
 							<%
 								render_corporation_wish = Proc.new { |wish|
-									corporation = wish.corporation
+									corporation = wish.corporation || Corporation.new
 									%Q!
 										<a href="/teachers/#{@teacher.id}/corporations/#{corporation.id}" class="none">
 											[#{corporation.id}]
@@ -235,7 +235,7 @@
 						<% if @job_wishes.size > 0 %>
 							<%
 								render_job_wish = Proc.new { |wish|
-									job = wish.job
+									job = wish.job || Job.new
 									%Q!
 										<a href="/teachers/#{@teacher.id}/corporations/#{job.corporation_id}/jobs/#{job.id}" class="none">
 											[#{job.id}]
