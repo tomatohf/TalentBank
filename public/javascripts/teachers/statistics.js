@@ -676,7 +676,8 @@ function setup_daterangepicker() {
 			arrows: true,
 			datepickerOptions: {
 				showButtonPanel: false,
-				showMonthAfterYear: true
+				showMonthAfterYear: true,
+				shortYearCutoff: short_year_cutoff
 			}
 		}
 	);
@@ -877,7 +878,8 @@ function setup_compare() {
 						$(input).siblings(".ui-datepicker-dialog").css("z-index", 100);
 					},
 					showButtonPanel: false,
-					showMonthAfterYear: true
+					showMonthAfterYear: true,
+					shortYearCutoff: short_year_cutoff
 				},
 				e
 			);
