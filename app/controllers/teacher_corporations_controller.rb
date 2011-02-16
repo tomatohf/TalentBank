@@ -183,16 +183,21 @@ class TeacherCorporationsController < ApplicationController
   
   def jobs
     respond_to do |format|
+      options = {
+        :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
+        :conditions => ["school_id = ?", @teacher.school_id],
+        :include => [:corporation => [:profile]],
+        :order => "corporations.created_at DESC"
+      }
+      
       format.html {
         page = params[:page]
         page = 1 unless page =~ /\d+/
         @jobs = Job.paginate(
-          :page => page,
-          :per_page => Job_Page_Size,
-          :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
-          :conditions => ["school_id = ?", @teacher.school_id],
-          :include => [:corporation => [:profile]],
-          :order => "corporations.created_at DESC"
+          options.merge(
+            :page => page,
+            :per_page => Job_Page_Size
+          )
         )
 
         @counts = CorporationsController.helpers.prepare_intern_log_counts(
@@ -209,13 +214,7 @@ class TeacherCorporationsController < ApplicationController
       }
       
       format.csv {
-        jobs = Job.find(
-          :all,
-          :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
-          :conditions => ["school_id = ?", @teacher.school_id],
-          :include => [:corporation => [:profile]],
-          :order => "corporations.created_at DESC"
-        )
+        jobs = Job.find(:all, options)
         
         counts = CorporationsController.helpers.prepare_intern_log_counts(
           Proc.new { |filters|
@@ -243,7 +242,7 @@ class TeacherCorporationsController < ApplicationController
 
   					row = [
   					  corporation.id,
-  					  corporation.name || corporation.uid,
+  					  corporation.get_name,
   					  nature && nature[:name],
   					  job.id,
   					  job.get_name,

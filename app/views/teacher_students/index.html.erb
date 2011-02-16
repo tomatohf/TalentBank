@@ -75,17 +75,6 @@
 						<option value="f"<%= %Q! selected="selected"! if @complete == false %>>否</option>
 					</select>
 				</span>
-				
-				<span>
-					<label for="gender" style="margin-right: 5px;">
-						性别:
-					</label>
-					<select name="ge" id="gender" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @gender.nil? %>>不限</option>
-						<option value="t"<%= %Q! selected="selected"! if @gender == true %>>男</option>
-						<option value="f"<%= %Q! selected="selected"! if @gender == false %>>女</option>
-					</select>
-				</span>
 			</div>
 			
 			<div style="margin-top: 15px;">
@@ -125,6 +114,17 @@
 							}
 						)
 					%>
+				</span>
+				
+				<span class="field">
+					<label for="gender">
+						性别:
+					</label>
+					<select name="ge" id="gender" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @gender.nil? %>>不限</option>
+						<option value="t"<%= %Q! selected="selected"! if @gender == true %>>男</option>
+						<option value="f"<%= %Q! selected="selected"! if @gender == false %>>女</option>
+					</select>
 				</span>
 			</div>
 			

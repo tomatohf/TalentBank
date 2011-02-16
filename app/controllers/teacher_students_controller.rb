@@ -19,7 +19,7 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_teacher_student, :except => [:index, :resume]
   
-  before_filter :check_student, :except => [:index, :new, :create, :resume]
+  before_filter :check_student, :except => [:index, :new, :create, :resume, :no_intern_log]
   
   
   def index
@@ -287,6 +287,70 @@ class TeacherStudentsController < ApplicationController
     @student.save!
     
     render :partial => "status_field", :locals => {:student => @student, :field => field}
+  end
+  
+  
+  def no_intern_log
+    respond_to do |format|
+      options = {
+        # :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
+        # :conditions => ["school_id = ?", @teacher.school_id],
+        :conditions => ["school_id = ? and id NOT in (select DISTINCT student_id from intern_logs)", @teacher.school_id],
+        :include => [:intern_profile]
+      }
+      
+      format.html {
+        page = params[:page]
+        page = 1 unless page =~ /\d+/
+        @students = Student.paginate(
+          options.merge(
+            :page => page,
+            :per_page => 15
+          )
+        )
+      }
+      
+      format.csv {
+        students = Student.find(:all, options)
+        
+        csv_data = FasterCSV.generate do |csv|
+          header = ["编号", "姓名", "学校", "学历", "毕业时间", "上岗时间", "工作期限", "每周工作时间", "相关专业", "实习意向"]
+    			
+          csv << header
+          
+          students.each do |student|
+            university = student.university_id && University.find(student.university_id)
+            edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id)
+            intern_profile = student.intern_profile || InternProfile.new
+            period = intern_profile.period_id && JobPeriod.find(intern_profile.period_id)
+            workday = intern_profile.workday_id && JobWorkday.find(intern_profile.workday_id)
+            major = intern_profile.major_id && JobMajor.find(intern_profile.major_id)
+
+  					row = [
+  					  student.id,
+  					  student.get_name,
+  					  university && university[:name],
+  					  edu_level && edu_level[:name],
+  					  student.graduation_year,
+  					  ApplicationController.helpers.format_date(intern_profile.begin_at),
+  					  period && period[:name],
+  					  workday && workday[:name],
+  					  major && major[:name],
+  					  intern_profile.intention
+  					]
+  					
+            csv << row
+          end
+        end
+        
+        send_data(
+          csv_data,
+          :filename => "students_without_intern_log.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
   end
   
   

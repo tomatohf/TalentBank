@@ -35,6 +35,8 @@ ActionController::Routing::Routes.draw do |map|
       :remove_intern_wish => :post,
       
       :adjust_status => :post
+    }, :collection => {
+      :no_intern_log => :get
     } do |teacher_students|
       teacher_students.resources :teacher_student_intern_logs, :as => :intern_logs, :collection => {
         :set_calling_mark => :post,
