@@ -229,7 +229,7 @@ class TeacherCorporationsController < ApplicationController
         
         csv_data = FasterCSV.generate do |csv|
           header = ["企业编号", "企业名称", "企业性质", "岗位编号", "岗位名称", "招聘人数"]
-    			counts.titles.each do |key, value|
+    			counts.each_title do |key, value|
             header << value
           end
     			
@@ -248,7 +248,7 @@ class TeacherCorporationsController < ApplicationController
   					  job.get_name,
   					  job.number
   					]
-  					counts.filters.each do |key, value|
+  					counts.each_filter do |key, value|
     				  row << (counts.get_counts(key)[job.id] || 0).to_s
             end
   					

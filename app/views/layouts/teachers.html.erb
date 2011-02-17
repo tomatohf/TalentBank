@@ -76,7 +76,9 @@
 					<% if @teacher.student %>
 						<a href="/teachers/<%= @teacher.id %>/students/new">添加学生</a>
 						
-						<a href="/teachers/<%= @teacher.id %>/students/no_intern_log">尚未推荐岗位</a>
+						<% if @teacher.statistic %>
+							<a href="/teachers/<%= @teacher.id %>/students/no_intern_log">尚未推荐岗位</a>
+						<% end %>
 					<% end %>
 					
 					<% if @teacher.revision %>

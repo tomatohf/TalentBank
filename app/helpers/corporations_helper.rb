@@ -80,6 +80,22 @@ module CorporationsHelper
   end
   
   class InternLogCounts
+    def self.ordered_keys
+      [:aii, :rii, :irp, :irf, :irm, :ie, :il, :if]
+    end
+    def ordered_keys
+      self.class.ordered_keys
+    end
+    
+    def self.each_by_key(hash, &block)
+      ordered_keys.each do |key|
+        block.call(key, hash[key])
+      end
+    end
+    def each_by_key(hash, &block)
+      self.class.each_by_key(hash, &block)
+    end
+    
     def self.filters
       {
         :aii => {:event_id => 10, :result_id => 10},
@@ -94,6 +110,12 @@ module CorporationsHelper
     end
     def filters
       self.class.filters
+    end
+    def self.each_filter(&block)
+      self.each_by_key(self.filters, &block)
+    end
+    def each_filter(&block)
+      self.class.each_filter(&block)
     end
     
     def self.titles
@@ -110,6 +132,12 @@ module CorporationsHelper
     end
     def titles
       self.class.titles
+    end
+    def self.each_title(&block)
+      self.each_by_key(self.titles, &block)
+    end
+    def each_title(&block)
+      self.class.each_title(&block)
     end
     
     def self.postfix

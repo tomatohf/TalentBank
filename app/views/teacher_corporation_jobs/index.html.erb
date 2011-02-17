@@ -31,7 +31,7 @@
 			<td>提供面试</td>
 			<td style="width: 65px;">招聘终止</td>
 			
-			<% @counts.titles.each do |key, value| %>
+			<% @counts.each_title do |key, value| %>
 				<% if @counts.send(key) %>
 					<td><%= value %></td>
 				<% end %>
@@ -55,7 +55,7 @@
 					<%= format_date(job.recruit_end_at) %>
 				</td>
 
-				<% @counts.filters.each do |key, value| %>
+				<% @counts.each_filter do |key, value| %>
 					<% if @counts.send(key) %>
 						<td align="right" style="font-weight: bold;">
 							<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>/intern_logs?event=<%= value[:event_id] %>&result=<%= value[:result_id] %>" class="none">
