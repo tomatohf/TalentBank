@@ -54,9 +54,10 @@
 	</td>
 	
 	<td valign="top">
-		<div class="intern_profile">
-			<%= format_date(Time.at(attributes["intern_begin_at"])) unless attributes["intern_begin_at"].blank? %>
-			<% workday = JobWorkday.find(attributes["intern_workday_id"]) %>
+		<% intern_profile = student.intern_profile %>
+		<div class="intern_profile" title="<%= h(intern_profile && intern_profile.desc) %>">
+			<%= format_date(intern_profile && intern_profile.begin_at) %>
+			<% workday = intern_profile && JobWorkday.find(intern_profile.workday_id) %>
 			<% if workday %>
 				›
 				<%= workday[:name] %>
@@ -64,13 +65,14 @@
 		
 			<br />
 		
-			<% period = JobPeriod.find(attributes["intern_period_id"]) %>
+			<% period = intern_profile && JobPeriod.find(intern_profile.period_id) %>
 			<% if period %>
 				<%= period[:name] %>
 				›
 			<% end %>
-			<% unless attributes["intern_salary"].blank? %>
-				<%= attributes["intern_salary"] %> 元/天
+			<% salary = intern_profile && intern_profile.salary %>
+			<% unless salary.blank? %>
+				<%= salary %> 元/天
 			<% end %>
 			
 			<br />
@@ -95,7 +97,7 @@
 			
 			<br />
 			
-			<% job_major = JobMajor.find(attributes["intern_major_id"]) %>
+			<% job_major = intern_profile && JobMajor.find(intern_profile.major_id) %>
 			<% if job_major %>
 				<%= job_major[:name] %>
 			<% end %>

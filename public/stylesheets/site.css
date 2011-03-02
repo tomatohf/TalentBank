@@ -1206,7 +1206,8 @@ img.notification_icon {
 	padding-top: 30px;
 	color: #BBBBBB;
 }
-.matched_student .intern_status {
+.matched_student .intern_status,
+.matched_student .intern_logs_link {
 	margin-top: 5px;
 	text-align: center;
 }

@@ -128,7 +128,7 @@ class TeacherCorporationJobsController < ApplicationController
     @page = @page =~ /\d+/ ? @page.to_i : 1
     @students = Student.job_search(
       @corporation.school_id, @job, @profile, @page,
-      :include => [:profile],
+      :include => [:profile, :intern_profile],
       :only_unemployed => !@not_only_unemployed,
       :keyword => @keyword
     )

@@ -23,6 +23,7 @@
 			
 			<td>岗位编号</td>
 			<td>岗位名称</td>
+			<td>负责人</td>
 			<td>招聘人数</td>
 
 			<% @counts.each_title do |key, value| %>
@@ -39,6 +40,7 @@
 				<%
 					corporation = job.corporation
 					profile = corporation.profile
+					teacher = corporation.teacher
 				%>
 
 				<td><%= corporation.id %></td>
@@ -56,6 +58,7 @@
 					<a href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
 						<%= h(job.get_name) %></a>
 				</td>
+				<td><%= teacher && teacher.get_name %></td>
 				<td align="right"><%= job.number %></td>
 
 				<% @counts.each_filter do |key, value| %>

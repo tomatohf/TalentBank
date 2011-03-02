@@ -265,7 +265,7 @@ class TeacherStudentsController < ApplicationController
   
   def show
     @profile = StudentProfile.get_record(@student.id)
-    @inter_profile = InternProfile.get_record(@student.id)
+    @intern_profile = InternProfile.get_record(@student.id)
     
     @target_type = TeacherNoteTargetType.find_by(:name, "students")
     @notes = TeacherNote.get_from_target(@target_type[:id], @student.id)

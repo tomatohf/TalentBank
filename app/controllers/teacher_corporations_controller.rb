@@ -186,7 +186,7 @@ class TeacherCorporationsController < ApplicationController
       options = {
         :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
         :conditions => ["school_id = ?", @teacher.school_id],
-        :include => [:corporation => [:profile]],
+        :include => [:corporation => [:profile, :teacher]],
         :order => "corporations.created_at DESC"
       }
       
@@ -228,7 +228,7 @@ class TeacherCorporationsController < ApplicationController
         )
         
         csv_data = FasterCSV.generate do |csv|
-          header = ["企业编号", "企业名称", "企业性质", "岗位编号", "岗位名称", "招聘人数"]
+          header = ["企业编号", "企业名称", "企业性质", "岗位编号", "岗位名称", "负责人", "招聘人数"]
     			counts.each_title do |key, value|
             header << value
           end
@@ -239,6 +239,7 @@ class TeacherCorporationsController < ApplicationController
             corporation = job.corporation
   					profile = corporation.profile
   					nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id)
+  					teacher = corporation.teacher
 
   					row = [
   					  corporation.id,
@@ -246,6 +247,7 @@ class TeacherCorporationsController < ApplicationController
   					  nature && nature[:name],
   					  job.id,
   					  job.get_name,
+  					  teacher && teacher.get_name,
   					  job.number
   					]
   					counts.each_filter do |key, value|

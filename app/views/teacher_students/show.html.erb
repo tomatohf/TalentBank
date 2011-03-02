@@ -377,7 +377,7 @@
 							</td>
 
 							<td>
-								<%= simple_format(h(@inter_profile.intention)) %>
+								<%= simple_format(h(@intern_profile.intention)) %>
 							</td>
 						</tr>
 					</tbody>
@@ -395,7 +395,7 @@
 						</td>
 
 						<td>
-							<%= format_date(@inter_profile.begin_at) %>
+							<%= format_date(@intern_profile.begin_at) %>
 						</td>
 					</tr>
 					
@@ -405,7 +405,7 @@
 						</td>
 
 						<td>
-							<% job_period = JobPeriod.find(@inter_profile.period_id) %>
+							<% job_period = JobPeriod.find(@intern_profile.period_id) %>
 							<%= job_period && job_period[:name] %>
 						</td>
 					</tr>
@@ -416,7 +416,7 @@
 						</td>
 
 						<td>
-							<% job_workday = JobWorkday.find(@inter_profile.workday_id) %>
+							<% job_workday = JobWorkday.find(@intern_profile.workday_id) %>
 							<%= job_workday && job_workday[:name] %>
 						</td>
 					</tr>
@@ -427,7 +427,7 @@
 						</td>
 
 						<td>
-							<% job_major = JobMajor.find(@inter_profile.major_id) %>
+							<% job_major = JobMajor.find(@intern_profile.major_id) %>
 							<%= job_major && job_major[:name] %>
 						</td>
 					</tr>
@@ -438,7 +438,7 @@
 						</td>
 
 						<td>
-							<%= h(@inter_profile.salary || 0) %>
+							<%= h(@intern_profile.salary || 0) %>
 							元/天
 						</td>
 					</tr>
@@ -449,7 +449,7 @@
 						</td>
 
 						<td>
-							<%= h(@inter_profile.birthplace) %>
+							<%= h(@intern_profile.birthplace) %>
 						</td>
 					</tr>
 					
@@ -459,7 +459,7 @@
 						</td>
 
 						<td>
-							<%= h(@inter_profile.birthmonth) %>
+							<%= h(@intern_profile.birthmonth) %>
 						</td>
 					</tr>
 					
@@ -469,7 +469,7 @@
 						</td>
 
 						<td>
-							<%= simple_format(h(@inter_profile.skill)) %>
+							<%= simple_format(h(@intern_profile.skill)) %>
 						</td>
 					</tr>
 					
@@ -479,7 +479,7 @@
 						</td>
 
 						<td>
-							<%= simple_format(h(@inter_profile.experience)) %>
+							<%= simple_format(h(@intern_profile.experience)) %>
 						</td>
 					</tr>
 					
@@ -489,7 +489,7 @@
 						</td>
 
 						<td>
-							<%= simple_format(h(@inter_profile.desc)) %>
+							<%= simple_format(h(@intern_profile.desc)) %>
 						</td>
 					</tr>
 				</table>
