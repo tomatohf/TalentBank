@@ -1,0 +1,110 @@
+<%
+	page_title = "已经面试通过的学生"
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/students/interview_passed.csv" class="button">
+		导出为 CSV</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<thead>
+		<tr>
+			<td>学号</td>
+			<td>姓名</td>
+			<td>学校</td>
+			<td>学历</td>
+			<td>毕业时间</td>
+			
+			<td>性别</td>
+			<td>政治面貌</td>
+			
+			<td>上岗时间</td>
+			<td>工作期限</td>
+			<td>每周工作时间</td>
+			<td>籍贯</td>
+			<td>其他信息</td>
+			<td>相关专业</td>
+			
+			<td>公司编号</td>
+			<td>公司名称</td>
+			<td>岗位编号</td>
+			<td>岗位名称</td>
+			
+			<td>实习记录</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @students.each_with_index do |student, i| %>
+			<tr<%= %Q! class="odd"! if i.odd? %>>
+				<td><%= student.number %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" class="none">
+						<%= h(student.get_name) %></a>
+				</td>
+				<td>
+					<% university = student.university_id && University.find(student.university_id) %>
+					<%= university && university[:name] %>
+				</td>
+				<td>
+					<% edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id) %>
+					<%= edu_level && edu_level[:name] %>
+				</td>
+				<td>
+					<%= student.graduation_year %>
+				</td>
+				
+				<% profile = student.profile || StudentProfile.new %>
+				<td>
+					<%= (profile.gender ? "男" : "女") unless profile.gender.blank? %>
+				</td>
+				<td>
+					<% political_status = profile.political_status_id && PoliticalStatus.find(profile.political_status_id) %>
+					<%= political_status && political_status[:name] %>
+				</td>
+
+				<% intern_profile = student.intern_profile || InternProfile.new %>
+				<td>
+					<%= format_date(intern_profile.begin_at) %>
+				</td>
+				<td>
+					<% period = intern_profile.period_id && JobPeriod.find(intern_profile.period_id) %>
+					<%= period && period[:name] %>
+				</td>
+				<td>
+					<% workday = intern_profile.workday_id && JobWorkday.find(intern_profile.workday_id) %>
+					<%= workday && workday[:name] %>
+				</td>
+				<td><%= h(intern_profile.birthplace) %></td>
+				<td><%= h(intern_profile.desc) %></td>
+				<td>
+					<% major = intern_profile.major_id && JobMajor.find(intern_profile.major_id) %>
+					<%= major && major[:name] %>
+				</td>
+				
+				<td><%= student.corporation_id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= student.corporation_id %>" class="none">
+						<%= student.corporation_name %></a>
+				</td>
+				<td><%= student.job_id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= student.corporation_id %>/jobs/<%= student.job_id %>" class="none">
+						<%= student.job_name %></a>
+				</td>
+				
+				<td align="right" style="font-weight: bold;">
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs" class="none">
+						<%= student.intern_logs.size %></a>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= paging_buttons(@students) %>

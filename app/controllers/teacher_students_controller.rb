@@ -19,7 +19,8 @@ class TeacherStudentsController < ApplicationController
   
   before_filter :check_teacher_student, :except => [:index, :resume]
   
-  before_filter :check_student, :except => [:index, :new, :create, :resume, :no_intern_log]
+  before_filter :check_student, :except => [:index, :new, :create, :resume,
+                                            :no_intern_log, :interview_passed]
   
   
   def index
@@ -346,6 +347,88 @@ class TeacherStudentsController < ApplicationController
         send_data(
           csv_data,
           :filename => "students_without_intern_log.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
+  end
+  
+  
+  def interview_passed
+    respond_to do |format|
+      options = {
+        :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name",
+        :joins => "INNER JOIN (intern_logs INNER JOIN (jobs INNER JOIN corporations ON corporations.id = jobs.corporation_id) ON jobs.id = intern_logs.job_id) ON students.id = intern_logs.student_id",
+        :conditions => [
+          "corporations.school_id = ? and intern_logs.result_id = ?",
+          @teacher.school_id, InternLogEventResult.interview_result_passed[:id]
+        ],
+        :include => [:profile, :intern_profile, :intern_logs]
+      }
+      
+      format.html {
+        page = params[:page]
+        page = 1 unless page =~ /\d+/
+        @students = Student.paginate(
+          options.merge(
+            :page => page,
+            :per_page => 15
+          )
+        )
+      }
+      
+      format.csv {
+        students = Student.find(:all, options)
+        
+        csv_data = FasterCSV.generate do |csv|
+          header = ["学号", "姓名", "学校", "学历", "毕业时间",
+                    "性别", "政治面貌", "上岗时间", "工作期限", "每周工作时间", "籍贯", "其他信息", "相关专业",
+                    "公司编号", "公司名称", "岗位编号", "岗位名称", "实习记录条数"]
+    			
+          csv << header
+          
+          students.each do |student|
+            university = student.university_id && University.find(student.university_id)
+            edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id)
+            profile = student.profile || StudentProfile.new
+            political_status = profile.political_status_id && PoliticalStatus.find(profile.political_status_id)
+            intern_profile = student.intern_profile || InternProfile.new
+            period = intern_profile.period_id && JobPeriod.find(intern_profile.period_id)
+            workday = intern_profile.workday_id && JobWorkday.find(intern_profile.workday_id)
+            major = intern_profile.major_id && JobMajor.find(intern_profile.major_id)
+
+  					row = [
+  					  student.number,
+  					  student.get_name,
+  					  university && university[:name],
+  					  edu_level && edu_level[:name],
+  					  student.graduation_year,
+  					  
+              profile.gender.blank? ? "" : (profile.gender ? "男" : "女"),
+  					  political_status && political_status[:name],
+  					  ApplicationController.helpers.format_date(intern_profile.begin_at),
+  					  period && period[:name],
+  					  workday && workday[:name],
+  					  intern_profile.birthplace,
+  					  intern_profile.desc,
+  					  major && major[:name],
+  					  
+  					  student.corporation_id,
+  					  student.corporation_name,
+  					  student.job_id,
+  					  student.job_name,
+  					  
+  					  student.intern_logs.size
+  					]
+  					
+            csv << row
+          end
+        end
+        
+        send_data(
+          csv_data,
+          :filename => "interview_passed_students.csv",
           :type => :csv,
           :disposition => "attachment"
         )
