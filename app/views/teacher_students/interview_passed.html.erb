@@ -61,7 +61,7 @@
 				
 				<% profile = student.profile || StudentProfile.new %>
 				<td>
-					<%= (profile.gender ? "男" : "女") unless profile.gender.blank? %>
+					<%= (profile.gender ? "男" : "女") unless profile.gender.nil? %>
 				</td>
 				<td>
 					<% political_status = profile.political_status_id && PoliticalStatus.find(profile.political_status_id) %>
