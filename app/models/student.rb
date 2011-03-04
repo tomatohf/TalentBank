@@ -223,6 +223,7 @@ class Student < ActiveRecord::Base
     filters[:edu_level_id] = EduLevel.data.first[:id] .. job.edu_level_id unless job.edu_level_id.blank?
     filters[:graduation_year] = JobGraduation.get_graduation_year_range(job.graduation_id) unless job.graduation_id.blank?
     filters[:gender] = job.gender ? 1 : 0 unless job.gender.nil?
+    filters[:political_status_id] = job.political_status_id unless job.political_status_id.blank?
     filters[:intern_major_id] = job.major_id unless job.major_id.blank?
     filters[:intern_log_latest_result_id] = InternLogEventResult.find_by_intern_status(:unemployed).map { |result|
       result[:id]

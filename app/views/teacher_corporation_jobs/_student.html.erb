@@ -33,6 +33,12 @@
 		
 		<div class="profile">
 			<% if profile %>
+				<% political_status = PoliticalStatus.find(profile.political_status_id) %>
+				<% if political_status %>
+					<%= political_status[:name] %>
+					<br />
+				<% end %>
+				
 				<%= h(profile.phone) %>
 				<br />
 				<%= h(profile.email) %>

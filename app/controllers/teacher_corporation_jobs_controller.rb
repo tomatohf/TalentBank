@@ -117,6 +117,7 @@ class TeacherCorporationJobsController < ApplicationController
       else
         nil
     end unless params[:g].nil?
+    @job.political_status_id = params[:ps].strip unless params[:ps].nil?
     @job.major_id = params[:jm].strip unless params[:jm].nil?
     
     

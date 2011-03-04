@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 30) do
+ActiveRecord::Schema.define(:version => 31) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(:version => 30) do
   create_table "corporation_profiles", :force => true do |t|
     t.integer  "corporation_id"
     t.string   "email"
-    t.string   "phone",                :limit => 25
-    t.string   "contact",              :limit => 15
+    t.string   "phone"
+    t.string   "contact",              :limit => 100
     t.boolean  "contact_gender"
     t.string   "contact_title",        :limit => 15
     t.string   "address"
@@ -293,28 +293,29 @@ ActiveRecord::Schema.define(:version => 30) do
 
   create_table "jobs", :force => true do |t|
     t.integer  "corporation_id"
-    t.string   "name",              :limit => 50
-    t.integer  "category_class_id", :limit => 2
-    t.integer  "category_id",       :limit => 2
-    t.string   "manager",           :limit => 50
-    t.string   "desc",              :limit => 500
-    t.integer  "district_id",       :limit => 2
-    t.string   "place",             :limit => 200
-    t.integer  "salary",            :limit => 10,  :precision => 10, :scale => 0
-    t.string   "welfare",           :limit => 300
-    t.integer  "number",            :limit => 2
-    t.integer  "interview_number",  :limit => 2
+    t.string   "name",                :limit => 50
+    t.integer  "category_class_id",   :limit => 2
+    t.integer  "category_id",         :limit => 2
+    t.string   "manager",             :limit => 50
+    t.string   "desc",                :limit => 500
+    t.integer  "district_id",         :limit => 2
+    t.string   "place",               :limit => 200
+    t.integer  "salary",              :limit => 10,  :precision => 10, :scale => 0
+    t.string   "welfare",             :limit => 300
+    t.integer  "number",              :limit => 2
+    t.integer  "interview_number",    :limit => 2
     t.datetime "begin_at"
-    t.integer  "period_id",         :limit => 2
-    t.integer  "workday_id",        :limit => 2
-    t.integer  "edu_level_id",      :limit => 2
-    t.integer  "graduation_id",     :limit => 2
-    t.integer  "major_id",          :limit => 2
-    t.string   "requirement",       :limit => 500
+    t.integer  "period_id",           :limit => 2
+    t.integer  "workday_id",          :limit => 2
+    t.integer  "edu_level_id",        :limit => 2
+    t.integer  "graduation_id",       :limit => 2
+    t.integer  "major_id",            :limit => 2
+    t.string   "requirement",         :limit => 500
     t.datetime "recruit_end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "gender"
+    t.integer  "political_status_id", :limit => 2
   end
 
   add_index "jobs", ["corporation_id", "created_at"], :name => "index_jobs_on_corporation_id_and_created_at"
@@ -564,7 +565,7 @@ ActiveRecord::Schema.define(:version => 30) do
     t.integer  "target_type_id", :limit => 2
     t.integer  "target_id"
     t.integer  "teacher_id"
-    t.string   "content",        :limit => 500
+    t.string   "content",        :limit => 1000
     t.datetime "created_at"
     t.datetime "updated_at"
   end

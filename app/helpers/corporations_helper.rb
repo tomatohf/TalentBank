@@ -58,6 +58,7 @@ module CorporationsHelper
       else
         nil
     end
+    job.political_status_id = params[:political_status]
     job.major_id = params[:job_major]
     job.requirement = params[:requirement] && params[:requirement].strip
     job.recruit_end_at = params[:recruit_end_at] && params[:recruit_end_at].strip

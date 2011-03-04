@@ -227,15 +227,6 @@
 							)
 						%>
 					</span>
-					
-					<span class="field">
-						<label for="gender">性别:</label>
-						<select name="g" id="gender" class="dropdown_list">
-							<option value=""<%= %Q! selected="selected"! if @job.gender.nil? %>>不限性别</option>
-							<option value="true"<%= %Q! selected="selected"! if @job.gender == true %>>男 - ♂</option>
-							<option value="false"<%= %Q! selected="selected"! if @job.gender == false %>>女 - ♀</option>
-						</select>
-					</span>
 				</div>
 				
 				<div class="field_row">
@@ -254,6 +245,29 @@
 								}
 							)
 						%>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
+						<%=
+							render(
+								:partial => "/students/selects/political_status",
+								:locals => {
+									:political_status_id => @job.political_status_id,
+									:field_id => "political_status", :field_name => "ps"
+								}
+							)
+						%>
+					</span>
+					
+					<span class="field">
+						<label for="gender">性别:</label>
+						<select name="g" id="gender" class="dropdown_list">
+							<option value=""<%= %Q! selected="selected"! if @job.gender.nil? %>>不限性别</option>
+							<option value="true"<%= %Q! selected="selected"! if @job.gender == true %>>男 - ♂</option>
+							<option value="false"<%= %Q! selected="selected"! if @job.gender == false %>>女 - ♀</option>
+						</select>
 					</span>
 				</div>
 				

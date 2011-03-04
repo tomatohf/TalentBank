@@ -298,6 +298,27 @@
 	
 	<tr>
 		<td>
+			<label for="political_status">
+				政治面貌<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/students/selects/political_status",
+					:locals => {
+						:political_status_id => @job.political_status_id,
+						:field_id => "political_status", :field_name => "political_status",
+						:hide_label => true
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
 			<label for="job_major">
 				相关专业
 			</label>

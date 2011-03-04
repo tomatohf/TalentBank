@@ -1,0 +1,21 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= "不限政治面貌"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		政治面貌:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if political_status_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% PoliticalStatus.data.each do |political_status| %>
+		<option value="<%= political_status[:id] %>"<%= %Q! selected="selected"! if political_status_id.to_i == political_status[:id] %>><%= political_status[:name] %></option>
+	<% end %>
+</select>

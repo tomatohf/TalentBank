@@ -51,10 +51,7 @@
 					</td>
 
 					<td>
-						<%
-							period = @job.period_id && JobPeriod.find(@job.period_id)
-						%>
-						
+						<% period = @job.period_id && JobPeriod.find(@job.period_id) %>
 						<%= period && period[:name] %>
 					</td>
 				</tr>
@@ -65,10 +62,7 @@
 					</td>
 
 					<td>
-						<%
-							workday = @job.workday_id && JobWorkday.find(@job.workday_id)
-						%>
-						
+						<% workday = @job.workday_id && JobWorkday.find(@job.workday_id) %>
 						<%= workday && workday[:name] %>
 					</td>
 				</tr>
@@ -79,10 +73,7 @@
 					</td>
 
 					<td>
-						<%
-							edu_level = @job.edu_level_id && EduLevel.find(@job.edu_level_id)
-						%>
-						
+						<% edu_level = @job.edu_level_id && EduLevel.find(@job.edu_level_id) %>
 						<%= edu_level && edu_level[:name] %>
 					</td>
 				</tr>
@@ -93,10 +84,7 @@
 					</td>
 
 					<td>
-						<%
-							graduation = @job.graduation_id && JobGraduation.find(@job.graduation_id)
-						%>
-						
+						<% graduation = @job.graduation_id && JobGraduation.find(@job.graduation_id) %>
 						<%= graduation && graduation[:name] %>
 					</td>
 				</tr>
@@ -110,6 +98,17 @@
 						<%= @job.gender ? "男" : "女" unless @job.gender.nil? %>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>
+						政治面貌:
+					</td>
+
+					<td>
+						<% political_status = @job.political_status_id && PoliticalStatus.find(@job.political_status_id) %>
+						<%= political_status && political_status[:name] %>
+					</td>
+				</tr>
 
 				<tr>
 					<td>
@@ -117,10 +116,7 @@
 					</td>
 
 					<td>
-						<%
-							major = @job.major_id && JobMajor.find(@job.major_id)
-						%>
-						
+						<% major = @job.major_id && JobMajor.find(@job.major_id) %>
 						<%= major && major[:name] %>
 					</td>
 				</tr>
@@ -205,9 +201,7 @@
 					</td>
 
 					<td>
-						<%
-							district = @job.district_id && JobDistrict.find(@job.district_id)
-						%>
+						<% district = @job.district_id && JobDistrict.find(@job.district_id) %>
 						
 						<%= district && district[:name] %>
 						›
