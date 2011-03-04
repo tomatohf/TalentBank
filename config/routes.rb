@@ -37,7 +37,8 @@ ActionController::Routing::Routes.draw do |map|
       :adjust_status => :post
     }, :collection => {
       :no_intern_log => :get,
-      :interview_passed => :get
+      :interview_passed => :get,
+      :no_interview_result => :get
     } do |teacher_students|
       teacher_students.resources :teacher_student_intern_logs, :as => :intern_logs, :collection => {
         :set_calling_mark => :post,

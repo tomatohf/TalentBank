@@ -90,12 +90,12 @@
 				<td><%= student.corporation_id %></td>
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= student.corporation_id %>" class="none">
-						<%= student.corporation_name %></a>
+						<%= h(student.corporation_name) %></a>
 				</td>
 				<td><%= student.job_id %></td>
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= student.corporation_id %>/jobs/<%= student.job_id %>" class="none">
-						<%= student.job_name %></a>
+						<%= h(student.job_name) %></a>
 				</td>
 				
 				<td align="right" style="font-weight: bold;">

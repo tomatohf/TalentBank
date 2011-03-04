@@ -1,0 +1,64 @@
+<%
+	page_title = "已经面试但还没有面试结果的学生"
+	talent_page_title(page_title)
+%>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/students/no_interview_result.csv" class="button">
+		导出为 CSV</a>
+</div>
+<h2 class="page_title"><%= page_title %></h2>
+
+
+<table border="0" cellspacing="0" cellpadding="0" class="main_part_w grid">
+	<thead>
+		<tr>
+			<td>学生编号</td>
+			<td>学号</td>
+			<td>姓名</td>
+			
+			<td>岗位编号</td>
+			<td>岗位名称</td>
+			<td>公司编号</td>
+			<td>公司名称</td>
+			
+			<td>企业负责人</td>
+			<td></td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @intern_logs.each_with_index do |log, i| %>
+			<tr<%= %Q! class="odd"! if i.odd? %>>
+				<td><%= log.student_id %></td>
+				<td><%= log.student_number %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= log.student_id %>" class="none">
+						<%= h(log.student_name) %></a>
+				</td>
+				
+				<td><%= log.job_id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>/jobs/<%= log.job_id %>" class="none">
+						<%= h(log.job_name) %></a>
+				</td>
+				<td><%= log.corporation_id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>" class="none">
+						<%= h(log.corporation_name) %></a>
+				</td>
+				
+				<td>
+					<%= h(log.teacher_name) %></a>
+				</td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= log.student_id %>/intern_logs" class="none">
+						实习记录</a>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= paging_buttons(@intern_logs) %>

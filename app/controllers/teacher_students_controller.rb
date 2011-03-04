@@ -20,7 +20,7 @@ class TeacherStudentsController < ApplicationController
   before_filter :check_teacher_student, :except => [:index, :resume]
   
   before_filter :check_student, :except => [:index, :new, :create, :resume,
-                                            :no_intern_log, :interview_passed]
+                                            :no_intern_log, :interview_passed, :no_interview_result]
   
   
   def index
@@ -361,8 +361,9 @@ class TeacherStudentsController < ApplicationController
         :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name",
         :joins => "INNER JOIN (intern_logs INNER JOIN (jobs INNER JOIN corporations ON corporations.id = jobs.corporation_id) ON jobs.id = intern_logs.job_id) ON students.id = intern_logs.student_id",
         :conditions => [
-          "corporations.school_id = ? and intern_logs.result_id = ?",
-          @teacher.school_id, InternLogEventResult.interview_result_passed[:id]
+          "corporations.school_id = ? and intern_logs.event_id = ? and intern_logs.result_id = ?",
+          @teacher.school_id,
+          InternLogEvent.interview_result[:id], InternLogEventResult.interview_result_passed[:id]
         ],
         :include => [:profile, :intern_profile, :intern_logs]
       }
@@ -429,6 +430,67 @@ class TeacherStudentsController < ApplicationController
         send_data(
           csv_data,
           :filename => "interview_passed_students.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
+  end
+  
+  
+  def no_interview_result
+    respond_to do |format|
+      options = {
+        :select => "students.id as student_id, students.number as student_number, students.name as student_name, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, teachers.name as teacher_name",
+        :joins => "LEFT OUTER JOIN intern_logs logs ON intern_logs.student_id = logs.student_id and intern_logs.occur_at < logs.occur_at LEFT OUTER JOIN students ON intern_logs.student_id = students.id LEFT OUTER JOIN jobs ON intern_logs.job_id = jobs.id LEFT OUTER JOIN corporations ON jobs.corporation_id = corporations.id LEFT OUTER JOIN teachers ON corporations.teacher_id = teachers.id",
+        :conditions => [
+          "logs.student_id IS NULL and corporations.school_id = ? and intern_logs.event_id = ? and intern_logs.result_id = ? and intern_logs.occur_at < ?",
+          @teacher.school_id,
+          InternLogEvent.inform_interview[:id], InternLogEventResult.inform_interview_accepted[:id], Time.now
+        ]
+      }
+      
+      format.html {
+        page = params[:page]
+        page = 1 unless page =~ /\d+/
+        @intern_logs = InternLog.paginate(
+          options.merge(
+            :page => page,
+            :per_page => 15
+          )
+        )
+      }
+      
+      format.csv {
+        intern_logs = InternLog.find(:all, options)
+        
+        csv_data = FasterCSV.generate do |csv|
+          header = ["学生编号", "学号", "姓名",
+                    "公司编号", "公司名称", "岗位编号", "岗位名称", "企业负责人"]
+    			
+          csv << header
+          
+          intern_logs.each do |log|
+  					row = [
+  					  log.student_id,
+  					  log.student_number,
+  					  log.student_name,
+  					  
+  					  log.job_id,
+  					  log.job_name,
+  					  log.corporation_id,
+  					  log.corporation_name,
+  					  
+  					  log.teacher_name
+  					]
+  					
+            csv << row
+          end
+        end
+        
+        send_data(
+          csv_data,
+          :filename => "students_without_interview_result.csv",
           :type => :csv,
           :disposition => "attachment"
         )

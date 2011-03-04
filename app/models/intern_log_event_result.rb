@@ -35,6 +35,10 @@ class InternLogEventResult < HashModel::Grouped
   end
   
   
+  def self.inform_interview_accepted
+    self.find(10, 10)
+  end
+  
   def self.interview_result_passed
     self.find(20, 30)
   end
