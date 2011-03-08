@@ -154,7 +154,7 @@ module CorporationsHelper
     
     filters.each do |key, value|
       attr_reader key
-      attr_reader "#{key}#{self.postfix}".to_sym
+      attr_reader counts_field_name(key).to_sym
     end
     
     def initialize(count_proc, params = {})
