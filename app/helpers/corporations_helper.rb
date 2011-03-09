@@ -66,14 +66,12 @@ module CorporationsHelper
   
   
   def count_intern_log(school_id, group_field, group_values, filters)
-    with = {}
-    with[group_field] = group_values unless group_values.nil?
-    
     InternLog.period_group_counts(
       school_id, Date.parse(InternLog.intern_begin_at), Date.today,
       :group_by => group_field.to_s,
       :group_function => :attr,
-      :with => with.merge(filters)
+      :limit => group_values.size,
+      :with => {group_field => group_values}.merge(filters)
     ).inject({}) { |hash, record|
       hash[record[1]["@groupby"]] = record[1]["@count"]
       hash

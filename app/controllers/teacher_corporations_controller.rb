@@ -189,6 +189,19 @@ class TeacherCorporationsController < ApplicationController
         :include => [:corporation => [:profile, :teacher]],
         :order => "corporations.created_at DESC"
       }
+      compute_counts = Proc.new { |jobs, selected|
+        CorporationsController.helpers.prepare_intern_log_counts(
+          Proc.new { |filters|
+            CorporationsController.helpers.count_intern_log(
+              @teacher.school_id,
+              :job_id,
+              jobs.map { |job| job.id },
+              filters
+            )
+          },
+          selected
+        )
+      }
       
       format.html {
         page = params[:page]
@@ -200,32 +213,13 @@ class TeacherCorporationsController < ApplicationController
           )
         )
 
-        @counts = CorporationsController.helpers.prepare_intern_log_counts(
-          Proc.new { |filters|
-            CorporationsController.helpers.count_intern_log(
-              @teacher.school_id,
-              :job_id,
-              @jobs.map { |job| job.id },
-              filters
-            )
-          },
-          params
-        )
+        @counts = compute_counts.call(@jobs, params)
       }
       
       format.csv {
         jobs = Job.find(:all, options)
         
-        counts = CorporationsController.helpers.prepare_intern_log_counts(
-          Proc.new { |filters|
-            CorporationsController.helpers.count_intern_log(
-              @teacher.school_id,
-              :job_id,
-              nil,
-              filters
-            )
-          }
-        )
+        counts = compute_counts.call(jobs, :all)
         
         csv_data = FasterCSV.generate do |csv|
           header = ["企业编号", "企业名称", "企业性质", "岗位编号", "岗位名称", "相关专业", "负责人", "招聘人数"]
