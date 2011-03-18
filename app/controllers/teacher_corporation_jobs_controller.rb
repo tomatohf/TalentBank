@@ -122,6 +122,7 @@ class TeacherCorporationJobsController < ApplicationController
     
     
     @not_only_unemployed = (params[:not_only_unemployed] == "true")
+    @not_only_no_related_intern_log = (params[:not_only_no_related_intern_log] == "true")
     @keyword = params[:kw] && params[:kw].strip
     
     
@@ -131,6 +132,7 @@ class TeacherCorporationJobsController < ApplicationController
       @corporation.school_id, @job, @profile, @page,
       :include => [:profile, :intern_profile],
       :only_unemployed => !@not_only_unemployed,
+      :only_no_related_intern_log => !@not_only_no_related_intern_log,
       :keyword => @keyword
     )
     @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])

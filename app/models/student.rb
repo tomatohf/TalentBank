@@ -121,6 +121,7 @@ class Student < ActiveRecord::Base
     has intern_job_blacklists.job_id, :as => :intern_blacklist_job_id
     
     has intern_logs.created_at, :as => :intern_logs_created_at
+    has intern_logs.job_id, :as => :intern_logs_job_id
     has(
       "GROUP_CONCAT(IFNULL(intern_logs.result_id, 0) ORDER BY intern_logs.occur_at DESC SEPARATOR ',')",
       :as => :intern_log_latest_result_id,
@@ -239,6 +240,7 @@ class Student < ActiveRecord::Base
     blacklists[:intern_blacklist_corporation_id] = job.corporation_id
     blacklists[:intern_blacklist_job_id] = job.id
     blacklists[:intern_salary] = (job.salary.to_i + 1) .. 1010 unless job.salary.to_i > 1000
+    blacklists[:intern_logs_job_id] = job.id if options[:only_no_related_intern_log]
     
     wishes = [%Q!"j0j"!]
     wishes << %Q!"j#{corporation_profile.industry_category_id}y"! unless corporation_profile.industry_category_id.blank?
