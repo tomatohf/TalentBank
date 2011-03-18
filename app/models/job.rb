@@ -24,8 +24,8 @@ class Job < ActiveRecord::Base
   validates_length_of :requirement, :maximum => 500, :message => "其它要求 超过长度限制", :allow_nil => true
   
   validates_numericality_of :salary, :message => "薪酬 必须是大于等于0的数字", :allow_nil => false, :greater_than_or_equal_to => 0
-  validates_numericality_of :number, :message => "招聘人数 必须是正整数", :allow_nil => false, :greater_than => 0, :only_integer => true
-  validates_numericality_of :interview_number, :message => "面试人数 必须是正整数", :allow_nil => true, :greater_than => 0, :only_integer => true
+  validates_numericality_of :number, :message => "招聘人数 必须是大于等于0的整数", :allow_nil => false, :greater_than_or_equal_to => 0, :only_integer => true
+  validates_numericality_of :interview_number, :message => "面试人数 必须是大于等于0的整数", :allow_nil => true, :greater_than_or_equal_to => 0, :only_integer => true
   
   
   
