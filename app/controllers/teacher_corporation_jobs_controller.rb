@@ -175,6 +175,24 @@ class TeacherCorporationJobsController < ApplicationController
   end
   
   
+  def add_sms_intern_logs
+    (params[:student_ids] || []).each do |student_id|
+      log = InternLog.new(
+        :student_id => student_id,
+        :teacher_id => @teacher.id,
+        :job_id => @job.id,
+        :event_id => InternLogEvent.inform_interview[:id],
+        :result_id => InternLogEventResult.inform_interview_rejected[:id],
+        :occur_at => Time.now
+      )
+      
+      Student.mark_calling(student_id, @teacher.id) if log.save
+    end
+    
+    jump_to("/teachers/#{@teacher.id}/corporations/#{@corporation.id}/jobs/#{@job.id}/#{params[:search_action_name]}?page=#{params[:search_page]}&#{params[:search_params]}")
+  end
+  
+  
   private
   
   def check_teacher

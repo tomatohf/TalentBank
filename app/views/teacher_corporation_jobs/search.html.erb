@@ -307,6 +307,8 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w list">
 		<thead>
 			<tr>
+				<td style="width: 15px;">
+				</td>
 				<td style="width: 180px;">
 					搜索到约
 					<b><%= @students.total_entries %></b>
@@ -352,6 +354,36 @@
 			<span>正在搜索学生 ...</span>
 		</div>
 	<% end %>
+</div>
+
+
+
+<div class="sms_students">
+	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
+		<tr>
+			<td>
+				<label for="sms_number">短信号码<span id="sms_number_count"></span>：</label>
+				<textarea id="sms_number" class="text_field" readonly="true"></textarea>
+				
+				<% form_tag "/teachers/#{@teacher.id}/corporations/#{@corporation.id}/jobs/#{@job.id}/add_sms_intern_logs", :method => :post, :id => "add_sms_intern_logs_form" do %>
+					<span id="sms_student_ids_placeholder"></span>
+					<input type="hidden" name="search_action_name" value="<%= action_name %>" />
+					<input type="hidden" name="search_page" value="<%= @page %>" />
+					<input type="submit" value="添加拒绝面试通知的实习记录并标记通话" class="button" />
+				<% end %>
+			</td>
+			
+			<td>
+				<% sms_content = sms(@corporation, @job) %>
+				<label for="sms_content">短信内容 (<%= sms_content.jsize %>)：</label>
+				<textarea id="sms_content" class="text_field" readonly="true"><%= sms_content %></textarea>
+			</td>
+		</tr>
+	</table>
+	
+	<div>
+		
+	</div>
 </div>
 
 

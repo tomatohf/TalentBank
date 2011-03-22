@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 31) do
+ActiveRecord::Schema.define(:version => 32) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(:version => 31) do
     t.datetime "updated_at"
     t.boolean  "gender"
     t.integer  "political_status_id", :limit => 2
+    t.integer  "result_id",           :limit => 2
   end
 
   add_index "jobs", ["corporation_id", "created_at"], :name => "index_jobs_on_corporation_id_and_created_at"

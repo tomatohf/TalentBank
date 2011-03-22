@@ -22,11 +22,17 @@
 
 <tr id="matched_student_<%= student.id %>" class="matched_student<%= " odd" if counter.even? %>">
 	<td valign="top">
+		<% student_checkbox_id = "student_checkbox_#{student.id}" %>
+		<%= check_box_tag student_checkbox_id, value = "true", false, :class => "student_checkbox" %>
+	</td>
+	<td valign="top">
 		<div>
-			<span class="student_name"><%= h(student.get_name) %></span>
-			<span class="student_gender">
-				<%= profile.gender ? "(男)" : "(女)" if profile && !profile.gender.nil? %>
-			</span>
+			<label for="<%= student_checkbox_id %>">
+				<span class="student_name"><%= h(student.get_name) %></span>
+				<span class="student_gender">
+					<%= profile.gender ? "(男)" : "(女)" if profile && !profile.gender.nil? %>
+				</span>
+			</label>
 			<a href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" target="_blank" class="none">
 				<%= h(student.number) %></a>
 		</div>
@@ -39,7 +45,7 @@
 					<br />
 				<% end %>
 				
-				<%= h(profile.phone) %>
+				<span class="student_phone"><%= h(profile.phone) %></span>
 				<br />
 				<%= h(profile.email) %>
 				<br />

@@ -27,6 +27,27 @@
 	
 	<tr>
 		<td>
+			<label for="job_result">
+				岗位去向<%= required_mark %>
+			</label>
+		</td>
+		
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/job_result",
+					:locals => {
+						:job_result_id => @job.result_id,
+						:field_id => "job_result", :field_name => "job_result",
+						:hide_label => true, :empty_label => "选择岗位去向"
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
 			<label for="job_category_class">
 				岗位大类
 			</label>

@@ -157,6 +157,17 @@
 						<%= job_name %>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>
+						岗位去向<%= required_mark %>:
+					</td>
+
+					<td>
+						<% result = @job.result_id && JobResult.find(@job.result_id) %>
+						<%= result && result[:name] %>
+					</td>
+				</tr>
 
 				<tr>
 					<td>

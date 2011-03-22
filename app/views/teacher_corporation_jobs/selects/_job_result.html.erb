@@ -1,0 +1,21 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= "不限岗位去向"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		岗位去向:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if job_result_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobResult.data.each do |result| %>
+		<option value="<%= result[:id] %>"<%= %Q! selected="selected"! if job_result_id.to_i == result[:id] %>><%= result[:name] %></option>
+	<% end %>
+</select>

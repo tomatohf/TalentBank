@@ -7,17 +7,19 @@
 
 <tr<%= %Q! class="odd"! if intern_log_counter.odd? %>>
 	<td>
-		<a href="#" title="查看学生的数据统计" class="none operation_link">
-			<%= h(student.name) %></a>
+		<% if student %>
+			<a href="#" title="查看学生的数据统计" class="none operation_link">
+				<%= h(student.name) %></a>
 			
-		<div class="dropdown_menu">
-			<ul class="dropdown_sub_menu">
-				<li>
-					<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics/intern?student=<%= student.id %>">
-						实习数据统计</a>
-				</li>
-			</ul>
-		</div>
+			<div class="dropdown_menu">
+				<ul class="dropdown_sub_menu">
+					<li>
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/statistics/intern?student=<%= student.id %>">
+							实习数据统计</a>
+					</li>
+				</ul>
+			</div>
+		<% end %>
 	</td>
 	
 	<td>

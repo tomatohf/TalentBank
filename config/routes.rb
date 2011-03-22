@@ -84,7 +84,9 @@ ActionController::Routing::Routes.draw do |map|
         :search => :get,
         :match => :get,
         
-        :intern_logs => :get
+        :intern_logs => :get,
+        
+        :add_sms_intern_logs => :post
       }
     end
   end

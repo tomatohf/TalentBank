@@ -33,6 +33,7 @@ module CorporationsHelper
   
   def fill_corporation_job(job, params)
     job.name = params[:name] && params[:name].strip
+    job.result_id = params[:job_result]
     job.category_class_id = params[:job_category_class]
     job.category_id = params[:job_category]
     job.manager = params[:manager] && params[:manager].strip

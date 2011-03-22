@@ -38,8 +38,10 @@
 					teacher = log.teacher
 				%>
 				<td>
-					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" class="none">
-						<%= h(student.get_name) %></a>
+					<% if student %>
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" class="none">
+							<%= h(student.get_name) %></a>
+					<% end %>
 				</td>
 				<td>
 					<% event = InternLogEvent.find(log.event_id) %>
@@ -57,8 +59,10 @@
 				</td>
 
 				<td>
-					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs?job_id=<%= @job.id %>" class="none">
-						添加实习记录</a>
+					<% if student %>
+						<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs?job_id=<%= @job.id %>" class="none">
+							添加实习记录</a>
+					<% end %>
 				</td>
 			</tr>
 			

@@ -65,6 +65,8 @@ function add_more_search_result(table) {
 					$("#current_page").val(next);
 					
 					setup_matched_student_actions(table);
+					
+					setup_matched_student_checkbox();
 				}
 			}
 		);
@@ -245,8 +247,65 @@ function show_status_refreshing(student_id) {
 }
 
 
+function setup_sms_students() {
+	var sms_container = $(".sms_students");
+	
+	sms_container.find("#add_sms_intern_logs_form").submit(
+		function() {
+			if(!confirm('确定要提交么 ?')){
+				return false;
+			}
+			
+			$(this).append(
+				'<input type="hidden" name="search_params" value="' + $("#match_job_form").serialize() + '" />'
+			);
+		}
+	);
+	
+	sms_container.find("textarea").unbind("click").click(
+		function() {
+			$(this).select();
+		}
+	);
+}
+
+
+function setup_matched_student_checkbox() {
+	var checkbox_class_name = "student_checkbox",
+		sms_container = $(".sms_students");
+	
+	$("input:checkbox." + checkbox_class_name).unbind("click").click(
+		function() {
+			var student_phones = [],
+				student_ids_input = [];
+			
+			$.each(
+				$("input:checkbox:checked." + checkbox_class_name),
+				function(i, element) {
+					var checkbox = $(element),
+						student_id = checkbox.attr("id").substr((checkbox_class_name + "_").length);
+						
+					student_phones.push(
+						$.trim(checkbox.parent().next().find(".profile .student_phone").html())
+					);
+					student_ids_input.push(
+						'<input type="hidden" name="student_ids[]" value="' + student_id + '" />'
+					);
+				}
+			);
+			
+			sms_container.find("#sms_number_count").text(" (" + student_phones.length + ")");
+			sms_container.find("#sms_number").val(student_phones.join(","));
+			sms_container.find("#sms_student_ids_placeholder").html(student_ids_input.join(""));
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
+		goto_job_requirements_link();
+		
 		$("#industry_category").unbind("change").change(
 			function() {
 				APP.fill_industries("#industry", $(this).val(), "");
@@ -265,6 +324,7 @@ $(document).ready(
 		
 		setup_matched_student_actions();
 		
-		goto_job_requirements_link();
+		setup_sms_students();
+		setup_matched_student_checkbox();
 	}
 );
