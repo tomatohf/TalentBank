@@ -18,7 +18,7 @@ class Job < ActiveRecord::Base
   
   validates_length_of :name, :maximum => 50, :message => "名称 超过长度限制", :allow_nil => false
   validates_length_of :manager, :maximum => 50, :message => "负责人 超过长度限制", :allow_nil => true
-  validates_length_of :desc, :maximum => 500, :message => "工作内容 超过长度限制", :allow_nil => false
+  validates_length_of :desc, :maximum => 1000, :message => "工作内容 超过长度限制", :allow_nil => false
   validates_length_of :place, :maximum => 200, :message => "工作地址 超过长度限制", :allow_nil => false
   validates_length_of :welfare, :maximum => 300, :message => "福利待遇 超过长度限制", :allow_nil => true
   validates_length_of :requirement, :maximum => 500, :message => "其它要求 超过长度限制", :allow_nil => true

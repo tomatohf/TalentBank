@@ -10,7 +10,7 @@ class Jobs < ActiveRecord::Migration
       
       t.column :manager, :string, :limit => 50
       
-      t.column :desc, :string, :limit => 500
+      t.column :desc, :string, :limit => 1000
       
       t.column :district_id, :integer, :limit => 2
       t.column :place, :string, :limit => 200
