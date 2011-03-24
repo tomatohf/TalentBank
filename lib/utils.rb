@@ -195,7 +195,7 @@ module Utils
       def including_model.hash_field(*fields)
         fields.each do |field|
           define_method("get_#{field}") {
-            eval(self.send(field) || "") || {}
+            (eval(self.send(field) || "") || {}) rescue {}
           }
           
           define_method("fill_#{field}") { |value|
