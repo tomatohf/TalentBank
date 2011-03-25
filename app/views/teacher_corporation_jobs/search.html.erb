@@ -374,9 +374,17 @@
 			</td>
 			
 			<td>
-				<% sms_content = sms(@corporation, @job) %>
-				<label for="sms_content">短信内容 (<%= sms_content.jsize %>)：</label>
-				<textarea id="sms_content" class="text_field" readonly="true"><%= sms_content %></textarea>
+				<div>
+					<% sms_content = sms(@corporation, @job) %>
+					<label for="sms_content">短信内容 (<%= sms_content.jsize %>)：</label>
+					<textarea id="sms_content" class="text_field" readonly="true"><%= sms_content %></textarea>
+				</div>
+				
+				<div>
+					<% sms_content_2 = sms_2(@corporation, @job, @teacher) %>
+					<label for="sms_content_2">短信内容2 (<%= sms_content_2.jsize %>)：</label>
+					<textarea id="sms_content_2" class="text_field" readonly="true"><%= sms_content_2 %></textarea>
+				</div>
 			</td>
 		</tr>
 	</table>
