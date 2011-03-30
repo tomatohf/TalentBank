@@ -9,8 +9,8 @@ module TeacherCorporationJobsHelper
     district = JobDistrict.find(job.district_id)
     result = JobResult.find(job.result_id)
     
-    %Q!#{corporation.get_name}›#{job.get_name}:#{remove_newline(job.requirement)}#{result && result[:name]}。! +
-    %Q!工作地址:#{district && "#{district[:name]}›"}#{job.place}。!
+    %Q!#{corporation.get_name}，#{job.get_name}:#{remove_newline(job.requirement)}#{result && result[:name]}。! +
+    %Q!工作地址:#{district && district[:name].gsub(" ", "")}#{job.place}。!
   end
   
   

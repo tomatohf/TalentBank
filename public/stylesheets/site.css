@@ -1260,6 +1260,9 @@ img.notification_icon {
 .sms_students {
 	margin-top: 30px;
 }
+.sms_students table {
+	table-layout: fixed;
+}
 .sms_students table td {
 	vertical-align: top;
 	padding: 0px 8px;
