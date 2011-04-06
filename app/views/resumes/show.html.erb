@@ -5,10 +5,8 @@
 %>
 
 
-<h2 class="page_title">预览 <%= domain %> 的简历</h2>
-
-<div class="align_r" style="margin: 0px 50px 10px; font-size: 14px;">
-	<a href="/students/<%= @student.id %>/revise_resumes/<%= @resume.id %>" style="margin-right: 30px;" class="none">
+<div class="float_r" style="margin-top: 10px; font-size: 14px;">
+	<a href="/students/<%= @student.id %>/revise_resumes/<%= @resume.id %>" style="margin: 0px 30px;" class="none">
 		<img src="/images/revise_resumes/revise_resume_icon.gif" border="0" alt="简历修改" style="margin-bottom: -2px;" />
 		进入简历修改模式</a>
 	
@@ -16,6 +14,11 @@
 		<img src="/images/students/pdf_icon.gif" border="0" alt="PDF" style="vertical-align: -2px;" />
 		导出为 PDF</a>
 </div>
+<h2 class="page_title">预览 <%= domain %> 的简历</h2>
+
+<%= render :partial => "edit_resume_nav", :locals => {:current_link => "show"} %>
+
+<br />
 
 <div>
 	<%= render :partial => "resume", :object => @resume, :locals => {:protective => false} %>

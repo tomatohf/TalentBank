@@ -19,7 +19,7 @@ module Schools
     
     def resume_domains
       # TODO - MUST BE OVERRIDED
-      [10, 110, 120, 130, 140, 150, 160, 170, 180, 200, 210, 220]
+      ResumeDomain.data.map { |rd| rd[:id] }
     end
     
   end

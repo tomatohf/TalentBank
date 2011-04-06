@@ -26,7 +26,7 @@ module Schools
     
     
     def resume_domains
-      [10]
+      [20]
     end
     
     

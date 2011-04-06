@@ -10,7 +10,24 @@
 <table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 	<tr>
 		<td valign="top" style="padding-right: 20px;">
-			
+			<table border="0" cellspacing="0" cellpadding="0" class="list" style="font-size: 14px;">
+				<thead>
+					<tr>
+						<td>
+							<%= @resumes.size %>
+							份简历
+						</td>
+						<td style="width: 100px;"></td>
+						<td>
+							<a href="/students/<%= @student.id %>/resumes" class="none">管理简历</a>
+						</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					<%= render :partial => "added_resume", :collection => @resumes %>
+				</tbody>
+			</table>
 		</td>
 		
 		<td valign="top" style="width: 180px;">
@@ -23,6 +40,42 @@
 					}
 				)
 			%>
+			
+			<% if @profile.new_record? %>
+				<div class="info_with_icon" style="margin-top: 15px;">
+					还没有填写个人信息 ...
+				</div>
+				<div style="padding-left: 20px;">
+					<a href="/students/<%= @student.id %>/edit_profile">
+						填写个人信息</a>
+				</div>
+			<% end %>
+			<% unless @edu_exp_count > 0 %>
+				<div class="info_with_icon" style="margin-top: 15px;">
+					还没有填写教育经历 ...
+				</div>
+				<div style="padding-left: 20px;">
+					<a href="/students/<%= @student.id %>/edu_exps">
+						添加教育经历</a>
+				</div>
+			<% end %>
+			<% if @photo.new_record? %>
+				<div class="info_with_icon" style="margin-top: 15px;">
+					还没有上传求职照 ...
+				</div>
+				<div style="padding-left: 20px;">
+					<a href="/students/<%= @student.id %>/edit_photo">
+						设置求职照</a>
+				</div>
+			<% end %>
 		</td>
 	</tr>
 </table>
+
+
+
+<% content_for :scripts do %>
+	<script type="text/javascript">
+		APP.setup_dropdown_menu(".edit_link", 110);
+	</script>
+<% end %>

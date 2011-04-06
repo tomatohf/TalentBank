@@ -14,7 +14,14 @@ class StudentsController < ApplicationController
   
   
   def show
+    @resumes = Resume.find(
+      :all,
+      :conditions => ["student_id = ?  and domain_id in (?)", @student.id, @school.resume_domains]
+    ).select { |r| !r.hidden }
     
+    @profile = StudentProfile.get_record(@student.id)
+    @edu_exp_count = EduExp.count(:conditions => ["student_id = ?", @student.id])
+    @photo = JobPhoto.get_record(@student.id)
   end
   
   

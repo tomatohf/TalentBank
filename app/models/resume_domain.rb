@@ -8,6 +8,7 @@ class ResumeDomain < HashModel::Simple
     [
       # first 100 ids are reserved by general versions ...
       {:id => 10, :name => "不限方向", :category_id => 100},
+      {:id => 20, :name => "实习生", :category_id => 100},
       
       {:id => 110, :name => "销售", :category_id => 200},
       {:id => 120, :name => "市场", :category_id => 200},
