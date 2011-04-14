@@ -16,7 +16,7 @@ module TeacherCorporationJobsHelper
   
   def sms(corporation, job)
     sms_common(corporation, job) +
-    "有意申请该岗位者，请于2小时内致电60517703或60516910"
+    "有意申请该岗位者，请于今日17点前致电60517703或60516910"
   end
   
   
