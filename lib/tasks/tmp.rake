@@ -29,7 +29,7 @@ namespace :tmp do
 				
 				log = logs.sort { |x, y|
 				  x.occur_at <=> y.occur_at
-				}.first
+				}.last
 				event = log && InternLogEvent.find(log.event_id)
 				result = event && InternLogEventResult.find(event[:id], log.result_id)
 				job = log && log.job
