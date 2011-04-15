@@ -72,6 +72,9 @@ module Schools
         :intern => "实习"
       }
     end
+    def use_phone_as_number
+      false
+    end
     
   end
 

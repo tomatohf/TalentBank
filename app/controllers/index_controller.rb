@@ -280,7 +280,7 @@ class IndexController < ApplicationController
       
       @student.password = "111111"
       @intern_profile.salary = 0
-      @student.number = @profile.phone
+      @student.number = @profile.phone if @school.use_phone_as_number
       if @student.save
         @profile.student_id = @student.id
         @intern_profile.student_id = @student.id

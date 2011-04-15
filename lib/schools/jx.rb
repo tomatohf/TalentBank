@@ -42,6 +42,9 @@ module Schools
         :intern => "见习"
       }
     end
+    def use_phone_as_number
+      true
+    end
     
   end
   

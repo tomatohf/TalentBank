@@ -5,7 +5,12 @@
 <div class="intern_register">
 	<% if @student.errors.size > 0 %>
 		<p class="error_msg">
-			<%= list_model_validate_errors(@student).gsub("学号", @labels[:number]) %>
+			<%=
+				list_model_validate_errors(@student).gsub(
+					"学号",
+					@school.use_phone_as_number ? "手机" : @labels[:number]
+				)
+			%>
 		</p>
 	<% end %>
 	
@@ -106,7 +111,7 @@
 				
 				<td>
 					<label for="number">
-						<%= @labels[:number] %><%= required_mark(false) %>
+						<%= @labels[:number] %>
 					</label>
 				</td>
 				<td>
@@ -719,10 +724,6 @@
 					}
 					else if(is_field_empty("birthplace")) {
 						alert("请填写籍贯");
-						return false;
-					}
-					else if(is_field_empty("number")) {
-						alert("请填写<%= @labels[:number] %>");
 						return false;
 					}
 					else if(is_field_empty("edu_level")) {
