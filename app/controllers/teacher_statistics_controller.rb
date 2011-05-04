@@ -721,7 +721,7 @@ class TeacherStatisticsController < ApplicationController
 		    ]
 		  },
 		  {
-		    :title => "企业岗位状态 统计",
+		    :title => "企业实习状态 统计",
 		    :unit => "企业数",
 		    :total => {
 		      :title => "企业数目",
