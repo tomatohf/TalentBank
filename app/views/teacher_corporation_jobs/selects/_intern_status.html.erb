@@ -1,0 +1,21 @@
+<%
+	field_name ||= nil
+	hide_label &&= true
+	empty_label ||= "不限实习状态"
+	required &&= true
+%>
+
+
+<% unless hide_label %>
+	<label for="<%= field_id %>">
+		实习状态:
+	</label>
+<% end %>
+<select class="dropdown_list" id="<%= field_id %>"<%= %Q! name="#{field_name}"! if field_name %>>
+	<% unless required %>
+		<option value=""<%= %Q! selected="selected"! if intern_status_id.blank? %>><%= empty_label %></option>
+	<% end %>
+	<% JobInternStatus.data.each do |status| %>
+		<option value="<%= status[:id] %>"<%= %Q! selected="selected"! if intern_status_id.to_i == status[:id] %>><%= status[:label] %></option>
+	<% end %>
+</select>

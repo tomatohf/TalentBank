@@ -168,6 +168,17 @@
 						<%= result && result[:name] %>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>
+						实习状态<%= required_mark %>:
+					</td>
+
+					<td>
+						<% intern_status = @job.intern_status_id && JobInternStatus.find(@job.intern_status_id) %>
+						<%= intern_status && intern_status[:label] %>
+					</td>
+				</tr>
 
 				<tr>
 					<td>

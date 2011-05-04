@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 32) do
+ActiveRecord::Schema.define(:version => 33) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -297,10 +297,10 @@ ActiveRecord::Schema.define(:version => 32) do
     t.integer  "category_class_id",   :limit => 2
     t.integer  "category_id",         :limit => 2
     t.string   "manager",             :limit => 50
-    t.string   "desc",                :limit => 500
+    t.string   "desc",                :limit => 1000
     t.integer  "district_id",         :limit => 2
     t.string   "place",               :limit => 200
-    t.integer  "salary",              :limit => 10,  :precision => 10, :scale => 0
+    t.integer  "salary",              :limit => 10,   :precision => 10, :scale => 0
     t.string   "welfare",             :limit => 300
     t.integer  "number",              :limit => 2
     t.integer  "interview_number",    :limit => 2
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(:version => 32) do
     t.boolean  "gender"
     t.integer  "political_status_id", :limit => 2
     t.integer  "result_id",           :limit => 2
+    t.integer  "intern_status_id",    :limit => 2
   end
 
   add_index "jobs", ["corporation_id", "created_at"], :name => "index_jobs_on_corporation_id_and_created_at"

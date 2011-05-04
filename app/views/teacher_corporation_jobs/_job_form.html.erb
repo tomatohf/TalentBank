@@ -48,6 +48,27 @@
 	
 	<tr>
 		<td>
+			<label for="intern_status">
+				实习状态
+			</label>
+		</td>
+
+		<td>
+			<%=
+				render(
+					:partial => "/teacher_corporation_jobs/selects/intern_status",
+					:locals => {
+						:intern_status_id => @job.intern_status_id,
+						:field_id => "intern_status", :field_name => "intern_status",
+						:hide_label => true, :empty_label => "选择实习状态"
+					}
+				)
+			%>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
 			<label for="job_category_class">
 				岗位大类
 			</label>
