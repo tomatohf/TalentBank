@@ -130,7 +130,8 @@
 							:partial => "/corporations/selects/intern_status",
 							:locals => {
 								:intern_status_id => @intern_status_id,
-								:field_id => "intern_status", :field_name => "is"
+								:field_id => "intern_status", :field_name => "is",
+								:include_no_value => true
 							}
 						)
 					%>

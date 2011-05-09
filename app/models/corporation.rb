@@ -27,7 +27,8 @@ class Corporation < ActiveRecord::Base
     
     
     has school_id, allow_query, updated_at, created_at
-    has intern_status_id
+    has "IFNULL(intern_status_id, 0)", :type => :integer, :as => :intern_status_id
+    has "IFNULL(teacher_id, 0)", :type => :integer, :as => :teacher_id
     
     has profile.job_district_id, :as => :job_district_id
     has profile.nature_id, :as => :nature_id

@@ -3,6 +3,8 @@
 	hide_label &&= true
 	empty_label ||= "不限实习状态"
 	required &&= true
+	
+	include_no_value &&= true
 %>
 
 
@@ -17,5 +19,8 @@
 	<% end %>
 	<% CorporationInternStatus.data.each do |intern_status| %>
 		<option value="<%= intern_status[:id] %>"<%= %Q! selected="selected"! if intern_status_id.to_i == intern_status[:id] %>><%= intern_status[:label] %></option>
+	<% end %>
+	<% if include_no_value %>
+		<option value="0"<%= %Q! selected="selected"! if intern_status_id.to_i == 0 %>>[未填写]</option>
 	<% end %>
 </select>
