@@ -788,6 +788,11 @@ class TeacherStatisticsController < ApplicationController
 			  :title => "实习结果 统计",
 			  :rows => [
 			    {
+			      :title => "实习后 #{InternLogEventResult.intern_end_finish[:name]}",
+			      :event_id => InternLogEvent.intern_end[:id],
+			      :result_id => InternLogEventResult.intern_end_finish[:id]
+			    },
+			    {
 			      :title => "实习后 #{InternLogEventResult.intern_end_employed[:name]}",
 			      :event_id => InternLogEvent.intern_end[:id],
 			      :result_id => InternLogEventResult.intern_end_employed[:id]

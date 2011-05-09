@@ -47,6 +47,10 @@ class InternLogEventResult < HashModel::Grouped
     self.find(20, 30)
   end
   
+  def self.intern_end_finish
+    self.find(30, 60)
+  end
+  
   def self.intern_end_employed
     self.find(30, 70)
   end
