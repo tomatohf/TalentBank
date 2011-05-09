@@ -281,19 +281,24 @@
 		</div>
 		
 		
-		<div class="align_r" style="margin: 15px 100px 5px 5px;">
+		<div class="align_r" style="margin: 15px 50px 5px 5px;">
 			<span class="field">
-				搜索结果包含:
+				搜索结果:
 			</span>
 			
 			<span class="field">
 				<%= check_box_tag :not_only_unemployed, value = "true", @not_only_unemployed %>
-				<label for="not_only_unemployed">非待业</label>
+				<label for="not_only_unemployed">包含非待业</label>
 			</span>
 			
 			<span class="field">
 				<%= check_box_tag :not_only_no_related_intern_log, value = "true", @not_only_no_related_intern_log %>
-				<label for="not_only_no_related_intern_log">已有该岗位实习记录</label>
+				<label for="not_only_no_related_intern_log">包含已有该岗位实习记录</label>
+			</span>
+			
+			<span class="field">
+				<%= check_box_tag :only_no_intern_log, value = "true", @only_no_intern_log %>
+				<label for="only_no_intern_log">不包含已有实习记录</label>
 			</span>
 			
 			<input type="submit" value="搜索" class="button" />

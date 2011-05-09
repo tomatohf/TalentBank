@@ -229,6 +229,8 @@ class Student < ActiveRecord::Base
     filters[:intern_log_latest_result_id] = InternLogEventResult.find_by_intern_status(:unemployed).map { |result|
       result[:id]
     } << 0 if options[:only_unemployed]
+    filters[:intern_log_latest_result_id] = 0 if options[:only_no_intern_log]
+    # :only_no_intern_log has higher priority than :only_unemployed
     
     blacklists = {}
     blacklists[:intern_blacklist_industry_category_id] = corporation_profile.industry_category_id unless corporation_profile.industry_category_id.blank?
