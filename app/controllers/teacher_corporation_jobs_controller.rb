@@ -121,6 +121,7 @@ class TeacherCorporationJobsController < ApplicationController
     @job.major_id = params[:jm].strip unless params[:jm].nil?
     
     
+    @university_id = params[:u] && params[:u].strip
     @not_only_unemployed = (params[:not_only_unemployed] == "true")
     @not_only_no_related_intern_log = (params[:not_only_no_related_intern_log] == "true")
     @only_no_intern_log = (params[:only_no_intern_log] == "true")
@@ -135,6 +136,7 @@ class TeacherCorporationJobsController < ApplicationController
       :only_unemployed => !@not_only_unemployed,
       :only_no_related_intern_log => !@not_only_no_related_intern_log,
       :only_no_intern_log => @only_no_intern_log,
+      :university_id => @university_id,
       :keyword => @keyword
     )
     @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])

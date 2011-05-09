@@ -231,6 +231,7 @@ class Student < ActiveRecord::Base
     } << 0 if options[:only_unemployed]
     filters[:intern_log_latest_result_id] = 0 if options[:only_no_intern_log]
     # :only_no_intern_log has higher priority than :only_unemployed
+    filters[:university_id] = options[:university_id] unless options[:university_id].blank?
     
     blacklists = {}
     blacklists[:intern_blacklist_industry_category_id] = corporation_profile.industry_category_id unless corporation_profile.industry_category_id.blank?

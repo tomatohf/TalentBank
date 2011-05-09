@@ -269,6 +269,18 @@
 							<option value="false"<%= %Q! selected="selected"! if @job.gender == false %>>女 - ♀</option>
 						</select>
 					</span>
+					
+					<span class="field">
+						<%=
+							render(
+								:partial => "/students/selects/university",
+								:locals => {
+									:university_id => @university_id,
+									:field_id => "university", :field_name => "u"
+								}
+							)
+						%>
+					</span>
 				</div>
 				
 				<div class="field_row">
