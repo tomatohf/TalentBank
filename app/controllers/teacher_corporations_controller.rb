@@ -19,6 +19,8 @@ class TeacherCorporationsController < ApplicationController
   
   
   def index
+    @teachers = Teacher.list_from_school(@teacher.school_id)
+    
     @uid = params[:u] && params[:u].strip
     
     page = params[:page]
@@ -46,6 +48,7 @@ class TeacherCorporationsController < ApplicationController
       @industry_category_id = params[:ic] && params[:ic].strip
       @industry_id = params[:i] && params[:i].strip
       @intern_status_id = params[:is] && params[:is].strip
+      @teacher_id = params[:t] && params[:t].strip
       
       @keyword = params[:k] && params[:k].strip
       
@@ -60,7 +63,7 @@ class TeacherCorporationsController < ApplicationController
       if @district_id.blank? && @nature_id.blank? && @size_id.blank? &&
         @industry_category_id.blank? && @industry_id.blank? &&
         @province_id.blank? && @keyword.blank? && @allow_query.nil? &&
-        @intern_status_id.blank?
+        @intern_status_id.blank? && @teacher_id.blank?
         Corporation.paginate(
           :page => page,
           :per_page => Corporation_Page_Size,
@@ -79,6 +82,7 @@ class TeacherCorporationsController < ApplicationController
           :industry_category_id => @industry_category_id,
           :industry_id => @industry_id,
           :intern_status_id => @intern_status_id,
+          :teacher_id => @teacher_id,
           :province_id => @province_id
         )
       end

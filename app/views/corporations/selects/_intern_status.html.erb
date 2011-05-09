@@ -21,6 +21,6 @@
 		<option value="<%= intern_status[:id] %>"<%= %Q! selected="selected"! if intern_status_id.to_i == intern_status[:id] %>><%= intern_status[:label] %></option>
 	<% end %>
 	<% if include_no_value %>
-		<option value="0"<%= %Q! selected="selected"! if intern_status_id.to_i == 0 %>>[未填写]</option>
+		<option value="0"<%= %Q! selected="selected"! if intern_status_id == "0" %>>[未填写]</option>
 	<% end %>
 </select>

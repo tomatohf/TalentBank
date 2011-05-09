@@ -138,6 +138,19 @@
 				</span>
 				
 				<span class="field">
+					<label for="teacher_id">
+						负责老师:
+					</label>
+					<select name="t" id="teacher_id" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @teacher_id.blank? %>>不限老师</option>
+						<% @teachers.each do |teacher| %>
+							<option value="<%= teacher.id %>"<%= %Q! selected="selected"! if @teacher_id.to_i == teacher.id %>><%= teacher.get_name %></option>
+						<% end %>
+						<option value="0"<%= %Q! selected="selected"! if @teacher_id == "0" %>>[未填写]</option>
+					</select>
+				</span>
+				
+				<span class="field">
 					<label for="keyword">
 						关键词:
 					</label>

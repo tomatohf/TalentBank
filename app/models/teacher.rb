@@ -53,4 +53,13 @@ class Teacher < ActiveRecord::Base
     self.find(:all, :conditions => ["school_id = ? and revision = ?", school_id, true])
   end
   
+  
+  def self.list_from_school(school_id)
+    self.find(
+      :all,
+      :conditions => ["school_id = ?", school_id],
+      :order => "created_at DESC"
+    )
+  end
+  
 end

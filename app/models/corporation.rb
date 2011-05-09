@@ -91,7 +91,7 @@ class Corporation < ActiveRecord::Base
     [
       :job_district_id, :nature_id, :size_id,
       :industry_category_id, :industry_id, :province_id,
-      :intern_status_id
+      :intern_status_id, :teacher_id
     ].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?
