@@ -27,6 +27,7 @@
 		<tr>
 			<td>编号</td>
 			<td>岗位名称</td>
+			<td>实习状态</td>
 			<td>招聘人数</td>
 			<td>提供面试</td>
 			<td style="width: 65px;">招聘终止</td>
@@ -48,6 +49,10 @@
 				<td>
 					<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= job.id %>" class="none" target="_blank">
 						<%= h(job.get_name) %></a>
+				</td>
+				<td>
+					<% intern_status = job.intern_status_id && JobInternStatus.find(job.intern_status_id) %>
+					<%= intern_status && intern_status[:label] %>
 				</td>
 				<td align="right"><%= job.number %></td>
 				<td align="right"><%= job.interview_number %></td>

@@ -19,6 +19,7 @@
 		<tr>
 			<td>企业编号</td>
 			<td>企业名称</td>
+			<td>行业大类</td>
 			<td>企业性质</td>
 			
 			<td>岗位编号</td>
@@ -49,6 +50,10 @@
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= corporation.id %>" class="none">
 						<%= h(corporation.get_name) %></a>
+				</td>
+				<td>
+					<% industry_category = profile && profile.industry_category_id && IndustryCategory.find(profile.industry_category_id) %>
+					<%= industry_category && industry_category[:name] %>
 				</td>
 				<td>
 					<% nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id) %>
