@@ -76,7 +76,8 @@ ActionController::Routing::Routes.draw do |map|
     teachers.resources :teacher_corporations, :as => :corporations, :collection => {
       :autocomplete => :get,
       
-      :jobs => :get
+      :jobs => :get,
+      :jobs_info => :get
     }, :member => {
       :adjust_permission => :post
     } do |teacher_corporations|

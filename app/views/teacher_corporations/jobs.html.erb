@@ -5,8 +5,11 @@
 
 
 <div class="float_r" style="margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/jobs_info.csv" class="button" style="margin-right: 30px;">
+		导出完整信息为 CSV</a>
+	
 	<a href="/teachers/<%= @teacher.id %>/corporations/jobs.csv" class="button">
-		导出为 CSV</a>
+		导出当前列表为 CSV</a>
 </div>
 <h2 class="page_title"><%= page_title %></h2>
 

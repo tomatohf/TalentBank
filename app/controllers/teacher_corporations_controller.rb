@@ -15,7 +15,8 @@ class TeacherCorporationsController < ApplicationController
   
   before_filter :check_teacher_admin, :except => [:autocomplete]
   
-  before_filter :check_corporation, :except => [:index, :new, :create, :autocomplete, :jobs]
+  before_filter :check_corporation, :except => [:index, :new, :create, :autocomplete,
+                                                :jobs, :jobs_info]
   
   
   def index
@@ -265,6 +266,66 @@ class TeacherCorporationsController < ApplicationController
         send_data(
           csv_data,
           :filename => "jobs.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
+  end
+  
+  def jobs_info
+    respond_to do |format|
+      format.csv {
+        jobs = Job.find(
+          :all,
+          :joins => "INNER JOIN corporations ON corporations.id = jobs.corporation_id",
+          :conditions => ["school_id = ?", @teacher.school_id],
+          :include => [:corporation => :profile]
+        ).sort { |x, y|
+          x.recruit_end_at <=> y.recruit_end_at
+        }
+    
+        csv_data = FasterCSV.generate do |csv|
+          csv << [
+            "企业名称", "企业简介", "企业性质",
+            "岗位名称", "上岗日期", "招聘终止日期", "工作期限", "每周工作时间", "最低学历", "毕业时间",
+            "性别", "政治面貌", "其他要求", "工作内容", "薪酬", "招聘人数"
+          ]
+      
+          jobs.each do |job|
+            corporation = job.corporation
+    				profile = corporation.profile
+    				nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id)
+    				period = job.period_id && JobPeriod.find(job.period_id)
+    				workday = job.workday_id && JobWorkday.find(job.workday_id)
+    				edu_level = job.edu_level_id && EduLevel.find(job.edu_level_id)
+    				graduation = job.graduation_id && JobGraduation.find(job.graduation_id)
+    				political_status = job.political_status_id && PoliticalStatus.find(job.political_status_id)
+				
+            csv << [
+    				  corporation.get_name,
+    				  profile && profile.desc,
+    				  nature && nature[:name],
+    				  job.get_name,
+    				  ApplicationController.helpers.format_date(job.begin_at),
+    				  ApplicationController.helpers.format_date(job.recruit_end_at),
+    				  period && period[:name],
+    				  workday && workday[:name],
+    				  edu_level && edu_level[:name],
+    				  graduation && graduation[:name],
+              job.gender.nil? ? "" : (job.gender ? "男" : "女"),
+              political_status && political_status[:name],
+              job.requirement,
+              job.desc,
+              job.salary,
+              job.number
+    				]
+          end
+        end
+    
+        send_data(
+          csv_data,
+          :filename => "jobs_info.csv",
           :type => :csv,
           :disposition => "attachment"
         )
