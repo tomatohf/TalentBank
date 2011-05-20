@@ -25,6 +25,10 @@ module ApplicationHelper
     date && date.to_time.getlocal.strftime("%H:%M:%S")
   end
   
+  def day_end(date)
+    Time.local(date.year, date.month, date.mday, 23, 59, 59)
+  end
+  
   
   def paging_buttons(collection, params = {})
     will_paginate(

@@ -263,7 +263,7 @@ module Utils
         from, to = to, from if from > to
 
         from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
-        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+        to_time = ApplicationController.helpers.day_end(to)
         
         group_function = options[:group_function] || :attr
         
@@ -301,7 +301,7 @@ module Utils
         from, to = to, from if from > to
 
         from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
-        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+        to_time = ApplicationController.helpers.day_end(to)
         
         search_args = {
           # :match_mode => self::Search_Match_Mode,
@@ -321,7 +321,7 @@ module Utils
         from, to = to, from if from > to
 
         from_time = Time.local(from.year, from.month, from.mday, 0, 0, 0)
-        to_time = Time.local(to.year, to.month, to.mday, 23, 59, 59)
+        to_time = ApplicationController.helpers.day_end(to)
         
         self.search(
           :page => options[:page] || 1,

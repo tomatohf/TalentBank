@@ -562,13 +562,21 @@ class TeacherStatisticsController < ApplicationController
       Job.sum(
         :number,
         :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
-        :conditions => ["corporations.school_id = ? and jobs.created_at < ?", @teacher.school_id, to]
+        :conditions => [
+          "corporations.school_id = ? and jobs.created_at < ?",
+          @teacher.school_id,
+          ApplicationController.helpers.day_end(to)
+        ]
       )
     }
     count_job = Proc.new { |to|
       Job.count(
         :joins => "RIGHT OUTER JOIN corporations ON jobs.corporation_id = corporations.id",
-        :conditions => ["corporations.school_id = ? and jobs.created_at < ?", @teacher.school_id, to]
+        :conditions => [
+          "corporations.school_id = ? and jobs.created_at < ?",
+          @teacher.school_id,
+          ApplicationController.helpers.day_end(to)
+        ]
       )
     }
     student_count = Student.period_total_count(
