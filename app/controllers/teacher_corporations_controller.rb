@@ -287,8 +287,8 @@ class TeacherCorporationsController < ApplicationController
     
         csv_data = FasterCSV.generate do |csv|
           csv << [
-            "企业名称", "企业简介", "企业性质",
-            "岗位名称", "上岗日期", "招聘终止日期", "工作期限", "每周工作时间", "最低学历", "毕业时间",
+            "企业编号", "企业名称", "企业简介", "企业性质",
+            "岗位编号", "岗位名称", "上岗日期", "招聘终止日期", "工作期限", "每周工作时间", "最低学历", "毕业时间",
             "性别", "政治面貌", "其他要求", "工作内容", "薪酬", "招聘人数"
           ]
       
@@ -303,9 +303,11 @@ class TeacherCorporationsController < ApplicationController
     				political_status = job.political_status_id && PoliticalStatus.find(job.political_status_id)
 				
             csv << [
+              corporation.id,
     				  corporation.get_name,
     				  profile && profile.desc,
     				  nature && nature[:name],
+    				  job.id,
     				  job.get_name,
     				  ApplicationController.helpers.format_date(job.begin_at),
     				  ApplicationController.helpers.format_date(job.recruit_end_at),
