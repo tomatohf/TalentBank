@@ -73,7 +73,7 @@ class Industry < HashModel::Grouped
       
       90 => [
         {:id => 460, :name => "交通/运输/物流"},
-        {:id => 470, :name => "航天/航空"},
+        {:id => 470, :name => "航天/航空"}
       ],
       
       100 => [
