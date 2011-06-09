@@ -20,7 +20,8 @@ class TeacherStudentsController < ApplicationController
   before_filter :check_teacher_student, :except => [:index, :resume]
   
   before_filter :check_student, :except => [:index, :new, :create, :resume,
-                                            :no_intern_log, :interview_passed, :no_interview_result]
+                                            :no_intern_log, :interview_passed, :no_interview_result,
+                                            :import]
   
   
   def index
@@ -496,6 +497,11 @@ class TeacherStudentsController < ApplicationController
         )
       }
     end
+  end
+  
+  
+  def import
+    
   end
   
   

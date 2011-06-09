@@ -1,0 +1,15 @@
+<% talent_page_title("导入学生数据") %>
+
+
+<h2 class="page_title">导入学生数据</h2>
+
+<%= render :partial => "new_nav", :locals => {:current_link => "import"} %>
+
+<% if flash[:error_msg] %>
+	<p class="error_msg">
+	    <%= flash[:error_msg] %>
+	</p>
+<% end %>
+
+<% form_tag "/teachers/#{@teacher.id}/students", :method => :post do %>
+<% end %>

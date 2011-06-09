@@ -5,6 +5,9 @@
 
 <% if @teacher.student %>
 	<div class="float_r" style="margin: 12px 25px 0px;">
+		<a href="/teachers/<%= @teacher.id %>/students/import" class="button" style="margin-right: 30px;">
+			导入学生数据</a>
+		
 		<a href="/teachers/<%= @teacher.id %>/students/new" class="button">
 			添加学生帐号</a>
 	</div>
