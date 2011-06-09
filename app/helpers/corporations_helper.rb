@@ -82,7 +82,7 @@ module CorporationsHelper
   
   class InternLogCounts
     def self.ordered_keys
-      [:aii, :rii, :irp, :irf, :irm, :ie, :il, :if]
+      [:aii, :rii, :irp, :irf, :irm, :ief, :iee, :il, :if]
     end
     def ordered_keys
       self.class.ordered_keys
@@ -104,7 +104,8 @@ module CorporationsHelper
         :irp => {:event_id => 20, :result_id => 30},
         :irf => {:event_id => 20, :result_id => 40},
         :irm => {:event_id => 20, :result_id => 50},
-        :ie => {:event_id => 30, :result_id => 70},
+        :ief => {:event_id => 30, :result_id => 60},
+        :iee => {:event_id => 30, :result_id => 70},
         :il => {:event_id => 30, :result_id => 80},
         :if => {:event_id => 30, :result_id => 90}
       }
@@ -126,7 +127,8 @@ module CorporationsHelper
         :irp => "面试成功",
         :irf => "面试失败",
         :irm => "没去面试",
-        :ie => "实习结束留任",
+        :ief => "实习到期",
+        :iee => "实习结束留任",
         :il => "实习中流动",
         :if => "实习中劝退"
       }
