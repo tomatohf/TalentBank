@@ -1382,3 +1382,26 @@ img.notification_icon {
 .intern_register table tr.wish a.remove_wish_link {
 	margin-left: 10px;
 }
+
+
+#students_import {
+	margin: 0px 10px;
+	text-align: center;
+}
+#students_import textarea {
+	margin-left: -4px;
+	width: 100%;
+	height: 200px;
+	margin-bottom: 15px;
+}
+#students_import #begin_import {
+	font-size: 14px;
+}
+#students_import .importing {
+	font-size: 16px;
+	color: #666666;
+	margin-bottom: 20px;
+}
+#students_import .importing img {
+	margin: 0px 10px -2px 0px;
+}

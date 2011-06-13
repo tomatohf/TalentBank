@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 33) do
+ActiveRecord::Schema.define(:version => 34) do
 
   create_table "blocked_corps", :force => true do |t|
     t.integer  "student_id"
@@ -504,6 +504,15 @@ ActiveRecord::Schema.define(:version => 33) do
   end
 
   add_index "student_exps", ["student_id"], :name => "index_student_exps_on_student_id"
+
+  create_table "student_imports", :force => true do |t|
+    t.integer  "school_id"
+    t.integer  "teacher_id"
+    t.text     "data"
+    t.text     "saved"
+    t.text     "failed"
+    t.datetime "updated_at"
+  end
 
   create_table "student_profile_copies", :force => true do |t|
     t.integer  "student_id"

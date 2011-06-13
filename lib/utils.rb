@@ -108,6 +108,15 @@ module Utils
   end
   
   
+  def self.to_boolean(value)
+    if value.is_a?(String) && value.blank?
+      nil
+    else
+      [true, 1, "1", "t", "T", "true", "TRUE"].include?(value)
+    end
+  end
+  
+  
   module CountCacheable
     def self.included(including_model)
       

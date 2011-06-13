@@ -53,4 +53,100 @@ module StudentsHelper
     log.occur_at = params[:occur_at]
   end
   
+  
+  def import(students, school, school_id)
+    saved = []
+    failed = []
+    
+    universities = school.universities.map { |u_id| University.find(u_id) }
+    
+    (students.first.kind_of?(Array) ? students : [students]).each_with_index do |s, i|
+      begin
+        basic = s[0] || {}
+        intern = s[1] || {}
+        extra = s[2] || {}
+        
+        number = basic["number"]
+        number = "#{Time.now.to_f}.#{i}" if number.blank?
+        university = basic["university"]
+        university_model = universities.detect { |u| u[:name] == university }
+        student = Student.new(
+          :school_id => school_id,
+          :name => basic["name"],
+          :number => number,
+          :password => number,
+          :edu_level_id => basic["edu_level"],
+          :graduation_year => basic["graduation_year"]
+        )
+        student.university_id = university_model[:id] if university_model
+        
+        student_profile = StudentProfile.new(
+          :phone => basic["phone"],
+          :email => basic["email"],
+          :gender => Utils.to_boolean(basic["gender"]),
+          :political_status_id => basic["political_status"]
+        )
+        
+        intern_profile = InternProfile.new(
+          :begin_at => intern["begin_at"],
+          :period_id => intern["job_period"],
+          :workday_id => intern["job_workday"],
+          :major_id => basic["job_major"],
+          :salary => 0,
+          :birthplace => basic["birthplace"],
+          :birthmonth => basic["birthday"],
+          :intention => intern["intention"],
+          :skill => extra["skill"],
+          :experience => extra["experience"],
+          :desc => %Q!学校:#{university}\n学院:#{basic["college"]}\n专业:#{basic["major"]}\n服从岗位调剂:#{Utils.to_boolean(intern["allow_adjust"]) ? "是" : "否"}!
+        )
+        
+        ActiveRecord::Base.transaction do
+          student.save!
+          
+          student_profile.student_id = student.id
+          student_profile.save!
+          
+          intern_profile.student_id = student.id
+          intern_profile.save!
+          
+          intern["wishes"].each do |wish|
+            wish_model = case wish["aspect"]
+              when "job"
+                wish_job = wish["job"]
+                wish_job.blank? ? InternCorporationWish.new(:corporation_id => wish["corporation"]) : InternJobWish.new(:job_id => wish_job)
+              when "industry"
+                InternIndustryWish.new(
+                  :industry_category_id => wish["industry_category"],
+                  :industry_id => wish["industry"]
+                )
+              when "job_category"
+                InternJobCategoryWish.new(
+                  :job_category_class_id => wish["job_category_class"],
+                  :job_category_id => wish["job_category"]
+                )
+              when "corp_nature"
+                InternCorpNatureWish.new(:nature_id => wish["corp_nature"])
+              when "job_district"
+                InternJobDistrictWish.new(:job_district_id => wish["job_district"])
+              else
+                nil
+            end
+            
+            unless wish_model.nil?
+              wish_model.student_id = student.id
+              wish_model.save!
+            end
+          end
+          
+          saved << s
+        end
+      rescue
+        failed << s
+      end
+    end
+    
+    [saved, failed]
+  end
+  
 end

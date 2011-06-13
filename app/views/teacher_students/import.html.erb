@@ -5,11 +5,14 @@
 
 <%= render :partial => "new_nav", :locals => {:current_link => "import"} %>
 
-<% if flash[:error_msg] %>
-	<p class="error_msg">
-	    <%= flash[:error_msg] %>
-	</p>
-<% end %>
+<div id="students_import">
+	<textarea id="students" name="students" class="text_field"></textarea>
+	<br />
+	<a href="#" id="begin_import" class="button">开始导入</a>
+</div>
 
-<% form_tag "/teachers/#{@teacher.id}/students", :method => :post do %>
+
+
+<% content_for :scripts do %>
+	<script src="/javascripts/teachers/import.js" type="text/javascript"></script>
 <% end %>

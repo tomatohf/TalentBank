@@ -501,7 +501,37 @@ class TeacherStudentsController < ApplicationController
   
   
   def import
-    
+    if request.post?
+      students = JSON.parse(params[:students] && params[:students].strip) rescue []
+      
+      return render(
+        :layout => false,
+        :json => {
+          :finished => false,
+          :message => "无法解析出可用的数据"
+        }.to_json
+      ) unless students.kind_of?(Array) && students.size > 0
+      
+      saved, failed = StudentsController.helpers.import(students, @school, @teacher.school_id)
+      
+      import_log = StudentImport.new(
+        :school_id => @teacher.school_id,
+        :teacher_id => @teacher.id,
+        :data => students.to_json,
+        :saved => saved.to_json,
+        :failed => failed.to_json
+      )
+      import_log.save
+      
+      render(
+        :layout => false,
+        :json => {
+          :finished => true,
+          :saved_count => saved.size,
+          :failed => failed.map { |s| s.to_json }
+        }.to_json
+      )
+    end
   end
   
   
