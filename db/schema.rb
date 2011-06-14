@@ -512,6 +512,7 @@ ActiveRecord::Schema.define(:version => 34) do
     t.text     "saved"
     t.text     "failed"
     t.datetime "updated_at"
+    t.text     "exceptions"
   end
 
   create_table "student_profile_copies", :force => true do |t|

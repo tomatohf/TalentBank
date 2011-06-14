@@ -18,6 +18,63 @@ function build_table(info) {
 }
 
 
+function build_table_list(columns, header, rows, use_textarea) {
+	var table = $('<table border="1"></table>');
+
+	var header_row = $('<tr></tr>');
+	$.each(
+		columns,
+		function(i, column) {
+			header_row.append($('<th></th>').text(header[column]));
+		}
+	);
+	table.append(header_row);
+	
+	$.each(
+		rows,
+		function(i, row_data) {
+			var row = $('<tr></tr>');
+			$.each(
+				columns,
+				function(i, column) {
+					var cell = $('<td></td>');
+					var value = row_data[column];
+					if(use_textarea) {
+						cell.html(
+							build_readonly_textarea(value)
+						);
+					}
+					else {
+						cell.text(value);
+					}
+					row.append(cell);
+				}
+			);
+			table.append(row);
+		}
+	);
+	
+	return table;
+}
+
+
+function build_readonly_textarea(value) {
+	return $('<textarea></textarea>')
+		.attr(
+			{
+				class: "text_field",
+				readonly: "true"
+			}
+		)
+		.unbind("click").click(
+			function() {
+				$(this).select();
+			}
+		)
+		.val(value);
+}
+
+
 function import_students() {
 	var container = $("#students_import"),
 		students_data = container.find("textarea#students").val();
@@ -61,6 +118,7 @@ function import_students() {
 				if(data.finished) {
 					var saved_count = data.saved_count,
 						failed = data.failed,
+						exceptions = data.exceptions,
 						failed_count = failed.length;
 					
 					if(failed_count > 0) {
@@ -73,23 +131,31 @@ function import_students() {
 							)
 							.before(
 								$('<p class="error_msg"></p>').html(
-									"共有 " + failed_count + " 名学生导入失败，数据如下："
+									"共有 " + failed_count + " 名学生导入失败，相关数据与错误信息如下："
 								)
 							)
-							.html(
-								$('<textarea></textarea>')
-									.attr(
-										{
-											class: "text_field",
-											readonly: "true"
+							.append(
+								build_readonly_textarea("[" + failed.join("\n,\n") + "]")
+							)
+							.append(
+								build_table_list(
+									["data", "error"],
+									{
+										data: "学生数据",
+										error: "错误信息"
+									},
+									$.map(
+										failed,
+										function(failed_data, i) {
+											var exception = exceptions[i];
+											return {
+												data: failed_data,
+												error: exception.inspect + "\n" + exception.backtrace.join("\n")
+											};
 										}
-									)
-									.unbind("click").click(
-										function() {
-											$(this).select();
-										}
-									)
-									.val("[" + failed.join("\n,\n") + "]")
+									),
+									true
+								)
 							);
 					}
 					else {

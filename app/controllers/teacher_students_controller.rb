@@ -512,14 +512,15 @@ class TeacherStudentsController < ApplicationController
         }.to_json
       ) unless students.kind_of?(Array) && students.size > 0
       
-      saved, failed = StudentsController.helpers.import(students, @school, @teacher.school_id)
+      saved, failed, exceptions = StudentsController.helpers.import(students, @school, @teacher.school_id)
       
       import_log = StudentImport.new(
         :school_id => @teacher.school_id,
         :teacher_id => @teacher.id,
         :data => students.to_json,
         :saved => saved.to_json,
-        :failed => failed.to_json
+        :failed => failed.to_json,
+        :exceptions => exceptions.to_json
       )
       import_log.save
       
@@ -528,7 +529,8 @@ class TeacherStudentsController < ApplicationController
         :json => {
           :finished => true,
           :saved_count => saved.size,
-          :failed => failed.map { |s| s.to_json }
+          :failed => failed.map { |s| s.to_json },
+          :exceptions => exceptions
         }.to_json
       )
     end

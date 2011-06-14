@@ -57,6 +57,7 @@ module StudentsHelper
   def import(students, school, school_id)
     saved = []
     failed = []
+    exceptions = []
     
     universities = school.universities.map { |u_id| University.find(u_id) }
     
@@ -135,18 +136,20 @@ module StudentsHelper
             
             unless wish_model.nil?
               wish_model.student_id = student.id
-              wish_model.save!
+              # ignore when saving wish fail
+              wish_model.save! rescue nil
             end
           end
           
           saved << s
         end
-      rescue
+      rescue Exception => e
         failed << s
+        exceptions << {:inspect => e.inspect, :backtrace => e.backtrace}
       end
     end
     
-    [saved, failed]
+    [saved, failed, exceptions]
   end
   
 end

@@ -8,6 +8,7 @@ class StudentImports < ActiveRecord::Migration
       t.column :data, :text
       t.column :saved, :text
       t.column :failed, :text
+      t.column :exceptions, :text
       
       t.column :updated_at, :datetime
     end

@@ -1405,3 +1405,6 @@ img.notification_icon {
 #students_import .importing img {
 	margin: 0px 10px -2px 0px;
 }
+#students_import table {
+	width: 100%;
+}
