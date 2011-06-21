@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   
+  map.connect "/r", :controller => "index", :action => "intern_register"
+  
   map.connect "/schools/:id/teachers/:page", :controller => "schools", :action => "teachers", :id => /\d+/, :page => /\d+/
   map.resources :schools, :collection => {
     
