@@ -67,22 +67,21 @@ module StudentsHelper
         intern = s[1] || {}
         extra = s[2] || {}
         
-        number = basic["number"]
-        number = "#{Time.now.to_f}.#{i}" if number.blank?
+        phone = basic["phone"]
         university = basic["university"]
         university_model = universities.detect { |u| u[:name] == university }
         student = Student.new(
           :school_id => school_id,
           :name => basic["name"],
-          :number => number,
-          :password => number,
+          :number => phone,
+          :password => phone,
           :edu_level_id => basic["edu_level"],
           :graduation_year => basic["graduation_year"]
         )
         student.university_id = university_model[:id] if university_model
         
         student_profile = StudentProfile.new(
-          :phone => basic["phone"],
+          :phone => phone,
           :email => basic["email"],
           :gender => Utils.to_boolean(basic["gender"]),
           :political_status_id => basic["political_status"]
@@ -99,7 +98,7 @@ module StudentsHelper
           :intention => intern["intention"],
           :skill => extra["skill"],
           :experience => extra["experience"],
-          :desc => %Q!学校:#{university}\n学院:#{basic["college"]}\n专业:#{basic["major"]}\n服从岗位调剂:#{Utils.to_boolean(intern["allow_adjust"]) ? "是" : "否"}!
+          :desc => %Q!学号:#{basic["number"]}\n学校:#{university}\n学院:#{basic["college"]}\n专业:#{basic["major"]}\n服从岗位调剂:#{Utils.to_boolean(intern["allow_adjust"]) ? "是" : "否"}!
         )
         
         ActiveRecord::Base.transaction do
