@@ -27,6 +27,7 @@
 	show_job_category_class = show.include?(:job_category_class)
 	show_job_category = show.include?(:job_category)
 	show_job_district = show.include?(:job_district)
+	show_intern_major = show.include?(:intern_major)
 	
 	period = %Q!#{@from.strftime("%Y%m%d")}#{TeacherStatisticsController::Date_Range_Splitter}#{@to.strftime("%Y%m%d")}!
 	compare = @compared_from && @compared_from.strftime("%Y%m%d")
@@ -89,6 +90,9 @@
 	<% end %>
 	<% if show_job_district %>
 		<input type="hidden" id="job_district" name="job_district" value="<%= @job_district && @job_district[:id] %>" />
+	<% end %>
+	<% if show_intern_major %>
+		<input type="hidden" id="intern_major" name="intern_major" value="<%= @intern_major && @intern_major[:id] %>" />
 	<% end %>
 	
 	<% unless hide_order %>
@@ -173,6 +177,7 @@
 		filters << ["job_category_class", "岗位大类"] if show_job_category_class
 		filters << ["job_category", "岗位细分"] if show_job_category
 		filters << ["job_district", "工作区域"] if show_job_district
+		filters << ["intern_major", "学生相关专业"] if show_intern_major
 	%>
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w">
 		<tr>

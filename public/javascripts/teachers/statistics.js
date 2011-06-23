@@ -8,7 +8,7 @@ var FILTERS = [
 	"level", "graduation", "university", "college", "major", "student",
 	"corp", "corp_industry_category", "corp_industry", "corp_nature",
 	"domain", "tag", "skill", "keyword",
-	"job_category_class", "job_category", "job_district"
+	"job_category_class", "job_category", "job_district", "intern_major"
 ];
 
 
@@ -471,6 +471,11 @@ function filter_job_category() {
 
 function filter_job_district() {
 	show_static_filter_dialog("job_district", JOB_DISTRICTS, "过滤工作区域");
+}
+
+
+function filter_intern_major() {
+	show_static_filter_dialog("intern_major", JOB_MAJORS, "过滤学生相关专业");
 }
 
 

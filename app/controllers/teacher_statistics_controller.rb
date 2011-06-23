@@ -1009,6 +1009,9 @@ class TeacherStatisticsController < ApplicationController
 	  job_district_id = params[:job_district] && params[:job_district].strip
     @job_district = JobDistrict.find(job_district_id.to_i)
     
+    intern_major_id = params[:intern_major] && params[:intern_major].strip
+    @intern_major = JobMajor.find(intern_major_id.to_i)
+    
     
     filters = {}
     
@@ -1038,6 +1041,7 @@ class TeacherStatisticsController < ApplicationController
     filters[:job_category_class_id] = @job_category_class[:id] if @job_category_class
     filters[:job_category_id] = @job_category[:id] if @job_category
     filters[:job_district_id] = @job_district[:id] if @job_district
+    filters[:intern_major_id] = @intern_major[:id] if @intern_major
     
     filters
   end

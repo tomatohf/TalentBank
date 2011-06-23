@@ -25,6 +25,8 @@ class InternLog < ActiveRecord::Base
     has student.edu_level_id, :as => :edu_level_id
     has student.graduation_year, :as => :graduation_year
     
+    has student.intern_profile.major_id, :as => :intern_major_id
+    
     has job.corporation_id, :as => :corporation_id
     has job.category_class_id, :as => :job_category_class_id
     has job.category_id, :as => :job_category_id
