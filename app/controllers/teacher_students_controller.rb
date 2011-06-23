@@ -346,7 +346,7 @@ class TeacherStudentsController < ApplicationController
         end
         
         send_data(
-          csv_data,
+          add_utf8_bom(csv_data),
           :filename => "students_without_intern_log.csv",
           :type => :csv,
           :disposition => "attachment"
@@ -359,7 +359,7 @@ class TeacherStudentsController < ApplicationController
   def interview_passed
     respond_to do |format|
       options = {
-        :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name",
+        :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, intern_logs.occur_at as occur_at",
         :joins => "INNER JOIN (intern_logs INNER JOIN (jobs INNER JOIN corporations ON corporations.id = jobs.corporation_id) ON jobs.id = intern_logs.job_id) ON students.id = intern_logs.student_id",
         :conditions => [
           "corporations.school_id = ? and intern_logs.event_id = ? and intern_logs.result_id = ?",
@@ -386,7 +386,7 @@ class TeacherStudentsController < ApplicationController
         csv_data = FasterCSV.generate do |csv|
           header = ["学号", "姓名", "学校", "学历", "毕业时间",
                     "性别", "政治面貌", "上岗时间", "工作期限", "每周工作时间", "籍贯", "其他信息", "相关专业",
-                    "公司编号", "公司名称", "岗位编号", "岗位名称", "实习记录条数"]
+                    "公司编号", "公司名称", "岗位编号", "岗位名称", "发生时间", "实习记录条数"]
     			
           csv << header
           
@@ -421,6 +421,7 @@ class TeacherStudentsController < ApplicationController
   					  student.job_id,
   					  student.job_name,
   					  
+              student.occur_at,
   					  student.intern_logs.size
   					]
   					
@@ -429,7 +430,7 @@ class TeacherStudentsController < ApplicationController
         end
         
         send_data(
-          csv_data,
+          add_utf8_bom(csv_data),
           :filename => "interview_passed_students.csv",
           :type => :csv,
           :disposition => "attachment"
@@ -490,7 +491,7 @@ class TeacherStudentsController < ApplicationController
         end
         
         send_data(
-          csv_data,
+          add_utf8_bom(csv_data),
           :filename => "students_without_interview_result.csv",
           :type => :csv,
           :disposition => "attachment"

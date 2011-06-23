@@ -216,4 +216,9 @@ class ApplicationController < ActionController::Base
     correct
   end
   
+  
+  def add_utf8_bom(str)
+    "EFBBBF".to_a.pack("H*") + str
+  end
+  
 end

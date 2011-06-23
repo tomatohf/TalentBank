@@ -264,7 +264,7 @@ class TeacherCorporationsController < ApplicationController
         end
         
         send_data(
-          csv_data,
+          add_utf8_bom(csv_data),
           :filename => "jobs.csv",
           :type => :csv,
           :disposition => "attachment"
@@ -326,7 +326,7 @@ class TeacherCorporationsController < ApplicationController
         end
     
         send_data(
-          csv_data,
+          add_utf8_bom(csv_data),
           :filename => "jobs_info.csv",
           :type => :csv,
           :disposition => "attachment"

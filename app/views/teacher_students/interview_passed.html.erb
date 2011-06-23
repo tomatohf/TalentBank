@@ -35,6 +35,7 @@
 			<td>岗位编号</td>
 			<td>岗位名称</td>
 			
+			<td>发生时间</td>
 			<td>实习记录</td>
 		</tr>
 	</thead>
@@ -98,6 +99,7 @@
 						<%= h(student.job_name) %></a>
 				</td>
 				
+				<td><%= student.occur_at %></td>
 				<td align="right" style="font-weight: bold;">
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs" class="none">
 						<%= student.intern_logs.size %></a>
