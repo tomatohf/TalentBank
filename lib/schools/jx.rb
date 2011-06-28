@@ -37,7 +37,7 @@ module Schools
     
     def intern_register_labels
       {
-        :title => "世博会志愿者见习岗位申请表",
+        :title => "青年岗位见习行动暨世博会志愿者职业发展服务申请表",
         :number => "志愿者证号",
         :intern => "见习"
       }

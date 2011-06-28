@@ -27,7 +27,7 @@
 			
 			<td>岗位编号</td>
 			<td>岗位名称</td>
-			<td>相关专业</td>
+			<td>岗位大类</td>
 			<td>负责人</td>
 			<td>招聘人数</td>
 			<td>实习状态</td>
@@ -69,8 +69,8 @@
 						<%= h(job.get_name) %></a>
 				</td>
 				<td>
-					<% major = job.major_id && JobMajor.find(job.major_id) %>
-					<%= major && major[:name] %>
+					<% category_class = job.category_class_id && JobCategoryClass.find(job.category_class_id) %>
+					<%= category_class && category_class[:name] %>
 				</td>
 				<td><%= teacher && teacher.get_name %></td>
 				<td align="right"><%= job.number %></td>
