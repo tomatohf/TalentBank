@@ -18,10 +18,10 @@ class Job < ActiveRecord::Base
   
   validates_length_of :name, :maximum => 50, :message => "名称 超过长度限制", :allow_nil => false
   validates_length_of :manager, :maximum => 50, :message => "负责人 超过长度限制", :allow_nil => true
-  validates_length_of :desc, :maximum => 1000, :message => "工作内容 超过长度限制", :allow_nil => false
+  validates_length_of :desc, :maximum => 2000, :message => "工作内容 超过长度限制", :allow_nil => false
   validates_length_of :place, :maximum => 200, :message => "工作地址 超过长度限制", :allow_nil => false
   validates_length_of :welfare, :maximum => 300, :message => "福利待遇 超过长度限制", :allow_nil => true
-  validates_length_of :requirement, :maximum => 500, :message => "其它要求 超过长度限制", :allow_nil => true
+  validates_length_of :requirement, :maximum => 1000, :message => "其它要求 超过长度限制", :allow_nil => true
   
   validates_numericality_of :salary, :message => "薪酬 必须是大于等于0的数字", :allow_nil => false, :greater_than_or_equal_to => 0
   validates_numericality_of :number, :message => "招聘人数 必须是大于等于0的整数", :allow_nil => false, :greater_than_or_equal_to => 0, :only_integer => true
