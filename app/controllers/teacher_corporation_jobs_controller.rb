@@ -126,6 +126,7 @@ class TeacherCorporationJobsController < ApplicationController
     @not_only_no_related_intern_log = (params[:not_only_no_related_intern_log] == "true")
     @only_no_intern_log = (params[:only_no_intern_log] == "true")
     @keyword = params[:kw] && params[:kw].strip
+    @created_at = params[:ca].blank? ? nil : (Time.parse(params[:ca]) rescue nil)
     
     
     @page = params[:page]
@@ -137,7 +138,8 @@ class TeacherCorporationJobsController < ApplicationController
       :only_no_related_intern_log => !@not_only_no_related_intern_log,
       :only_no_intern_log => @only_no_intern_log,
       :university_id => @university_id,
-      :keyword => @keyword
+      :keyword => @keyword,
+      :created_at => @created_at
     )
     @intern_logs = InternLog.latest_by_students(@students, :include => [:job => :corporation])
     

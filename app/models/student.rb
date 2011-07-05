@@ -232,6 +232,7 @@ class Student < ActiveRecord::Base
     filters[:intern_log_latest_result_id] = 0 if options[:only_no_intern_log]
     # :only_no_intern_log has higher priority than :only_unemployed
     filters[:university_id] = options[:university_id] unless options[:university_id].blank?
+    filters[:created_at] = options[:created_at] .. Time.now if options[:created_at]
     
     blacklists = {}
     blacklists[:intern_blacklist_industry_category_id] = corporation_profile.industry_category_id unless corporation_profile.industry_category_id.blank?
@@ -262,7 +263,7 @@ class Student < ActiveRecord::Base
       keyword.blank? ? wishes : "#{keyword} (#{wishes})",
       :page => page, :per_page => 10,
       :match_mode => :extended2,
-      :order => "@weight DESC",
+      :order => "@weight DESC, created_at DESC",
       :field_weights => {
         :intern_wish_industry_category_ids => 4,
         :intern_wish_industry_ids => 8,

@@ -285,6 +285,14 @@
 				
 				<div class="field_row">
 					<span class="field">
+						<label for="created_at">入库时间:</label>
+						<input type="text" id="created_at" name="ca" class="text_field" size="15" value="<%= format_date(@created_at) %>" />
+						<span class="info_with_icon">仅包含该时间之后入库的学生</span>
+					</span>
+				</div>
+				
+				<div class="field_row">
+					<span class="field">
 						<label for="keyword">相关描述:</label>
 						<input type="text" id="keyword" name="kw" class="text_field" size="30" value="<%= h(@keyword) %>" />
 					</span>
