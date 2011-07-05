@@ -9,7 +9,7 @@ module Schools
     
     def coming_graduation_year
       today = Date.today
-      (today.month > 6) ? (today.year + 1) : today.year
+      (today.month > 8) ? (today.year + 1) : today.year
     end
     
   end
