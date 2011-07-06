@@ -316,7 +316,7 @@ class TeacherStudentsController < ApplicationController
         students = Student.find(:all, options)
         
         csv_data = FasterCSV.generate do |csv|
-          header = ["编号", "姓名", "学校", "学历", "毕业时间", "上岗时间", "工作期限", "每周工作时间", "相关专业", "实习意向"]
+          header = ["编号", "姓名", "学校", "学历", "毕业时间", "上岗时间", "工作期限", "每周工作时间", "相关专业", "入库时间", "实习意向"]
     			
           csv << header
           
@@ -338,6 +338,7 @@ class TeacherStudentsController < ApplicationController
   					  period && period[:name],
   					  workday && workday[:name],
   					  major && major[:name],
+  					  ApplicationController.helpers.format_date(student.created_at),
   					  intern_profile.intention
   					]
   					
