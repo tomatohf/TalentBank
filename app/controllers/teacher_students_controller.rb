@@ -60,11 +60,14 @@ class TeacherStudentsController < ApplicationController
       else
         nil
       end
+      @created_at_from = params[:created_at_from].blank? ? nil : (Time.parse(params[:created_at_from]) rescue nil)
+      @created_at_to = params[:created_at_to].blank? ? nil : (Time.parse(params[:created_at_to]) rescue nil)
       
       includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
       
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
-          @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil?
+          @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil? &&
+          @created_at_from.blank? && @created_at_to.blank?
         Student.paginate(
           :page => page,
           :per_page => Student_Page_Size,
@@ -83,7 +86,8 @@ class TeacherStudentsController < ApplicationController
           :edu_level_id => @edu_level_id,
           :graduation_year => @graduation_year,
           :complete => @complete,
-          :gender => @gender
+          :gender => @gender,
+          :created_at => [@created_at_from, @created_at_to]
         )
       end
     end

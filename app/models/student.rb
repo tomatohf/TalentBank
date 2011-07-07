@@ -196,12 +196,19 @@ class Student < ActiveRecord::Base
   
   def self.school_search(name, school_id, includes, page = 1, per_page = 10, options = {})
     filters = {:school_id => school_id}
+    
     filters.merge!(:complete => options[:complete]) unless options[:complete].nil?
     filters.merge!(:gender => options[:gender] ? 1 : 0) unless options[:gender].nil?
+    
     [:university_id, :college_id, :major_id, :edu_level_id, :graduation_year].each do |filter_key|
       filter_value = options[filter_key]
       filters.merge!(filter_key => filter_value) unless filter_value.blank?
     end
+    
+    created_at_range = options[:created_at] || []
+    created_at_from = created_at_range[0] || Time.parse(InternLog.intern_begin_at)
+    created_at_to = created_at_range[1] || Time.now
+    filters.merge!(:created_at => created_at_from .. created_at_to)
     
     self.search(
       name,

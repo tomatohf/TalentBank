@@ -131,6 +131,15 @@
 						<option value="f"<%= %Q! selected="selected"! if @gender == false %>>女</option>
 					</select>
 				</span>
+				
+				<span class="field">
+					<label for="created_at_from">
+						入库时间:
+					</label>
+					<input type="text" id="created_at_from" name="created_at_from" class="text_field" size="10" value="<%= format_date(@created_at_from) %>" />
+					至
+					<input type="text" id="created_at_to" name="created_at_to" class="text_field" size="10" value="<%= format_date(@created_at_to) %>" />
+				</span>
 			</div>
 			
 			<div class="align_r" style="margin-right: 20px;">
