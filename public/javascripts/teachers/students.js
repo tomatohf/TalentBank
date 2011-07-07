@@ -84,6 +84,20 @@ function setup_toggle_search_form_link() {
 }
 
 
+function setup_export_link() {
+	$("#export_csv_link").unbind("click").click(
+		function () {
+			var link = $(this);
+			
+			link.attr(
+				"href",
+				link.attr("href") + "&" + link.parents("form").serialize()
+			);
+		}
+	);
+}
+
+
 $(document).ready(
 	function() {
 		APP.setup_dropdown_menu(".operation_link", 130);
@@ -104,5 +118,7 @@ $(document).ready(
 		setup_toggle_search_form_link();
 		
 		setup_number_input();
+		
+		setup_export_link();
 	}
 );

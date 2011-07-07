@@ -26,18 +26,10 @@ class TeacherStudentsController < ApplicationController
   
   def index
     @number = params[:n] && params[:n].strip
-    @intern_log_statistic = (params[:intern_log_statistic] == "true")
+    @intern_log_statistic = false
+    csv = (params[:csv] == "true")
     
     includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
-    includes = if request.xhr?
-      []
-    else
-      if @intern_log_statistic
-        [:intern_logs]
-      else
-        @teacher.resume ? [:resumes] : []
-      end
-    end
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
@@ -50,6 +42,9 @@ class TeacherStudentsController < ApplicationController
         :include => includes
       )
     else
+      @intern_log_statistic = (params[:intern_log_statistic] == "true")
+      includes = [:intern_logs] if @intern_log_statistic
+      
       @university_id = params[:u] && params[:u].strip
       @college_id = params[:c] && params[:c].strip
       @major_id = params[:m] && params[:m].strip
@@ -75,12 +70,20 @@ class TeacherStudentsController < ApplicationController
       @created_at_from = params[:created_at_from].blank? ? nil : (Time.parse(params[:created_at_from]) rescue nil)
       @created_at_to = params[:created_at_to].blank? ? nil : (Time.parse(params[:created_at_to]) rescue nil)
       
+      per_page = Student_Page_Size
+      if csv
+        page = 1
+        
+        limit = params[:limit]
+        per_page = (limit =~ /\d+/) ? 1 : 10000
+      end
+      
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
           @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil? &&
           @created_at_from.blank? && @created_at_to.blank?
         Student.paginate(
           :page => page,
-          :per_page => Student_Page_Size,
+          :per_page => per_page,
           :conditions => ["school_id = ?", @teacher.school_id],
           :order => "created_at DESC",
           :include => includes
@@ -89,7 +92,7 @@ class TeacherStudentsController < ApplicationController
         Student.school_search(
           @name,
           @teacher.school_id, includes,
-          page, Student_Page_Size,
+          page, per_page,
           :university_id => @university_id,
           :college_id => @college_id,
           :major_id => @major_id,
@@ -100,6 +103,61 @@ class TeacherStudentsController < ApplicationController
           :created_at => [@created_at_from, @created_at_to]
         )
       end
+    end
+    
+    if csv
+      csv_data = FasterCSV.generate do |csv|
+        header = ["学生编号", "学号", "姓名", "大学", "学院", "专业", "学历", "毕业时间", "入库时间"]
+        header.concat(
+          ["总数", "接受面试", "拒绝面试", "面试通过", "面试失败", "面试没去", "实习到期", "实习后留用", "实习中流动", "实习中劝退"]
+        ) if @intern_log_statistic
+  			
+        csv << header
+        
+        @students.each do |student|
+          university = student.university_id && University.find(student.university_id)
+          college = university && College.find(university[:id], student.college_id)
+          major = college && Major.find(college[:id], student.major_id)
+          edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id)
+          
+					row = [
+					  student.id,
+					  student.number,
+					  student.name,
+					  university && university[:name],
+					  college && college[:name],
+					  major && major[:name],
+					  edu_level && edu_level[:name],
+					  student.graduation_year,
+					  ApplicationController.helpers.format_date(student.created_at)
+					]
+					
+					if @intern_log_statistic
+					  intern_logs = student.intern_logs
+          	intern_log_groups = intern_logs.group_by { |log| log.result_id }
+
+          	sort_block = Proc.new { |x, y|
+          		x[:id] <=> y[:id]
+          	}
+          	
+          	row << intern_logs.size
+          	InternLogEvent.data.sort(&sort_block).each do |event|
+              InternLogEventResult.find_group(event[:id]).sort(&sort_block).each do |result|
+                row << (intern_log_groups[result[:id]] || []).size
+        			end
+            end
+				  end
+					
+          csv << row
+        end
+      end
+      
+      return send_data(
+        add_utf8_bom(csv_data),
+        :filename => "students.csv",
+        :type => :csv,
+        :disposition => "attachment"
+      )
     end
     
     if request.xhr?

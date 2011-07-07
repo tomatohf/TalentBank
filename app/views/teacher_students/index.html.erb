@@ -150,11 +150,11 @@
 			</div>
 			
 			<div class="align_r" style="margin-right: 20px;">
-				<input type="submit" value="查找学生" class="button" style="margin: 0 20px;" />
+				<input type="submit" value="查找学生" class="button" style="margin: 0 30px;" />
 				
 				<% if @number.blank? %>
-					<a href="#" class="button">
-						导出查询结果为 CSV</a>
+					<a id="export_csv_link" href="students?csv=true&limit=<%= @students.total_entries %>" class="button">
+						导出为 CSV</a>
 				<% end %>
 			</div>
 		<% end %>
