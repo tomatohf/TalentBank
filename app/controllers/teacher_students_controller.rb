@@ -75,7 +75,7 @@ class TeacherStudentsController < ApplicationController
         page = 1
         
         limit = params[:limit]
-        per_page = (limit =~ /\d+/) ? limit : 10000
+        per_page = (limit =~ /\d+/) ? limit.to_i : 10000
       end
       
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&

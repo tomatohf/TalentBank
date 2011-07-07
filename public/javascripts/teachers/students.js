@@ -84,14 +84,16 @@ function setup_toggle_search_form_link() {
 }
 
 
+var setup_export_link_href = "";
 function setup_export_link() {
-	$("#export_csv_link").unbind("click").click(
+	var link = $("#export_csv_link");
+	setup_export_link_href = $.trim(link.attr("href"));
+	
+	link.unbind("click").click(
 		function () {
-			var link = $(this);
-			
 			link.attr(
 				"href",
-				link.attr("href") + "&" + link.parents("form").serialize()
+				setup_export_link_href + "&" + link.parents("form").serialize()
 			);
 		}
 	);
