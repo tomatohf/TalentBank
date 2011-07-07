@@ -26,6 +26,18 @@ class TeacherStudentsController < ApplicationController
   
   def index
     @number = params[:n] && params[:n].strip
+    @intern_log_statistic = (params[:intern_log_statistic] == "true")
+    
+    includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
+    includes = if request.xhr?
+      []
+    else
+      if @intern_log_statistic
+        [:intern_logs]
+      else
+        @teacher.resume ? [:resumes] : []
+      end
+    end
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
@@ -35,7 +47,7 @@ class TeacherStudentsController < ApplicationController
         :page => page,
         :per_page => Student_Page_Size,
         :conditions => ["school_id = ? and number = ?", @teacher.school_id, @number],
-        :include => request.xhr? ? [] : [:resumes]
+        :include => includes
       )
     else
       @university_id = params[:u] && params[:u].strip
@@ -62,8 +74,6 @@ class TeacherStudentsController < ApplicationController
       end
       @created_at_from = params[:created_at_from].blank? ? nil : (Time.parse(params[:created_at_from]) rescue nil)
       @created_at_to = params[:created_at_to].blank? ? nil : (Time.parse(params[:created_at_to]) rescue nil)
-      
-      includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
       
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
           @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil? &&

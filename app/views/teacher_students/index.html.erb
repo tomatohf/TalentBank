@@ -142,8 +142,20 @@
 				</span>
 			</div>
 			
+			<div style="margin-top: 15px;">
+				<label for="intern_log_statistic">
+					实习记录统计:
+				</label>
+				<%= check_box_tag :intern_log_statistic, value = "true", @intern_log_statistic %>
+			</div>
+			
 			<div class="align_r" style="margin-right: 20px;">
-				<input type="submit" value="查找学生" class="button" />
+				<input type="submit" value="查找学生" class="button" style="margin: 0 20px;" />
+				
+				<% if @number.blank? %>
+					<a href="#" class="button">
+						导出查询结果为 CSV</a>
+				<% end %>
 			</div>
 		<% end %>
 	</div>
@@ -162,32 +174,51 @@
 	<table border="0" cellspacing="0" cellpadding="0" class="main_part_w result_grid">
 		<thead>
 			<tr>
-				<td style="width: 80px;">学号</td>
-				<td style="width: 50px;">姓名</td>
-				<%
-					n = [@teacher.resume, @teacher.statistic, @teacher.student].select{|bool|bool}.size
-					width = 45 * n + 5 * (n-1)
-					width += 5 if @teacher.resume
-				%>
-				<% if n > 0 %>
-					<td style="width: <%= width %>px;">操作</td>
+				<% if @intern_log_statistic %>
+					<td>姓名</td>
+					<td>入库时间</td>
+					<td class="grey">总数</td>
+					<td class="grey">接受面试</td>
+					<td class="grey">拒绝面试</td>
+					<td class="grey">面试通过</td>
+					<td class="grey">面试失败</td>
+					<td class="grey">面试没去</td>
+					<td class="grey">实习到期</td>
+					<td class="grey">实习后留用</td>
+					<td class="grey">实习中流动</td>
+					<td class="grey">实习中劝退</td>
 				<% else %>
-					<td></td>
+					<td style="width: 80px;">学号</td>
+					<td style="width: 50px;">姓名</td>
+					<%
+						n = [@teacher.resume, @teacher.statistic, @teacher.student].select{|bool|bool}.size
+						width = 45 * n + 5 * (n-1)
+						width += 5 if @teacher.resume
+					%>
+					<% if n > 0 %>
+						<td style="width: <%= width %>px;">操作</td>
+					<% else %>
+						<td></td>
+					<% end %>
+					<td class="grey">大学</td>
+					<td class="grey">学院</td>
+					<td class="grey">专业</td>
+					<td class="grey" style="width: 30px;">学历</td>
+					<td class="grey" style="width: 85px;">毕业时间</td>
+					<td style="width: 28px;">
+						<span title="单击进行修改">完整</span>
+						<img src="/images/teachers/search/loading_icon.gif" id="status_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
+					</td>
 				<% end %>
-				<td class="grey">大学</td>
-				<td class="grey">学院</td>
-				<td class="grey">专业</td>
-				<td class="grey" style="width: 30px;">学历</td>
-				<td class="grey" style="width: 85px;">毕业时间</td>
-				<td style="width: 28px;">
-					<span title="单击进行修改">完整</span>
-					<img src="/images/teachers/search/loading_icon.gif" id="status_loading" border="0" title="操作中" alt="操作中" style="margin-bottom: -3px; display: none;" />
-				</td>
 			</tr>
 		</thead>
 
 		<tbody>
-			<%= render :partial => "student", :collection => @students %>
+			<% if @intern_log_statistic %>
+				<%= render :partial => "student_intern_logs", :collection => @students %>
+			<% else %>
+				<%= render :partial => "student", :collection => @students %>
+			<% end %>
 		</tbody>
 	</table>
 	<div class="result_paging">

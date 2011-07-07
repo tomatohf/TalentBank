@@ -1,0 +1,33 @@
+<%
+	student = student_intern_logs
+	intern_logs = student.intern_logs
+	intern_log_groups = intern_logs.group_by { |log| log.result_id }
+	
+	sort_block = Proc.new { |x, y|
+		x[:id] <=> y[:id]
+	}
+%>
+
+<tr<%= %Q! class="even"! if student_intern_logs_counter.even? %>>
+	<td>
+		<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>" class="none">
+			<%= h(student.name) %></a>
+	</td>
+	
+	<td>
+		<%= format_date(student.created_at) %>
+	</td>
+	
+	<td class="grey" style="text-align: right;">
+		<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs" class="none">
+			<%= intern_logs.size %></a>
+	</td>
+	
+	<% InternLogEvent.data.sort(&sort_block).each do |event| %>
+		<% InternLogEventResult.find_group(event[:id]).sort(&sort_block).each do |result| %>
+			<td class="grey" style="text-align: right;">
+				<%= (intern_log_groups[result[:id]] || []).size %>
+			</td>
+		<% end %>
+	<% end %>
+</tr>
