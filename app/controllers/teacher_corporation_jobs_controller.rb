@@ -193,7 +193,11 @@ class TeacherCorporationJobsController < ApplicationController
           :conditions => conditions,
           :include => {:student => [:profile, :intern_profile]}
         ).sort { |x, y|
-          x.student.university_id <=> y.student.university_id
+          def get_university_id(log)
+            student = log.student
+            (student && student.university_id) || -1
+          end
+          get_university_id(x) <=> get_university_id(y)
         }
         
         csv_data = FasterCSV.generate do |csv|
