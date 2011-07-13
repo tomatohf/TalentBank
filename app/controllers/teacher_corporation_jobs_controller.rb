@@ -166,18 +166,70 @@ class TeacherCorporationJobsController < ApplicationController
   
   
   def intern_logs
-    page = params[:page]
-    page = 1 unless page =~ /\d+/
-    @intern_logs = InternLog.paginate(
-      :page => page,
-      :per_page => Intern_Log_Page_Size,
-      :conditions => [
+    respond_to do |format|
+      @event_id = params[:event]
+      @result_id = params[:result]
+      
+      conditions = [
         "job_id = ? and event_id = ? and result_id = ?",
-        @job.id, params[:event], params[:result]
-      ],
-      :order => "occur_at DESC",
-      :include => [:student, :teacher]
-    )
+        @job.id, @event_id, @result_id
+      ]
+      
+      format.html {
+        page = params[:page]
+        page = 1 unless page =~ /\d+/
+        @intern_logs = InternLog.paginate(
+          :page => page,
+          :per_page => Intern_Log_Page_Size,
+          :conditions => conditions,
+          :order => "occur_at DESC",
+          :include => [:student, :teacher]
+        )
+      }
+      
+      format.csv {
+        intern_logs = InternLog.find(
+          :all,
+          :conditions => conditions,
+          :include => {:student => [:profile, :intern_profile]}
+        ).sort { |x, y|
+          x.student.university_id <=> y.student.university_id
+        }
+        
+        csv_data = FasterCSV.generate do |csv|
+          header = ["姓名", "性别", "专业", "学历", "学校", "毕业时间", "发生时间"]
+    			
+          csv << header
+          
+          intern_logs.each do |log|
+            student = log.student
+  					profile = student.profile
+  					intern_profile = student.intern_profile
+  					edu_level = EduLevel.find(student.edu_level_id)
+  					university = University.find(student.university_id)
+
+  					row = [
+  					  student.get_name,
+  					  profile.gender.nil? ? "" : (profile.gender ? "男" : "女"),
+  					  intern_profile.desc,
+  					  edu_level && edu_level[:name],
+  					  university && university[:name],
+  					  student.graduation_year,
+  					  ApplicationController.helpers.format_datetime(log.occur_at)
+  					]
+  					
+            csv << row
+          end
+        end
+        
+        send_data(
+          add_utf8_bom(csv_data),
+          :filename => "students.csv",
+          :type => :csv,
+          :disposition => "attachment"
+        )
+      }
+    end
   end
   
   

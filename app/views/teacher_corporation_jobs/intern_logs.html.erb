@@ -11,6 +11,10 @@
 <h2 class="page_title"><%= page_title %></h2>
 
 
+<div class="float_r" style="margin: 5px 20px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>/jobs/<%= @job.id %>/intern_logs.csv?event=<%= @event_id %>&result=<%= @result_id %>" class="button">
+		导出学生名单为 CSV</a>
+</div>
 <div class="info_with_icon" style="margin: 0px 30px 20px;">
 	共有
 	<strong><%= @intern_logs.total_entries %></strong>
