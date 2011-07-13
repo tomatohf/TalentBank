@@ -34,6 +34,11 @@ namespace :tmp do
 				result = event && InternLogEventResult.find(event[:id], log.result_id)
 				job = log && log.job
 				corporation = job && job.corporation
+				occur_at = log && if log.occur_at.kind_of?(DateTime)
+				  log.occur_at
+			  else
+			    log.occur_at.getlocal
+		    end
 				
         csv << [
           student.number,
@@ -48,7 +53,7 @@ namespace :tmp do
           job && "#{job.id}   #{job.name}",
           event && event[:name],
           result && result[:name],
-          log && log.occur_at.strftime("%Y-%m-%d %H:%M:%S")
+          occur_at && occur_at.strftime("%Y-%m-%d %H:%M:%S")
         ]
       end
     end
