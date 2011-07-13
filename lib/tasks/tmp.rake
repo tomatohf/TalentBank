@@ -48,7 +48,7 @@ namespace :tmp do
           job && "#{job.id}   #{job.name}",
           event && event[:name],
           result && result[:name],
-          log && log.occur_at.getlocal.strftime("%Y-%m-%d %H:%M:%S")
+          log && log.occur_at.strftime("%Y-%m-%d %H:%M:%S")
         ]
       end
     end

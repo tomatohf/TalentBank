@@ -2,27 +2,35 @@
 module ApplicationHelper
   
   def format_datetime(datetime)
-    datetime && datetime.to_time.getlocal.strftime("%Y-%m-%d %H:%M:%S")
+    datetime && to_local_time(datetime).strftime("%Y-%m-%d %H:%M:%S")
   end
   
   def format_date(date)
-    date && date.to_time.getlocal.strftime("%Y-%m-%d")
+    date && to_local_time(date).strftime("%Y-%m-%d")
   end
   
   def format_short_date(date)
-    date && date.to_time.getlocal.strftime("%y-%m-%d")
+    date && to_local_time(date).strftime("%y-%m-%d")
   end
   
   def format_short_datetime(date)
-    date && date.to_time.getlocal.strftime("%y-%m-%d %H:%M:%S")
+    date && to_local_time(date).strftime("%y-%m-%d %H:%M:%S")
   end
   
   def format_zh_date(date)
-    date && (date = date.to_time.getlocal) && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
+    date && (date = to_local_time(date)) && %Q!#{date.year}年#{date.month}月#{date.mday}日 星期#{["天", "一", "二", "三", "四", "五", "六"][date.wday]}!
   end
   
   def format_time(date)
-    date && date.to_time.getlocal.strftime("%H:%M:%S")
+    date && to_local_time(date).strftime("%H:%M:%S")
+  end
+  
+  def to_local_time(datetime)
+    if datetime.kind_of?(DateTime)
+      Time.local(datetime.year, datetime.month, datetime.mday, datetime.hour, datetime.min, datetime.sec)
+    else
+      datetime.to_time
+    end.getlocal
   end
   
   def day_end(date)
