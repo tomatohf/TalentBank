@@ -136,11 +136,15 @@ function add_inform_interview_log(student_id) {
 			ok_event: function(data) {
 				var form = $("form#log_form:first");
 				
+				if (!confirm("确定要保存这条通知面试 " + form.find("#result option:selected").text() + " 的实习记录么 ?")) {
+					return false;
+				}
+				
 				// check occur_at field
 				var occur_at_field = form.find("input#occur_at");
 				if(!$.trim(occur_at_field.val()).match(/^\d{2,4}-\d{1,2}-\d{1,2}\s\d{1,2}/i)) {
 					occur_at_field.siblings("div.info_with_icon").css("color", "#EE0000");
-					return;
+					return false;
 				}
 				
 				show_status_refreshing(student_id);

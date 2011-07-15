@@ -551,10 +551,10 @@ class TeacherStudentsController < ApplicationController
   					  log.student_number,
   					  log.student_name,
   					  
-  					  log.job_id,
-  					  log.job_name,
   					  log.corporation_id,
   					  log.corporation_name,
+  					  log.job_id,
+  					  log.job_name,
   					  
   					  log.teacher_name
   					]

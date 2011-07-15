@@ -1,0 +1,59 @@
+<div style="font-size: 9pt;">
+	<p><%= @student.name %>同学：</p>
+	
+	<p>你好！</p>
+	
+	<p>很遗憾的通知你，你通过见习行动投递的<b><%= @corporation.get_name %></b>公司<b><%= @job.get_name %></b>岗位，<b>未通过</b>企业初步筛选。</p>
+	
+	<p>本次行动为团市委发起的公益活动，从2010年10月至2013年12月，我们会持续为您推荐见习（实习）岗位。</p>
+	
+	<% phone = '<span style="color: #ff6600; font-weight: bold;">021-60517703, 021-60517706</span>' %>
+	<ul>
+		<li style="margin: 10px 0;">
+			<b>增改申请表中的信息，或增改意向岗位：</b>
+			<ul>
+				<li>服务邮箱： student@qiaobutang.com</li>
+				<li>服务电话： <%= phone %></li>
+			</ul>
+		</li>
+		
+		<li style="margin: 10px 0;">
+			<b>查看最新招聘岗位信息：</b>
+			<ul>
+				<li>青年岗位见习行动-乔布圈： http://www.qiaobutang.com/groups/4</li>
+			</ul>
+		</li>
+		
+		<li style="margin: 10px 0;">
+			<b>如何写简历？什么简历可以通过HR筛选：</b>
+			<ul>
+				<li>可参考简历圈： http://www.qiaobutang.com/groups/3</li>
+				<li>下载简历模板： http://www.qiaobutang.com/group/posts/367</li>
+			</ul>
+		</li>
+		
+		<li style="margin: 10px 0;">
+			<b>对本次活动吐槽或建议：</b>
+			<ul>
+				<li>青年岗位见习行动-乔布圈：http://www.qiaobutang.com/groups/4</li>
+				<li>服务邮箱： student@qiaobutang.com</li>
+				<li>服务电话： <%= phone %></li>
+			</ul>
+		</li>
+		
+		<li style="margin: 10px 0;">
+			<b>本邮件由系统自动发送，请勿直接回复。若不再需要我们推荐工作岗位的服务，请发送邮件至 student@qiaobutang.com ,并在邮件标题注明：停止见习服务-姓名</b>
+		</li>
+	</ul>
+	
+	<br />
+	<p>感谢你对我们服务的支持！</p>
+	
+	<br />
+	<br />
+	<br />
+	<p style="font-size: 10.5pt; font-weight: bold;">青年岗位见习行动</p>
+	<p>授权服务单位：乔布堂</p>
+	<p>官方网站：http://jx.51cy.sh.cn</p>
+	<p>岗位见习行动申请表：http://jx.qiaobutang.com/r</p>
+</div>

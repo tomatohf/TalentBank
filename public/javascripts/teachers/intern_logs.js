@@ -99,6 +99,10 @@ function show_dialog(content, submit_label) {
 			data: {},
 			modal: false,
 			ok_event: function(data) {
+				if (!confirm("确定要保存这条实习记录 " + $("#event option:selected").text() + " " + $("#result option:selected").text() + " 么 ?")) {
+					return false;
+				}
+				
 				// check occur_at field
 				var occur_at_field = $("form#log_form:first input#occur_at");
 				if(!$.trim(occur_at_field.val()).match(/^\d{2,4}-\d{1,2}-\d{1,2}\s\d{1,2}/i)) {

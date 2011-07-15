@@ -61,6 +61,16 @@ class InternLog < ActiveRecord::Base
   validates_presence_of :occur_at, :message => "请输入 发生时间"
   
   
+  after_save { |log|
+    student_profile = log.student.profile
+    unless student_profile.email.blank?
+      Postman.deliver_interview_result_failed_notification(
+        log.student, student_profile, log.job, log.job.corporation
+      ) if log.event_id == InternLogEvent.interview_result[:id] && log.result_id == InternLogEventResult.interview_result_failed[:id]
+    end
+  }
+  
+  
   
   def self.intern_begin_at
     Rails.env.production? ? "2010-10-01" : "2008-10-01"
