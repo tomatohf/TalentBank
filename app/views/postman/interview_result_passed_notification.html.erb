@@ -3,12 +3,19 @@
 	
 	<p>你好！</p>
 	
-	<p>很遗憾的通知你，你通过见习行动投递的<b><%= @corporation.get_name %></b>公司<b><%= @job.get_name %></b>岗位，<b>未通过</b>企业初步筛选。</p>
+	<p>恭喜你<b>已经通过</b>由见习行动推荐的<b><%= @corporation.get_name %></b>公司<b><%= @job.get_name %></b>岗位的筛选，开始正式见习（实习），希望本次工作给你的职业经历积累经验。</p>
 	
-	<p>本次行动为团市委发起的公益活动，从2010年10月至2013年12月，我们会持续为您推荐见习（实习）岗位。</p>
+	<p>本次行动为团市委发起的公益活动，从2010年10月至2013年12月，<span style="color: #ff6600; font-weight: bold;">实习结束后，可以继续与我们联系，推荐后续见习（实习）岗位</span>。</p>
 	
 	<% phone = '<span style="color: #ff6600; font-weight: bold;">021-60517703, 021-60517706</span>' %>
 	<ul>
+		<li style="margin: 10px 0;">
+			<b>实习中遇到问题：</b>
+			<ul>
+				<li>专家解答-乔布问答： http://ask.qiaobutang.com</li>
+			</ul>
+		</li>
+		
 		<li style="margin: 10px 0;">
 			<b>增改申请表中的信息，或增改意向岗位：</b>
 			<ul>
@@ -35,7 +42,7 @@
 		<li style="margin: 10px 0;">
 			<b>对本次活动吐槽或建议：</b>
 			<ul>
-				<li>青年岗位见习行动-乔布圈：http://www.qiaobutang.com/groups/4</li>
+				<li>青年岗位见习行动-乔布圈： http://www.qiaobutang.com/groups/4</li>
 				<li>服务邮箱： student@qiaobutang.com</li>
 				<li>服务电话： <%= phone %></li>
 			</ul>
