@@ -39,9 +39,9 @@
 			<div>
 				<span class="field">
 					<label for="name">
-						姓名:
+						姓名或关键词:
 					</label>
-					<input type="text" id="name" name="name" class="text_field" size="10" value="<%= h(@name) %>" />
+					<input type="text" id="name" name="name" class="text_field" size="20" value="<%= h(@name) %>" />
 				</span>
 				
 				<span class="field">
@@ -66,17 +66,6 @@
 							}
 						)
 					%>
-				</span>
-				
-				<span class="field">
-					<label for="complete">
-						完整:
-					</label>
-					<select name="co" id="complete" class="dropdown_list">
-						<option value=""<%= %Q! selected="selected"! if @complete.nil? %>>不限</option>
-						<option value="t"<%= %Q! selected="selected"! if @complete == true %>>是</option>
-						<option value="f"<%= %Q! selected="selected"! if @complete == false %>>否</option>
-					</select>
 				</span>
 			</div>
 			
@@ -139,6 +128,17 @@
 					<input type="text" id="created_at_from" name="created_at_from" class="text_field" size="10" value="<%= format_date(@created_at_from) %>" />
 					至
 					<input type="text" id="created_at_to" name="created_at_to" class="text_field" size="10" value="<%= format_date(@created_at_to) %>" />
+				</span>
+
+				<span class="field">
+					<label for="complete">
+						完整:
+					</label>
+					<select name="co" id="complete" class="dropdown_list">
+						<option value=""<%= %Q! selected="selected"! if @complete.nil? %>>不限</option>
+						<option value="t"<%= %Q! selected="selected"! if @complete == true %>>是</option>
+						<option value="f"<%= %Q! selected="selected"! if @complete == false %>>否</option>
+					</select>
 				</span>
 			</div>
 			

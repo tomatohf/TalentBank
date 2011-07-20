@@ -174,6 +174,7 @@ class TeacherCorporationJobsController < ApplicationController
         "job_id = ? and event_id = ? and result_id = ?",
         @job.id, @event_id, @result_id
       ]
+      order = "occur_at DESC"
       
       format.html {
         page = params[:page]
@@ -182,7 +183,7 @@ class TeacherCorporationJobsController < ApplicationController
           :page => page,
           :per_page => Intern_Log_Page_Size,
           :conditions => conditions,
-          :order => "occur_at DESC",
+          :order => order,
           :include => [:student, :teacher]
         )
       }
@@ -191,14 +192,9 @@ class TeacherCorporationJobsController < ApplicationController
         intern_logs = InternLog.find(
           :all,
           :conditions => conditions,
+          :order => order,
           :include => {:student => [:profile, :intern_profile]}
-        ).sort { |x, y|
-          def get_university_id(log)
-            student = log.student
-            (student && student.university_id) || -1
-          end
-          get_university_id(x) <=> get_university_id(y)
-        }
+        )
         
         csv_data = FasterCSV.generate do |csv|
           header = ["姓名", "性别", "专业", "学历", "学校", "毕业时间", "发生时间"]
