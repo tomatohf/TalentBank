@@ -1,3 +1,5 @@
+# currently, mails are all specific for JX ... !!!!!!!!!!
+
 class Postman < ActionMailer::Base
   
   helper :application
@@ -44,6 +46,22 @@ class Postman < ActionMailer::Base
       :student_profile => student_profile,
       :job => job,
       :corporation => corporation
+    )
+    content_type "text/html"
+  end
+  
+  def student_created_mail(student, student_profile)
+    recipients(
+      [
+        student_profile.email
+      ]
+    )
+    
+    from(self.class.from)
+    subject("欢迎您加入青年岗位见习行动")
+    body(
+      :student => student,
+      :student_profile => student_profile
     )
     content_type "text/html"
   end

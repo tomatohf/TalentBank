@@ -24,6 +24,10 @@ class StudentProfile < ActiveRecord::Base
     StudentProfileCopy.copy_profile(student_profile)
   }
   
+  after_create { |student_profile|
+    Postman.deliver_student_created_mail(student_profile.student, student_profile) unless student_profile.email.blank?
+  }
+  
   
   Belongs_To_Keys = [:student_id]
   include Utils::UniqueBelongs
