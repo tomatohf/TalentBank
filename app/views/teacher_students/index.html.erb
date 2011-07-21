@@ -143,10 +143,21 @@
 			</div>
 			
 			<div style="margin-top: 15px;">
-				<label for="intern_log_statistic">
-					实习记录统计:
-				</label>
-				<%= check_box_tag :intern_log_statistic, value = "true", @intern_log_statistic %>
+				<span class="field">
+					<label for="begin_at_from">
+						上岗时间:
+					</label>
+					<input type="text" id="begin_at_from" name="begin_at_from" class="text_field" size="10" value="<%= format_date(@begin_at_from) %>" />
+					至
+					<input type="text" id="begin_at_to" name="begin_at_to" class="text_field" size="10" value="<%= format_date(@begin_at_to) %>" />
+				</span>
+				
+				<span class="field">
+					<label for="intern_log_statistic">
+						实习记录统计:
+					</label>
+					<%= check_box_tag :intern_log_statistic, value = "true", @intern_log_statistic %>
+				</span>
 			</div>
 			
 			<div class="align_r" style="margin-right: 20px;">
@@ -177,6 +188,7 @@
 				<% if @intern_log_statistic %>
 					<td>姓名</td>
 					<td>入库时间</td>
+					<td>上岗时间</td>
 					<td class="grey">总数</td>
 					<td class="grey">接受面试</td>
 					<td class="grey">拒绝面试</td>

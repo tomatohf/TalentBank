@@ -3,6 +3,8 @@
 	intern_logs = student.intern_logs
 	intern_log_groups = intern_logs.group_by { |log| log.result_id }
 	
+	intern_profile = student.intern_profile
+	
 	sort_block = Proc.new { |x, y|
 		x[:id] <=> y[:id]
 	}
@@ -16,6 +18,10 @@
 	
 	<td>
 		<%= format_date(student.created_at) %>
+	</td>
+	
+	<td>
+		<%= format_date(intern_profile && intern_profile.begin_at) %>
 	</td>
 	
 	<td class="grey" style="text-align: right;">

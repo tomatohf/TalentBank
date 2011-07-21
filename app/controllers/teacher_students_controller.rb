@@ -43,7 +43,7 @@ class TeacherStudentsController < ApplicationController
       )
     else
       @intern_log_statistic = (params[:intern_log_statistic] == "true")
-      includes = [:intern_logs] if @intern_log_statistic
+      includes = [:intern_profile, :intern_logs] if @intern_log_statistic
       
       @university_id = params[:u] && params[:u].strip
       @college_id = params[:c] && params[:c].strip
@@ -69,6 +69,8 @@ class TeacherStudentsController < ApplicationController
       end
       @created_at_from = params[:created_at_from].blank? ? nil : (Time.parse(params[:created_at_from]) rescue nil)
       @created_at_to = params[:created_at_to].blank? ? nil : (Time.parse(params[:created_at_to]) rescue nil)
+      @begin_at_from = params[:begin_at_from].blank? ? nil : (Time.parse(params[:begin_at_from]) rescue nil)
+      @begin_at_to = params[:begin_at_to].blank? ? nil : (Time.parse(params[:begin_at_to]) rescue nil)
       
       per_page = Student_Page_Size
       if csv
@@ -80,7 +82,7 @@ class TeacherStudentsController < ApplicationController
       
       if @university_id.blank? && @college_id.blank? && @major_id.blank? && @edu_level_id.blank? &&
           @graduation_year.blank? && @name.blank? && @complete.nil? && @gender.nil? &&
-          @created_at_from.blank? && @created_at_to.blank?
+          @created_at_from.blank? && @created_at_to.blank? && @begin_at_from.blank? && @begin_at_to.blank?
         Student.paginate(
           :page => page,
           :per_page => per_page,
@@ -100,14 +102,15 @@ class TeacherStudentsController < ApplicationController
           :graduation_year => @graduation_year,
           :complete => @complete,
           :gender => @gender,
-          :created_at => [@created_at_from, @created_at_to]
+          :created_at => [@created_at_from, @created_at_to],
+          :begin_at => [@begin_at_from, @begin_at_to]
         )
       end
     end
     
     if csv
       csv_data = FasterCSV.generate do |csv|
-        header = ["学生编号", "学号", "姓名", "大学", "学院", "专业", "学历", "毕业时间", "入库时间"]
+        header = ["学生编号", "学号", "姓名", "大学", "学院", "专业", "学历", "毕业时间", "入库时间", "上岗时间"]
         header.concat(
           ["总数", "接受面试", "拒绝面试", "面试通过", "面试失败", "面试没去", "实习到期", "实习后留用", "实习中流动", "实习中劝退"]
         ) if @intern_log_statistic
@@ -119,6 +122,7 @@ class TeacherStudentsController < ApplicationController
           college = university && College.find(university[:id], student.college_id)
           major = college && Major.find(college[:id], student.major_id)
           edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id)
+          intern_profile = student.intern_profile
           
 					row = [
 					  student.id,
@@ -129,7 +133,8 @@ class TeacherStudentsController < ApplicationController
 					  major && major[:name],
 					  edu_level && edu_level[:name],
 					  student.graduation_year,
-					  ApplicationController.helpers.format_date(student.created_at)
+					  ApplicationController.helpers.format_date(student.created_at),
+					  ApplicationController.helpers.format_date(intern_profile && intern_profile.begin_at)
 					]
 					
 					if @intern_log_statistic
