@@ -204,14 +204,15 @@ class TeacherCorporationJobsController < ApplicationController
           intern_logs.each do |log|
             student = log.student
   					profile = student.profile
+  					gender = profile && profile.gender
   					intern_profile = student.intern_profile
   					edu_level = EduLevel.find(student.edu_level_id)
   					university = University.find(student.university_id)
 
   					row = [
   					  student.get_name,
-  					  profile.gender.nil? ? "" : (profile.gender ? "男" : "女"),
-  					  intern_profile.desc,
+  					  gender.nil? ? "" : (gender ? "男" : "女"),
+  					  intern_profile && intern_profile.desc,
   					  edu_level && edu_level[:name],
   					  university && university[:name],
   					  student.graduation_year,
