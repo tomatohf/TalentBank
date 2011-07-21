@@ -24,6 +24,11 @@
 		<%= format_date(intern_profile && intern_profile.begin_at) %>
 	</td>
 	
+	<td>
+		<% job_major = intern_profile && intern_profile.major_id && JobMajor.find(intern_profile.major_id) %>
+		<%= job_major && job_major[:name] %>
+	</td>
+	
 	<td class="grey" style="text-align: right;">
 		<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= student.id %>/intern_logs" class="none">
 			<%= intern_logs.size %></a>

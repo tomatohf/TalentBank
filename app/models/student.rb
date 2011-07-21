@@ -210,10 +210,9 @@ class Student < ActiveRecord::Base
     created_at_to = created_at_range[1] || Time.now
     filters.merge!(:created_at => created_at_from .. created_at_to)
     
-    begin_at_range = options[:begin_at] || []
-    begin_at_from = begin_at_range[0] || Time.parse(InternLog.intern_begin_at)
-    begin_at_to = begin_at_range[1] || Time.now
-    filters.merge!(:intern_begin_at => begin_at_from .. begin_at_to)
+    filters.merge!(:intern_begin_at => options[:begin_at_range]) unless options[:begin_at_range].blank?
+    
+    filters.merge!(:intern_major_id => options[:job_major_id]) unless options[:job_major_id].blank?
     
     self.search(
       name,
