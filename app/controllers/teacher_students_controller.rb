@@ -537,7 +537,7 @@ class TeacherStudentsController < ApplicationController
   def no_interview_result
     respond_to do |format|
       options = {
-        :select => "students.id as student_id, students.number as student_number, students.name as student_name, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, teachers.name as teacher_name",
+        :select => "students.id as student_id, students.number as student_number, students.name as student_name, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, teachers.name as teacher_name, intern_logs.occur_at",
         :joins => "LEFT OUTER JOIN intern_logs logs ON intern_logs.student_id = logs.student_id and intern_logs.occur_at < logs.occur_at LEFT OUTER JOIN students ON intern_logs.student_id = students.id LEFT OUTER JOIN jobs ON intern_logs.job_id = jobs.id LEFT OUTER JOIN corporations ON jobs.corporation_id = corporations.id LEFT OUTER JOIN teachers ON corporations.teacher_id = teachers.id",
         :conditions => [
           "logs.student_id IS NULL and corporations.school_id = ? and intern_logs.event_id = ? and intern_logs.result_id = ? and intern_logs.occur_at < ?",
@@ -562,7 +562,7 @@ class TeacherStudentsController < ApplicationController
         
         csv_data = FasterCSV.generate do |csv|
           header = ["学生编号", "学号", "姓名",
-                    "公司编号", "公司名称", "岗位编号", "岗位名称", "企业负责人"]
+                    "公司编号", "公司名称", "岗位编号", "岗位名称", "企业负责人", "记录时间"]
     			
           csv << header
           
@@ -577,7 +577,8 @@ class TeacherStudentsController < ApplicationController
   					  log.job_id,
   					  log.job_name,
   					  
-  					  log.teacher_name
+  					  log.teacher_name,
+  					  ApplicationController.helpers.format_datetime(log.occur_at)
   					]
   					
             csv << row

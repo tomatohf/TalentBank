@@ -18,12 +18,13 @@
 			<td>学号</td>
 			<td>姓名</td>
 			
-			<td>岗位编号</td>
-			<td>岗位名称</td>
 			<td>公司编号</td>
 			<td>公司名称</td>
+			<td>岗位编号</td>
+			<td>岗位名称</td>
 			
 			<td>企业负责人</td>
+			<td>记录时间</td>
 			<td></td>
 		</tr>
 	</thead>
@@ -38,19 +39,22 @@
 						<%= h(log.student_name) %></a>
 				</td>
 				
-				<td><%= log.job_id %></td>
-				<td>
-					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>/jobs/<%= log.job_id %>" class="none">
-						<%= h(log.job_name) %></a>
-				</td>
 				<td><%= log.corporation_id %></td>
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>" class="none">
 						<%= h(log.corporation_name) %></a>
 				</td>
+				<td><%= log.job_id %></td>
+				<td>
+					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= log.corporation_id %>/jobs/<%= log.job_id %>" class="none">
+						<%= h(log.job_name) %></a>
+				</td>
 				
 				<td>
 					<%= h(log.teacher_name) %></a>
+				</td>
+				<td>
+					<%= format_datetime(log.occur_at) %>
 				</td>
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/students/<%= log.student_id %>/intern_logs" class="none">
