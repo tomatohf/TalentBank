@@ -67,8 +67,8 @@ class InternLog < ActiveRecord::Base
   end
   after_save { |log|
     unless log.class.exclude_job_for_mail_notification.include?(log.job_id)
-      student_profile = log.student.profile
-      unless student_profile.email.blank?
+      student_profile = log.student && log.student.profile
+      unless student_profile.blank? || student_profile.email.blank?
         Postman.deliver_interview_result_passed_notification(
           log.student, student_profile, log.job, log.job.corporation
         ) if log.event_id == InternLogEvent.interview_result[:id] && log.result_id == InternLogEventResult.interview_result_passed[:id]
