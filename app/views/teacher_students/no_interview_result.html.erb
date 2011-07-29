@@ -23,6 +23,7 @@
 			<td>岗位编号</td>
 			<td>岗位名称</td>
 			
+			<td>记录老师</td>
 			<td>企业负责人</td>
 			<td>记录时间</td>
 			<td></td>
@@ -50,6 +51,9 @@
 						<%= h(log.job_name) %></a>
 				</td>
 				
+				<td>
+					<%= log.teacher && h(log.teacher.get_name) %></a>
+				</td>
 				<td>
 					<%= h(log.teacher_name) %></a>
 				</td>
