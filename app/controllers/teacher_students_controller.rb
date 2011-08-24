@@ -29,7 +29,7 @@ class TeacherStudentsController < ApplicationController
     @intern_log_statistic = false
     csv = (params[:csv] == "true")
     
-    includes = (request.xhr? || !@teacher.resume) ? [] : [:resumes]
+    includes = (request.xhr? || csv || !@teacher.resume) ? [] : [:resumes]
     
     page = params[:page]
     page = 1 unless page =~ /\d+/
@@ -124,9 +124,12 @@ class TeacherStudentsController < ApplicationController
     
     if csv
       csv_data = FasterCSV.generate do |csv|
-        header = ["学生编号", "学号", "姓名", "大学", "学院", "专业", "学历", "毕业时间", "入库时间", "上岗时间", "相关专业"]
+        header = ["学生编号", "学号", "姓名", "大学", "学院", "专业", "学历", "毕业时间"]
         header.concat(
-          ["总数", "接受面试", "拒绝面试", "面试通过", "面试失败", "面试没去", "实习到期", "实习后留用", "实习中流动", "实习中劝退"]
+          [
+            "入库时间", "上岗时间", "最后通知面试时间", "相关专业",
+            "总数", "接受面试", "拒绝面试", "面试通过", "面试失败", "面试没去", "实习到期", "实习后留用", "实习中流动", "实习中劝退"
+          ]
         ) if @intern_log_statistic
   			
         csv << header
@@ -136,8 +139,6 @@ class TeacherStudentsController < ApplicationController
           college = university && College.find(university[:id], student.college_id)
           major = college && Major.find(college[:id], student.major_id)
           edu_level = student.edu_level_id && EduLevel.find(student.edu_level_id)
-          intern_profile = student.intern_profile
-          job_major = intern_profile && intern_profile.major_id && JobMajor.find(intern_profile.major_id)
           
 					row = [
 					  student.id,
@@ -147,13 +148,13 @@ class TeacherStudentsController < ApplicationController
 					  college && college[:name],
 					  major && major[:name],
 					  edu_level && edu_level[:name],
-					  student.graduation_year,
-					  ApplicationController.helpers.format_date(student.created_at),
-					  ApplicationController.helpers.format_date(intern_profile && intern_profile.begin_at),
-					  job_major && job_major[:name]
+					  student.graduation_year
 					]
 					
 					if @intern_log_statistic
+            intern_profile = student.intern_profile
+            job_major = intern_profile && intern_profile.major_id && JobMajor.find(intern_profile.major_id)
+            
 					  intern_logs = student.intern_logs
           	intern_log_groups = intern_logs.group_by { |log| log.result_id }
 
@@ -161,7 +162,23 @@ class TeacherStudentsController < ApplicationController
           		x[:id] <=> y[:id]
           	}
           	
-          	row << intern_logs.size
+          	latest_inform_interview_log = intern_logs.select { |log|
+          		InternLogEvent.inform_interview[:id] == log.event_id
+          	}.sort { |x, y|
+          		y.occur_at <=> x.occur_at
+          	}.first
+          	
+          	row.concat(
+          	  [
+          	    ApplicationController.helpers.format_date(student.created_at),
+    					  ApplicationController.helpers.format_date(intern_profile && intern_profile.begin_at),
+    					  latest_inform_interview_log && ApplicationController.helpers.format_datetime(
+    					    latest_inform_interview_log.occur_at
+    					  ),
+    					  job_major && job_major[:name],
+                intern_logs.size
+          	  ]
+          	)
           	InternLogEvent.data.sort(&sort_block).each do |event|
               InternLogEventResult.find_group(event[:id]).sort(&sort_block).each do |result|
                 row << (intern_log_groups[result[:id]] || []).size

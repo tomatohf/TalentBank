@@ -8,6 +8,12 @@
 	sort_block = Proc.new { |x, y|
 		x[:id] <=> y[:id]
 	}
+	
+ 	latest_inform_interview_log = intern_logs.select { |log|
+		InternLogEvent.inform_interview[:id] == log.event_id
+	}.sort { |x, y|
+		y.occur_at <=> x.occur_at
+	}.first
 %>
 
 <tr<%= %Q! class="even"! if student_intern_logs_counter.even? %>>
@@ -22,6 +28,10 @@
 	
 	<td>
 		<%= format_date(intern_profile && intern_profile.begin_at) %>
+	</td>
+	
+	<td>
+		<%= latest_inform_interview_log && format_datetime(latest_inform_interview_log.occur_at) %>
 	</td>
 	
 	<td>
