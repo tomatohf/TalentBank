@@ -28,6 +28,8 @@
 			<td>岗位编号</td>
 			<td>岗位名称</td>
 			<td>岗位大类</td>
+			<td>岗位去向</td>
+			<td>招聘终止日期</td>
 			<td>负责人</td>
 			<td>招聘人数</td>
 			<td>实习状态</td>
@@ -71,6 +73,13 @@
 				<td>
 					<% category_class = job.category_class_id && JobCategoryClass.find(job.category_class_id) %>
 					<%= category_class && category_class[:name] %>
+				</td>
+				<td>
+					<% result = job.result_id && JobResult.find(job.result_id) %>
+					<%= result && result[:name] %>
+				</td>
+				<td>
+					<%= format_date(job.recruit_end_at) %>
 				</td>
 				<td><%= teacher && teacher.get_name %></td>
 				<td align="right"><%= job.number %></td>
