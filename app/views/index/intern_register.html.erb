@@ -102,7 +102,7 @@
 			<tr>
 				<td>
 					<label for="birthplace">
-						籍贯<%= required_mark(false) %>
+						户口<%= required_mark(false) %>
 					</label>
 				</td>
 				<td>
@@ -721,11 +721,7 @@
 						return false;
 					}
 					else if(is_field_empty("birthplace")) {
-						alert("请填写籍贯");
-						return false;
-					}
-					else if(is_field_empty("birthplace")) {
-						alert("请填写籍贯");
+						alert("请填写户口");
 						return false;
 					}
 					else if(is_field_empty("edu_level")) {

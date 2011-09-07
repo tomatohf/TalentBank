@@ -496,7 +496,7 @@ class TeacherStudentsController < ApplicationController
         
         csv_data = FasterCSV.generate do |csv|
           header = ["学号", "姓名", "学校", "学历", "毕业时间",
-                    "性别", "政治面貌", "上岗时间", "工作期限", "每周工作时间", "籍贯", "其他信息", "相关专业",
+                    "性别", "政治面貌", "上岗时间", "工作期限", "每周工作时间", "户口", "其他信息", "相关专业",
                     "公司编号", "公司名称", "岗位编号", "岗位名称", "发生时间", "实习记录条数"]
     			
           csv << header
