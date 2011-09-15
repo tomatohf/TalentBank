@@ -227,7 +227,10 @@ class TeacherCorporationsController < ApplicationController
         counts = compute_counts.call(jobs, :all)
         
         csv_data = FasterCSV.generate do |csv|
-          header = ["企业编号", "企业名称", "行业大类", "企业性质", "岗位编号", "岗位名称", "岗位大类", "岗位去向", "招聘终止日期", "负责人", "招聘人数", "实习状态"]
+          header = [
+            "企业编号", "企业名称", "行业大类", "企业性质",
+            "岗位编号", "岗位名称", "岗位大类", "岗位去向", "最低学历", "招聘终止日期", "负责人", "招聘人数", "实习状态"
+          ]
     			counts.each_title do |key, value|
             header << value
           end
@@ -241,6 +244,7 @@ class TeacherCorporationsController < ApplicationController
   					nature = profile && profile.nature_id && CorporationNature.find(profile.nature_id)
   					category_class = job.category_class_id && JobCategoryClass.find(job.category_class_id)
   					result = job.result_id && JobResult.find(job.result_id)
+  					edu_level = job.edu_level_id && EduLevel.find(job.edu_level_id)
   					intern_status = job.intern_status_id && JobInternStatus.find(job.intern_status_id)
   					teacher = corporation.teacher
 
@@ -253,6 +257,7 @@ class TeacherCorporationsController < ApplicationController
   					  job.get_name,
   					  category_class && category_class[:name],
   					  result && result[:name],
+  					  edu_level && edu_level[:name],
   					  ApplicationController.helpers.format_date(job.recruit_end_at),
   					  teacher && teacher.get_name,
   					  job.number,
