@@ -6,6 +6,10 @@
 %>
 
 
+<div class="float_r" style="word-spacing: 20px; margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/students/<%= @student.id %>">
+		查看学生资料</a>
+</div>
 <h2 class="page_title"><%= page_title %></h2>
 
 <%= render :partial => "edit_nav", :locals => {:current_link => "edit_profile"} %>

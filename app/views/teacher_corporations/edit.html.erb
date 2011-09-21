@@ -1,6 +1,10 @@
 <% talent_page_title("编辑企业资料") %>
 
 
+<div class="float_r" style="word-spacing: 20px; margin: 12px 25px 0px;">
+	<a href="/teachers/<%= @teacher.id %>/corporations/<%= @corporation.id %>">
+		查看企业资料</a>
+</div>
 <h2 class="page_title">编辑企业资料</h2>
 
 <% if flash[:success_msg] %>
