@@ -29,6 +29,7 @@
 			<td>岗位名称</td>
 			<td>岗位大类</td>
 			<td>岗位去向</td>
+			<td>最低学历</td>
 			<td>招聘终止日期</td>
 			<td>负责人</td>
 			<td>招聘人数</td>
@@ -77,6 +78,10 @@
 				<td>
 					<% result = job.result_id && JobResult.find(job.result_id) %>
 					<%= result && result[:name] %>
+				</td>
+				<td>
+					<% edu_level = job.edu_level_id && EduLevel.find(job.edu_level_id) %>
+					<%= edu_level && edu_level[:name] %>
 				</td>
 				<td>
 					<%= format_date(job.recruit_end_at) %>
