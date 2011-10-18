@@ -151,6 +151,16 @@
 
 					<tr>
 						<td>
+							区域:
+						</td>
+
+						<td>
+							<% job_district = @profile.job_district_id && JobDistrict.find(@profile.job_district_id) %>
+							<%= job_district && job_district[:name] %>
+						</td>
+
+					<tr>
+						<td>
 							地址:
 						</td>
 
