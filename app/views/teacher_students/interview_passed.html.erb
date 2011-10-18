@@ -32,6 +32,7 @@
 			
 			<td>公司编号</td>
 			<td>公司名称</td>
+			<td>区域</td>
 			<td>岗位编号</td>
 			<td>岗位名称</td>
 			
@@ -92,6 +93,10 @@
 				<td>
 					<a target="_blank" href="/teachers/<%= @teacher.id %>/corporations/<%= student.corporation_id %>" class="none">
 						<%= h(student.corporation_name) %></a>
+				</td>
+				<td>
+					<% job_district = student.corporation_job_district_id && JobDistrict.find(student.corporation_job_district_id.to_i) %>
+					<%= job_district && job_district[:name] %>
 				</td>
 				<td><%= student.job_id %></td>
 				<td>

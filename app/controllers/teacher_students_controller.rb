@@ -470,8 +470,8 @@ class TeacherStudentsController < ApplicationController
   def interview_passed
     respond_to do |format|
       options = {
-        :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, intern_logs.occur_at as occur_at",
-        :joins => "INNER JOIN (intern_logs INNER JOIN (jobs INNER JOIN corporations ON corporations.id = jobs.corporation_id) ON jobs.id = intern_logs.job_id) ON students.id = intern_logs.student_id",
+        :select => "students.*, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, corporation_profiles.job_district_id as corporation_job_district_id, intern_logs.occur_at as occur_at",
+        :joins => "INNER JOIN (intern_logs INNER JOIN (jobs INNER JOIN (corporations INNER JOIN corporation_profiles ON corporations.id = corporation_profiles.corporation_id) ON corporations.id = jobs.corporation_id) ON jobs.id = intern_logs.job_id) ON students.id = intern_logs.student_id",
         :conditions => [
           "corporations.school_id = ? and intern_logs.event_id = ? and intern_logs.result_id = ?",
           @teacher.school_id,
@@ -497,7 +497,7 @@ class TeacherStudentsController < ApplicationController
         csv_data = FasterCSV.generate do |csv|
           header = ["学号", "姓名", "学校", "学历", "毕业时间",
                     "性别", "政治面貌", "上岗时间", "工作期限", "每周工作时间", "户口", "其他信息", "相关专业",
-                    "公司编号", "公司名称", "岗位编号", "岗位名称", "发生时间", "实习记录条数"]
+                    "公司编号", "公司名称", "区域", "岗位编号", "岗位名称", "发生时间", "实习记录条数"]
     			
           csv << header
           
@@ -510,6 +510,7 @@ class TeacherStudentsController < ApplicationController
             period = intern_profile.period_id && JobPeriod.find(intern_profile.period_id)
             workday = intern_profile.workday_id && JobWorkday.find(intern_profile.workday_id)
             major = intern_profile.major_id && JobMajor.find(intern_profile.major_id)
+            job_district = student.corporation_job_district_id && JobDistrict.find(student.corporation_job_district_id.to_i)
 
   					row = [
   					  student.number,
@@ -529,6 +530,7 @@ class TeacherStudentsController < ApplicationController
   					  
   					  student.corporation_id,
   					  student.corporation_name,
+    					job_district && job_district[:name],
   					  student.job_id,
   					  student.job_name,
   					  
