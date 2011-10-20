@@ -297,7 +297,7 @@ ActiveRecord::Schema.define(:version => 34) do
     t.integer  "category_class_id",   :limit => 2
     t.integer  "category_id",         :limit => 2
     t.string   "manager",             :limit => 50
-    t.string   "desc",                :limit => 1000
+    t.string   "desc",                :limit => 2000
     t.integer  "district_id",         :limit => 2
     t.string   "place",               :limit => 200
     t.integer  "salary",              :limit => 10,   :precision => 10, :scale => 0
@@ -310,7 +310,7 @@ ActiveRecord::Schema.define(:version => 34) do
     t.integer  "edu_level_id",        :limit => 2
     t.integer  "graduation_id",       :limit => 2
     t.integer  "major_id",            :limit => 2
-    t.string   "requirement",         :limit => 500
+    t.string   "requirement",         :limit => 1000
     t.datetime "recruit_end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
