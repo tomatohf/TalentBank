@@ -555,9 +555,9 @@ class TeacherStudentsController < ApplicationController
   
   def no_interview_result
     respond_to do |format|
-      # if we group the results also by job, we'd better also include job field in the index.
+      # TODO - if we group the results also by job, we'd better also include job field in the index.
       # while, currently the job field is *NOT* included in the index definition,
-      # but the MySQL explain output is NOT bad
+      # but the MySQL explain output and performance is NOT so bad.
       by_job = true
       options = {
         :select => "students.id as student_id, students.number as student_number, students.name as student_name, jobs.id as job_id, jobs.name as job_name, corporations.id as corporation_id, corporations.name as corporation_name, teachers.name as teacher_name, intern_logs.occur_at, intern_logs.teacher_id",
