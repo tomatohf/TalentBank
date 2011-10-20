@@ -8,6 +8,8 @@ class TeachersController < ApplicationController
   
   before_filter :check_teacher_revision, :only => [:revisions]
   
+  before_filter :check_teacher_statistic, :only => [:refresh_index]
+  
   
   def show
     
@@ -127,6 +129,28 @@ class TeachersController < ApplicationController
   end
   
   
+  def refresh_index
+    if request.post?
+      sep = "\n\n" + ("-" * 100) + "\n\n"
+      @output = if params[:index] == "all"
+        if Rails.env.production?
+          `rake ts:in RAILS_ENV=production` + sep + `rake ts:in:delta RAILS_ENV=production`
+        else
+          `rake ts:in` + sep + `rake ts:in:delta`
+        end
+      elsif params[:index] == "delta"
+        if Rails.env.production?
+          `rake ts:in:delta RAILS_ENV=production`
+        else
+          `rake ts:in:delta`
+        end
+      else
+        ""
+      end
+    end
+  end
+  
+  
   private
   
   def check_teacher
@@ -137,6 +161,11 @@ class TeachersController < ApplicationController
   
   def check_teacher_revision
     jump_to("/errors/unauthorized") unless @teacher.revision
+  end
+  
+  
+  def check_teacher_statistic
+    jump_to("/errors/unauthorized") unless @teacher.statistic
   end
   
 end

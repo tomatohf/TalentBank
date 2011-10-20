@@ -21,7 +21,8 @@ ActionController::Routing::Routes.draw do |map|
     :edit_password => :get,
     :update_password => :post,
     
-    :revisions => :get
+    :revisions => :get,
+    :refresh_index => :any
   } do |teachers|
     teachers.resources :teacher_students, :as => :students, :member => {
       :resume => :get,

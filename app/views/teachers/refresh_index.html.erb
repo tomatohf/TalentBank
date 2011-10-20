@@ -1,0 +1,27 @@
+<% talent_page_title("刷新索引") %>
+
+
+<div class="float_r" style="margin: 12px 25px 0px;">
+	<% form_tag "", :method => :post, :onsubmit => "if(!confirm('确定要重新创建全部索引么 ? 这可能会耗费较长的时间 ！ 如果只是为了查看最新数据，只需刷新增量索引即可')){ return false; }" do %>
+		<input type="hidden" name="index" value="all" />
+		<%= submit_tag "重建全部索引", :class => "button" %>
+	<% end %>
+</div>
+<h2 class="page_title">刷新数据索引</h2>
+
+<div style="padding: 10px 30px;">
+	<% form_tag "", :method => :post, :onsubmit => "if(!confirm('确定要刷新索引么 ?')){ return false; }" do %>
+		<input type="hidden" name="index" value="delta" />
+		<%= submit_tag "刷新增量索引", :class => "button", :style => "font-size: 14px;" %>
+	<% end %>
+</div>
+
+<% unless @output.blank? %>
+	<div style="margin: 30px 20px;">
+		<div style="font-size: 14px; font-weight: bold; padding-bottom: 10px;">
+			(<%= format_datetime(Time.now) %>)
+			索引完成，输出如下：
+		</div>
+		<%= simple_format(h(@output)) %>
+	</div>
+<% end %>
