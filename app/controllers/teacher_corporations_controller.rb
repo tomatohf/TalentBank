@@ -229,7 +229,7 @@ class TeacherCorporationsController < ApplicationController
         csv_data = FasterCSV.generate do |csv|
           header = [
             "企业编号", "企业名称", "行业大类", "企业性质",
-            "岗位编号", "岗位名称", "岗位大类", "岗位去向", "最低学历", "招聘终止日期", "负责人", "招聘人数", "实习状态"
+            "岗位编号", "岗位名称", "岗位大类", "岗位去向", "最低学历", "招聘终止日期", "其它要求", "负责人", "招聘人数", "实习状态"
           ]
     			counts.each_title do |key, value|
             header << value
@@ -259,6 +259,7 @@ class TeacherCorporationsController < ApplicationController
   					  result && result[:name],
   					  edu_level && edu_level[:name],
   					  ApplicationController.helpers.format_date(job.recruit_end_at),
+  					  job.requirement,
   					  teacher && teacher.get_name,
   					  job.number,
   					  intern_status && intern_status[:label]

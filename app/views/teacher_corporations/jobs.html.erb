@@ -31,6 +31,7 @@
 			<td>岗位去向</td>
 			<td>最低学历</td>
 			<td>招聘终止日期</td>
+			<td>其它要求</td>
 			<td>负责人</td>
 			<td>招聘人数</td>
 			<td>实习状态</td>
@@ -86,7 +87,9 @@
 				<td>
 					<%= format_date(job.recruit_end_at) %>
 				</td>
-				<td><%= teacher && teacher.get_name %></td>
+				<% job_requirement = h(job.requirement) %>
+				<td title="<%= job_requirement %>"><%= truncate(job_requirement, :length => 10) %></td>
+				<td><%= teacher && h(teacher.get_name) %></td>
 				<td align="right"><%= job.number %></td>
 				<td>
 					<% intern_status = job.intern_status_id && JobInternStatus.find(job.intern_status_id) %>
