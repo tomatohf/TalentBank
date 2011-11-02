@@ -519,7 +519,7 @@ class TeacherStudentsController < ApplicationController
   					  edu_level && edu_level[:name],
   					  student.graduation_year,
   					  
-              profile.gender.blank? ? "" : (profile.gender ? "男" : "女"),
+              profile.gender.nil? ? "" : (profile.gender ? "男" : "女"),
   					  political_status && political_status[:name],
   					  ApplicationController.helpers.format_date(intern_profile.begin_at),
   					  period && period[:name],

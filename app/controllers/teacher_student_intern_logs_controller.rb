@@ -22,7 +22,7 @@ class TeacherStudentInternLogsController < ApplicationController
     @logs = InternLog.list_from_student(
       @student.id,
       :order => "occur_at DESC",
-      :include => [:job => :corporation]
+      :include => [{:job => :corporation}, :teacher]
     )
     
     marked_teacher_id = @student.get_calling_mark

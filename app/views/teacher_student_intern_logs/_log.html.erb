@@ -32,6 +32,10 @@
 	<td>
 		<%= format_datetime(log.occur_at) %>
 	</td>
+
+	<td>
+		<%= h(log.teacher.get_name) %>
+	</td>
 	
 	<td>
 		<input type="hidden" value="<%= log.id %>" />
